@@ -61,6 +61,7 @@
 	    	<patternset includes="lib/**"/>
 	    	<patternset includes="other/manifest"/>
 	    	<patternset includes="other/LICENSE.*"/>
+		<patternset includes="other/ReadMe.*"/>
 	    	<patternset includes="src/**" excludes="**/CVS/*;**/bak~/*"/>
 		<patternset includes="resources/de/**/*.properties"/>
 		<patternset includes="resources/fr/**/*.properties"/>
