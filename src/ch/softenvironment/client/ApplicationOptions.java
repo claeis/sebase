@@ -15,22 +15,27 @@ package ch.softenvironment.client;
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+import java.awt.Font;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Locale;
+
 import ch.softenvironment.util.ParserCSV;
+import ch.softenvironment.util.StringUtils;
+import ch.softenvironment.util.Tracer;
 
 /**
  * Manage the Application Settings by Properties file.
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2004-05-08 15:21:31 $
+ * @version $Revision: 1.2 $ $Date: 2005-02-03 14:20:58 $
  */
 public class ApplicationOptions extends java.util.Properties implements UserSettings {
 	// values for Key-Values
 	private final static String TRUE = "TRUE";
 	private final static String FALSE = "FALSE";
 	private final static String SEPARATOR = ";";
-	private final static String HOME_DIRECTORY = "user.home";
+	protected final static String HOME_DIRECTORY = "user.home";
 
 	// Property Keys (non-NLS)
 	// @see getKeySet()
@@ -54,37 +59,94 @@ public class ApplicationOptions extends java.util.Properties implements UserSett
 	// variables
 	private String filename = null;
 /**
- * UserSettings constructor comment.
+ * Create new Default Settings.
  */
-private ApplicationOptions() {
+protected ApplicationOptions() {
 	super();
+
+	// create Default
+	setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
+	setBackgroundColor(java.awt.Color.white);
+//	setFont("Default-PLAIN-9");
+	setForegroundColor(java.awt.Color.black);
+	setImportDirectory(System.getProperty(HOME_DIRECTORY));
+//	setLanguage(java.util.Locale.GERMAN.getLanguage());
+//	setCountry("CH");
+	
+	setShowStatusBar(Boolean.TRUE);
+	setShowToolBar(Boolean.TRUE);
+	setWorkingDirectory(System.getProperty(HOME_DIRECTORY));
+	setLastFiles(new ArrayList());
+
+	setWindowHeight(new Integer(600));
+	setWindowWidth(new Integer(800));
+	setWindowX(new Integer(10));
+	setWindowY(new Integer(10));
 }
 /**
- * Instantiates and loads the UserSettings.
- * @see getKeySet()
+ * Load given Settings by filename.
  */
-protected static ApplicationOptions createDefault() {
-	ApplicationOptions userSettings = new ApplicationOptions();
+public ApplicationOptions(String filename) {
+	this(filename, new ApplicationOptions());
+}
+/**
+ * Load given Settings by filename.
+ */
+protected ApplicationOptions(String filename, java.util.Properties defaults) {
+	// create Default
+	super(defaults);
 
-	userSettings.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
-	userSettings.setBackgroundColor(java.awt.Color.white);
-	userSettings.setFont("Monospaced-BOLD-9");
-	userSettings.setForegroundColor(java.awt.Color.black);
-	userSettings.setImportDirectory(System.getProperty(HOME_DIRECTORY));
-	userSettings.setLanguage(java.util.Locale.GERMAN.getLanguage());
-	userSettings.setCountry("CH");
+	try {
+		// load the persistent Properties -> overwrite keys
+		this.filename = filename;
+
+		FileInputStream inputStream = new FileInputStream(filename);
+		/*tmp=*/ super.load(inputStream);
+
+/*
+		// try to reuse given keys
+		// copy mechanism makes sure newer Versions of this Class
+		// with additional keys cause no problems
+		java.util.Iterator keys = getKeySet().iterator();
+		while (keys.hasNext()) {
+			String key = (String)keys.next();
+			if (tmp.containsKey(key)) {
+				userSettings.setProperty(key, tmp.getProperty(key));
+			}
+		}
+*/
+	} catch(FileNotFoundException fe) {
+		Tracer.getInstance().runtimeWarning(ApplicationOptions.class, "load()", "File not found: " + fe.getLocalizedMessage());
+	} catch(IOException ioe) {
+	    Tracer.getInstance().runtimeWarning(ApplicationOptions.class, "load()", "IO failure: " + ioe.getLocalizedMessage());
+	}
+}
+/**
+ * Create new Default Settings.
+ */
+protected static java.util.Properties createDs() {
+	ApplicationOptions defaults = new ApplicationOptions();
+
+	// create Default
+	defaults.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
+	defaults.setBackgroundColor(java.awt.Color.white);
+//	defaults.setFont("Default-PLAIN-9");
+	defaults.setForegroundColor(java.awt.Color.black);
+	defaults.setImportDirectory(System.getProperty(HOME_DIRECTORY));
+//	defaults.setLanguage(java.util.Locale.GERMAN.getLanguage());
+//	defaults.setCountry("CH");
 	
-	userSettings.setShowStatusBar(new Boolean(true));
-	userSettings.setShowToolBar(new Boolean(true));
-	userSettings.setWorkingDirectory(System.getProperty(HOME_DIRECTORY));
-	userSettings.setLastFiles(new ArrayList());
+	defaults.setShowStatusBar(Boolean.TRUE);
+	defaults.setShowToolBar(Boolean.TRUE);
+	defaults.setWorkingDirectory(System.getProperty(HOME_DIRECTORY));
+	defaults.setLastFiles(new ArrayList());
 
-	userSettings.setWindowHeight(new Integer(570));
-	userSettings.setWindowWidth(new Integer(850));
-	userSettings.setWindowX(new Integer(10));
-	userSettings.setWindowY(new Integer(10));
+	defaults.setWindowHeight(new Integer(600));
+	defaults.setWindowWidth(new Integer(800));
+	defaults.setWindowX(new Integer(10));
+	defaults.setWindowY(new Integer(10));
 
-    return userSettings;
+	return defaults;
 }
 /**
  * Return whether the User is allowed to use Application or not.
@@ -114,14 +176,31 @@ public java.awt.Color getBackgroundColor() {
  * @see #setCountry
  */
 public java.lang.String getCountry() {
-	return getProperty(COUNTRY);
+    String country = getProperty(COUNTRY);
+	if (StringUtils.isNullOrEmpty(country)) {
+	    return Locale.getDefault().getCountry();
+	} else {
+	    return country;
+	}
 }
 /**
- * Gets the font property (java.lang.String) value.
+ * Return font.
  * @return The font property value.
  * @see #setFont
  */
-public String getFont() {
+public Font getFont() {
+    if (StringUtils.isNullOrEmpty(getFontString())) {
+        return null;
+    } else {
+		return Font.decode(getFontString());
+    }
+}
+/**
+ * Return font in a descriptive String.
+ * @return The font property value.
+ * @see #setFont
+ */
+public String getFontString() {
 	return getProperty(FONT);
 }
 /**
@@ -141,38 +220,17 @@ public java.lang.String getImportDirectory() {
 	return getProperty(IMPORT_DIRECTORY);
 }
 /**
- * @return all keys managed by Settings.
- * @see class definition
- * @see createDefault()
- */
-private static java.util.Set getKeySet() {
-	java.util.Set set = new java.util.HashSet();
-	set.add(LOOK_AND_FEEL);
-	set.add(BACKGROUND_COLOR);
-	set.add(FONT);
-	set.add(FOREGROUND_COLOR);
-	set.add(IMPORT_DIRECTORY);
-	set.add(LANGUAGE);
-	set.add(COUNTRY);
-	set.add(SHOW_STATUS_BAR);
-	set.add(SHOW_TOOLBAR);
-	set.add(WORKING_DIRECTORY);
-	set.add(LAST_FILES);
-	set.add(QUERY_DELETION);
-	set.add(WINDOW_HEIGHT);
-	set.add(WINDOW_WIDTH);
-	set.add(WINDOW_X);
-	set.add(WINDOW_Y);
-
-	return set;
-}
-/**
  * Gets the language property (java.lang.String) value.
  * @return The language property value.
  * @see #setLanguage
  */
 public java.lang.String getLanguage() {
-	return getProperty(LANGUAGE);
+	String language = getProperty(LANGUAGE);
+	if (StringUtils.isNullOrEmpty(language)) {
+	    return Locale.getDefault().getLanguage();
+	} else {
+	    return language;
+	}
 }
 /**
  * Gets the lastFiles opened property (java.lang.String) value.
@@ -181,7 +239,6 @@ public java.lang.String getLanguage() {
 public java.util.List getLastFiles() {
 	return ParserCSV.stringToArray((String)getProperty(LAST_FILES), SEPARATOR);
 }
-
 /**
  * Gets the 'Look & Feel' property (java.lang.String) value.
  * @return The language property value.
@@ -196,16 +253,6 @@ public java.lang.String getLookAndFeel() {
  */
 public java.lang.String getProviderSMTP() {
 	return null;
-}
-/**
- * Gets the showLogView property (java.lang.Boolean) value.
- * @return The showLogView property value.
- * @see #setShowLogView
- * @deprecated
- */
-public java.lang.Boolean getShowLogView() {
-//	return Boolean.valueOf(getProperty(SHOW_LOG_VIEW));
-	return Boolean.TRUE;
 }
 /**
  * Gets the showStatusBar property (java.lang.Boolean) value.
@@ -265,47 +312,15 @@ public java.lang.String getWorkingDirectory() {
 	return getProperty(WORKING_DIRECTORY);
 }
 /**
- * Instantiates and loads the UserSettings.
+ * Save the UserSettings.
  */
-public static ApplicationOptions load(String filename) {
-	ApplicationOptions userSettings = createDefault();
-	userSettings.filename = filename;
-	
+public final void save() {
 	try {
-	    FileInputStream inputStream = new FileInputStream(filename);
-		ApplicationOptions tmp = new ApplicationOptions();
-		tmp.load(inputStream);
-
-		// try to reuse given keys
-		// copy mechanism makes sure newer Versions of this Class
-		// with additional keys cause no problems
-		java.util.Iterator keys = getKeySet().iterator();
-		while (keys.hasNext()) {
-			String key = (String)keys.next();
-			if (tmp.containsKey(key)) {
-				userSettings.setProperty(key, tmp.getProperty(key));
-			}
-		}
-
-		// set the Locale
-                // doesn't belong to UserSettings
-                // ce2003-03-06 don't change Locale!!!
-		// java.util.Locale.setDefault(new java.util.Locale(tmp.getLanguage(), tmp.getCountry()));
-		// Tracer.getInstance().runtimeInfo("Locale is: " + java.util.Locale.getDefault().toString());
-	} catch(FileNotFoundException fe) {
-		
-	} catch(IOException ioe) {
-		
+	    FileOutputStream outputStream = new FileOutputStream(filename);
+ 	   super.store(outputStream, "User Properties <" + filename + ">");
+	} catch(Throwable e) {
+		Tracer.getInstance().runtimeWarning(this, "save()", "IGNORE: Failed for User Properties <" + filename + ">");
 	}
-	
-    return userSettings;
-}
-/**
- * Saves the UserSettings.
- */
-public void save() throws IOException, FileNotFoundException {
-    FileOutputStream outputStream = new FileOutputStream(filename);
-    super.store(outputStream, "TCO-Tool User Properties");
 }
 /**
  * Sets the backgroundColor property (java.awt.Color) value.
@@ -324,13 +339,31 @@ public void setCountry(java.lang.String country) {
 	setProperty(COUNTRY, country);
 }
 /**
- * Sets the font property (java.lang.String) value.
- * This Font is used for graphical nodes and edges.
- * @param font The new value for the property.
- * @see #getFont
+ * Transform given font into String-Description.
+ * @param font
+ * @see setFont(String)
  */
-public void setFont(String font) {
-	setProperty(FONT, font);
+public void setFont(java.awt.Font font) {
+    if (font == null) {
+        setProperty(FONT, null);
+    } else {
+        String s = font.getFamily() + "-";
+        switch (font.getStyle()) {
+        case Font.BOLD:
+            s = s + "BOLD";
+            break;
+        case Font.ITALIC:
+            s = s + "ITALIC";
+            break;
+        case (Font.BOLD + Font.ITALIC):
+            s = s + "BOLDITALIC";
+            break;
+        default:
+            s = s + "PLAIN";
+            break;
+        }
+        setProperty(FONT, s + "-" + font.getSize());
+    }
 }
 /**
  * Sets the foregroundColor property (java.awt.Color) value.
@@ -424,5 +457,11 @@ public void setWindowY(java.lang.Integer value) {
  */
 public void setWorkingDirectory(java.lang.String workingDirectory) {
 	setProperty(WORKING_DIRECTORY, workingDirectory);
+}
+/*
+ * Overwrites.
+ */
+public synchronized Object setProperty(String key, String value) {
+    return super.setProperty(key, value == null ? "" : value);
 }
 }
