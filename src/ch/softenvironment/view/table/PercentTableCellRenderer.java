@@ -19,7 +19,7 @@ package ch.softenvironment.view.table;
 /**
  * Format a Number value as Percent-String in a JTable-Cell.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2005-01-06 09:55:25 $
+ * @version $Revision: 1.3 $ $Date: 2005-02-03 14:23:41 $
  */
 public class PercentTableCellRenderer extends javax.swing.table.DefaultTableCellRenderer {
 	java.text.NumberFormat percentFormat = null;
@@ -41,6 +41,10 @@ public java.awt.Component getTableCellRendererComponent(javax.swing.JTable table
  * Overwrites.
  */
 protected void setValue(Object value) {
-	setText((value == null) ? "" : percentFormat.format((Number)value));
+	try {
+		setText((value == null) ? "" : percentFormat.format((Number)value));
+	} catch(ClassCastException e) {
+        ch.softenvironment.util.Tracer.getInstance().developerError(this, "setValue()", "Number value expected for: " + value);
+    }
 }
 }
