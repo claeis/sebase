@@ -24,7 +24,7 @@ import ch.softenvironment.util.Tracer;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.9 $ $Date: 2004-06-11 20:38:49 $
+ * @version $Revision: 1.10 $ $Date: 2004-06-26 11:18:56 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -605,39 +605,46 @@ protected final void showBusy(String methodName) {
  * @param exception java.lang.Throwable
  */
 public final static void showException(Window owner, java.lang.Throwable exception) {
-	// update log
-	Tracer.getInstance().runtimeWarning(owner, "handleException(..) -> stackTrace follows...", exception.toString());//$NON-NLS-1$
-	exception.printStackTrace(System.out);
+	try {
+		// update log
+		Tracer.getInstance().runtimeWarning(owner, "handleException(..) -> stackTrace follows...", exception.toString());//$NON-NLS-1$
+		exception.printStackTrace(System.out);
 
-	// inform user
-	String title = null; //$NON-NLS-1$
-	String message = getResourceString(BaseFrame.class, "CWTopLevelHandler"); //$NON-NLS-1$
-	if (exception instanceof NumberFormatException) {
-		
-		if ((exception.getMessage().length() == 0) || exception.getMessage().equals("empty String") || (exception.getMessage().equals("-"))) {//$NON-NLS-2$//$NON-NLS-1$
+		// inform user
+		String title = null; //$NON-NLS-1$
+		String message = getResourceString(BaseFrame.class, "CWTopLevelHandler"); //$NON-NLS-1$
+		if (exception instanceof NumberFormatException) {
+			
+			if ((exception.getMessage().length() == 0) || exception.getMessage().equals("empty String") || (exception.getMessage().equals("-"))) {//$NON-NLS-2$//$NON-NLS-1$
 Tracer.getInstance().hack(BaseFrame.class, "showException(..)", "exception message might change -> use another recognition");//$NON-NLS-2$//$NON-NLS-1$
-			Tracer.getInstance().runtimeWarning(BaseFrame.class, "showException(.)", "NumberFormatException ignored: " + exception.toString());
-			return;
-		}
+				Tracer.getInstance().runtimeWarning(BaseFrame.class, "showException(.)", "NumberFormatException ignored: " + exception.toString());
+				return;
+			}
 
-		title = getResourceString(BaseFrame.class, "CTInputError"); //$NON-NLS-1$
-		message = getResourceString(BaseFrame.class, "CENumberFormat") + "\n  => " + exception.getLocalizedMessage();//$NON-NLS-2$ //$NON-NLS-1$
-	} else if (exception instanceof DeveloperException) {
-		title = ((DeveloperException)exception).getTitle();
-		message = exception.getMessage();
-	} else if (exception instanceof MissingResourceException) {
-		Tracer.getInstance().developerError(BaseFrame.class, "showException(.)", "MissingResourceException ignored: " + exception.getLocalizedMessage());
-		return;
-	} /* else if (exception instanceof java.sql.SQLException) {
-		@see DbBaseFrame#handleException(..)
-	} */
-	
-	if ((owner == null) || (owner instanceof Frame)) {
-		new ErrorDialog((Frame)owner, title , message, exception);
-	} else if (owner instanceof Dialog) {
-		new ErrorDialog((Dialog)owner, title , message, exception);
-	} else {
-Tracer.getInstance().nyi(BaseFrame.class, "showException(..)");//$NON-NLS-1$
+			title = getResourceString(BaseFrame.class, "CTInputError"); //$NON-NLS-1$
+			message = getResourceString(BaseFrame.class, "CENumberFormat") + "\n  => " + exception.getLocalizedMessage();//$NON-NLS-2$ //$NON-NLS-1$
+		} else if (exception instanceof DeveloperException) {
+			title = ((DeveloperException)exception).getTitle();
+			message = exception.getMessage();
+		} else if (exception instanceof MissingResourceException) {
+			Tracer.getInstance().developerError(BaseFrame.class, "showException(.)", "MissingResourceException ignored: " + exception.getLocalizedMessage());
+			return;
+		} /* else if (exception instanceof java.sql.SQLException) {
+			@see DbBaseFrame#handleException(..)
+		} */
+		
+		if ((owner == null) || (owner instanceof Frame)) {
+			new ErrorDialog((Frame)owner, title , message, exception);
+		} else if (owner instanceof Dialog) {
+			new ErrorDialog((Dialog)owner, title , message, exception);
+		} else {
+Tracer.getInstance().nyi(BaseFrame.class, "showException(..)");
+		}
+	} catch(Throwable e) {
+		Tracer.getInstance().developerError(BaseFrame.class, "showException(..)", e.getLocalizedMessage());
+	} finally {
+		// this method must not throw an Exception under any circumstances
+		System.out.println("BaseFrame#showException(..) -> finally should not have been reached");
 	}
 }
 /**
