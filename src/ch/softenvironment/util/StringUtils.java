@@ -1,5 +1,7 @@
 package ch.softenvironment.util;
 
+import java.io.File;
+
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,7 +17,7 @@ package ch.softenvironment.util;
 /**
  * Set of reusable String Utilities.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:30:43 $
+ * @version $Revision: 1.3 $ $Date: 2004-05-08 13:34:09 $
  */
 public abstract class StringUtils {
 /**
@@ -50,6 +52,20 @@ public static String getPureClassName(java.lang.Class type) {
 	String className = type.getName();
 	int index = className.lastIndexOf('.');
 	return className.substring(index + 1, className.length());
+}
+/**
+ * Return ClassName of given class without package path.
+ */
+public static String getPureFileName(String absolutePath) {
+	int index = absolutePath.lastIndexOf(File.separator);
+	// 1) strip expected Path-separator
+	String tmp = absolutePath.substring(index + 1, absolutePath.length());
+	// 2) strip evtl. hardcoded DOS-separator on Unix-Plattforms
+	index = tmp.lastIndexOf("\\");
+	tmp = tmp.substring(index + 1, tmp.length());
+	// 3) strip evtl. hardcoded Unix-separator on DOS-Plattforms
+	index = tmp.lastIndexOf("/");
+	return tmp.substring(index + 1, tmp.length());
 }
 /**
  * Return ClassName of an Instance without package path.
