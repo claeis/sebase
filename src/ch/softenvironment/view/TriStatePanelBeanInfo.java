@@ -15,7 +15,7 @@ package ch.softenvironment.view;
 /**
  * The bean information class for ch.softenvironment.view.TriStatePanel.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:33:00 $
+ * @version $Revision: 1.3 $ $Date: 2005-01-24 10:04:21 $
  */
 public class TriStatePanelBeanInfo extends java.beans.SimpleBeanInfo {
 /**
@@ -32,7 +32,7 @@ public java.beans.PropertyDescriptor componentOrientationPropertyDescriptor() {
 				/* Attempt to find the method using getMethod with parameter types. */
 				java.lang.Class aGetMethodParameterTypes[] = {};
 				aGetMethod = getBeanClass().getMethod("getComponentOrientation", aGetMethodParameterTypes);
-			} catch (java.lang.Throwable exception) {
+			} catch (Throwable exception) {
 				/* Since getMethod failed, call findMethod. */
 				handleException(exception);
 				aGetMethod = findMethod(getBeanClass(), "getComponentOrientation", 0);
@@ -44,14 +44,14 @@ public java.beans.PropertyDescriptor componentOrientationPropertyDescriptor() {
 					java.awt.ComponentOrientation.class
 				};
 				aSetMethod = getBeanClass().getMethod("setComponentOrientation", aSetMethodParameterTypes);
-			} catch (java.lang.Throwable exception) {
+			} catch (Throwable exception) {
 				/* Since getMethod failed, call findMethod. */
 				handleException(exception);
 				aSetMethod = findMethod(getBeanClass(), "setComponentOrientation", 1);
 			};
 			aDescriptor = new java.beans.PropertyDescriptor("componentOrientation"
 			, aGetMethod, aSetMethod);
-		} catch (java.lang.Throwable exception) {
+		} catch (Throwable exception) {
 			/* Since we failed using methods, try creating a default property descriptor. */
 			handleException(exception);
 			aDescriptor = new java.beans.PropertyDescriptor("componentOrientation"
@@ -63,14 +63,14 @@ public java.beans.PropertyDescriptor componentOrientationPropertyDescriptor() {
 		/* aDescriptor.setShortDescription("componentOrientation"); */
 		/* aDescriptor.setExpert(false); */
 		/* aDescriptor.setHidden(false); */
-		/* aDescriptor.setValue("preferred", new java.lang.Boolean(false)); */
-		/* aDescriptor.setValue("ivjDesignTimeProperty", new java.lang.Boolean(true)); */
-		aDescriptor.setValue("enumerationValues", new java.lang.Object[] {
+		/* aDescriptor.setValue("preferred", new Boolean(false)); */
+		/* aDescriptor.setValue("ivjDesignTimeProperty", new Boolean(true)); */
+		aDescriptor.setValue("enumerationValues", new Object[] {
 				"UNKNOWN",java.awt.ComponentOrientation.UNKNOWN,"java.awt.ComponentOrientation.UNKNOWN",
 				"LEFT_TO_RIGHT",java.awt.ComponentOrientation.LEFT_TO_RIGHT,"java.awt.ComponentOrientation.LEFT_TO_RIGHT",
 				"RIGHT_TO_LEFT",java.awt.ComponentOrientation.RIGHT_TO_LEFT,"java.awt.ComponentOrientation.RIGHT_TO_LEFT",
 		});
-	} catch (java.lang.Throwable exception) {
+	} catch (Throwable exception) {
 		handleException(exception);
 	};
 	return aDescriptor;
@@ -157,7 +157,7 @@ public java.beans.EventSetDescriptor[] getEventSetDescriptors() {
 	try {
 		java.beans.EventSetDescriptor aDescriptorList[] = {};
 		return aDescriptorList;
-	} catch (java.lang.Throwable exception) {
+	} catch (Throwable exception) {
 		handleException(exception);
 	};
 	return null;
@@ -168,11 +168,9 @@ public java.beans.EventSetDescriptor[] getEventSetDescriptors() {
  */
 public java.beans.MethodDescriptor[] getMethodDescriptors() {
 	try {
-		java.beans.MethodDescriptor aDescriptorList[] = {
-			main_javalangString__MethodDescriptor()
-		};
+		java.beans.MethodDescriptor aDescriptorList[] = {};
 		return aDescriptorList;
-	} catch (java.lang.Throwable exception) {
+	} catch (Throwable exception) {
 		handleException(exception);
 	};
 	return null;
@@ -188,7 +186,7 @@ public java.beans.PropertyDescriptor[] getPropertyDescriptors() {
 			,valuePropertyDescriptor()
 		};
 		return aDescriptorList;
-	} catch (java.lang.Throwable exception) {
+	} catch (Throwable exception) {
 		handleException(exception);
 	};
 	return null;
@@ -261,7 +259,7 @@ public java.beans.PropertyDescriptor valuePropertyDescriptor() {
 				/* Attempt to find the method using getMethod with parameter types. */
 				java.lang.Class aGetMethodParameterTypes[] = {};
 				aGetMethod = getBeanClass().getMethod("getValue", aGetMethodParameterTypes);
-			} catch (java.lang.Throwable exception) {
+			} catch (Throwable exception) {
 				/* Since getMethod failed, call findMethod. */
 				handleException(exception);
 				aGetMethod = findMethod(getBeanClass(), "getValue", 0);
@@ -273,14 +271,14 @@ public java.beans.PropertyDescriptor valuePropertyDescriptor() {
 					java.lang.Boolean.class
 				};
 				aSetMethod = getBeanClass().getMethod("setValue", aSetMethodParameterTypes);
-			} catch (java.lang.Throwable exception) {
+			} catch (Throwable exception) {
 				/* Since getMethod failed, call findMethod. */
 				handleException(exception);
 				aSetMethod = findMethod(getBeanClass(), "setValue", 1);
 			};
 			aDescriptor = new java.beans.PropertyDescriptor("value"
 			, aGetMethod, aSetMethod);
-		} catch (java.lang.Throwable exception) {
+		} catch (Throwable exception) {
 			/* Since we failed using methods, try creating a default property descriptor. */
 			handleException(exception);
 			aDescriptor = new java.beans.PropertyDescriptor("value"
@@ -292,9 +290,9 @@ public java.beans.PropertyDescriptor valuePropertyDescriptor() {
 		/* aDescriptor.setShortDescription("value"); */
 		/* aDescriptor.setExpert(false); */
 		/* aDescriptor.setHidden(false); */
-		/* aDescriptor.setValue("preferred", new java.lang.Boolean(false)); */
-		/* aDescriptor.setValue("ivjDesignTimeProperty", new java.lang.Boolean(true)); */
-	} catch (java.lang.Throwable exception) {
+		/* aDescriptor.setValue("preferred", new Boolean(false)); */
+		/* aDescriptor.setValue("ivjDesignTimeProperty", new Boolean(true)); */
+	} catch (Throwable exception) {
 		handleException(exception);
 	};
 	return aDescriptor;

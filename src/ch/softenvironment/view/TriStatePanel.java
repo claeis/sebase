@@ -19,9 +19,13 @@ package ch.softenvironment.view;
  * - undefined
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-10-26 19:21:21 $
+ * @version $Revision: 1.4 $ $Date: 2005-01-24 10:04:21 $
  */
 public class TriStatePanel extends BasePanel {
+	private static String ACTION_ALL = "ALL";
+	private static String ACTION_YES = "YES";
+	private static String ACTION_NO = "NO";
+	private javax.swing.ButtonGroup group = new javax.swing.ButtonGroup();
 	private javax.swing.JRadioButton ivjRbtFalse = null;
 	private javax.swing.JRadioButton ivjRbtTrue = null;
 	private javax.swing.JRadioButton ivjRbtAll = null;
@@ -68,13 +72,13 @@ public TriStatePanel(boolean isDoubleBuffered) {
 	super(isDoubleBuffered);
 }
 /**
- * Comment
+ * Trigger event at Selection-Change.
  */
 private void changed(java.awt.event.ItemEvent itemEvent) {
-	if (getRbtFalse().isSelected()) {
-		setValue(new Boolean(false));
-	} else if (getRbtTrue().isSelected()) {
-		setValue(new Boolean(true));
+	if (group.getSelection().getActionCommand().equals(ACTION_NO)) {
+		setValue(Boolean.FALSE);
+	} else if (group.getSelection().getActionCommand().equals(ACTION_YES)) {
+		setValue(Boolean.TRUE);
 	} else {
 		setValue(null);
 	}
@@ -156,6 +160,7 @@ private javax.swing.JRadioButton getRbtAll() {
 			ivjRbtAll.setText("Alle");
 			ivjRbtAll.setBounds(0, 0, 93, 22);
 			// user code begin {1}
+			ivjRbtAll.setActionCommand(ACTION_ALL);
 			ivjRbtAll.setText(getResourceString("CI_All_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
@@ -179,6 +184,7 @@ private javax.swing.JRadioButton getRbtFalse() {
 			ivjRbtFalse.setText("Nein");
 			ivjRbtFalse.setBounds(200, 0, 93, 22);
 			// user code begin {1}
+			ivjRbtFalse.setActionCommand(ACTION_NO);
 			ivjRbtFalse.setText(getResourceString(ch.softenvironment.util.StringUtils.class, "CI_No_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
@@ -202,6 +208,7 @@ private javax.swing.JRadioButton getRbtTrue() {
 			ivjRbtTrue.setText("Ja");
 			ivjRbtTrue.setBounds(100, 0, 93, 21);
 			// user code begin {1}
+			ivjRbtTrue.setActionCommand(ACTION_YES);
 			ivjRbtTrue.setText(getResourceString(ch.softenvironment.util.StringUtils.class, "CI_Yes_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
@@ -257,7 +264,6 @@ private void initialize() {
 		handleException(ivjExc);
 	}
 	// user code begin {2}
-	javax.swing.ButtonGroup group = new javax.swing.ButtonGroup();
 	group.add(getRbtAll());
 	group.add(getRbtTrue());
 	group.add(getRbtFalse());
