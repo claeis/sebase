@@ -22,7 +22,7 @@ package ch.softenvironment.util;
  *   -> MyObject#getMyProperty()			// the getter-Method
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-04-27 09:12:05 $
+ * @version $Revision: 1.3 $ $Date: 2004-05-03 12:06:01 $
  */
 public class BeanReflector extends java.util.EventObject {
 	private transient String property = null;
@@ -129,5 +129,17 @@ public void setField(Object value) throws NoSuchFieldException, IllegalAccessExc
 public void setValue(Object value) throws NoSuchMethodException, java.lang.reflect.InvocationTargetException, IllegalAccessException {
 	Object args[] = { value };
 	getSetterMethod().invoke(getSource(), args);
+}
+
+/**
+ * Create an instance of the given Class by the default constructor.
+ * MyObject object = (MyObject)BeanReflector.createInstance(MyObject.class);
+ * @param target The Target-Object's Type
+ */
+public static java.lang.Object createInstance(java.lang.Class target) throws NoSuchMethodException, InstantiationException, IllegalAccessException, java.lang.reflect.InvocationTargetException {
+	Class types[] = {};
+	Object args[] = {};
+	java.lang.reflect.Constructor constructor = target.getConstructor(types);
+	return constructor.newInstance(args);
 }
 }
