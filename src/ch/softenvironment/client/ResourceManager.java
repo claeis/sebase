@@ -22,7 +22,7 @@ import java.util.*;
  * the mapped *.properties files are cached during runtime.
  * 
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2005-02-21 13:26:41 $
+ * @version $Revision: 1.3 $ $Date: 2005-03-01 15:29:25 $
  */
 public class ResourceManager {
 	private static ResourceManager manager = null;
@@ -39,12 +39,13 @@ public class ResourceManager {
 		}
 		return manager;
 	}
-	/**
-	 * @see getResource(java.lang.Class, Locale, String)
-	 */
-	public String getResource(java.lang.Class holder, String propertyName) {
-		return getResource(holder, Locale.getDefault(), propertyName);
-	}
+/**
+ * Convenience Method.
+ * @see #getResource(java.lang.Class, Locale, String)
+ */
+public static String getResource(java.lang.Class owner, String propertyName) {
+	return getInstance().getResource(owner, Locale.getDefault(), propertyName);
+}
 	/**
 	 * Return NLS-String for a certain Property.
 	 * @param holder A <holder-Class>[_<language>].properties file must exist
