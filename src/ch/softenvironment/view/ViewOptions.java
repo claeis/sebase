@@ -14,18 +14,36 @@ package ch.softenvironment.view;
 
 /**
  * Manage a Set of GUI-Options.
+ * An instance of the ViewOptions should be initalized as Singleton
+ * by an Appplication-Launcher and passed to any View opened from there.
+ *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:33:00 $
+ * @version $Revision: 1.3 $ $Date: 2004-09-14 17:01:47 $
  * @see DetailView(..)
  * @see SearchView(..)
  */
 public class ViewOptions {
+	private boolean closeOnSave = true;
 	private java.util.Map options = new java.util.HashMap();
+	private ch.softenvironment.client.ViewManager viewManager = new ch.softenvironment.client.ViewManager();
 /**
  * ViewOptions constructor comment.
  */
 public ViewOptions() {
 	super();
+}
+/**
+ * @see #setCloseOnSave()
+ */
+public boolean getCloseOnSave() {
+	return closeOnSave;
+}
+/**
+ * Design Pattern: Singleton.
+ * @return ViewManager
+ */
+public ch.softenvironment.client.ViewManager getViewManager() {
+	return viewManager;
 }
 /**
  * Return whether Option with given Name is Configured YES or NO.
@@ -37,6 +55,13 @@ public boolean isSet(String name) {
 	}
 
 	return false;
+}
+/**
+ * Set whether saveObject() in DetailView's shall close GUI if
+ * only one object is represented.
+ */
+public void setCloseOnSave(boolean closeOnSave) {
+	this.closeOnSave = closeOnSave;
 }
 /**
  * Set a certain Option.
