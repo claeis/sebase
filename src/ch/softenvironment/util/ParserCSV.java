@@ -17,31 +17,21 @@ import java.io.*;
 /**
  * Parser-Tool to parse comma separated files (*.CSV).
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2004-08-18 09:28:13 $
+ * @version $Revision: 1.7 $ $Date: 2005-01-06 09:49:10 $
  */
 public class ParserCSV {
 	private String line = null;
 	private String separator = null;
 	private int lastIndex = -1;
-	
 /**
- * Transform a String with separated items into a List.
- * @param serializedList
- * @return java.util.List
+ * ParserCSV constructor comment.
+ * @param line (for e.g. "field1;field2;...")
+ * @param separator (for e.g. ";")
  */
-public static java.util.List stringToArray(String serializedList, String separator) {
-	ParserCSV parser = new ParserCSV(serializedList, separator);
-	
-	java.util.List list = new java.util.ArrayList();
-	String item = parser.getNextString();
-	while (item != null) {
-//		if (!StringUtils.isNullOrEmpty(item)) {
-			list.add(item);
-//Tracer.getInstance().debug(ParserCSV.class, "stringToArray(..)", "adding: " + item);
-//		}
-		item = parser.getNextString();
-	}
-	return list;
+public ParserCSV(String line, String separator) {
+	super();
+	this.line = line;
+	this.separator = separator;
 }
 /**
  * Transform a List into a String with items separated by a Separator.
@@ -55,16 +45,6 @@ public static String arrayToString(java.util.List items, String separator) {
 		serializedList = serializedList + iterator.next() + separator;
 	}
 	return serializedList;
-}
-/**
- * ParserCSV constructor comment.
- * @param line (for e.g. "field1;field2;...")
- * @param separator (for e.g. ";")
- */
-public ParserCSV(String line, String separator) {
-	super();
-	this.line = line;
-	this.separator = separator;
 }
 /**
  * Return next Integer between to Separators.
@@ -116,6 +96,7 @@ public String getNextString() {
 }
 /**
  * Replace separator in text.
+ * @deprecated (use CsvSerializer#encodeString() instead)
  */
 public static String maskSeparator(Object object, char sep) {
 	if (object == null) {
@@ -131,7 +112,6 @@ public static String maskSeparator(Object object, char sep) {
 	}
 	return text.replace(sep, replacement).replace('\n', replacement);
 }
-
 /**
  * Read a File where fields/cells are separated by a given separator and return a List
  * where each item contains a line of the given Stream.
@@ -204,5 +184,24 @@ public void skip(int nrOfFields) {
 			break;
 		}
 	}
+}
+/**
+ * Transform a String with separated items into a List.
+ * @param serializedList
+ * @return java.util.List
+ */
+public static java.util.List stringToArray(String serializedList, String separator) {
+	ParserCSV parser = new ParserCSV(serializedList, separator);
+	
+	java.util.List list = new java.util.ArrayList();
+	String item = parser.getNextString();
+	while (item != null) {
+//		if (!StringUtils.isNullOrEmpty(item)) {
+			list.add(item);
+//Tracer.getInstance().debug(ParserCSV.class, "stringToArray(..)", "adding: " + item);
+//		}
+		item = parser.getNextString();
+	}
+	return list;
 }
 }
