@@ -13,9 +13,9 @@ package ch.softenvironment.util;
  */
  
 /**
- * Format a number to certain criterias.
+ * Format a number to look like a financial value.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-08-25 15:56:21 $
+ * @version $Revision: 1.4 $ $Date: 2004-09-27 11:11:15 $
  */
 public class AmountFormat extends java.text.DecimalFormat {
 /**
@@ -31,27 +31,26 @@ public AmountFormat() {
 	setDecimalSeparatorAlwaysShown(true);
 }
 /**
- * Format Amount.
- */
-public String format(Double amount) {
-	if (amount == null) {
-		return "";
-	} else {
-		return format(amount.doubleValue());
-	}
-}
-/**
  * Convert Amount into String.
  */
 public static String toString(double amount) {
-	AmountFormat amountFormat = new AmountFormat();
-	return amountFormat.format(amount);
+	return toString(new Double(amount));
 }
 /**
  * Convert Amount into String.
  */
-public static String toString(Double amount) {
-	AmountFormat amountFormat = new AmountFormat();
-	return amountFormat.format(amount);
+public static String toString(long amount) {
+	return toString(new Long(amount));
+}
+/**
+ * Convert given amount into formatted String.
+ */
+public static String toString(Number amount) {
+	if (amount == null) {
+		return "";
+	} else {
+		AmountFormat amountFormat = new AmountFormat();
+		return amountFormat.format(amount);
+	}
 }
 }
