@@ -1,6 +1,5 @@
 package ch.softenvironment.view;
 
-import ch.softenvironment.util.ResourceManager;
 
 /* 
  * This library is free software; you can redistribute it and/or
@@ -13,11 +12,11 @@ import ch.softenvironment.util.ResourceManager;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  */
- 
+import ch.softenvironment.client.ResourceManager;
 /**
  * Dialog for user query. Provides only YES or NO Options.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
+ * @version $Revision: 1.4 $ $Date: 2004-09-14 16:56:57 $
  */
 public class QueryCancelDialog extends BaseDialog {
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();

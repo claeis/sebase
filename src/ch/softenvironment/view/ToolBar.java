@@ -1,6 +1,5 @@
 package ch.softenvironment.view;
 
-import ch.softenvironment.util.ResourceManager;
 
 /* 
  * This library is free software; you can redistribute it and/or
@@ -13,11 +12,11 @@ import ch.softenvironment.util.ResourceManager;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  */
- 
+import ch.softenvironment.client.ResourceManager;
 /**
  * StandardToolbar.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-07-05 19:34:35 $
+ * @version $Revision: 1.5 $ $Date: 2004-09-14 16:56:57 $
  */
 public class ToolBar extends javax.swing.JToolBar {
 	// list of Objects to treat by selector
@@ -504,7 +503,6 @@ private javax.swing.JComboBox getCbxItems() {
 	}
 	return ivjCbxItems;
 }
-
 /**
  * Gets the currentObject property (java.lang.Object) value.
  * @return The currentObject property value.
@@ -575,6 +573,12 @@ public Object getPrevious() {
 	}
 	treatNextPreviousButtons();
 	return getCurrentObject();
+}
+/**
+ * @see BaseFrame#getResourceString(String)
+ */
+protected String getResourceString(String propertyName) {
+	return ResourceManager.getInstance().getResource(this.getClass(), propertyName);
 }
 /**
  * Return the TbbCopy property value.
@@ -1331,11 +1335,5 @@ private void treatNextPreviousButtons() {
 		getTbbLast().setEnabled(false);
 		getLblSelector().setText(" 0/0 ");//$NON-NLS-1$
 	}
-}
-/**
- * @see BaseFrame#getResourceString(String)
- */
-protected String getResourceString(String propertyName) {
-	return ResourceManager.getInstance().getResource(this.getClass(), propertyName);
 }
 }

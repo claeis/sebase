@@ -11,11 +11,11 @@ package ch.softenvironment.view;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  */
- 
+import ch.softenvironment.client.ResourceManager;
 /**
  * Panel to manage a single URL.
  * @author: Peter Hirzel </i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-08-25 16:00:33 $
+ * @version $Revision: 1.4 $ $Date: 2004-09-14 16:56:57 $
  */
 public class URLView extends javax.swing.JPanel {
 	private javax.swing.JButton ivjBtnBrowser = null;
@@ -79,7 +79,7 @@ private void browse() {
 	try {
 		ch.ehi.basics.view.BrowserControl.displayURL(getTxtURLText());
 	} catch(Throwable e) {
-		new ch.softenvironment.view.WarningDialog(this, ch.softenvironment.util.ResourceManager.getInstance().getResource(URLView.class, "CT_BrowserError"), e.toString());
+		new ch.softenvironment.view.WarningDialog(this, ResourceManager.getInstance().getResource(URLView.class, "CT_BrowserError"), e.toString());
 	}
 }
 /**
@@ -142,7 +142,7 @@ private javax.swing.JButton getBtnBrowser() {
 			ivjBtnBrowser.setText("...");
 			ivjBtnBrowser.setEnabled(true);
 			// user code begin {1}
-			ivjBtnBrowser.setToolTipText(ch.softenvironment.util.ResourceManager.getInstance().getResource(URLView.class, "CW_OpenInBrowser"));
+			ivjBtnBrowser.setToolTipText(ResourceManager.getInstance().getResource(URLView.class, "CW_OpenInBrowser"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}

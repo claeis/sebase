@@ -15,7 +15,7 @@ package ch.softenvironment.view;
 /**
  * Basic javax.swing.JPanel.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-06-29 11:28:42 $
+ * @version $Revision: 1.4 $ $Date: 2004-09-14 16:56:57 $
  */
 public class BasePanel extends javax.swing.JPanel {
 /**
@@ -70,7 +70,7 @@ protected void genericPopupDisplay(java.awt.event.MouseEvent event, javax.swing.
  * @see BaseFrame#getResourceString(Class, String)
  */
 protected static String getResourceString(java.lang.Class resource, String propertyName) {
-	return ch.softenvironment.util.ResourceManager.getInstance().getResource(resource, propertyName);
+	return ch.softenvironment.client.ResourceManager.getInstance().getResource(resource, propertyName);
 }
 /**
  * @see BaseFrame#getResourceString(String)

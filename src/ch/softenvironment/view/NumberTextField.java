@@ -1,7 +1,5 @@
 package ch.softenvironment.view;
 
-import ch.softenvironment.util.ResourceManager;
-
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -13,7 +11,7 @@ import ch.softenvironment.util.ResourceManager;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  */
- 
+import ch.softenvironment.client.ResourceManager;
 /**
  * Extended JTextField to show any Number values.
  * Allows visual connection of Attribute-to-Attribute connection from e.g.
@@ -22,7 +20,7 @@ import ch.softenvironment.util.ResourceManager;
  * The Model will be updated after a focusLost-Event.
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
+ * @version $Revision: 1.4 $ $Date: 2004-09-14 16:56:57 $
  */
 public class NumberTextField extends javax.swing.JTextField implements java.awt.event.InputMethodListener {
 	private java.text.DecimalFormat decFormat = null;

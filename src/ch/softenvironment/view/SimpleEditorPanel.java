@@ -13,10 +13,11 @@ package ch.softenvironment.view;
  */
  
 import ch.softenvironment.util.*;
+import ch.softenvironment.client.ResourceManager;
 /**
  * Provide a simple editor Area with minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2004-06-29 11:29:27 $
+ * @version $Revision: 1.6 $ $Date: 2004-09-14 16:56:57 $
  */
 public class SimpleEditorPanel extends javax.swing.JPanel {
 	private boolean hasContentsChanged = false;
@@ -113,6 +114,20 @@ public SimpleEditorPanel(boolean isDoubleBuffered) {
 public void addSimpleEditorPanelListener(ch.softenvironment.view.SimpleEditorPanelListener newListener) {
 	fieldSimpleEditorPanelListenerEventMulticaster = ch.softenvironment.view.SimpleEditorPanelListenerEventMulticaster.add(fieldSimpleEditorPanelListenerEventMulticaster, newListener);
 	return;
+}
+/**
+ * Append text at the end.
+ */
+public void append(String text) {
+	getTxaEditor().append(text);
+}
+/**
+ * Remove the whole contents from editing area.
+ * If TextArea is not enabled no erasing will be performed.
+ */
+public void clearAll() {
+	getTxaEditor().selectAll();
+	getTxaEditor().replaceSelection("");
 }
 /**
  * connEtoC1:  (MniDelete.action.actionPerformed(java.awt.event.ActionEvent) --> SimpleEditorPanel.mniDelete()V)
@@ -832,21 +847,5 @@ public void setTxaEditorEditable(boolean arg1) {
  */
 private void txaEditor_KeyReleased(java.awt.event.KeyEvent keyEvent) {
 	hasContentsChanged = true;
-}
-
-/**
- * Append text at the end.
- */
-public void append(String text) {
-	getTxaEditor().append(text);
-}
-
-/**
- * Remove the whole contents from editing area.
- * If TextArea is not enabled no erasing will be performed.
- */
-public void clearAll() {
-	getTxaEditor().selectAll();
-	getTxaEditor().replaceSelection("");
 }
 }

@@ -14,12 +14,12 @@ package ch.softenvironment.view;
 
 import java.awt.*;
 
-import ch.softenvironment.util.ResourceManager;
+import ch.softenvironment.client.ResourceManager;
 import ch.softenvironment.util.Tracer;
 /**
  * Template-Dialog defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2004-08-18 09:26:08 $
+ * @version $Revision: 1.6 $ $Date: 2004-09-14 16:56:57 $
  */
 public abstract class BaseDialog extends javax.swing.JDialog {
 	private javax.swing.JPanel ivjJDialogContentPane = null;
@@ -55,6 +55,12 @@ public BaseDialog(Frame owner, boolean modal) {
 	super(owner, modal);
 	setRelativeLocation(owner);
 	initialize();
+}
+/**
+ * Overwrite for specific adaptions.
+ * @see BaseFrame#adaptSelection(..)
+ */
+protected void adaptSelection(java.awt.event.MouseEvent event, javax.swing.JPopupMenu popupMenu) {
 }
 /**
  * Typical Apply-Action.
@@ -193,6 +199,18 @@ protected String getRemoveString() {
 	return getResourceString(BaseDialog.class, "BtnRemove_text");
 }
 /**
+ * @see BaseFrame#getResourceString(String)
+ */
+protected static String getResourceString(java.lang.Class resourceClass, String propertyName) {
+	return ResourceManager.getInstance().getResource(resourceClass, propertyName);
+}
+/**
+ * @see BaseFrame#getResourceString(String)
+ */
+protected String getResourceString(String propertyName) {
+	return ResourceManager.getInstance().getResource(this.getClass(), propertyName);
+}
+/**
  * Return Button Label-String.
  */
 protected String getSearchWindowString() {
@@ -305,25 +323,5 @@ protected void traceOnly(java.lang.Throwable exception) {
  */
 protected void undo() {
 	// do nothing by default
-}
-
-/**
- * @see BaseFrame#getResourceString(String)
- */
-protected static String getResourceString(java.lang.Class resourceClass, String propertyName) {
-	return ResourceManager.getInstance().getResource(resourceClass, propertyName);
-}
-/**
- * @see BaseFrame#getResourceString(String)
- */
-protected String getResourceString(String propertyName) {
-	return ResourceManager.getInstance().getResource(this.getClass(), propertyName);
-}
-
-/**
- * Overwrite for specific adaptions.
- * @see BaseFrame#adaptSelection(..)
- */
-protected void adaptSelection(java.awt.event.MouseEvent event, javax.swing.JPopupMenu popupMenu) {
 }
 }

@@ -13,10 +13,11 @@ package ch.softenvironment.view;
  */
  
 import ch.ehi.basics.view.*;
+import ch.softenvironment.client.ResourceManager;
 /**
  * TextField representing a File-Name and Chooser-Button.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-08-25 16:00:33 $
+ * @version $Revision: 1.4 $ $Date: 2004-09-14 16:56:57 $
  */
 public class FileNamePanel extends javax.swing.JPanel {
 	private javax.swing.JButton ivjBtnChooseFile = null;
@@ -81,7 +82,7 @@ private void chooseFile() {
 		String fileName = null;
 
 		FileChooser dialog =  new FileChooser(/*LauncherView.getSettings().getWorkingDirectory()*/);
-		dialog.setDialogTitle(ch.softenvironment.util.ResourceManager.getInstance().getResource(FileNamePanel.class, "CT_ChooseFile"));//$NON-NLS-1$
+		dialog.setDialogTitle(ResourceManager.getInstance().getResource(FileNamePanel.class, "CT_ChooseFile"));//$NON-NLS-1$
 //		dialog.setSelectedFile(new File(fileName));
 //		dialog.addChoosableFileFilter(HTMLUtility.createHtmlFilter());
 		if (dialog.showOpenDialog(this) == FileChooser.APPROVE_OPTION) {
@@ -162,7 +163,7 @@ private javax.swing.JButton getBtnChooseFile() {
 			ivjBtnChooseFile.setToolTipText("Datei wählen");
 			ivjBtnChooseFile.setText("...");
 			// user code begin {1}
-			ivjBtnChooseFile.setToolTipText(ch.softenvironment.util.ResourceManager.getInstance().getResource(FileNamePanel.class, "CT_ChooseFile"));
+			ivjBtnChooseFile.setToolTipText(ResourceManager.getInstance().getResource(FileNamePanel.class, "CT_ChooseFile"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}

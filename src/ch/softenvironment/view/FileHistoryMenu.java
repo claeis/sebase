@@ -16,13 +16,13 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.*;
-import ch.softenvironment.util.ResourceManager;
+import ch.softenvironment.client.ResourceManager;
 import ch.softenvironment.util.StringUtils;
 
 /**
  * Generic FileMenu to provide a list of recently used files. 
  * @author: Peter Hirzel <i>soft</i> Environment
- * @version $Revision: 1.1 $ $Date: 2004-05-08 13:29:51 $
+ * @version $Revision: 1.2 $ $Date: 2004-09-14 16:56:57 $
  */
 public class FileHistoryMenu extends javax.swing.JMenu {
 	private FileHistoryListener listener = null;
@@ -87,6 +87,13 @@ public class FileHistoryMenu extends javax.swing.JMenu {
 		}
 	}
 	/**
+	 * Return the current history in last used Order.
+	 * @return java.util.List
+	 */
+	public java.util.List getHistory() {
+		return history;
+	}
+	/**
 	 * Remove a file from History (for e.g. if non existing any more).
 	 * @param filename (incl. absolute path) to be removed from history
 	 */
@@ -95,12 +102,5 @@ public class FileHistoryMenu extends javax.swing.JMenu {
 			history.remove(filename);
 		}
 		buildSubmenu();
-	}
-	/**
-	 * Return the current history in last used Order.
-	 * @return java.util.List
-	 */
-	public java.util.List getHistory() {
-		return history;
 	}
 }

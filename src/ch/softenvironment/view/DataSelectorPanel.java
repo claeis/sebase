@@ -13,10 +13,11 @@ package ch.softenvironment.view;
  */
  
 import ch.softenvironment.util.*;
+import ch.softenvironment.client.ResourceManager;
 /**
  * Browser to walk through a List of Objects.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-04-27 09:14:58 $
+ * @version $Revision: 1.5 $ $Date: 2004-09-14 16:56:57 $
  */
 public class DataSelectorPanel extends javax.swing.JPanel {
 	private DataSelectorPanelListener listener = null;
