@@ -15,7 +15,7 @@ package ch.softenvironment.view;
 /**
  * Panel to manage a single URL.
  * @author: Peter Hirzel </i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:33:00 $
+ * @version $Revision: 1.3 $ $Date: 2004-08-25 16:00:33 $
  */
 public class URLView extends javax.swing.JPanel {
 	private javax.swing.JButton ivjBtnBrowser = null;
@@ -79,7 +79,7 @@ private void browse() {
 	try {
 		ch.ehi.basics.view.BrowserControl.displayURL(getTxtURLText());
 	} catch(Throwable e) {
-		new ch.softenvironment.view.WarningDialog(this, "Browser-Fehler", e.toString());
+		new ch.softenvironment.view.WarningDialog(this, ch.softenvironment.util.ResourceManager.getInstance().getResource(URLView.class, "CT_BrowserError"), e.toString());
 	}
 }
 /**
@@ -142,6 +142,7 @@ private javax.swing.JButton getBtnBrowser() {
 			ivjBtnBrowser.setText("...");
 			ivjBtnBrowser.setEnabled(true);
 			// user code begin {1}
+			ivjBtnBrowser.setToolTipText(ch.softenvironment.util.ResourceManager.getInstance().getResource(URLView.class, "CW_OpenInBrowser"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -194,10 +195,7 @@ public java.lang.String getTxtURLText() {
  * @param exception java.lang.Throwable
  */
 private void handleException(java.lang.Throwable exception) {
-
-	/* Uncomment the following lines to print uncaught exceptions to stdout */
-	// System.out.println("--------- UNCAUGHT EXCEPTION ---------");
-	// exception.printStackTrace(System.out);
+	BaseFrame.showException(null, exception);
 }
 /**
  * Initializes connections
@@ -243,31 +241,6 @@ private void initialize() {
 	}
 	// user code begin {2}
 	// user code end
-}
-/**
- * main entrypoint - starts the part when it is run as an application
- * @param args java.lang.String[]
- */
-public static void main(java.lang.String[] args) {
-	try {
-		javax.swing.JFrame frame = new javax.swing.JFrame();
-		URLView aURLView;
-		aURLView = new URLView();
-		frame.setContentPane(aURLView);
-		frame.setSize(aURLView.getSize());
-		frame.addWindowListener(new java.awt.event.WindowAdapter() {
-			public void windowClosing(java.awt.event.WindowEvent e) {
-				System.exit(0);
-			};
-		});
-		frame.show();
-		java.awt.Insets insets = frame.getInsets();
-		frame.setSize(frame.getWidth() + insets.left + insets.right, frame.getHeight() + insets.top + insets.bottom);
-		frame.setVisible(true);
-	} catch (Throwable exception) {
-		System.err.println("Exception occurred in main() of javax.swing.JPanel");
-		exception.printStackTrace(System.out);
-	}
 }
 /**
  * 

@@ -15,7 +15,7 @@ package ch.softenvironment.view;
 /**
  * Product Info Dialog.
  * @author: @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
+ * @version $Revision: 1.4 $ $Date: 2004-08-25 16:00:33 $
  */
 public class AboutDialog extends BaseDialog {
 	private javax.swing.JPanel ivjBaseDialogContentPane = null;
@@ -35,7 +35,7 @@ public AboutDialog(java.awt.Frame owner, String application, String version, Str
 	super(owner, null, true);
 	initialize();
 
-	setTitle("Info zu " + application);
+	setTitle(getResourceString("DlgTitle") + " " + application);
 	getLblTitle().setText(application + " " + version);
 	getLblCopyright().setText("Copyright (c) softEnvironment " + copyrightPeriod);
 	getTxaLicence().setText(licence);
@@ -138,6 +138,7 @@ private javax.swing.JLabel getLblCopyright() {
 			ivjLblCopyright.setText("Copyright (c) softEnvironment 2001-2003");
 			ivjLblCopyright.setBounds(127, 461, 280, 27);
 			// user code begin {1}
+			ivjLblCopyright.setText("Copyright (c) softEnvironment 2001-2004");
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -161,6 +162,7 @@ private javax.swing.JLabel getLblLicencedFor() {
 			ivjLblLicencedFor.setText("Dieses Produkt ist lizenziert für:");
 			ivjLblLicencedFor.setBounds(64, 320, 285, 26);
 			// user code begin {1}
+			ivjLblLicencedFor.setText(getResourceString("LblLicencedFor_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -184,6 +186,7 @@ private javax.swing.JLabel getLblTitle() {
 			ivjLblTitle.setText("Lepra-Projektadministration Vx.x.x");
 			ivjLblTitle.setBounds(15, 16, 497, 38);
 			// user code begin {1}
+			ivjLblTitle.setText("<your product name>");
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -240,6 +243,7 @@ private void initialize() {
 		handleException(ivjExc);
 	}
 	// user code begin {2}
+	setTitle(getResourceString("DlgTitle"));
 	// user code end
 }
 }
