@@ -20,17 +20,20 @@ import ch.softenvironment.client.ResourceManager;
  * The Model will be updated after a focusLost-Event.
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2004-09-16 15:12:11 $
+ * @version $Revision: 1.6 $ $Date: 2005-01-24 10:01:51 $
  */
 public class NumberTextField extends javax.swing.JTextField implements java.awt.event.InputMethodListener {
 	private java.text.DecimalFormat decFormat = null;
 /**
  * Constructor.
+ * By Default align value-contents NumberFields on the right.
  */
 public NumberTextField() {
 	super();
 
 	addInputMethodListener(this);
+
+	setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 }
 /**
  * Invoked when the caret within composed text has changed.
