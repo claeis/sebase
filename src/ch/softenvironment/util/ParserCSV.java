@@ -15,9 +15,9 @@ package ch.softenvironment.util;
 import java.io.*;
 
 /**
- * Parser to parse comma separated files.
+ * Parser-Tool to parse comma separated files (*.CSV).
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-05-08 13:33:33 $
+ * @version $Revision: 1.4 $ $Date: 2004-05-17 14:05:45 $
  */
 public class ParserCSV {
 	private String line = null;
@@ -97,10 +97,10 @@ public String getNextString() {
 		// end of line reached
 		return result;
 	}
-
-	// eliminate "quotes" around String => quotes
+/*
+	// eliminate "double-quotes" around String => quotes
 	// Excel introduces such quotes in case a cell contains separator-like Characters
-	if (result.startsWith("\"", 0) && result.endsWith("\"" /*, result.length() - 1*/)) {
+	if (result.startsWith("\"", 0) && result.endsWith("\"")) {
 		result = result.substring(1, result.length() - 1);
 	}
 
@@ -111,20 +111,8 @@ public String getNextString() {
 		result = result.substring(0, to + 1) + result.substring(to + 2, result.length());
 		from = to + 1;
 	}
-
-	result = result.trim();
-	
-	if (System.getProperty("os.name").toUpperCase().indexOf("WINDOW") < 0) {
-Tracer.getInstance().patch(this, "getNextString()", "äöü replaced for non-Windows OS");
-		result = StringUtils.replace(result, "ä", "ae");
-		result = StringUtils.replace(result, "ö", "oe");
-		result = StringUtils.replace(result, "ü", "ue");
-		result = StringUtils.replace(result, "Ä", "Ue");
-		result = StringUtils.replace(result, "Ö", "Oe");
-		result = StringUtils.replace(result, "Ü", "Ue");
-	}
-		
-	return result;
+*/
+	return result.trim();
 }
 /**
  * Replace separator in text.
@@ -162,20 +150,23 @@ public static java.util.List readFile(InputStream stream, String separator) {
 
 		int c;
 		while ((c = inFile.read()) != -1) {
-			if (c == '\r') {
+			if (c == '\r' /*CR*/) {
   				c = inFile.read();
   				if (c == -1) {
+  					// EOF reached
 	  				if (line.length() > 0) {
 		  				arrayList.add(line);
 	  				}
 	  				return arrayList;
-  				}
-  				if (c == '\n') {
-	  				// end of line reached
+  				} else if (c == '\n' /*LF*/) {
+	  				// Windows: EndOfLine reached
 	  				arrayList.add(line);
   					line = "";
   				} else {
-					throw new DeveloperException(ParserCSV.class, "readFile(..)", "'\n' was expected!");
+  					// Linux evtl. other EndOfLine
+//					throw new DeveloperException(ParserCSV.class, "readFile(..)", "'\n' was expected!");
+  					arrayList.add(line);
+  					line = "" + (char)c;
   				}
 	   		} else {
 		   		line = line + (char)c;
