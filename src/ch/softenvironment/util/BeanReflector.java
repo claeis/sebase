@@ -1,5 +1,4 @@
 package ch.softenvironment.util;
-
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,7 +21,7 @@ package ch.softenvironment.util;
  *   -> MyObject#getMyProperty()			// the getter-Method
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2004-12-03 16:27:49 $
+ * @version $Revision: 1.8 $ $Date: 2005-03-12 17:46:42 $
  */
 public class BeanReflector extends java.util.EventObject {
 	private transient String property = null;
@@ -31,6 +30,21 @@ public class BeanReflector extends java.util.EventObject {
 	public static final int GETTER = 1;
 	public static final int SETTER = 2;
 	public static final int GETTER_AND_SETTER = GETTER + SETTER;
+	
+	/**
+	 * Determine whether given son inherits from predecessor somewhere in
+	 * inheritance chain.
+	 */
+	public static final boolean isInherited(java.lang.Class son, Class predecessor) {
+		java.lang.Class current = son;
+		while ((current != Object.class) && (current != null /* simple types such as boolean */)) {
+			if (current.equals(predecessor)) {
+				return true;
+			}
+			current = current.getSuperclass();
+		}
+		return false;
+	}
 /**
  * ObjectChange constructor.
  * @param source Object to be changed
@@ -191,7 +205,7 @@ public Object cloneValue() throws IllegalAccessException, java.lang.reflect.Invo
 	} else if (value instanceof java.util.Date) {
 		return new java.util.Date(((java.util.Date)value).getTime());
 	} else {
-Tracer.getInstance().nyi(this, "cloneValue()", "type not cloneable yet: " + value.getClass());
+//TOD NYI: type not cloneable yet => value.getClass()
 		return null;
 	}
 }

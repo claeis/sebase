@@ -20,7 +20,7 @@ package ch.softenvironment.view.swingext;
  * The expected format is shown as ToolTip.
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2005-02-23 15:16:51 $
+ * @version $Revision: 1.2 $ $Date: 2005-03-12 17:48:42 $
  */
 public class DateTextField extends javax.swing.JTextField {
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
@@ -36,11 +36,11 @@ class IvjEventHandler implements java.awt.event.KeyListener {
 		public void keyTyped(java.awt.event.KeyEvent e) {};
 	};
 /**
- * DateTextField constructor comment.
+ * DateTextField constructor comment for date with pattern "dd.MM.yyyy".
  * @see ch.softenvironment.util.NlsUtils.DATE_EUROPE_PATTERN (default Date-pattern)
  */
 public DateTextField() {
-	this(ch.softenvironment.util.NlsUtils.DATE_EUROPE_PATTERN);
+	this("dd.MM.yyyy");
 }
 /**
  * DateTextField constructor comment.

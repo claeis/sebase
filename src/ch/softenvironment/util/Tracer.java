@@ -25,7 +25,7 @@ package ch.softenvironment.util;
  * Design Pattern: Singleton
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2005-02-21 13:24:30 $
+ * @version $Revision: 1.8 $ $Date: 2005-03-12 17:46:42 $
  */
 public class Tracer {
 	// Mode's
@@ -106,7 +106,7 @@ public static Tracer getInstance() {
  */
 private void log(String logMessage) {
 	if (mode != SILENT) {
-		outStream.println(NlsUtils.getEuropeanTimestampString() + ">" + logMessage);
+		outStream.println(NlsUtils.formatDateTime(new java.util.Date()) + ">" + logMessage);
 	}
 }
 /**

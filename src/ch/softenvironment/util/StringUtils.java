@@ -17,7 +17,7 @@ import java.io.File;
 /**
  * Set of reusable String Utilities.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-10-26 19:27:19 $
+ * @version $Revision: 1.5 $ $Date: 2005-03-12 17:46:42 $
  */
 public abstract class StringUtils {
 
@@ -115,9 +115,9 @@ public static String getBooleanString(Boolean value) {
 	if (value == null) {
 		return "";
 	} else if (value.booleanValue()) {
-		return ch.softenvironment.client.ResourceManager.getInstance().getResource(StringUtils.class, "CI_Yes_text");
+		return ch.softenvironment.client.ResourceManager.getResource(StringUtils.class, "CI_Yes_text");
 	} else {
-		return ch.softenvironment.client.ResourceManager.getInstance().getResource(StringUtils.class, "CI_No_text");
+		return ch.softenvironment.client.ResourceManager.getResource(StringUtils.class, "CI_No_text");
 	}
 }
 }

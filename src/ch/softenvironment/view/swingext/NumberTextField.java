@@ -18,7 +18,7 @@ import ch.softenvironment.client.ResourceManager;
  * to trigger <b>propertyChange</b>-Event from this Component towards the Model.
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2005-02-23 15:16:52 $
+ * @version $Revision: 1.2 $ $Date: 2005-03-12 17:48:42 $
  */
 public class NumberTextField extends javax.swing.JTextField implements java.awt.event.InputMethodListener {
 	private java.text.DecimalFormat decFormat = null;
@@ -88,8 +88,8 @@ public void inputMethodTextChanged(java.awt.event.InputMethodEvent event) {
 	if (!(((lastChar >= '0') && (lastChar <= '9')) || (lastChar == '-') || (lastChar == '+') || (lastChar == '.'))) {
 		if (isEditable() && isEnabled()) {
 			Object parent = getRootPane().getParent();
-			String title = ResourceManager.getInstance().getResource(NumberTextField.class, "CTInvalidInput"); //$NON-NLS-1$
-			String message = ResourceManager.getInstance().getResource(NumberTextField.class, "CICorrectInput"); //$NON-NLS-1$
+			String title = ResourceManager.getResource(NumberTextField.class, "CTInvalidInput"); //$NON-NLS-1$
+			String message = ResourceManager.getResource(NumberTextField.class, "CICorrectInput"); //$NON-NLS-1$
 			// reset wrong value
 			if (parent instanceof java.awt.Dialog) {
 				ch.softenvironment.view.BaseDialog.showWarning((java.awt.Component)parent, title, message);
