@@ -24,7 +24,7 @@ import ch.softenvironment.util.Tracer;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.8 $ $Date: 2004-05-28 19:51:42 $
+ * @version $Revision: 1.9 $ $Date: 2004-06-11 20:38:49 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -616,7 +616,7 @@ public final static void showException(Window owner, java.lang.Throwable excepti
 		
 		if ((exception.getMessage().length() == 0) || exception.getMessage().equals("empty String") || (exception.getMessage().equals("-"))) {//$NON-NLS-2$//$NON-NLS-1$
 Tracer.getInstance().hack(BaseFrame.class, "showException(..)", "exception message might change -> use another recognition");//$NON-NLS-2$//$NON-NLS-1$
-			Tracer.getInstance().runtimeWarning(BaseFrame.class, "showException(.)", "Exception ignored: " + exception.toString());
+			Tracer.getInstance().runtimeWarning(BaseFrame.class, "showException(.)", "NumberFormatException ignored: " + exception.toString());
 			return;
 		}
 
@@ -625,6 +625,9 @@ Tracer.getInstance().hack(BaseFrame.class, "showException(..)", "exception messa
 	} else if (exception instanceof DeveloperException) {
 		title = ((DeveloperException)exception).getTitle();
 		message = exception.getMessage();
+	} else if (exception instanceof MissingResourceException) {
+		Tracer.getInstance().developerError(BaseFrame.class, "showException(.)", "MissingResourceException ignored: " + exception.getLocalizedMessage());
+		return;
 	} /* else if (exception instanceof java.sql.SQLException) {
 		@see DbBaseFrame#handleException(..)
 	} */
