@@ -24,7 +24,7 @@ import ch.softenvironment.util.Tracer;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.10 $ $Date: 2004-06-26 11:18:56 $
+ * @version $Revision: 1.11 $ $Date: 2004-06-26 11:31:21 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -627,7 +627,7 @@ Tracer.getInstance().hack(BaseFrame.class, "showException(..)", "exception messa
 			title = ((DeveloperException)exception).getTitle();
 			message = exception.getMessage();
 		} else if (exception instanceof MissingResourceException) {
-			Tracer.getInstance().developerError(BaseFrame.class, "showException(.)", "MissingResourceException ignored: " + exception.getLocalizedMessage());
+			Tracer.getInstance().developerError(BaseFrame.class, "showException(..)", "MissingResourceException ignored: " + exception.getLocalizedMessage());
 			return;
 		} /* else if (exception instanceof java.sql.SQLException) {
 			@see DbBaseFrame#handleException(..)
@@ -641,10 +641,9 @@ Tracer.getInstance().hack(BaseFrame.class, "showException(..)", "exception messa
 Tracer.getInstance().nyi(BaseFrame.class, "showException(..)");
 		}
 	} catch(Throwable e) {
-		Tracer.getInstance().developerError(BaseFrame.class, "showException(..)", e.getLocalizedMessage());
+		Tracer.getInstance().developerError(BaseFrame.class, "showException(..)", "should not have been reached => " + e.getLocalizedMessage());
 	} finally {
 		// this method must not throw an Exception under any circumstances
-		System.out.println("BaseFrame#showException(..) -> finally should not have been reached");
 	}
 }
 /**
