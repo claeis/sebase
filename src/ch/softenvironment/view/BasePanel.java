@@ -15,7 +15,7 @@ package ch.softenvironment.view;
 /**
  * Basic javax.swing.JPanel.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-06-11 20:39:54 $
+ * @version $Revision: 1.3 $ $Date: 2004-06-29 11:28:42 $
  */
 public class BasePanel extends javax.swing.JPanel {
 /**
@@ -47,22 +47,24 @@ public BasePanel(boolean isDoubleBuffered) {
 	super(isDoubleBuffered);
 }
 /**
- * Adapt the given PopupMenu before displaying it (for e.g. disable Items).
- * Overwrite this method.
- * @see #genericPopupDisplay()
- */
-protected javax.swing.JPopupMenu adaptPopupMenu(javax.swing.JPopupMenu popupMenu) {
-	// overwrite
-	return null;
-}
-/**
- * @see BaseFrame
+ * @see BaseFrame#genericPopupDisplay(..)
  */
 protected void genericPopupDisplay(java.awt.event.MouseEvent event, javax.swing.JPopupMenu popupMenu) {
-	if (event.isPopupTrigger()) {
-		adaptPopupMenu(popupMenu);
-		popupMenu.show(event.getComponent(), event.getX(), event.getY());
-	}
+	try {
+	 	adaptSelection(event, popupMenu);
+
+	 	if (event.getClickCount() == 2) {
+		 	// case: double-click
+			if (this instanceof ListMenuChoice) {
+//				((ListMenuChoice)this).defaultDoubleClickAction(event);
+				((ListMenuChoice)this).changeObjects(event.getSource());
+			}
+	 	} else if (event.isPopupTrigger() && (popupMenu != null)) {
+			popupMenu.show(event.getComponent(), event.getX(), event.getY());
+		}
+   	} catch(Throwable e) {
+	   	handleException(e);
+   	}
 }
 /**
  * @see BaseFrame#getResourceString(Class, String)
@@ -82,5 +84,12 @@ protected String getResourceString(String propertyName) {
  */
 protected void handleException(java.lang.Throwable exception) {
 	BaseFrame.showException(null, exception);
+}
+
+/**
+ * Overwrite for specific adaptions.
+ * @see BaseFrame#adaptSelection(..)
+ */
+protected void adaptSelection(java.awt.event.MouseEvent event, javax.swing.JPopupMenu popupMenu) {
 }
 }

@@ -19,7 +19,7 @@ import ch.softenvironment.util.Tracer;
 /**
  * Template-Dialog defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
+ * @version $Revision: 1.4 $ $Date: 2004-06-29 11:28:42 $
  */
 public abstract class BaseDialog extends javax.swing.JDialog {
 	private javax.swing.JPanel ivjJDialogContentPane = null;
@@ -52,13 +52,6 @@ public BaseDialog(Frame owner, String title, boolean modal) {
 public BaseDialog(Frame owner, boolean modal) {
 	super(owner, modal);
 	initialize();
-}
-/**
- * Adapt the given PopupMenu before displaying it (for e.g. disable Items).
- * Overwrite this method.
- * @see #genericPopupDisplay()
- */
-protected void adaptPopupMenu(javax.swing.JPopupMenu popupMenu) {
 }
 /**
  * Typical Apply-Action.
@@ -95,13 +88,24 @@ protected boolean checkDeletion(String title, String question) {
 	return dialog.isYes();
 }
 /**
- * @see BaseFrame
+ * @see BaseFrame#genericPopupDisplay(..)
  */
 protected void genericPopupDisplay(java.awt.event.MouseEvent event, javax.swing.JPopupMenu popupMenu) {
-	if (event.isPopupTrigger()) {
-		adaptPopupMenu(popupMenu);
-		popupMenu.show(event.getComponent(), event.getX(), event.getY());
-	}
+	try {
+	 	adaptSelection(event, popupMenu);
+
+	 	if (event.getClickCount() == 2) {
+		 	// case: double-click
+			if (this instanceof ListMenuChoice) {
+//				((ListMenuChoice)this).defaultDoubleClickAction(event);
+				((ListMenuChoice)this).changeObjects(event.getSource());
+			}
+	 	} else if (event.isPopupTrigger() && (popupMenu != null)) {
+			popupMenu.show(event.getComponent(), event.getX(), event.getY());
+		}
+   	} catch(Throwable e) {
+	   	handleException(e);
+   	}
 }
 /**
  * Return Apply-Button Label-String.
@@ -309,5 +313,12 @@ protected static String getResourceString(java.lang.Class resourceClass, String 
  */
 protected String getResourceString(String propertyName) {
 	return ResourceManager.getInstance().getResource(this.getClass(), propertyName);
+}
+
+/**
+ * Overwrite for specific adaptions.
+ * @see BaseFrame#adaptSelection(..)
+ */
+protected void adaptSelection(java.awt.event.MouseEvent event, javax.swing.JPopupMenu popupMenu) {
 }
 }
