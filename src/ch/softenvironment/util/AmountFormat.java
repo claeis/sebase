@@ -15,7 +15,7 @@ package ch.softenvironment.util;
 /**
  * Format a number to certain criterias.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:30:42 $
+ * @version $Revision: 1.3 $ $Date: 2004-08-25 15:56:21 $
  */
 public class AmountFormat extends java.text.DecimalFormat {
 /**
@@ -53,15 +53,5 @@ public static String toString(double amount) {
 public static String toString(Double amount) {
 	AmountFormat amountFormat = new AmountFormat();
 	return amountFormat.format(amount);
-}
-/**
- * Return the value as Decimal-String with given range of digits after dot.
- * @deprecated
- */
-public static String toString(Double value, int minDigits, int maxDigits) {
-	AmountFormat decFormat = new AmountFormat();
-	decFormat.setMinimumFractionDigits(minDigits);
-	decFormat.setMaximumFractionDigits(maxDigits);
-	return decFormat.format(value);
 }
 }
