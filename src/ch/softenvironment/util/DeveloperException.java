@@ -11,11 +11,12 @@ package ch.softenvironment.util;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  */
- 
+
+import ch.softenvironment.client.ResourceManager;
 /**
  * Show Developer failures.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-05-28 19:52:13 $
+ * @version $Revision: 1.5 $ $Date: 2004-09-14 17:09:51 $
  */
 public class DeveloperException extends RuntimeException {
 	private String message = null;
