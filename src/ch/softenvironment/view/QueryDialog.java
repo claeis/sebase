@@ -14,17 +14,18 @@ package ch.softenvironment.view;
  
 import ch.softenvironment.util.*;
 /**
- * Dialog for user query. Provides only YES or NO Options.
+ * Dialog for user query. Provides YES and NO Options,
+ * and optionally CANCEL Option can be configured.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
+ * @version $Revision: 1.4 $ $Date: 2004-10-20 11:56:38 $
  */
 public class QueryDialog extends BaseDialog {
+	private Boolean buttonPressed = null;
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
 	private javax.swing.JPanel ivjJDialogContentPane = null;
 	private javax.swing.JButton ivjBtnNo = null;
 	private javax.swing.JButton ivjBtnYes = null;
 	private javax.swing.JTextArea ivjTxaQuery = null;
-	private boolean yes = false;
 	private javax.swing.JLabel ivjLblQuestionIcon = null;
 	private javax.swing.JScrollPane ivjScpText = null;
 	private javax.swing.JPanel ivjPnlCenter = null;
@@ -36,8 +37,11 @@ class IvjEventHandler implements java.awt.event.ActionListener {
 				connEtoC1(e);
 			if (e.getSource() == QueryDialog.this.getBtnNo()) 
 				connEtoC2(e);
+			if (e.getSource() == QueryDialog.this.getBtnCancel()) 
+				connEtoC3(e);
 		};
 	};
+	private javax.swing.JButton ivjBtnCancel = null;
 /**
  * Create and open QuestionDialog modally.
  */
@@ -46,11 +50,18 @@ public QueryDialog(java.awt.Dialog owner, String title, String question) {
 	setUp(owner, title, question);
 }
 /**
- * Create and open QuestionDialog modally.
+ * Create and open QuestionDialog modally without a CANCEL button.
  */
 public QueryDialog(java.awt.Frame owner, String title, String question) {
+	this(owner, title, question, false);
+}
+/**
+ * Create and open QuestionDialog modally.
+ */
+public QueryDialog(java.awt.Frame owner, String title, String question, boolean showCancelButton) {
 	super(owner, title, true);
 	setUp(owner, title, question);
+	getBtnCancel().setVisible(showCancelButton);
 }
 /**
  * Create and open QuestionDialog modally.
@@ -61,17 +72,24 @@ Tracer.getInstance().nyi(this, "QueryDialog(Panel..)", "relative location gets l
 	setUp(null, title, question);
 }
 /**
- * Comment
+ * 
  */
-public void btnNo_ActionPerformed() {
-	yes = false;
+private void btnCancel_ActionPerformed() {
+	buttonPressed = null;;
+	dispose();
+}
+/**
+ * 
+ */
+private void btnNo_ActionPerformed() {
+	buttonPressed = new Boolean(false);
 	dispose();
 }
 /**
  * Comment
  */
-public void btnYes_ActionPerformed() {
-	yes = true;
+private void btnYes_ActionPerformed() {
+	buttonPressed = new Boolean(true);
 	dispose();
 }
 /**
@@ -111,6 +129,46 @@ private void connEtoC2(java.awt.event.ActionEvent arg1) {
 	}
 }
 /**
+ * connEtoC3:  (BtnCancel.action.actionPerformed(java.awt.event.ActionEvent) --> QueryDialog.btnCancel_ActionPerformed()V)
+ * @param arg1 java.awt.event.ActionEvent
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private void connEtoC3(java.awt.event.ActionEvent arg1) {
+	try {
+		// user code begin {1}
+		// user code end
+		this.btnCancel_ActionPerformed();
+		// user code begin {2}
+		// user code end
+	} catch (java.lang.Throwable ivjExc) {
+		// user code begin {3}
+		// user code end
+		handleException(ivjExc);
+	}
+}
+/**
+ * Return the BtnCancel property value.
+ * @return javax.swing.JButton
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+private javax.swing.JButton getBtnCancel() {
+	if (ivjBtnCancel == null) {
+		try {
+			ivjBtnCancel = new javax.swing.JButton();
+			ivjBtnCancel.setName("BtnCancel");
+			ivjBtnCancel.setText("Cancel");
+			ivjBtnCancel.setBounds(287, 3, 103, 25);
+			// user code begin {1}
+			// user code end
+		} catch (java.lang.Throwable ivjExc) {
+			// user code begin {2}
+			// user code end
+			handleException(ivjExc);
+		}
+	}
+	return ivjBtnCancel;
+}
+/**
  * Return the BtnNo property value.
  * @return javax.swing.JButton
  */
@@ -121,7 +179,7 @@ private javax.swing.JButton getBtnNo() {
 			ivjBtnNo = new javax.swing.JButton();
 			ivjBtnNo.setName("BtnNo");
 			ivjBtnNo.setText("No");
-			ivjBtnNo.setBounds(234, 2, 106, 25);
+			ivjBtnNo.setBounds(174, 3, 106, 25);
 			// user code begin {1}
 			ivjBtnNo.setText(getResourceString("BtnNo_text"));
 			// user code end
@@ -144,7 +202,7 @@ private javax.swing.JButton getBtnYes() {
 			ivjBtnYes = new javax.swing.JButton();
 			ivjBtnYes.setName("BtnYes");
 			ivjBtnYes.setText("Yes");
-			ivjBtnYes.setBounds(101, 2, 106, 25);
+			ivjBtnYes.setBounds(61, 3, 106, 25);
 			// user code begin {1}
 			ivjBtnYes.setText(getResourceString("BtnYes_text"));
 			// user code end
@@ -248,6 +306,7 @@ private javax.swing.JPanel getPnlSouth() {
 			ivjPnlSouth.setLayout(null);
 			getPnlSouth().add(getBtnYes(), getBtnYes().getName());
 			getPnlSouth().add(getBtnNo(), getBtnNo().getName());
+			getPnlSouth().add(getBtnCancel(), getBtnCancel().getName());
 			// user code begin {1}
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
@@ -321,6 +380,7 @@ private void initConnections() throws java.lang.Exception {
 	// user code end
 	getBtnYes().addActionListener(ivjEventHandler);
 	getBtnNo().addActionListener(ivjEventHandler);
+	getBtnCancel().addActionListener(ivjEventHandler);
 }
 /**
  * Initialize the class.
@@ -344,10 +404,25 @@ private void initialize() {
 	// user code end
 }
 /**
- * @return boolean (either Yes or No)
+ * Return whether CANCEL-Button was pressed.
+ * @return boolean
+ */
+public boolean isCanceled() {
+	return buttonPressed == null;
+}
+/**
+ * Return true whether NO-button was pressed.
+ * @return boolean
+ */
+public boolean isNo() {
+	return (buttonPressed != null) && (!buttonPressed.booleanValue());
+}
+/**
+ * Return true whether YES-button was pressed.
+ * @return boolean
  */
 public boolean isYes() {
-	return yes;
+	return (buttonPressed != null) && buttonPressed.booleanValue();
 }
 /**
  * Initialize the Dialog.
