@@ -22,6 +22,7 @@ package ch.softenvironment.util;
  *   -> MyObject#getMyProperty()			// the getter-Method
  *
  * @author: Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2004-04-27 09:12:05 $
  */
 public class BeanReflector extends java.util.EventObject {
 	private transient String property = null;
