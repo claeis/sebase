@@ -24,7 +24,7 @@ import ch.softenvironment.util.Tracer;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.11 $ $Date: 2004-06-26 11:31:21 $
+ * @version $Revision: 1.12 $ $Date: 2004-06-29 11:27:15 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -132,11 +132,11 @@ public BaseFrame(String title) {
 	super(title);
 }
 /**
- * Adapt the dependendencies in relation to a mouseEvent.
+ * Adapt the entries of a PopupMenu in relation to a mouseEvent.
  *
  * For e.g. Adapt PopupMenuItems after a selection of a SearchTable-Row.
  * Overwrite this method.
- * @see genericPopupDisplay(..)
+ * @see #genericPopupDisplay(..)
  */
 protected void adaptSelection(MouseEvent event, JPopupMenu popupMenu) {
 }
@@ -585,7 +585,7 @@ protected final void showBusy(Class parameterTypes[], Object parameters[], Strin
 
 		block.interrupt();
 	} catch(Throwable e) {
-		Tracer.getInstance().runtimeError(this, "showBusyCursor(..)", e.toString());
+		Tracer.getInstance().runtimeError(this, "showBusy(..)", e.toString());
 		handleException(e);
 	} finally {
 		stopWaitDialog();
