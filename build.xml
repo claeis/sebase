@@ -55,7 +55,7 @@
     	<fileset dir="${src}" includes="**/*.jpg"/>
     	<fileset dir="${src}" includes="**/*.png"/>
 	<fileset dir="." includes="other/LICENSE.*"/>
-	<fileset dir="." includes="other/ReadMe.*"/>
+	<fileset dir="." includes="other/README.*"/>
     </jar>
   </target>
 
@@ -67,7 +67,7 @@
 	    	<patternset includes="lib/**"/>
 	    	<patternset includes="other/manifest"/>
 	    	<patternset includes="other/LICENSE.*"/>
-		<patternset includes="other/ReadMe.*"/>
+		<patternset includes="other/README.*"/>
 	    	<patternset includes="src/**" excludes="**/CVS/*;**/bak~/*"/>
 		<patternset includes="resources/de/**/*.properties"/>
 		<patternset includes="resources/fr/**/*.properties"/>
