@@ -15,7 +15,7 @@ package ch.softenvironment.util;
 /**
  * Utilities for Date calculations.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:30:43 $
+ * @version $Revision: 1.3 $ $Date: 2004-02-14 16:47:28 $
  */
 public class DateUtils {
 /**
@@ -80,5 +80,23 @@ public static java.util.Date getEndOfWeek() {
 public static java.util.Date getFirstOfMonth() {
 	java.util.Date now = new java.util.Date();
 	return new java.util.Date(now.getYear(), now.getMonth(), 1);
+}
+
+/**
+ * Return the first day of current month.
+ * @return java.util.Date
+ */
+public static java.util.Date getEndOfYear() {
+	java.util.Date now = new java.util.Date();
+	return new java.util.Date(now.getYear(), java.util.Calendar.DECEMBER, 31);
+}
+
+/**
+ * Return the first day of current month.
+ * @return java.util.Date
+ */
+public static java.util.Date getFirstOfYear() {
+	java.util.Date now = new java.util.Date();
+	return new java.util.Date(now.getYear(), java.util.Calendar.JANUARY, 1);
 }
 }
