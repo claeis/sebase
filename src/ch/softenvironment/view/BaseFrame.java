@@ -25,7 +25,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.16 $ $Date: 2005-01-24 09:59:52 $
+ * @version $Revision: 1.17 $ $Date: 2005-02-21 13:47:48 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -94,7 +94,7 @@ protected final boolean checkDeletion() {
 protected final boolean checkDeletion(String title, String question) {
 	try {
 		QueryDialog dialog = new QueryDialog(this, title, question);
-		dialog.dispose();
+//		dialog.dispose();
 		return dialog.isYes();
 	} catch(Throwable e) {
 		handleException(e);
@@ -147,8 +147,8 @@ public void dispose() {
 	super.dispose();
 }
 /**
- * Overwrite the #dispose() method for Launcher's of any Application extending this
- * BaseFrame.
+ * Overwrite the #dispose() method for <b>Launcher's containing a #main()</b> 
+ * of any Application extending this BaseFrame.
  *
  * // Overwrites
  * public void dispose() {
@@ -212,7 +212,9 @@ protected final void executeNewObject(Object source) {
  * @see DetailView#redoObject().
  */
 protected final void executeRedoObject() {
-	showBusy("redoObject");
+	Class types[] = {};
+	Object parameters[] = {};
+	showBusy(types, parameters, "redoObject");
 }
 /**
  * @deprecated
@@ -232,13 +234,17 @@ protected final void executeRemoveObjects(Object source) {
  * @see DetailView#saveObject().
  */
 protected final void executeSaveObject() {
-	showBusy("saveObject");
+	Class types[] = {};
+	Object parameters[] = {};
+	showBusy(types, parameters, "saveObject");
 }
 /**
  * @see SearchView#searchObjects().
  */
 protected final void executeSearchObjects() {
-	showBusy("searchObjects");
+	Class types[] = {};
+	Object parameters[] = {};
+	showBusy(types, parameters, "searchObjects");
 }
 /**
  * @see DetailView#setCurrentObject(Object).
@@ -252,7 +258,9 @@ protected final void executeSetCurrentObject(Object object) {
  * @see DetailView#undoObject().
  */
 protected final void executeUndoObject() {
-	showBusy("undoObject");
+	Class types[] = {};
+	Object parameters[] = {};
+	showBusy(types, parameters, "undoObject");
 }
 /**
  * @see #exportTableData(JTable)
@@ -326,19 +334,25 @@ public final void fatalError(JFrame frame, String title, String message, Throwab
 /**
  * Open a WaitDialog if not shown already.
  */
-private synchronized final void forkWaitDialog(String title) {
-// NASTY: forked by Swing only
+private synchronized final void forkWaitDialog(final String title) {
+// TODO NASTY: not really forked
 	if (waitCounter == 0) {
 		waitCounter++;
 		try {
-			setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-			waitDialog = new WaitDialog(this, title);
-waitDialog.show();
-waitDialog.paint(waitDialog.getGraphics());
+//		    SwingUtilities.invokeAndWait(new Runnable() {
+//		        public void run() {
+		            setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+					waitDialog = new WaitDialog(this, title);
+					waitDialog.show();
+					// make sure refresh is forced NOW			
+					waitDialog.paint(waitDialog.getGraphics());
+//		        }
+//		    });
 		} catch(Throwable e) {
-			Tracer.getInstance().runtimeError(this, "startWaitDialog(..)", e.toString());
-			setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-		} 
+			Tracer.getInstance().runtimeError(this, "forkWaitDialog(..)", e.toString());
+		} finally {
+		    setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+		}
 	}
 }
 /**
@@ -392,31 +406,6 @@ protected final String getResourceString(String propertyName) {
  */
 protected final static Dimension getScreenSize() {
 	return(Toolkit.getDefaultToolkit().getScreenSize());
-}
-/**
- * Return the User-Directory (for e.g. where this Java-Program is located)
- * without a Path-Separator at the end.
- */
-public static String getStartupPath(String jarFileName) {
-	String home = System.getProperty("user.dir");//$NON-NLS-1$
-Tracer.getInstance().debug(BaseFrame.class, "getStartupPath(jarfile)", "user.dir = " + home);
-	
-    String classpath = System.getProperty("java.class.path");//$NON-NLS-1$
-Tracer.getInstance().debug(BaseFrame.class, "getStartupPath(jarfile)", "java.class.path = " + classpath);
-/*    int index = classpath.toLowerCase().indexOf(jarFileName.toLowerCase());//$NON-NLS-1$
-Tracer.getInstance().debug(BaseFrame.class, "getStartupPath(jarfile)", "index of jarfile = " + index);
-    int start = classpath.lastIndexOf(java.io.File.pathSeparator, index) + 1;
-    if (start >= 0) {
-    	if (index > start) {
-    		home = classpath.substring(start, index - 1);
-    	} else {
-    		home = ".";
-    	}
-Tracer.getInstance().debug(BaseFrame.class, "getStartupPath(jarfile)", "home[JAR] = " + home);
-    }
- */
-
-    return home;
 }
 /**
  * Return GUI Configuration Options.
@@ -541,28 +530,18 @@ public void setVisible(boolean visible) {
  * There is only ONE WaitDialog in case of nested calls of this method.
  * Use #updateProgress(..) to show any Progress-Messages.
  *
- * Ex. 
- * class MyFrame extends BaseFrame {
- *   public void doAnything(Integer c, String s) {
- *     updateProgress(10, "start activity");
- *     ...
- *   }
- *   caller() {
- *     showBusy(.., "doAnything");
- *   }
- *
  * @param parameterTypes	Class parameterTypes[] = { Integer.class, String.class }
  * @param parameters		Object parameters[] = { new Integer(3), "Hello" }
  * @param methodName		methodName "doAnything" must be <b>public</b>
  *
- * @see WaitBlock.run()	inner Class here
- * @see #updateProgress(..)
+ * @see showBusy(Runnable)
+ * @deprecated (use showBusy(Runnable) instead)
  */
-protected final void showBusy(Class parameterTypes[], Object parameters[], String methodName) {
+private final void showBusy(final Class parameterTypes[], final Object parameters[], final String methodName) {
 	try {
 		forkWaitDialog(null);
 
-		// doBlock: be careful with threading sequential tasks, such as Database-Transactions!!!
+//TODO Patch: for e.g. #setCurrentObject() would not be visible if #showBusy(Runnable) was called here
 		java.lang.reflect.Method method = this.getClass().getMethod(methodName, parameterTypes);
 		method.invoke(this, parameters);
 
@@ -573,14 +552,6 @@ protected final void showBusy(Class parameterTypes[], Object parameters[], Strin
 	} finally {
 		stopWaitDialog();
 	}
-}
-/**
- * @see #showBusy(Class[]. Object[], String)
- */
-protected final void showBusy(String methodName) {
-	Class types[] = {};
-	Object parameters[] = {};
-	showBusy(types, parameters, methodName);
 }
 /**
  * Top-level Handler.
@@ -599,7 +570,7 @@ public final static void showException(Window owner, java.lang.Throwable excepti
 		if (exception instanceof NumberFormatException) {
 			
 			if ((exception.getMessage().length() == 0) || exception.getMessage().equals("empty String") || (exception.getMessage().equals("-"))) {//$NON-NLS-2$//$NON-NLS-1$
-Tracer.getInstance().hack(BaseFrame.class, "showException(..)", "exception message might change -> use another recognition");//$NON-NLS-2$//$NON-NLS-1$
+Tracer.getInstance().developerWarning(BaseFrame.class, "showException(..)", "exception message might change -> use another recognition");//$NON-NLS-2$//$NON-NLS-1$
 				Tracer.getInstance().runtimeWarning(BaseFrame.class, "showException(.)", "NumberFormatException ignored: " + exception.toString());
 				return;
 			}
@@ -621,7 +592,7 @@ Tracer.getInstance().hack(BaseFrame.class, "showException(..)", "exception messa
 		} else if (owner instanceof Dialog) {
 			new ErrorDialog((Dialog)owner, title , message, exception);
 		} else {
-Tracer.getInstance().nyi(BaseFrame.class, "showException(..)");
+			new ErrorDialog((Frame)null, title , message, exception);
 		}
 	} catch(Throwable e) {
 		Tracer.getInstance().developerError(BaseFrame.class, "showException(..)", "should not have been reached => " + e.getLocalizedMessage());
@@ -718,8 +689,8 @@ private synchronized final void stopWaitDialog() {
  * @see showBusy(..)
  * @see WaitDialog#updateProgress()
  */
-protected synchronized final void updateProgress(final int percentage, final String currentActivity) {
-// TUNE!!!
+public synchronized final void updateProgress(final int percentage, final String currentActivity) {
+//TODO Tune!!!
 	javax.swing.SwingUtilities.invokeLater(new Runnable() {
 		public void run() {
 			try {
@@ -788,6 +759,8 @@ private void updateStringProperty(java.lang.Class resource, Component component,
 				}
 				bean.setValue(nls);
 			} catch(Throwable e) {
+				// it is quite possible to get an exception here, because not all components are translateable
+				// for e.g. ImageIcon's
 				if ((e instanceof MissingResourceException) && 
 						(component instanceof javax.swing.JMenuItem)) {
 					// try CommonUserAccess.properties
@@ -795,13 +768,50 @@ private void updateStringProperty(java.lang.Class resource, Component component,
 						String nls = getResourceString(CommonUserAccess.class, component.getName() + "_" + property);
 						bean.setValue(nls);
 					} catch(Throwable cua) {
-						Tracer.getInstance().debug("Resource missing: " + cua.getLocalizedMessage());
+						Tracer.getInstance().debug(this, "updateStringProperty()", "Resource missing: " + e.getLocalizedMessage());
 					}
 				} else {
-					Tracer.getInstance().debug("Resource missing: " + e.getLocalizedMessage());
+					Tracer.getInstance().debug(this, "updateStringProperty()", "Resource missing: " + e.getLocalizedMessage());
 				}
 			}
 		}
+	}
+}
+
+/**
+ * Execute a given Block <b>NON-threaded</b> and 
+ * show Busy-Cursor and WaitDialog meanwhile.
+ * There is only ONE WaitDialog in case of nested calls of this method.
+ * Use #updateProgress(..) to show any Progress-Messages meanwhile in the WaitDialog.
+ *
+ * Ex. 
+ * class MyFrame extends BaseFrame {
+ *   public void doAnything(Integer c, String s) {
+ *     updateProgress(10, "start activity");
+ *     ...
+ *   }
+ *   caller() {
+ *     showBusy(new Runnable() {
+				public void run() {
+					// do anything
+				}
+	   });
+ *   }
+ *
+ * @param block	executable Block whith Busy cursor
+ *
+ * @see WaitBlock.run()	inner Class here
+ * @see #updateProgress(..)
+ */
+public final void showBusy(Runnable block) {
+	try {
+		forkWaitDialog(null);
+		block.run();
+	} catch(Throwable e) {
+		Tracer.getInstance().runtimeError(this, "showBusy(Runnable)", e.toString());
+		handleException(e);
+	} finally {
+		stopWaitDialog();
 	}
 }
 }
