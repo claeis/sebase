@@ -22,7 +22,7 @@ package ch.softenvironment.util;
  *   -> MyObject#getMyProperty()			// the getter-Method
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2004-10-26 19:27:17 $
+ * @version $Revision: 1.7 $ $Date: 2004-12-03 16:27:49 $
  */
 public class BeanReflector extends java.util.EventObject {
 	private transient String property = null;
@@ -44,7 +44,7 @@ public class BeanReflector extends java.util.EventObject {
  */
 public BeanReflector(Object source, String property) {
 	super(source);
-	this.property = property;
+	this.property = convertPropertyName(property);
 }
 /**
  * Return the Field for given Property-Name.
@@ -194,5 +194,14 @@ public Object cloneValue() throws IllegalAccessException, java.lang.reflect.Invo
 Tracer.getInstance().nyi(this, "cloneValue()", "type not cloneable yet: " + value.getClass());
 		return null;
 	}
+}
+
+/**
+ * Transform:
+ * - "MyProperty"=>"myProperty"
+ * - "myProperty"=> as is
+ */
+public static String convertPropertyName(String property) {
+	return property.substring(0, 1).toLowerCase() + property.substring(1, property.length());
 }
 }
