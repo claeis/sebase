@@ -22,14 +22,14 @@ import ch.softenvironment.util.Tracer;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:32:59 $
+ * @version $Revision: 1.3 $ $Date: 2004-02-25 07:04:34 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
 	private static java.util.ResourceBundle resBaseFrame = setResourceBundle();
 	public final static int X_CHILD_OFFSET = 20;
 	public final static int Y_CHILD_OFFSET = 15;
-	protected static final String JAR_FILENAME = "Startup.jar";
+protected static final String JAR_FILENAME = "Startup.jar";
 	private WaitDialog waitDialog = null;
 	private ViewOptions viewOptions = null;
 	
@@ -578,22 +578,16 @@ Tracer.getInstance().hack(BaseFrame.class, "showException(..)", "exception messa
 	} else if (exception instanceof DeveloperException) {
 		title = ((DeveloperException)exception).getTitle();
 		message = exception.getMessage();
-	} else if (exception instanceof java.sql.SQLException) {
-		title = resBaseFrame.getString("CTSQLError");
-		java.sql.SQLException sqlEx = (java.sql.SQLException)exception;
-		message = sqlEx.getLocalizedMessage() + " (" + resBaseFrame.getString("CESQLState") + sqlEx.getSQLState() + ")";
-		if (sqlEx.getNextException() != null) {
-			message = message + "\n" + sqlEx.getNextException();
-		}
-//		message = message + "\n" + resBaseFrame.getString("CESQLReasons");
-	}
+	} /* else if (exception instanceof java.sql.SQLException) {
+		@see DbBaseFrame#handleException(..)
+	} */
 	
 	if ((owner == null) || (owner instanceof Frame)) {
 		new ErrorDialog((Frame)owner, title , message, exception);
 	} else if (owner instanceof Dialog) {
 		new ErrorDialog((Dialog)owner, title , message, exception);
 	} else {
-Tracer.getInstance().nyi(BaseFrame.class, "showException()");//$NON-NLS-1$
+Tracer.getInstance().nyi(BaseFrame.class, "showException(..)");//$NON-NLS-1$
 	}
 }
 /**
@@ -675,13 +669,6 @@ protected final static void showSplashScreen(Dimension preferredWindowSize, Imag
 	} catch (Throwable e) {
 		Tracer.getInstance().runtimeWarning(BaseFrame.class, "showSplashScreen(<image=" + image + ">)", e.toString());//$NON-NLS-2$//$NON-NLS-1$
 	}
-}
-/**
- * Critical Error. Application must be shut down.
- * @param title Dialogtitle
- */
-public final void transactionError(JFrame frame, Throwable exception) {
-	fatalError(frame, resBaseFrame.getString("CTTransactionError"), resBaseFrame.getString("CETransactionError"), exception);
 }
 /**
  * Show Progress in WaitDialog if any.
