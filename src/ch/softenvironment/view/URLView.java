@@ -15,7 +15,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * Panel to manage a single URL.
  * @author: Peter Hirzel </i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2005-02-16 18:13:31 $
+ * @version $Revision: 1.6 $ $Date: 2005-02-23 16:19:19 $
  */
 public class URLView extends javax.swing.JPanel {
 	private javax.swing.JButton ivjBtnBrowser = null;
@@ -79,7 +79,7 @@ private void browse() {
 	try {
 		ch.ehi.basics.view.BrowserControl.displayURL(getTxtURLText());
 	} catch(Throwable e) {
-		new ch.softenvironment.view.WarningDialog(this, ResourceManager.getInstance().getResource(URLView.class, "CT_BrowserError"), e.toString());
+		BaseDialog.showWarning((java.awt.Component)this, ResourceManager.getInstance().getResource(URLView.class, "CT_BrowserError"), e.toString());
 	}
 }
 /**

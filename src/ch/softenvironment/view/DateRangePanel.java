@@ -15,12 +15,12 @@ import ch.softenvironment.util.DateUtils;
 /**
  * Define a Date-Range especially for SearchView's.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-08-25 15:59:52 $
+ * @version $Revision: 1.3 $ $Date: 2005-02-23 16:19:18 $
  */
 public class DateRangePanel extends javax.swing.JPanel {
 	private javax.swing.JLabel ivjLblBilled32 = null;
-	private DateTextField ivjTxtDateFrom = null;
-	private DateTextField ivjTxtDateTo = null;
+	private ch.softenvironment.view.swingext.DateTextField ivjTxtDateFrom = null;
+	private ch.softenvironment.view.swingext.DateTextField ivjTxtDateTo = null;
 	private javax.swing.JComboBox ivjCbxPeriod = null;
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
 
@@ -119,6 +119,12 @@ public java.util.Date getFromDate() {
 	return getTxtDateFrom().getDate();
 }
 /**
+ * Return Text in From-Field.
+ */
+public String getFromDateText() {
+	return getTxtDateFrom().getText();
+}
+/**
  * Return the LblBilled32 property value.
  * @return javax.swing.JLabel
  */
@@ -148,19 +154,24 @@ public java.util.Date getToDate() {
 	return getTxtDateTo().getDate();
 }
 /**
+ * Return Date in From-Field.
+ */
+public String getToDateText() {
+	return getTxtDateTo().getText();
+}
+/**
  * Return the TxtDateFrom property value.
- * @return ch.softenvironment.view.DateTextField
+ * @return ch.softenvironment.view.swingext.DateTextField
  */
 /* WARNING: THIS METHOD WILL BE REGENERATED. */
-private DateTextField getTxtDateFrom() {
+private ch.softenvironment.view.swingext.DateTextField getTxtDateFrom() {
 	if (ivjTxtDateFrom == null) {
 		try {
-			ivjTxtDateFrom = new ch.softenvironment.view.DateTextField();
+			ivjTxtDateFrom = new ch.softenvironment.view.swingext.DateTextField();
 			ivjTxtDateFrom.setName("TxtDateFrom");
 			ivjTxtDateFrom.setBounds(0, 3, 83, 20);
 			ivjTxtDateFrom.setEditable(true);
 			// user code begin {1}
-			ivjTxtDateFrom.setToolTipText(">= [" + ivjTxtDateFrom.getToolTipText() + "]");
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -172,18 +183,17 @@ private DateTextField getTxtDateFrom() {
 }
 /**
  * Return the TxtDateTo property value.
- * @return ch.softenvironment.view.DateTextField
+ * @return ch.softenvironment.view.swingext.DateTextField
  */
 /* WARNING: THIS METHOD WILL BE REGENERATED. */
-private DateTextField getTxtDateTo() {
+private ch.softenvironment.view.swingext.DateTextField getTxtDateTo() {
 	if (ivjTxtDateTo == null) {
 		try {
-			ivjTxtDateTo = new ch.softenvironment.view.DateTextField();
+			ivjTxtDateTo = new ch.softenvironment.view.swingext.DateTextField();
 			ivjTxtDateTo.setName("TxtDateTo");
 			ivjTxtDateTo.setBounds(107, 3, 83, 20);
 			ivjTxtDateTo.setEditable(true);
 			// user code begin {1}
-			ivjTxtDateTo.setToolTipText("<= [" + ivjTxtDateTo.getToolTipText() + "]");
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}

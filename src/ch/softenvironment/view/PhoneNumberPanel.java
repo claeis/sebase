@@ -15,7 +15,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * Panel for structured Phone Number representation.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2004-10-26 19:13:41 $
+ * @version $Revision: 1.6 $ $Date: 2005-02-23 16:19:18 $
  */
 public class PhoneNumberPanel extends javax.swing.JPanel {
 	private String separator = "/";//$NON-NLS-1$
@@ -323,31 +323,6 @@ private void initialize() {
 	}
 	// user code begin {2}
 	// user code end
-}
-/**
- * main entrypoint - starts the part when it is run as an application
- * @param args java.lang.String[]
- */
-public static void main(java.lang.String[] args) {
-	try {
-		javax.swing.JFrame frame = new javax.swing.JFrame();
-		PhoneNumberPanel aPhoneNumberPanel;
-		aPhoneNumberPanel = new PhoneNumberPanel();
-		frame.setContentPane(aPhoneNumberPanel);
-		frame.setSize(aPhoneNumberPanel.getSize());
-		frame.addWindowListener(new java.awt.event.WindowAdapter() {
-			public void windowClosing(java.awt.event.WindowEvent e) {
-				System.exit(0);
-			};
-		});
-		frame.show();
-		java.awt.Insets insets = frame.getInsets();
-		frame.setSize(frame.getWidth() + insets.left + insets.right, frame.getHeight() + insets.top + insets.bottom);
-		frame.setVisible(true);
-	} catch (Throwable exception) {
-		System.err.println("Exception occurred in main() of javax.swing.JPanel");
-		exception.printStackTrace(System.out);
-	}
 }
 /**
  * Comment
