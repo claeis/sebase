@@ -15,11 +15,10 @@ package ch.softenvironment.view;
 /**
  * StatusBar (bottom-Line of a Window).
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:33:00 $
+ * @version $Revision: 1.3 $ $Date: 2004-09-14 17:00:52 $
  * @see ApplicationFrame Subclasses
  */
-public class StatusBar extends javax.swing.JPanel {
-	public java.lang.String statusMaster;
+public class StatusBar extends BasePanel {
 	private javax.swing.JLabel ivjLblAction = null;
 	private javax.swing.JLabel ivjLblStatus = null;
 	private javax.swing.JLabel ivjLblMark = null;
@@ -194,21 +193,6 @@ private javax.swing.JPanel getPnlUserInfo() {
 	return ivjPnlUserInfo;
 }
 /**
- * Insert the method's description here.
- * Creation date: (07.09.2001 14:29:35)
- * @return java.lang.String
- */
-private java.lang.String getStatusMaster() {
-	return statusMaster;
-}
-/**
- * Called whenever the part throws an exception.
- * @param exception java.lang.Throwable
- */
-private void handleException(java.lang.Throwable exception) {
-	ch.softenvironment.util.Tracer.getInstance().uncaughtException(this, "handleException(..)", exception);
-}
-/**
  * Initialize the class.
  */
 /* WARNING: THIS METHOD WILL BE REGENERATED. */
@@ -230,16 +214,38 @@ private void initialize() {
 	// user code begin {2}
 	// user code end
 }
-public void setAction(String status) {
+/**
+ * Display an Action-message in middle Panel.
+ */
+public void setAction(String action) {
 	getLblAction().setForeground(java.awt.Color.black);
-	getLblAction().setText(status);
+	getLblAction().setText(action);
 }
+/**
+ * Display an Object-Mark in right Panel.
+ */
 public void setMark(String status) {
 	getLblMark().setText(status);
 }
+/**
+ * Display a status-message in left Panel.
+ */
 public void setStatus(String status) {
 	getLblStatus().setText(status);
 }
+/**
+ * The owning View is in state of an "Assignment".
+ */
+public void setStatusAssign() {
+	try {
+		getLblStatus().setText(getResourceString(StatusBar.class, "CIStatusAssign"));
+	} catch(java.util.MissingResourceException e) {
+		getLblStatus().setText("Assign");
+	}
+}
+/**
+ * Display a Warning-state in middle Panel.
+ */
 public void setWarning(String status) {
 	getLblAction().setForeground(java.awt.Color.red);
 	getLblAction().setText(status);
