@@ -22,7 +22,7 @@ package ch.softenvironment.util;
  *   -> MyObject#getMyProperty()			// the getter-Method
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-05-17 14:06:50 $
+ * @version $Revision: 1.5 $ $Date: 2004-05-20 15:16:27 $
  */
 public class BeanReflector extends java.util.EventObject {
 	private transient String property = null;
@@ -38,7 +38,7 @@ public class BeanReflector extends java.util.EventObject {
  *
  * Example:
  *  change = new ObjectProperty(Locale.getDefault, "language")
- *  if (change.getValue() = "de") {
+ *  if (change.getValue().equals("de")) {
  *    change.setValue("fr"); // switch default Language
  *  }
  */
