@@ -17,12 +17,45 @@ import java.io.*;
 /**
  * Parser to parse comma separated files.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:30:43 $
+ * @version $Revision: 1.3 $ $Date: 2004-05-08 13:33:33 $
  */
 public class ParserCSV {
 	private String line = null;
 	private String separator = null;
 	private int lastIndex = -1;
+	
+/**
+ * Transform a String with separated items into a List.
+ * @param serializedList
+ * @return java.util.List
+ */
+public static java.util.List stringToArray(String serializedList, String separator) {
+	ParserCSV parser = new ParserCSV(serializedList, separator);
+	
+	java.util.List list = new java.util.ArrayList();
+	String item = parser.getNextString();
+	while (item != null) {
+//		if (!StringUtils.isNullOrEmpty(item)) {
+			list.add(item);
+Tracer.getInstance().debug(ParserCSV.class, "stringToArray(..)", "adding: " + item);
+//		}
+		item = parser.getNextString();
+	}
+	return list;
+}
+/**
+ * Transform a List into a String with items separated by a Separator.
+ * @param items
+ * @return String
+ */
+public static String arrayToString(java.util.List items, String separator) {
+	String serializedList = "";
+	java.util.Iterator iterator = items.iterator();
+	while (iterator.hasNext()) {
+		serializedList = serializedList + iterator.next() + separator;
+	}
+	return serializedList;
+}
 /**
  * ParserCSV constructor comment.
  * @param line (for e.g. "field1;field2;...")
@@ -46,6 +79,7 @@ public Integer getNextInteger() throws NumberFormatException {
 }
 /**
  * Return a Substring between to Separators.
+ * @return null if no next or empty
  */
 public String getNextString() {
 	String result = null;
