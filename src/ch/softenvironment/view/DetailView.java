@@ -16,7 +16,7 @@ package ch.softenvironment.view;
  * Method-Set for a DetailView
  * @see BaseFrame (as a Parent-Class)
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-05-10 12:52:18 $
+ * @version $Revision: 1.5 $ $Date: 2004-08-18 09:27:25 $
  */
 public interface DetailView {
 	/**
@@ -31,6 +31,21 @@ public interface DetailView {
 	/**
 	 * Make the View represent the given Object.
 	 * @param currentObject
+	 *
+	 * Example Code:
+		 	try {
+				if ((object != null) && object.equals(getObject())) {
+					return;
+				}
+				if (getObject() != null) {
+					getObject().removeChangeListener(getConsistencyController());
+				}
+				((DbObject)object).refresh(true);
+				setObject(object);
+				object.addChangeListener(getconsistencyController());
+			} catch(Throwable e) {
+				handleException(e);
+			}
 	 */
 	void setCurrentObject(Object object);
 	/**
