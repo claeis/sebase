@@ -17,7 +17,7 @@ import javax.swing.*;
 /**
  * Splash screen for Application startup.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
+ * @version $Revision: 1.4 $ $Date: 2004-05-04 11:42:05 $
  */
 public class SplashScreen extends JWindow {
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
@@ -157,23 +157,23 @@ private void initialize() {
 }
 /**
  * Set the wanted image.
+ * @param image from IDE with relative FileSystem or compiled within Jar "/images/myPic.gif"
  */
 public void setImage(String image) {
-	try {
-		// var I) from IDE with relative FileSystem or compiled within Jar
-		getLblImage().setIcon(new javax.swing.ImageIcon(getClass().getResource(image)));
-	} catch(NullPointerException e) {
-		ch.softenvironment.util.Tracer.getInstance().developerWarning(this, "showImage(..)", "Resource not found: " + image);
-		getLblImage().setIcon(null);
-		getLblImage().setText(image + " -> kann nicht gefunden werden!");
+	ImageIcon icon = new javax.swing.ImageIcon(getClass().getResource(image));
+	if (icon == null) {
+		ch.softenvironment.util.Tracer.getInstance().runtimeWarning(this, "setImage(String)", "given iconFile not found <" + image + ">!");
+	} else {
+		setImage(icon);
 	}
 }
 /**
  * Set the wanted image.
+ * @parm icon
  */
 public void setImage(ImageIcon icon) {
 	if (icon == null) {
-		ch.softenvironment.util.Tracer.getInstance().runtimeWarning(this, "setImage(ImageIcon)", "Fehler: Ungültiges Bild!");
+		ch.softenvironment.util.Tracer.getInstance().runtimeWarning(this, "setImage(ImageIcon)", "given icon is null!");
 	}
 	getLblImage().setIcon(icon);
 }
