@@ -17,7 +17,7 @@ import java.text.*;
 /**
  * Set of reusable String Utilities.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2004-12-14 12:50:01 $
+ * @version $Revision: 1.6 $ $Date: 2005-02-21 13:25:18 $
  */
 public abstract class NlsUtils {
 	public final static String DATE_EUROPE_PATTERN = "dd.MM.yyyy";
@@ -150,7 +150,9 @@ public static String getTime24Hours(java.util.Date date) {
 
 /**
  * Change Default Locale (only if different from current default).
- * Might influence all NLS-Settings, like Number, Date/Time, Currency-Formatting.
+ * Might influence all NLS-Settings, like Number-, Date/Time-, Currency-Formatting, etc.
+ * @params locale Local to be switched to
+ * @return whether new Locale was different from old one
  */
 public static boolean changeLocale(Locale locale) {
 	if (Locale.getDefault().getLanguage().equals(locale.getLanguage())) {
@@ -169,8 +171,7 @@ Tracer.getInstance().nyi(NlsUtils.class, "changeLocale()", "country not consider
 		}
 */
 		Locale.setDefault(locale);
-Tracer.getInstance().developerWarning(NlsUtils.class, "changeLocale()", "Number-FOrmatting defaults (like Group-Separator) might be different from regional Settings now");
-		Tracer.getInstance().debug(NlsUtils.class, "changeLocale()", "Locale changed to: " + Locale.getDefault());
+Tracer.getInstance().runtimeInfo(NlsUtils.class, "changeLocale()", "Locale changed to: " + Locale.getDefault());
 		return true;
 	}
 
