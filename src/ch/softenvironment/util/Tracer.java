@@ -21,7 +21,7 @@ package ch.softenvironment.util;
  * (This Tool is not foreseen for NLS-Support.)
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:30:43 $
+ * @version $Revision: 1.3 $ $Date: 2004-02-25 07:09:14 $
  */
 public class Tracer {
 	// Mode's
@@ -132,7 +132,7 @@ public void nyi(Object obj, String methodName) {
  */
 public void nyi(Object obj, String methodName, String comment) {
 	if ((mode == DEBUG) || (mode == ALL)) {
-		log("Not yet implemented:", obj, methodName, comment);
+		log("NYI:", obj, methodName, comment);
 	}
 }
 /**
@@ -220,12 +220,12 @@ public static void start(java.io.PrintStream stream, int mode) {
 	instance.outStream = stream;
 	instance.mode = mode;
 	instance.debug("START Tracer");
-	instance.debug("Java Version: " + System.getProperty("java.version"));
-	instance.debug("Java VM Version: " + System.getProperty("java.vm.version"));
-	instance.debug("OS Name: " + System.getProperty("os.name"));
-	instance.debug("OS Architecture: " + System.getProperty("os.arch"));
-	instance.debug("OS Version: " + System.getProperty("os.version"));
-	instance.debug("OS Locale: " + java.util.Locale.getDefault().toString());
+	instance.runtimeInfo("Java Version: " + System.getProperty("java.version"));
+	instance.runtimeInfo("Java VM Version: " + System.getProperty("java.vm.version"));
+	instance.runtimeInfo("OS Name: " + System.getProperty("os.name"));
+	instance.runtimeInfo("OS Architecture: " + System.getProperty("os.arch"));
+	instance.runtimeInfo("OS Version: " + System.getProperty("os.version"));
+	instance.runtimeInfo("OS Locale: " + java.util.Locale.getDefault().toString());
 }
 /**
  * Stop Tracer.
