@@ -19,7 +19,7 @@ import ch.softenvironment.util.Tracer;
 /**
  * Template-Dialog defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2004-09-14 16:56:57 $
+ * @version $Revision: 1.7 $ $Date: 2005-01-06 09:39:00 $
  */
 public abstract class BaseDialog extends javax.swing.JDialog {
 	private javax.swing.JPanel ivjJDialogContentPane = null;
@@ -303,11 +303,11 @@ private void setCenterLocation(Dimension outerSize) {
  */
 protected void setRelativeLocation(java.awt.Window parent) {
 	if (parent != null) {
-/*		setLocation(new Point(parent.getX() + BaseFrame.X_CHILD_OFFSET,
+		setLocation(new Point(parent.getX() + BaseFrame.X_CHILD_OFFSET,
 								parent.getY() + BaseFrame.Y_CHILD_OFFSET));
-*/
+
 //		setCenterLocation(parent.getSize());
-		setLocationRelativeTo(parent);
+//		setLocationRelativeTo(parent);
 	}
 }
 /**

@@ -25,12 +25,12 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.14 $ $Date: 2004-10-26 19:22:56 $
+ * @version $Revision: 1.15 $ $Date: 2005-01-06 09:39:00 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
-	public final static int X_CHILD_OFFSET = 20;
-	public final static int Y_CHILD_OFFSET = 15;
+	public final static int X_CHILD_OFFSET = 50;
+	public final static int Y_CHILD_OFFSET = 50;
 	private WaitDialog waitDialog = null;
 	private volatile int waitCounter = 0;
 	private ViewOptions viewOptions = null;
@@ -152,31 +152,6 @@ public BaseFrame(String title) {
  * @see #genericPopupDisplay(..)
  */
 protected void adaptSelection(MouseEvent event, JPopupMenu popupMenu) {
-}
-/**
- * Set the Listener for windowClosed-Events.
- */
-protected final void addDefaultClosedListener() {
-	/* Add a windowListener for the windowClosedEvent */
-	addWindowListener(new java.awt.event.WindowAdapter() {
-		public void windowClosed(java.awt.event.WindowEvent e) {
-			System.exit(0);
-		};
-		//  public void windowClosing(java.awt.event.WindowEvent e) {
-		//      System.exit(0);
-		//  };
-	});
-}
-/**
- * Set the Listener for windowClosing-Events.
- */
-protected final void addDefaultClosingListener() {
-	/* Add a windowListener for the windowClosedEvent */
-	addWindowListener(new java.awt.event.WindowAdapter() {
-		public void windowClosing(java.awt.event.WindowEvent e) {
-			System.exit(0);
-		};
-	});
 }
 /**
  * Ask user whether the remove action shall be proceeded or not.
@@ -694,7 +669,7 @@ protected final void showBusy(String methodName) {
 public final static void showException(Window owner, java.lang.Throwable exception) {
 	try {
 		// update log
-		Tracer.getInstance().runtimeWarning(owner, "handleException(..) -> stackTrace follows...", exception.toString());//$NON-NLS-1$
+		Tracer.getInstance().runtimeWarning(owner, "handleException(..) -> stackTrace follows...", exception.getLocalizedMessage());//$NON-NLS-1$
 		exception.printStackTrace(System.out);
 
 		// inform user
@@ -844,7 +819,8 @@ private synchronized final void stopWaitDialog() {
  * @param currentActivity User friendly name
  * @see showBusy(..)
  */
-protected synchronized final void updateProgress(int percentage, String currentActivity) {
+public synchronized final void updateProgress(int percentage, String currentActivity) {
+// TUNE!!!
 	try {
 		if (waitDialog != null) {
 			waitDialog.updateProgress(percentage, currentActivity);
