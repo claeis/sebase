@@ -15,21 +15,18 @@ package ch.softenvironment.util;
 /**
  * Show Developer failures.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-02-25 07:07:54 $
+ * @version $Revision: 1.4 $ $Date: 2004-05-28 19:52:13 $
  */
 public class DeveloperException extends RuntimeException {
-	private static java.util.ResourceBundle resDeveloperException = ch.ehi.basics.i18n.ResourceBundle.getBundle(DeveloperException.class);
 	private String message = null;
 	private String title = null;
 	private String errorObject = null;
 	private String errorMethod = null;
-
-	public static final String DEVELOPER_ERROR = resDeveloperException.getString("CTDevelopmentError"); //$NON-NLS-1$
 /**
  * Construct a DeveloperException.
  */
 public DeveloperException(Class aClass, String method, String message) {
-	this(aClass, method, message, DEVELOPER_ERROR);
+	this(aClass, method, message, null);
 }
 /**
  * Construct a DeveloperException.
@@ -56,12 +53,14 @@ public DeveloperException(Class aClass, String method, String message, String ti
 	if (e != null) {
 		msg = msg + "[Original fault: " + e.getMessage() + "]";
 	}
+	
 	Tracer.getInstance().developerError(aClass, method, msg);
+	
 	this.errorObject = aClass.getName();
 	this.errorMethod = method;
 	this.message = msg;
 	if (title == null) {
-		this.title = DEVELOPER_ERROR;
+		this.title = ResourceManager.getInstance().getResource(DeveloperException.class, "CTDevelopmentError");
 	} else {
 		this.title = title;
 	}
@@ -70,7 +69,7 @@ public DeveloperException(Class aClass, String method, String message, String ti
  * Construct a DeveloperException.
  */
 public DeveloperException(Object object, String method, String message) {
-	this(object, method, message, DEVELOPER_ERROR);
+	this(object, method, message, null);
 }
 /**
  * Construct a DeveloperException.
@@ -89,7 +88,7 @@ public DeveloperException(Object errorObject, String errorMethod, String message
 	this(errorObject.getClass(), errorMethod, message, title, e);
 }
 public String getMessage() {
-	return message + "\n" + resDeveloperException.getString("CISource") + ": " + errorObject + "." + errorMethod;//$NON-NLS-3$ //$NON-NLS-2$//$NON-NLS-1$
+	return message + "\n" + ResourceManager.getInstance().getResource(DeveloperException.class, "CISource") + ": " + errorObject + "." + errorMethod;
 }
 public String getTitle() {
 	return title;
