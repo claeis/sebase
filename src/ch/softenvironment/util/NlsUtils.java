@@ -17,10 +17,9 @@ import java.text.*;
 /**
  * Set of reusable String Utilities.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2005-02-21 13:25:18 $
+ * @version $Revision: 1.7 $ $Date: 2005-03-12 17:47:28 $
  */
 public abstract class NlsUtils {
-	public final static String DATE_EUROPE_PATTERN = "dd.MM.yyyy";
 	public final static String TIME_24HOURS_PATTERN = "HH:mm:ss";	// 24 hours
 /**
  * Bind a String with appropriate parameters.
@@ -49,106 +48,6 @@ public static String formatMessage(String pattern, String arg0) {
 	return formatMessage(pattern, tokens);
 }
 /**
- * Return a date in european format String.
- * @param date (GregorianCalendar now = new java.util.GregorianCalendar())
- */
-public static String getEuropeanDateString(java.util.Date date) {
-	if (date == null) {
-		return "";
-	} else {
-		java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat(DATE_EUROPE_PATTERN); //"-HH:mm:ss"
-		return sf.format(date);
-	}
-}
-/**
- * Return a date in european format String.
- * @param date (GregorianCalendar now = new java.util.GregorianCalendar())
- */
-public static String getEuropeanDateString(GregorianCalendar date) {
-	return getEuropeanDateString(date.getTime());
-}
-/**
- * Create a Timestamp in European Format.
- * @return String current Timestamp as String
- */
-public static String getEuropeanTimestampString() {
-	return getEuropeanTimestampString(new java.util.GregorianCalendar());
-}
-/**
- * Create a Timestamp in European Format.
- * @return String current Timestamp as String
- */
-public static String getEuropeanTimestampString(java.util.Date date) {
-	if (date == null) {
-		return "";
-	} else {
-		java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat(DATE_EUROPE_PATTERN + " " + TIME_24HOURS_PATTERN);
-		return sf.format(date);
-	}
-}
-/**
- * Create a Timestamp in European Format.
- * @return String current Timestamp as String
- */
-public static String getEuropeanTimestampString(GregorianCalendar date) {
-	return getEuropeanTimestampString(date.getTime());
-}
-/**
- * Return a date in localized format String.
- */
-public static String getLocalizedDateString(java.util.Date date) {
-	if (date == null) {
-		return "";
-	} else {
-		return DateFormat.getDateInstance().format(date);
-	}
-}
-/**
- * Return a date in localized format String.
- */
-public static String getLocalizedDateString(GregorianCalendar date) {
-	return getLocalizedDateString(date.getTime());
-}
-/**
- * Return a Timestamp in localized format String.
- */
-public static String getLocalizedTimestampString() {
-	return getLocalizedTimestampString(new Date());
-}
-/**
- * Return a Timestamp in localized format String.
- */
-public static String getLocalizedTimestampString(Date date) {
-	if (date == null) {
-		return "";
-	} else {
-		return DateFormat.getDateTimeInstance().format(date);
-	}
-}
-/**
- * Return a date in localized format String.
- */
-public static String getLocalizedTimeString(java.util.Date date) {
-	if (date == null) {
-		return "";
-	} else {
-		return DateFormat.getTimeInstance().format(date);
-	}
-}
-
-/**
- * Return a date in localized format String.
- */
-public static String getTime24Hours(java.util.Date date) {
-	if (date == null) {
-		return "";
-	} else {
-		java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat("HH:mm");
-		return sf.format(date);
-	}
-}
-
-/**
  * Change Default Locale (only if different from current default).
  * Might influence all NLS-Settings, like Number-, Date/Time-, Currency-Formatting, etc.
  * @params locale Local to be switched to
@@ -157,7 +56,7 @@ public static String getTime24Hours(java.util.Date date) {
 public static boolean changeLocale(Locale locale) {
 	if (Locale.getDefault().getLanguage().equals(locale.getLanguage())) {
 		if ((!StringUtils.isNullOrEmpty(locale.getCountry())) && (!Locale.getDefault().getCountry().equals(locale.getCountry()))) {
-Tracer.getInstance().nyi(NlsUtils.class, "changeLocale()", "country not considered yet");
+//TODO NYI: country not considered yet
 		}
 	} else {
 /*			Locale locales[] = Locale.getAvailableLocales();
@@ -176,5 +75,74 @@ Tracer.getInstance().runtimeInfo(NlsUtils.class, "changeLocale()", "Locale chang
 	}
 
 	return false;
+}
+
+/**
+ * Format a given Date in numeric Format with numeric <b>day, month, year</b>
+ * only (Time suppressed) in current Locale representation.
+ * Example for de_CH: "23.03.2005"
+ * @return String
+ */
+public static String formatDate(java.util.Date date) {
+	if (date == null) {
+		return "";
+	} else {
+//		java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat("dd.MM.yyyy");
+//		return sf.format(date);
+		return java.text.DateFormat.getDateInstance(/*java.text.DateFormat.SHORT*/).format(date);
+	}
+}
+
+/**
+ * Return a date in localized format String.
+ */
+public static String formatDate(GregorianCalendar date) {
+	return formatDate(date.getTime());
+}
+
+/**
+ * Return a date in localized format String.
+ */
+public static String formatTime(java.util.Date date) {
+	if (date == null) {
+		return "";
+	} else {
+		return DateFormat.getTimeInstance().format(date);
+	}
+}
+
+/**
+ * Return a date in "HH:mm:ss" format.
+ */
+public static String formatTime24Hours(java.util.Date date) {
+	return formatTime24Hours(date, true);
+}
+/**
+ * Return a date in "HH:mm[:ss]" format.
+ */
+public static String formatTime24Hours(java.util.Date date, boolean includingSeconds) {
+	if (date == null) {
+		return "";
+	} else {
+	    String pattern = "HH:mm";
+	    if (includingSeconds) {
+	        pattern = TIME_24HOURS_PATTERN;
+	    }
+		java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat(pattern);
+		return sf.format(date);
+	}
+}
+
+/**
+ * Return a Timestamp in localized format String.
+ */
+public static String formatDateTime(Date date) {
+	if (date == null) {
+		return "";
+	} else {
+//		java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat("dd.MM.yyyy" + " " + TIME_24HOURS_PATTERN);
+//		return sf.format(date);
+		return DateFormat.getDateTimeInstance().format(date);
+	}
 }
 }
