@@ -16,7 +16,7 @@ import ch.softenvironment.util.*;
 /**
  * Output Dialog for application failures.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
+ * @version $Revision: 1.4 $ $Date: 2004-09-06 17:28:02 $
  */
 public class ErrorDialog extends BaseDialog {
 	// exception to show
@@ -440,6 +440,8 @@ private void initialize() {
 		handleException(ivjExc);
 	}
 	// user code begin {2}
+	getPnlErrorText().setEditable(false);
+	getPnlException().setEditable(false);
 	// user code end
 }
 /**
