@@ -15,7 +15,7 @@ package ch.softenvironment.util;
 /**
  * Utilities for Date calculations.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-02-14 16:47:28 $
+ * @version $Revision: 1.4 $ $Date: 2004-10-26 19:27:19 $
  */
 public class DateUtils {
 /**
@@ -98,5 +98,24 @@ public static java.util.Date getEndOfYear() {
 public static java.util.Date getFirstOfYear() {
 	java.util.Date now = new java.util.Date();
 	return new java.util.Date(now.getYear(), java.util.Calendar.JANUARY, 1);
+}
+
+/**
+ * Return the difference between end- and start-Time in hours with given
+ * precision after comma.
+ * @return Double
+ */
+public static Double calcHours(java.util.Date start, java.util.Date end, int precision) {
+	if ((start == null) || (end == null)) {
+		throw new DeveloperException(DateUtils.class, "calcTimeDifference(..)", "start nor end must be null!");
+	}
+	if (end.getTime() < start.getTime()) {
+		throw new DeveloperException(DateUtils.class, "calcTimeDifference(..)", "start must be earlier end!");
+	}
+	
+	double milliSeconds = (end.getTime() - start.getTime()) / 1000.0 / 3600.0;
+	double accuracy = Math.pow(10, precision);
+	
+	return new Double((Math.round(milliSeconds * accuracy)) / accuracy);
 }
 }

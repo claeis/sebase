@@ -22,7 +22,7 @@ package ch.softenvironment.util;
  *   -> MyObject#getMyProperty()			// the getter-Method
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2004-05-20 15:16:27 $
+ * @version $Revision: 1.6 $ $Date: 2004-10-26 19:27:17 $
  */
 public class BeanReflector extends java.util.EventObject {
 	private transient String property = null;
@@ -110,14 +110,16 @@ public int hasProperty() {
 		getGetterMethod();
 		implementationDegree = GETTER;
 	} catch (NoSuchMethodException e) {
-		Tracer.getInstance().developerWarning(this, "hasProperty()", "NoSuchMethodException ignored: no public getter-Method for property <" + getProperty() + "> implemented");
+		// ignore
+//		Tracer.getInstance().debug(this, "hasProperty()", "NoSuchMethodException ignored: no public getter-Method for property <" + getProperty() + "> implemented");
 	}
 
 	try {
 		getSetterMethod();
 		implementationDegree = implementationDegree + SETTER;
 	} catch (NoSuchMethodException e) {
-		Tracer.getInstance().developerWarning(this, "hasProperty()", "NoSuchMethodException ignored: no public setter-Method for property <" + getProperty() + "> implemented");
+		// ignore
+//		Tracer.getInstance().debug(this, "hasProperty()", "NoSuchMethodException ignored: no public setter-Method for property <" + getProperty() + "> implemented");
 	}
 
 	return implementationDegree;
@@ -162,6 +164,35 @@ public static java.lang.Object createInstance(java.lang.Class target) throws Ins
 		throw new DeveloperException(BeanReflector.class, "creatInstance(Class)", "Class <" + target + "> must implement: Constructor()!");
 	} catch(IllegalAccessException e) {
 		throw new DeveloperException(BeanReflector.class, "creatInstance(Class)", "Class <" + target + ".Constructor()> must be: PUBLIC!");
+	}
+}
+
+/**
+ * Clone the value of given Source.
+ * @see Object#clone() definitions
+ */
+public Object cloneValue() throws IllegalAccessException, java.lang.reflect.InvocationTargetException {
+	Object value = getValue();
+	if (value == null) {
+		return null;
+	} else if (value instanceof String) {
+		return new String(value.toString());
+	} else if (value instanceof Long) {
+		return new Long(value.toString());
+	} else if (value instanceof Double) {
+		return new Double(value.toString());
+	} else if (value instanceof Integer) {
+		return new Integer(value.toString());
+	} else if (value instanceof Float) {
+		return new Float(value.toString());
+	} else if (value instanceof Boolean) {
+		// unique instances of true/false in JRE 1.4
+		return value;
+	} else if (value instanceof java.util.Date) {
+		return new java.util.Date(((java.util.Date)value).getTime());
+	} else {
+Tracer.getInstance().nyi(this, "cloneValue()", "type not cloneable yet: " + value.getClass());
+		return null;
 	}
 }
 }

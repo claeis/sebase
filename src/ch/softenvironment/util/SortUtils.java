@@ -15,10 +15,10 @@ package ch.softenvironment.util;
 /**
  * Some useful sort-Tools.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:30:43 $
+ * @version $Revision: 1.3 $ $Date: 2004-10-26 19:27:19 $
  */
 public class SortUtils {
-	class GenericComparator implements java.util.Comparator {
+	static class GenericComparator implements java.util.Comparator {
 	private String propertyToSort = null;
 	
 	GenericComparator(String propertyToSort) {

@@ -17,20 +17,10 @@ import java.io.File;
 /**
  * Set of reusable String Utilities.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-05-08 13:34:09 $
+ * @version $Revision: 1.4 $ $Date: 2004-10-26 19:27:19 $
  */
 public abstract class StringUtils {
-/**
- * Return a String representation of a boolean.
- * @return X => true; <emptyString> => false
- */
-public static String getBooleanString(boolean value) {
-	if (value) {
-		return "Ja";
-	} else {
-		return "Nein";
-	}
-}
+
 /**
  * Return PackageName of given class.
  */
@@ -49,6 +39,11 @@ public static String getPackageName(Object object) {
  * Return ClassName of given class without package path.
  */
 public static String getPureClassName(java.lang.Class type) {
+/*
+	StringBuffer className = new StringBuffer(aclass.getName());
+	className.delete(0, aclass.getName().lastIndexOf('.') + 1);
+	return className.toString();
+*/		
 	String className = type.getName();
 	int index = className.lastIndexOf('.');
 	return className.substring(index + 1, className.length());
@@ -78,14 +73,14 @@ public static String getPureClassName(Object object) {
  * @return String
  */
 public static String getString(Object value) {
-	return value == null ? new String() : value.toString();
+	return value == null ? "" : value.toString();
 }
 /**
  * Return either String or empty String if nothing contained.
  * @return String
  */
 public static String getString(String value) {
-	return value == null ? new String() : value;
+	return value == null ? "" : value;
 }
 /**
  * Return whether String is null or contains nothing.
@@ -110,5 +105,19 @@ public static String replace(String source, String searchTerm, String replacemen
 		return replace(result, searchTerm, replacement);
 	}
 	return result;
+}
+
+/**
+ * Return a String representation of a boolean.
+ * @return X => true; <emptyString> => false
+ */
+public static String getBooleanString(Boolean value) {
+	if (value == null) {
+		return "";
+	} else if (value.booleanValue()) {
+		return ch.softenvironment.client.ResourceManager.getInstance().getResource(StringUtils.class, "CI_Yes_text");
+	} else {
+		return ch.softenvironment.client.ResourceManager.getInstance().getResource(StringUtils.class, "CI_No_text");
+	}
 }
 }

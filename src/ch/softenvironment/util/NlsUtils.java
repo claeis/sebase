@@ -17,7 +17,7 @@ import java.text.*;
 /**
  * Set of reusable String Utilities.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:30:43 $
+ * @version $Revision: 1.3 $ $Date: 2004-10-26 19:27:19 $
  */
 public abstract class NlsUtils {
 	public final static String DATE_EUROPE_PATTERN = "dd.MM.yyyy";
@@ -53,8 +53,12 @@ public static String formatMessage(String pattern, String arg0) {
  * @param date (GregorianCalendar now = new java.util.GregorianCalendar())
  */
 public static String getEuropeanDateString(java.util.Date date) {
-	java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat(DATE_EUROPE_PATTERN); //"-HH:mm:ss"
-	return sf.format(date);
+	if (date == null) {
+		return "";
+	} else {
+		java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat(DATE_EUROPE_PATTERN); //"-HH:mm:ss"
+		return sf.format(date);
+	}
 }
 /**
  * Return a date in european format String.
@@ -75,8 +79,12 @@ public static String getEuropeanTimestampString() {
  * @return String current Timestamp as String
  */
 public static String getEuropeanTimestampString(java.util.Date date) {
-	java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat(DATE_EUROPE_PATTERN + " " + TIME_24HOURS_PATTERN);
-	return sf.format(date);
+	if (date == null) {
+		return "";
+	} else {
+		java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat(DATE_EUROPE_PATTERN + " " + TIME_24HOURS_PATTERN);
+		return sf.format(date);
+	}
 }
 /**
  * Create a Timestamp in European Format.
@@ -89,7 +97,11 @@ public static String getEuropeanTimestampString(GregorianCalendar date) {
  * Return a date in localized format String.
  */
 public static String getLocalizedDateString(java.util.Date date) {
-	return DateFormat.getDateInstance().format(date);
+	if (date == null) {
+		return "";
+	} else {
+		return DateFormat.getDateInstance().format(date);
+	}
 }
 /**
  * Return a date in localized format String.
@@ -107,7 +119,11 @@ public static String getLocalizedTimestampString() {
  * Return a Timestamp in localized format String.
  */
 public static String getLocalizedTimestampString(Date date) {
-	return DateFormat.getDateTimeInstance().format(date);
+	if (date == null) {
+		return "";
+	} else {
+		return DateFormat.getDateTimeInstance().format(date);
+	}
 }
 /**
  * Return ClassName of an Instance without package path.
@@ -116,5 +132,16 @@ public static String getPureClassName(Object object) {
 	String className = object.getClass().getName();
 	int index = className.lastIndexOf('.');
 	return className.substring(index + 1, className.length());	
+}
+
+/**
+ * Return a date in localized format String.
+ */
+public static String getLocalizedTimeString(java.util.Date date) {
+	if (date == null) {
+		return "";
+	} else {
+		return DateFormat.getTimeInstance().format(date);
+	}
 }
 }
