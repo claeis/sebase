@@ -17,8 +17,9 @@ package ch.softenvironment.view.table;
  */
 
 /**
- * Format a Number value as Amount-String in a JTable-Cell.
+ * Format a Number value as Percent-String in a JTable-Cell.
  * @author: Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2005-01-06 09:55:25 $
  */
 public class PercentTableCellRenderer extends javax.swing.table.DefaultTableCellRenderer {
 	java.text.NumberFormat percentFormat = null;
