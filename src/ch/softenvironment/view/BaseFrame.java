@@ -21,20 +21,25 @@ import java.util.MissingResourceException;
 import ch.ehi.basics.view.*;
 import ch.softenvironment.util.*;
 import ch.softenvironment.util.Tracer;
+import ch.softenvironment.view.swingext.SwingWorker;
 import ch.softenvironment.client.ResourceManager;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.17 $ $Date: 2005-02-21 13:47:48 $
+ * @version $Revision: 1.18 $ $Date: 2005-02-22 10:25:46 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
 	public final static int X_CHILD_OFFSET = 50;
 	public final static int Y_CHILD_OFFSET = 50;
-	private WaitDialog waitDialog = null;
+	
+	// WaitDialog
+	public static final int UNKNOWN_PROGRESS = -1;
+	private volatile WaitDialog waitDialog = null; // global for #updateProgress()
 	private volatile int waitCounter = 0;
+	
 	private ViewOptions viewOptions = null;
-	private java.util.List objects = null;
+	private java.util.List objects = null;	// for DetailView's
 
 
 /**
@@ -332,30 +337,6 @@ public final void fatalError(JFrame frame, String title, String message, Throwab
 	System.exit(-1);
 }
 /**
- * Open a WaitDialog if not shown already.
- */
-private synchronized final void forkWaitDialog(final String title) {
-// TODO NASTY: not really forked
-	if (waitCounter == 0) {
-		waitCounter++;
-		try {
-//		    SwingUtilities.invokeAndWait(new Runnable() {
-//		        public void run() {
-		            setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-					waitDialog = new WaitDialog(this, title);
-					waitDialog.show();
-					// make sure refresh is forced NOW			
-					waitDialog.paint(waitDialog.getGraphics());
-//		        }
-//		    });
-		} catch(Throwable e) {
-			Tracer.getInstance().runtimeError(this, "forkWaitDialog(..)", e.toString());
-		} finally {
-		    setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-		}
-	}
-}
-/**
  * Display a popup menu.
  * Ex. SearchTable to JPopupMenu
  * 1) Connect MouseReleased-Event (for Windows) and MousePressed-Event (for Unix) from Panel (for e.g. JScrollPane, JTablePane, etc) to this method.
@@ -525,33 +506,27 @@ public void setVisible(boolean visible) {
 	}
 }
 /**
- * Execute a <b>public Method</b> in the hierarchy <b>NON-threaded</b> and 
- * show Busy-Cursor and WaitDialog meanwhile.
- * There is only ONE WaitDialog in case of nested calls of this method.
- * Use #updateProgress(..) to show any Progress-Messages.
+ * Execute a <b>public Method</b> in the hierarchy.
  *
  * @param parameterTypes	Class parameterTypes[] = { Integer.class, String.class }
  * @param parameters		Object parameters[] = { new Integer(3), "Hello" }
  * @param methodName		methodName "doAnything" must be <b>public</b>
- *
  * @see showBusy(Runnable)
  * @deprecated (use showBusy(Runnable) instead)
  */
 private final void showBusy(final Class parameterTypes[], final Object parameters[], final String methodName) {
-	try {
-		forkWaitDialog(null);
-
-//TODO Patch: for e.g. #setCurrentObject() would not be visible if #showBusy(Runnable) was called here
-		java.lang.reflect.Method method = this.getClass().getMethod(methodName, parameterTypes);
-		method.invoke(this, parameters);
-
-//		block.interrupt();
-	} catch(Throwable e) {
-		Tracer.getInstance().runtimeError(this, "showBusy(.., " + methodName + ")", e.toString());
-		handleException(e);
-	} finally {
-		stopWaitDialog();
-	}
+	final BaseFrame view = this;
+    showBusy(new Runnable() {
+        public void run() {
+            try {
+	            java.lang.reflect.Method method = view.getClass().getMethod(methodName, parameterTypes);
+	    		method.invoke(view, parameters);
+            } catch(Throwable e) {
+                Tracer.getInstance().runtimeError(view, "showBusy(.., " + methodName + ")", e.toString());
+        		handleException(e);
+            }
+        }
+    });
 }
 /**
  * Top-level Handler.
@@ -665,38 +640,20 @@ protected final static void showSplashScreen(Dimension preferredWindowSize, Imag
 	}
 }
 /**
- * Close the WaitDialog if blocked action is finished.
- * @see #forkWaitDialog()
- */
-private synchronized final void stopWaitDialog() {
-	if (--waitCounter == 0) {
-		try {
-			if (waitDialog != null) {
-				waitDialog.dispose();
-				waitDialog = null;
-			}
-		} catch(Throwable e) {
-			Tracer.getInstance().runtimeError(this, "stopWaitDialog()", e.toString());
-		} finally {
-			waitDialog = null;
-	 		setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-		} 
-	}
-}
-/**
  * Show Progress in WaitDialog started by #showBusy(..).
  *
- * @see showBusy(..)
+ * @param percentage Progress of current activity [0..100] or BaseFrame.UNKNOWN_PROGRESS
+ * @param currentActivity User friendly description of current activity
+ * @see showBusy(Runnable)
  * @see WaitDialog#updateProgress()
  */
 public synchronized final void updateProgress(final int percentage, final String currentActivity) {
-//TODO Tune!!!
 	javax.swing.SwingUtilities.invokeLater(new Runnable() {
 		public void run() {
 			try {
 				if (waitDialog != null) {
 					waitDialog.updateProgress(percentage, currentActivity);
-					waitDialog.paint(waitDialog.getGraphics());
+//					waitDialog.paint(waitDialog.getGraphics()); // force refresh
 				}
 			} catch(Throwable e) {
 				Tracer.getInstance().developerWarning(this, "updateProgress(..)", "Ignoring: " + e.getLocalizedMessage());
@@ -779,39 +736,79 @@ private void updateStringProperty(java.lang.Class resource, Component component,
 }
 
 /**
- * Execute a given Block <b>NON-threaded</b> and 
- * show Busy-Cursor and WaitDialog meanwhile.
+ * Execute a given Block and show Busy-Cursor and WaitDialog meanwhile.
  * There is only ONE WaitDialog in case of nested calls of this method.
  * Use #updateProgress(..) to show any Progress-Messages meanwhile in the WaitDialog.
  *
+ * The actions within the given Block are handled by a Throwable-Handler resp.
+ * #handleException().
+ * 
  * Ex. 
- * class MyFrame extends BaseFrame {
+ * class MyView extends BaseFrame {
  *   public void doAnything(Integer c, String s) {
- *     updateProgress(10, "start activity");
- *     ...
- *   }
- *   caller() {
- *     showBusy(new Runnable() {
+ 		showBusy(new Runnable() {
 				public void run() {
 					// do anything
+					...
+					updateProgress(10, "start activity");
+					...
 				}
 	   });
  *   }
  *
- * @param block	executable Block whith Busy cursor
- *
- * @see WaitBlock.run()	inner Class here
+ * @param block	executable Block that might take a while
  * @see #updateProgress(..)
+ * @see #handleException()
  */
-public final void showBusy(Runnable block) {
-	try {
-		forkWaitDialog(null);
-		block.run();
-	} catch(Throwable e) {
-		Tracer.getInstance().runtimeError(this, "showBusy(Runnable)", e.toString());
-		handleException(e);
-	} finally {
-		stopWaitDialog();
-	}
+public final void showBusy(final Runnable block) {
+    if (++waitCounter == 1) {
+		// show ONE WaitDialog only
+		try {
+// Tracer.getInstance().debug("opening WaitDialog");
+            setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+			waitDialog = new WaitDialog(this, null /*default title*/);
+			waitDialog.show();
+//			waitDialog.paint(waitDialog.getGraphics()); // make sure refresh is forced NOW	
+		} catch(Throwable e) {
+			Tracer.getInstance().runtimeError(this, "showBusy(Runnable)", "show WaitDialog failed: " + e.toString());
+		    waitDialog = null;
+		    setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+		    waitCounter = 0;
+		}
+    }
+    
+    // define Swing-Thread
+	SwingWorker worker = new SwingWorker() {
+	    public Object construct() {
+	        try {
+	            block.run();
+	        } catch (Throwable e) {
+	            // handler is necessary, otherwise #finished() won't be called
+	            // in case of a failure in block
+	            Tracer.getInstance().runtimeError(this, "showBusy(Runnable)", "Block failed: " + e.getLocalizedMessage());
+	            handleException(e);
+	        }
+	        return null;
+	    }
+	    /**
+	     * Will be called when #construct() has finished.
+	     * Close the WaitDialog and reset Cursor.
+	     */
+	    public void finished() {
+		    if (--waitCounter == 0) {
+		    	// close WaitDialog when last actions are done
+//Tracer.getInstance().debug("closing WaitDialog");
+		        if (waitDialog != null) {
+		            // @see Exeption-Handler at opening WaitDialog
+					waitDialog.dispose();
+		        }
+				waitDialog = null;
+		    	setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+    		}
+		}
+	};
+	
+	// always fork Swing-Thread resp. execute block
+	worker.start();
 }
 }
