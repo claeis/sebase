@@ -15,7 +15,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * Panel to manage a single URL.
  * @author: Peter Hirzel </i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-09-14 16:56:57 $
+ * @version $Revision: 1.5 $ $Date: 2005-02-16 18:13:31 $
  */
 public class URLView extends javax.swing.JPanel {
 	private javax.swing.JButton ivjBtnBrowser = null;
@@ -174,6 +174,7 @@ private javax.swing.JTextField getTxtURL() {
 			ivjTxtURL.setAlignmentY(java.awt.Component.TOP_ALIGNMENT);
 			ivjTxtURL.setText("http://");
 			// user code begin {1}
+			ivjTxtURL.setToolTipText("URL (http://..; file://..; ..");
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
