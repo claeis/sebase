@@ -21,7 +21,7 @@ package ch.softenvironment.util;
  * (This Tool is not foreseen for NLS-Support.)
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-02-25 07:09:14 $
+ * @version $Revision: 1.4 $ $Date: 2004-11-03 07:23:02 $
  */
 public class Tracer {
 	// Mode's
@@ -74,13 +74,8 @@ public void developerWarning(Object obj, String methodName, String comment) {
 	}
 }
 /**
- * @return console-out Stream
- */
-public static java.io.OutputStream getConsoleOut() {
-	return System.out;
-}
-/**
- * @return The Singleton Tracer.
+ * Design Pattern: Singleton
+ * @return Tracer.
  */
 public static Tracer getInstance() {
 	if (instance == null) {
@@ -150,7 +145,7 @@ public void runtimeError(Object obj, String methodName, String comment) {
 	log("Runtime Error:", obj, methodName, comment);
 }
 /**
- * Log Warnings during runtime.
+ * Log intormations during runtime.
  */
 public void runtimeInfo(String comment) {
 	log("Info: " + comment);
@@ -176,7 +171,7 @@ public void sql(String sqlString) {
 	}
 }
 /**
- * Start Tracer and use ConsoleOut.
+ * Start Tracer and use Console-Error.
  * @param args Command line arguments ("-all, -silent", "-trace", "traceSQL" or "-debug")
  */
 public static void start(java.lang.String[] args) {
@@ -201,14 +196,14 @@ public static void start(java.lang.String[] args) {
 			}
 		}
 	}
-	start((java.io.PrintStream)getConsoleOut(), mode);
+	start((java.io.PrintStream)getConsoleError(), mode);
 }
 /**
- * Start Tracer and use ConsoleOut.
+ * Start Tracer and use Console-Error.
  * @param mode (SILENT, NORMAL, DEBUG, TRACE_SQL, ALL)
  */
 public static void start(int mode) {
-	start((java.io.PrintStream)getConsoleOut(), mode);
+	start((java.io.PrintStream)getConsoleError(), mode);
 }
 /**
  * Start Tracer.
@@ -256,5 +251,12 @@ public void tune(Object obj, String methodName, String comment) {
 public void uncaughtException(Object obj, String methodName, Throwable exception) {
 	exception.printStackTrace(outStream);
 	log("Uncaught Exception:", obj, methodName, exception.toString());
+}
+
+/**
+ * @return console-error Stream
+ */
+public static java.io.OutputStream getConsoleError() {
+	return System.err;
 }
 }

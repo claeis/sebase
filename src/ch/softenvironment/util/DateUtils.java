@@ -15,7 +15,7 @@ package ch.softenvironment.util;
 /**
  * Utilities for Date calculations.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-10-26 19:27:19 $
+ * @version $Revision: 1.5 $ $Date: 2004-11-03 07:23:02 $
  */
 public class DateUtils {
 /**
@@ -66,7 +66,7 @@ public static java.util.Date getEndOfMonth() {
 	return new java.util.Date(firstNextMonth.getTime() - 24 * 60 * 60 * 1000);
 }
 /**
- * Return the last Monday.
+ * Return the next Sunday.
  * @return java.util.Date
  */
 public static java.util.Date getEndOfWeek() {
@@ -83,7 +83,7 @@ public static java.util.Date getFirstOfMonth() {
 }
 
 /**
- * Return the first day of current month.
+ * Return the last day of current year.
  * @return java.util.Date
  */
 public static java.util.Date getEndOfYear() {
@@ -92,7 +92,7 @@ public static java.util.Date getEndOfYear() {
 }
 
 /**
- * Return the first day of current month.
+ * Return the first day of current year, say "1.1.currentYear".
  * @return java.util.Date
  */
 public static java.util.Date getFirstOfYear() {
@@ -117,5 +117,37 @@ public static Double calcHours(java.util.Date start, java.util.Date end, int pre
 	double accuracy = Math.pow(10, precision);
 	
 	return new Double((Math.round(milliSeconds * accuracy)) / accuracy);
+}
+
+/**
+ * Return the day in month of given date.
+ * @return java.lang.Integer
+ */
+public static Integer getDayInMonth(java.util.Date date) {
+//	java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat("dd");
+//	sf.getCalendar().get(java.util.Calendar.YEAR);
+//	sf.applyPattern("dd");   // day only
+//	return new Integer(sf.format(date));
+	if (date == null) {
+		return null;
+	} else {
+		java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
+		cal.setTime(date);
+		return new Integer(cal.get(java.util.Calendar.DAY_OF_MONTH));
+	}
+}
+
+/**
+ * Return the year of the Date, for e.g. 2004.
+ * @return java.lang.Integer
+ */
+public static Integer getYear(java.util.Date date) {
+	if (date == null) {
+		return null;
+	} else {
+		java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
+		cal.setTime(date);
+		return new Integer(cal.get(java.util.Calendar.YEAR));
+	}
 }
 }

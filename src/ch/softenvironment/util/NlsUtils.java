@@ -17,7 +17,7 @@ import java.text.*;
 /**
  * Set of reusable String Utilities.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-10-26 19:27:19 $
+ * @version $Revision: 1.4 $ $Date: 2004-11-03 07:23:02 $
  */
 public abstract class NlsUtils {
 	public final static String DATE_EUROPE_PATTERN = "dd.MM.yyyy";
@@ -126,15 +126,6 @@ public static String getLocalizedTimestampString(Date date) {
 	}
 }
 /**
- * Return ClassName of an Instance without package path.
- */
-public static String getPureClassName(Object object) {
-	String className = object.getClass().getName();
-	int index = className.lastIndexOf('.');
-	return className.substring(index + 1, className.length());	
-}
-
-/**
  * Return a date in localized format String.
  */
 public static String getLocalizedTimeString(java.util.Date date) {
@@ -142,6 +133,18 @@ public static String getLocalizedTimeString(java.util.Date date) {
 		return "";
 	} else {
 		return DateFormat.getTimeInstance().format(date);
+	}
+}
+
+/**
+ * Return a date in localized format String.
+ */
+public static String getTime24Hours(java.util.Date date) {
+	if (date == null) {
+		return "";
+	} else {
+		java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat("HH:mm");
+		return sf.format(date);
 	}
 }
 }
