@@ -13,23 +13,27 @@ package ch.softenvironment.util;
  */
  
 /**
- * Global Tracer.
+ * This is a <b>Developer Tracing-Tool</b>, meant to trace important
+ * info a Developer should be aware of <b>while developing and testing an application</b>.
+ * Except of the runtime-logs the API of this Tool should not be missunderstood
+ * as a User-Log Tool, rather hide log-infos created by this tool from user.
+ *
+ * Eventually this Tool could help in a productive environment for remote assistance,
+ * by starting it in a command-shell only (the application parameters should forward
+ * any start-parameters to start a Tracer-Instance.
+ *
  * Design Pattern: Singleton
  *
- * This Tracer is useful as a development tool
- * to trace any Information while running an Application.
- * (This Tool is not foreseen for NLS-Support.)
- *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2005-01-06 09:49:58 $
+ * @version $Revision: 1.7 $ $Date: 2005-02-21 13:24:30 $
  */
 public class Tracer {
 	// Mode's
-	public final static int SILENT = 1;  	// supress all Trace-logs
-	public final static int NORMAL = 2;	 	// ~User-Compatible
-	public final static int DEBUG = 3;   	// show specific debug-messages
-	public final static int TRACE_SQL = 4;	// show specific SQL-logs
-	public final static int ALL = 5;		// show all Trace-logs
+	public final static int SILENT = 1;  		// supress all Trace-logs
+	public final static int NORMAL = 2;	 		// ~User-Compatible
+	public final static int DEBUG = 3;   		// show specific debug-messages
+	public final static int TRACE_BACKEND = 4;	// show specific Backend-Target-logs
+	public final static int ALL = 5;			// show all Trace-logs
 	
 	private static Tracer instance = null;
 	private java.io.PrintStream outStream = null;
@@ -42,15 +46,19 @@ private Tracer() {
 	super();
 }
 /**
- * Log a debug message.
+ * Log a debug message, for e.g. to help a developer to trace its code
+ * without using a Debugger. This method is meant for temporaly use only, be means
+ * any debug-logs should be removed after testing or within productional releases.
+ * @deprecated (should not remain in productive versions)
  */
-public void debug(Object obj, String methodName, String comment) {
+public void debug(Object source, String methodName, String comment) {
 	if ((mode == DEBUG) || (mode == ALL)) {
-		log("Debug: ", obj, methodName, comment);
+		log("Debug: ", source, methodName, comment);
 	}
 }
 /**
  * Log a debug message.
+ * @deprecated
  */
 public void debug(String comment) {
 	if ((mode == DEBUG) || (mode == ALL)) {
@@ -58,20 +66,30 @@ public void debug(String comment) {
 	}
 }
 /**
- * Log Developer Errors.
+ * Log Developer Errors, for e.g. when a developer missunderstood the
+ * concept of a called method/mechanism. If this happens, the developer is urged
+ * to change this part of code immediately.
  */
-public void developerError(Object obj, String methodName, String comment) {
+public void developerError(Object source, String methodName, String error) {
 	if ((mode == DEBUG) || (mode == ALL)) {
-		log("Developer Error: ", obj, methodName, comment);
+		log("Developer Error: ", source, methodName, error);
 	}
 }
 /**
- * Log developer Warnings.
+ * Log developer Warnings, for e.g. if something was wrongly used by Developer,
+ * but work around has taken place automatically. The developer should change its
+ * code as soon as possible if this trace-log happens to remain compatible for future releases.
  */
-public void developerWarning(Object obj, String methodName, String comment) {
+public void developerWarning(Object source, String methodName, String warning) {
 	if ((mode == DEBUG) || (mode == ALL)) {
-		log("Developer Warning: ", obj, methodName, comment);
+		log("Developer Warning: ", source, methodName, warning);
 	}
+}
+/**
+ * @return console-error Stream
+ */
+private static java.io.OutputStream getConsoleError() {
+	return System.err;
 }
 /**
  * Design Pattern: Singleton
@@ -84,16 +102,7 @@ public static Tracer getInstance() {
 	return instance;
 }
 /**
- * Trace Nasty codings.
- */
-public void hack(Object obj, String methodName, String comment) {
-	if (mode == ALL) {
-		// for e.g. hack(..., ..., "recode this..");
-		log("Hack:", obj, methodName, comment);
-	}
-}
-/**
- * Print Log-Infos with leading Timestamp.
+ * Print given Log-Message with leading Timestamp.
  */
 private void log(String logMessage) {
 	if (mode != SILENT) {
@@ -101,74 +110,62 @@ private void log(String logMessage) {
 	}
 }
 /**
- * Print Log-Infos.
+ * Print Log-Infos in a well formatted way.
+ * @param source Instance where Trace-Event happened
+ * @param methodName source-code method where Trace-Event happened.
+ * @see #log(String)
  */
-private void log(String errorType, Object obj, String methodName, String comment) {
+private void log(String errorType, Object source, String methodName, String comment) {
 	String sender = null;
-	if (obj == null) {
+	if (source == null) {
 		sender = "<???>";
-	} else if (obj.getClass().equals(java.lang.Class.class)) {
+	} else if (source.getClass().equals(java.lang.Class.class)) {
 		// class was the sender
-		sender = ((java.lang.Class)obj).getName();
+		sender = ((java.lang.Class)source).getName();
 	} else {
 		// instance was the sender
-		sender = obj.getClass().getName();
+		sender = source.getClass().getName();
 	}
 	log(errorType + "->" + comment + " in <" + sender + "#" + methodName + ">");
 }
 /**
- * Keep Not Yet Implemented code references.
+ * Log a command executed on a backend Target (for e.g. a DBMS or any other Server-System).
+ * @param command the remotely executed statement on Target-System
  */
-public void nyi(Object obj, String methodName) {
-	nyi(obj, methodName, "");
+public void logBackendCommand(Object source, String methodName, String command) {
+	log("Backend: " + command);
 }
 /**
- * Keep Not Yet Implemented code references.
+ * Keep <b>Not Yet Implemented</b> code references.
+ * Developer note, to keep reference where something has to be realized soon.
+ * @deprecated (a //TODO remark should be preferred)
  */
-public void nyi(Object obj, String methodName, String comment) {
+public void nyi(Object source, String methodName, String comment) {
 	if ((mode == DEBUG) || (mode == ALL)) {
-		log("NYI:", obj, methodName, comment);
+		log("NYI:", source, methodName, comment);
 	}
 }
 /**
- * Keep temporary fixes references.
+ * Log Errors during runtime, by means a serious error happened, which might corrupt
+ * application behaviour sooner or later.
  */
-public void patch(Object obj, String methodName, String comment) {
-	if (mode == ALL) {
-		log("Patch:", obj, methodName, comment);
-	}
+public void runtimeError(Object source, String methodName, String error) {
+	log("Runtime Error:", source, methodName, error);
 }
 /**
- * Log Errors during runtime.
+ * Log informations during runtime, by means this may represent a valuable
+ * info which might help to interprete application behaviour.
  */
-public void runtimeError(Object obj, String methodName, String comment) {
-	log("Runtime Error:", obj, methodName, comment);
+public void runtimeInfo(Object source, String methodName, String info) {
+	log("Info:", source, methodName, info);
 }
 /**
- * Log intormations during runtime.
+ * Log Warnings during runtime, by means errors might have been happened
+ * but were handled automatically. However any other follow-up
+ * errors might be expected.
  */
-public void runtimeInfo(String comment) {
-	log("Info: " + comment);
-}
-/**
- * Log Warnings during runtime.
- */
-public void runtimeWarning(Object obj, String methodName, String comment) {
-	log("Runtime Warning:", obj, methodName, comment);
-}
-/**
- * Log an SQL-message.
- */
-public void sql(Object obj, String methodName, String sqlString) {
-	sql(sqlString);
-}
-/**
- * Log an SQL-message.
- */
-public void sql(String sqlString) {
-	if ((mode == TRACE_SQL) || (mode == ALL)) {
-		log("SQL: " + sqlString);
-	}
+public void runtimeWarning(Object source, String methodName, String warning) {
+	log("Runtime Warning:", source, methodName, warning);
 }
 /**
  * Start Tracer and use Console-Error.
@@ -190,7 +187,7 @@ public static java.lang.String[] start(java.lang.String[] args) {
 				it.remove();
 				break;
 			} else if (option.equalsIgnoreCase("-traceSQL")) {
-				mode = TRACE_SQL;
+				mode = TRACE_BACKEND;
 				it.remove();
 				break;
 			} else if (option.equalsIgnoreCase("-all")) {
@@ -219,20 +216,18 @@ public static void start(java.io.PrintStream stream, int mode) {
 	instance = new Tracer();
 	instance.outStream = stream;
 	instance.mode = mode;
-	instance.debug("START Tracer");
-	instance.runtimeInfo("Java Version: " + System.getProperty("java.version"));
-	instance.runtimeInfo("Java VM Version: " + System.getProperty("java.vm.version"));
-	instance.runtimeInfo("OS Name: " + System.getProperty("os.name"));
-	instance.runtimeInfo("OS Architecture: " + System.getProperty("os.arch"));
-	instance.runtimeInfo("OS Version: " + System.getProperty("os.version"));
-	instance.runtimeInfo("OS Locale: " + java.util.Locale.getDefault().toString());
+	instance.log("Java Version: " + System.getProperty("java.version"));
+	instance.log("Java VM Version: " + System.getProperty("java.vm.version"));
+	instance.log("OS Name: " + System.getProperty("os.name"));
+	instance.log("OS Architecture: " + System.getProperty("os.arch"));
+	instance.log("OS Version: " + System.getProperty("os.version"));
+	instance.log("OS Locale: " + java.util.Locale.getDefault().toString());
 }
 /**
  * Stop Tracer.
  */
 public void stop() {
 //	try {
-		debug("STOP Tracer");
 		outStream.close();
 		instance = null;
 /*	} catch(java.io.IOException e) {
@@ -241,27 +236,12 @@ public void stop() {
 */
 }
 /**
- * Keep reference to tuning potential in code.
- */
-public void tune(Object obj, String methodName, String comment) {
-	if (mode == ALL) {
-		// for e.g. tune(..., ..., "slow");
-		log("Tune:", obj, methodName, comment);
-	}
-}
-/**
  * Use this message to trace non-visually handled exceptions which
- * might be ignored during application run.
+ * might be ignored during application run. Serious malfunctioning
+ * application behaviour might be possible.
  */
-public void uncaughtException(Object obj, String methodName, Throwable exception) {
+public void uncaughtException(Object source, String methodName, Throwable exception) {
 	exception.printStackTrace(outStream);
-	log("Uncaught Exception:", obj, methodName, exception.toString());
-}
-
-/**
- * @return console-error Stream
- */
-public static java.io.OutputStream getConsoleError() {
-	return System.err;
+	log("Uncaught Exception:", source, methodName, exception.toString());
 }
 }
