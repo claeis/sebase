@@ -21,7 +21,7 @@ package ch.softenvironment.util;
  * (This Tool is not foreseen for NLS-Support.)
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-11-03 07:23:02 $
+ * @version $Revision: 1.5 $ $Date: 2004-12-10 16:48:55 $
  */
 public class Tracer {
 	// Mode's
@@ -174,29 +174,34 @@ public void sql(String sqlString) {
  * Start Tracer and use Console-Error.
  * @param args Command line arguments ("-all, -silent", "-trace", "traceSQL" or "-debug")
  */
-public static void start(java.lang.String[] args) {
+public static java.lang.String[] start(java.lang.String[] args) {
 	int mode = SILENT;	// default
-	
+	java.util.ArrayList ret=new java.util.ArrayList(java.util.Arrays.asList(args));
 	if (args != null) {
-		int counter = 0;
-		while (counter < args.length) {
-			String option = args[counter++];
+		java.util.Iterator it=ret.iterator();
+		while (it.hasNext()) {
+			String option = (String)it.next();
 			if (option.equalsIgnoreCase("-debug")) {
 				mode = DEBUG;
+				it.remove();
 				break;
 			} else if (option.equalsIgnoreCase("-trace")) {
 				mode = NORMAL;
+				it.remove();
 				break;
 			} else if (option.equalsIgnoreCase("-traceSQL")) {
 				mode = TRACE_SQL;
+				it.remove();
 				break;
 			} else if (option.equalsIgnoreCase("-all")) {
 				mode = ALL;
+				it.remove();
 				break;
 			}
 		}
 	}
 	start((java.io.PrintStream)getConsoleError(), mode);
+	return (java.lang.String[])ret.toArray(new String[0]);
 }
 /**
  * Start Tracer and use Console-Error.
