@@ -17,7 +17,7 @@ import java.io.*;
 /**
  * Parser-Tool to parse comma separated files (*.CSV).
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2004-05-20 15:14:06 $
+ * @version $Revision: 1.6 $ $Date: 2004-08-18 09:28:13 $
  */
 public class ParserCSV {
 	private String line = null;
@@ -37,7 +37,7 @@ public static java.util.List stringToArray(String serializedList, String separat
 	while (item != null) {
 //		if (!StringUtils.isNullOrEmpty(item)) {
 			list.add(item);
-Tracer.getInstance().debug(ParserCSV.class, "stringToArray(..)", "adding: " + item);
+//Tracer.getInstance().debug(ParserCSV.class, "stringToArray(..)", "adding: " + item);
 //		}
 		item = parser.getNextString();
 	}
