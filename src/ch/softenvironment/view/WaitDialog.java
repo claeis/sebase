@@ -15,7 +15,7 @@ package ch.softenvironment.view;
 /**
  * Wait-Dialog for user.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-05-10 12:53:00 $
+ * @version $Revision: 1.5 $ $Date: 2004-10-26 19:17:59 $
  */
 public class WaitDialog extends BaseDialog {
 	private javax.swing.JPanel ivjBaseDialogContentPane = null;
@@ -42,7 +42,7 @@ public WaitDialog(java.awt.Frame owner, String title, String imagePath) {
 	if (imagePath == null) {
 		this.imageIcon = ch.ehi.basics.i18n.ResourceBundle.getImageIcon(WaitDialog.class, "traffic_redlight.png");
 	} else {
-		this.imageIcon = new javax.swing.ImageIcon(getClass().getResource(imagePath));
+		this.imageIcon = new javax.swing.ImageIcon(WaitDialog.class.getResource(imagePath));
 	}
 
 	initialize();

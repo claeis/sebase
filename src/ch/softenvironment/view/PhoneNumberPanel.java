@@ -1,6 +1,5 @@
 package ch.softenvironment.view;
 
-
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,13 +15,13 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * Panel for structured Phone Number representation.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-09-14 16:56:57 $
+ * @version $Revision: 1.5 $ $Date: 2004-10-26 19:13:41 $
  */
 public class PhoneNumberPanel extends javax.swing.JPanel {
 	private String separator = "/";//$NON-NLS-1$
 	private javax.swing.JTextField ivjTxtCountryPrefix = null;
 	private javax.swing.JTextField ivjTxtNumber = null;
-	private java.lang.String fieldText = new String();
+	private java.lang.String fieldText = "";
 	private javax.swing.JTextField ivjTxtSitePrefix = null;
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
 	private java.util.List fieldList = null;
