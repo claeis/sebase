@@ -24,7 +24,7 @@ import ch.softenvironment.util.Tracer;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2004-04-27 09:14:58 $
+ * @version $Revision: 1.6 $ $Date: 2004-05-09 17:14:42 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -268,22 +268,18 @@ protected final void executeBusy(String methodName) {
 	showBusyCursor(types, parameters, methodName, this);
 }
 /**
- * @see SearchView#newObject().
+ * (Short cut.)
+ * @see #executeNewObject(Object).
  */
 protected final void executeNewObject() {
-	executeBusy("newObject");
+	executeNewObject(null);
 }
 /**
- * @see SearchView#openObjects().
- */
-protected final void executeOpenObjects() {
-	executeBusy("openObjects");
-}
-/**
- * @see SearchView#removeObjects().
+ * (Short cut.)
+ * @see #executeRemoveObject(Object).
  */
 protected void executeRemoveObjects() {
-	executeBusy("removeObjects");
+	executeRemoveObjects(null);
 }
 /**
  * @see DetailView#saveObject().
@@ -371,17 +367,13 @@ protected final void genericPopupDisplay(java.awt.event.MouseEvent event, javax.
 	 	adaptSelection(event, popupMenu);
 
 	 	if (event.getClickCount() == 2) {
-			if (this instanceof SearchView) {
-				executeOpenObjects();
-				return;
-			} else if (this instanceof DetailView) {
-				if (((DetailView)this).defaultDoubleClickAction(event)) {
-					return;
-				}
+		 	// case: double-click
+			if (this instanceof ListMenuChoice) {
+//				((ListMenuChoice)this).defaultDoubleClickAction(event);
+				executeChangeObjects(event.getSource());
 			}
-	 	}
-		if (event.isPopupTrigger() && (popupMenu != null)) {
-  	      popupMenu.show(event.getComponent(), event.getX(), event.getY());
+	 	} else if (event.isPopupTrigger() && (popupMenu != null)) {
+			popupMenu.show(event.getComponent(), event.getX(), event.getY());
 		}
    	} catch(Throwable e) {
 	   	handleException(e);
@@ -771,5 +763,49 @@ protected final void updateProgress(int percentage, String currentActivity) {
 		waitDialog.updateProgress(percentage, currentActivity);
 		waitDialog.paint(waitDialog.getGraphics());
 	}
+}
+
+/**
+ * (Short cut.)
+ * @see #executeChangeObjects(Object).
+ */
+protected final void executeChangeObjects() {
+	executeChangeObjects(null);
+}
+
+/**
+ * @see ListMenuChoice#changeObjects(Object).
+ */
+protected final void executeChangeObjects(Object source) {
+	Class types[] = { Object.class };
+	Object parameters[] = { source };
+	showBusyCursor(types, parameters, "changeObjects", this);
+}
+
+/**
+ * @see ListMenuChoice#copyObject(Object).
+ */
+protected final void executeCopyObject(Object source) {
+	Class types[] = { Object.class };
+	Object parameters[] = { source };
+	showBusyCursor(types, parameters, "copyObject", this);
+}
+
+/**
+ * @see ListMenuChoice#newObject(Object).
+ */
+protected final void executeNewObject(Object source) {
+	Class types[] = { Object.class };
+	Object parameters[] = { source };
+	showBusyCursor(types, parameters, "newObject", this);
+}
+
+/**
+ * @see ListMenuChoice#removeObjects(Object).
+ */
+protected final void executeRemoveObjects(Object source) {
+	Class types[] = { Object.class };
+	Object parameters[] = { source };
+	showBusyCursor(types, parameters, "removeObjects", this);
 }
 }
