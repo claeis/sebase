@@ -24,36 +24,29 @@ import ch.softenvironment.util.Tracer;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2004-05-09 17:14:42 $
+ * @version $Revision: 1.7 $ $Date: 2004-05-10 12:51:41 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
 	public final static int X_CHILD_OFFSET = 20;
 	public final static int Y_CHILD_OFFSET = 15;
 	private WaitDialog waitDialog = null;
+	private volatile int waitCounter = 0;
 	private ViewOptions viewOptions = null;
-	
+
+/**
+ * Simply allow forking the display of a WaitDialog.
+ * @see WaitDialog
+ */
 class WaitBlock extends Thread {
-	private Class parameterTypes[];
-	private Object parameters[];
-	private String methodName = null;
-	private Object instance = null;
 	/**
-	 * @param methodName a public method
+	 * Constructor.
 	 */
-	WaitBlock(Class parameterTypes[], Object parameters[], String methodName, Object instance) {
+	WaitBlock() {
 		super();
-		this.parameterTypes = parameterTypes;
-		this.parameters = parameters;
-		this.methodName = methodName;
-		this.instance = instance;
 	}
 	/**
-	 * Execute the Method given by Block-Constructor and
-	 * show BusyCursor while executing the Method.
-	 *
-	 * A sequential calling is assumed therefore Multi-WaitDialog
-	 * should not be a problem.
+	 * Popup the WaitDialog if not already displayed.
 	 */
 	public void run() {
 		try {
@@ -61,20 +54,22 @@ class WaitBlock extends Thread {
 				waitDialog.show();
 				waitDialog.paint(waitDialog.getGraphics());
 			}
-		} catch(NullPointerException e) {
-			// waitDialog may be null'ed -> not Thread-save
-			Tracer.getInstance().developerWarning(this, "run()", "NullPointerException ignored");
+		} catch(Throwable e) {
+			Tracer.getInstance().runtimeWarning(this, "WaitBlock#run()", "Ignore: " + e.getLocalizedMessage());
 		}
 	}
 }
 
+/**
+ * Execute a method as a threaded Block and show Busy-Cursor meanwhile.
+ */
 class Block extends Thread {
 	private Class parameterTypes[];
 	private Object parameters[];
 	private String methodName = null;
 	private Object instance = null;
 	/**
-	 * @param methodName a public method
+	 * @param methodName a public method to be threaded
 	 */
 	Block(Class parameterTypes[], Object parameters[], String methodName, Object instance) {
 		super();
@@ -89,22 +84,23 @@ class Block extends Thread {
 	 */
 	public void run() {
 //		java.awt.Cursor cursor = getCursor();
+		WaitDialog dialog = null;
 		try {
 			setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-Tracer.getInstance().nyi(this, "Block.run()", "Multi-WaitDialog is possible yet");
-			waitDialog = new WaitDialog((java.awt.Frame)instance, null, null);
-			waitDialog.show();
+			
+			dialog = new WaitDialog((java.awt.Frame)instance, null, null);
+			dialog.show();
+			dialog.paint(dialog.getGraphics());
 			
 			java.lang.reflect.Method method = instance.getClass().getMethod(methodName, parameterTypes);
 			method.invoke(instance, parameters);
 		} catch(Throwable e) {
-			Tracer.getInstance().runtimeError(this, "Block.run()", "Thread failed: " + e.toString());
+			Tracer.getInstance().runtimeError(this, "Block#run()", "Thread failed: " + e.toString());
 			handleException(e);
 		} finally {
 			try {
-				if (waitDialog != null) {
-					waitDialog.dispose();
-					waitDialog = null;
+				if (dialog != null) {
+					dialog.dispose();
 				}
 			} catch(NullPointerException e) {
 				// waitDialog may be null'ed -> not Thread-save
@@ -241,8 +237,9 @@ public static String exceptionToString(Throwable exception) {
     return stringWriter.toString();
 }
 /**
- * Execute a <b>public</b> Method in <b>an own Thread</b> and show Busy-Cursor 
+ * Execute a <b>public Method</b> in an <b>own Thread</b> and show Busy-Cursor 
  * and WaitDialog meanwhile.
+ * Each threaded Block has its own WaitDialog.
  *
  * Ex. public void doAnything(Integer c, String s) {..}
  * @param parameterTypes	Class parameterTypes[] = { Integer.class, String.class }
@@ -257,15 +254,27 @@ protected final void executeBlock(Class parameterTypes[], Object parameters[], S
 	block.start(); 
 }
 /**
- * Execute a <b>public</b> Method within this hierarchy and show Busy-Cursor 
- * and WaitDialog meanwhile.
- * Ex. public void doAnything() {..}
- * @param methodName		methodName = "doAnything" must be <b>public</b>
+ * (Short cut.)
+ * @see #executeChangeObjects(Object).
  */
-protected final void executeBusy(String methodName) {
-	Class types[] = {};
-	Object parameters[] = {};
-	showBusyCursor(types, parameters, methodName, this);
+protected final void executeChangeObjects() {
+	executeChangeObjects(null);
+}
+/**
+ * @see ListMenuChoice#changeObjects(Object).
+ */
+protected final void executeChangeObjects(Object source) {
+	Class types[] = { Object.class };
+	Object parameters[] = { source };
+	showBusy(types, parameters, "changeObjects");
+}
+/**
+ * @see ListMenuChoice#copyObject(Object).
+ */
+protected final void executeCopyObject(Object source) {
+	Class types[] = { Object.class };
+	Object parameters[] = { source };
+	showBusy(types, parameters, "copyObject");
 }
 /**
  * (Short cut.)
@@ -275,6 +284,20 @@ protected final void executeNewObject() {
 	executeNewObject(null);
 }
 /**
+ * @see ListMenuChoice#newObject(Object).
+ */
+protected final void executeNewObject(Object source) {
+	Class types[] = { Object.class };
+	Object parameters[] = { source };
+	showBusy(types, parameters, "newObject");
+}
+/**
+ * @see DetailView#redoObject().
+ */
+protected final void executeRedoObject() {
+	showBusy("redoObject");
+}
+/**
  * (Short cut.)
  * @see #executeRemoveObject(Object).
  */
@@ -282,16 +305,24 @@ protected void executeRemoveObjects() {
 	executeRemoveObjects(null);
 }
 /**
+ * @see ListMenuChoice#removeObjects(Object).
+ */
+protected final void executeRemoveObjects(Object source) {
+	Class types[] = { Object.class };
+	Object parameters[] = { source };
+	showBusy(types, parameters, "removeObjects");
+}
+/**
  * @see DetailView#saveObject().
  */
 protected final void executeSaveObject() {
-	executeBusy("saveObject");
+	showBusy("saveObject");
 }
 /**
  * @see SearchView#searchObjects().
  */
 protected final void executeSearchObjects() {
-	executeBusy("searchObjects");
+	showBusy("searchObjects");
 }
 /**
  * @see DetailView#setCurrentObject(Object).
@@ -299,13 +330,13 @@ protected final void executeSearchObjects() {
 protected final void executeSetCurrentObject(Object object) {
 	Class methodParameterTypes[] = { Object.class };
 	Object methodParameters[] = { object };
-	showBusyCursor(methodParameterTypes, methodParameters, "setCurrentObject", this);
+	showBusy(methodParameterTypes, methodParameters, "setCurrentObject");
 }
 /**
  * @see DetailView#undoObject().
  */
 protected final void executeUndoObject() {
-	executeBusy("undoObject");
+	showBusy("undoObject");
 }
 /**
  * Export Data of table into a file.
@@ -393,77 +424,6 @@ protected static String getResourceString(java.lang.Class owner, String property
  */
 protected String getResourceString(String propertyName) {
 	return getResourceString(this.getClass(), propertyName);
-}
-/**
- * Look up a String in a properties-Resource-File, according to 
- * the following rule:
- * Component	  = javax.swing.JLabel
- * Component#name = LblMyLabel
- *   => entry in properties-File for "text"        = LblMyLabel_text
- *   => entry in properties-File for "toolTipText" = LblMyLabel_toolTipText
- * @param component Component having the given property
- * @param property (usually "text" or "toolTipText")
- */
-private void updateStringProperty(java.lang.Class resource, Component component, String property) {
-	if (component.getName() != null) {
-		BeanReflector bean = new BeanReflector(component, property);
-		if (bean.hasProperty() == BeanReflector.GETTER_AND_SETTER) {
-			try {
-				String nls = null;
-				if (resource == null) {
-					nls = getResourceString(component.getName() + "_" + property);
-				} else {
-					nls = getResourceString(resource, component.getName() + "_" + property);
-				}
-				bean.setValue(nls);
-			} catch(Throwable e) {
-				if ((e instanceof MissingResourceException) && 
-						(component instanceof javax.swing.JMenuItem)) {
-					// try CommonUserAccess.properties
-					try {
-						String nls = getResourceString(CommonUserAccess.class, component.getName() + "_" + property);
-						bean.setValue(nls);
-					} catch(Throwable cua) {
-						Tracer.getInstance().debug("Resource missing: " + cua.getLocalizedMessage());
-					}
-				} else {
-					Tracer.getInstance().debug("Resource missing: " + e.getLocalizedMessage());
-				}
-			}
-		}
-	}
-}
-/**
- * Reset GUI-Components NLS-Strings, such as Component-text 
- * or Component-textToolTip, usually after the Locale#getDefault() has changed.
- * Property "text" and "toolTipText" are changed in a generic, recursive matter.
- * 
- * @see  #getResourceString(..)
- */
-protected void updateStringComponent(Component component) {
-	// @see SwingUtilities#updateComponentTreeUI(Component)
-	java.lang.Class resource = null;
-	Component[] children = null;
-	if (component instanceof JMenu) {
-		children = ((JMenu)component).getMenuComponents();
-	} else if (component instanceof Container) {
-		children = ((Container)component).getComponents();
-		if (!(component.getClass().getName().startsWith("javax.swing") ||
-				component.getClass().getName().startsWith("java.awt"))) {
-			// container might be an own Part with its own properties-Resource-File
-			resource = component.getClass();
-		}
-	}
-	if (children != null) {
-		for(int i = 0; i < children.length; i++) {
-			Component child = children[i];
-			// try change potential NLS-properties
-			updateStringProperty(resource, child, "text");
-			updateStringProperty(resource, child, "toolTipText");
-			// go down UI-Tree recursively
-			updateStringComponent(child);
-		}
-	}
 }
 /**
  * Calculate the screen size
@@ -608,41 +568,54 @@ public void setVisible(boolean visible) {
 	super.setVisible(true);
 }
 /**
- * Execute a <b>public</b> Method and show Busy-Cursor 
- * and WaitDialog meanwhile.
+ * Execute a <b>public Method</b> in the hierarchy <b>NON-threaded</b> and 
+ * show Busy-Cursor and WaitDialog meanwhile.
+ * There is only ONE WaitDialog in case of nested calls of this method.
+ * Use #updateProgress(..) to show any Progress-Messages.
  *
- * Ex. public void doAnything(Integer c, String s) {..}
+ * Ex. 
+ * class MyFrame extends BaseFrame {
+ *   public void doAnything(Integer c, String s) {
+ *     updateProgress(10, "start activity");
+ *     ...
+ *   }
+ *   caller() {
+ *     showBusy(.., "doAnything");
+ *   }
+ *
  * @param parameterTypes	Class parameterTypes[] = { Integer.class, String.class }
  * @param parameters		Object parameters[] = { new Integer(3), "Hello" }
  * @param methodName		methodName "doAnything" must be <b>public</b>
- * @param instance			instance allowing doAnything(..)
+ *
  * @see WaitBlock.run()	inner Class here
  * @see #updateProgress(..)
  */
-protected final void showBusyCursor(Class parameterTypes[], Object parameters[], String methodName, Object instance) {
-	if (waitDialog == null) {
-		try {
-			setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-			
-			waitDialog = new WaitDialog((JFrame)instance, null, null);
-			// only the WaitDialog is forked here!
-			WaitBlock block = new WaitBlock(parameterTypes, parameters, methodName, instance);
-			block.start();
+protected final void showBusy(Class parameterTypes[], Object parameters[], String methodName) {
+	try {
+		startWaitDialog(null, null);
+		// only the WaitDialog is forked here!
+		WaitBlock block = new WaitBlock();
+		block.start();
 
-			// be careful with threading sequential tasks, such as Database-Transactions
-			java.lang.reflect.Method method = instance.getClass().getMethod(methodName, parameterTypes);
-			method.invoke(instance, parameters);
-		} catch(Throwable e) {
-			Tracer.getInstance().runtimeError(this, "showBusyCursor()", e.toString());
-			handleException(e);
-		} finally {
-			if (waitDialog != null) {
-				waitDialog.dispose();
-				waitDialog = null;
-			}
-	 		setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-		} 
+		// be careful with threading sequential tasks, such as Database-Transactions!!!
+		java.lang.reflect.Method method = this.getClass().getMethod(methodName, parameterTypes);
+		method.invoke(this, parameters);
+
+		block.interrupt();
+	} catch(Throwable e) {
+		Tracer.getInstance().runtimeError(this, "showBusyCursor(..)", e.toString());
+		handleException(e);
+	} finally {
+		stopWaitDialog();
 	}
+}
+/**
+ * @see #showBusy(Class[]. Object[], String)
+ */
+protected final void showBusy(String methodName) {
+	Class types[] = {};
+	Object parameters[] = {};
+	showBusy(types, parameters, methodName);
 }
 /**
  * Top-level Handler.
@@ -725,6 +698,12 @@ protected final static void showSplashScreen(Dimension preferredWindowSize, Stri
 	}
 }
 /**
+ * @see #showSplashScreen(Dimension, ImageIcon, long)
+ */
+protected final static void showSplashScreen(Dimension preferredWindowSize, ImageIcon image) {
+	showSplashScreen(preferredWindowSize, image, 5000);
+}
+/**
  * Show a SplashScreen.
  * Typically used at Application startup.
  */
@@ -747,65 +726,122 @@ protected final static void showSplashScreen(Dimension preferredWindowSize, Imag
 	}
 }
 /**
- * @see #showSplashScreen(Dimension, ImageIcon, long)
+ * 
  */
-protected final static void showSplashScreen(Dimension preferredWindowSize, ImageIcon image) {
-	showSplashScreen(preferredWindowSize, image, 5000);
+private synchronized final void startWaitDialog(String title, String imagePath) {
+	if (waitCounter == 0) {
+		try {
+			setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+			waitDialog = new WaitDialog(this, title, imagePath);
+		} catch(Throwable e) {
+			Tracer.getInstance().runtimeError(this, "startWaitDialog(..)", e.toString());
+		} 
+	}
+	waitCounter++;
 }
 /**
- * Show Progress in WaitDialog if any.
- * @param percentage
- * @param currentActivity
- * @see executeBlock(..)
+ * 
  */
-protected final void updateProgress(int percentage, String currentActivity) {
-	if (waitDialog != null) {
-		waitDialog.updateProgress(percentage, currentActivity);
-		waitDialog.paint(waitDialog.getGraphics());
+private synchronized final void stopWaitDialog() {
+	waitCounter--;
+	if (waitCounter == 0) {
+		try {
+			if (waitDialog != null) {
+				waitDialog.dispose();
+				waitDialog = null;
+			}
+		} catch(Throwable e) {
+			Tracer.getInstance().runtimeError(this, "stopWaitDialog(..)", e.toString());
+		} finally {
+	 		setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+		} 
 	}
 }
-
 /**
- * (Short cut.)
- * @see #executeChangeObjects(Object).
+ * Show Progress in WaitDialog started by #showBusy(..).
+ * @param percentage of activity done
+ * @param currentActivity User friendly name
+ * @see showBusy(..)
  */
-protected final void executeChangeObjects() {
-	executeChangeObjects(null);
+protected synchronized final void updateProgress(int percentage, String currentActivity) {
+	try {
+		if (waitDialog != null) {
+			waitDialog.updateProgress(percentage, currentActivity);
+			waitDialog.paint(waitDialog.getGraphics());
+		}
+	} catch(Throwable e) {
+		Tracer.getInstance().developerWarning(this, "updateProgress(..)", "Ignoring: " + e.getLocalizedMessage());
+	}
 }
-
 /**
- * @see ListMenuChoice#changeObjects(Object).
+ * Reset GUI-Components NLS-Strings, such as Component-text 
+ * or Component-textToolTip, usually after the Locale#getDefault() has changed.
+ * Property "text" and "toolTipText" are changed in a generic, recursive matter.
+ * 
+ * @see  #getResourceString(..)
  */
-protected final void executeChangeObjects(Object source) {
-	Class types[] = { Object.class };
-	Object parameters[] = { source };
-	showBusyCursor(types, parameters, "changeObjects", this);
+protected void updateStringComponent(Component component) {
+	// @see SwingUtilities#updateComponentTreeUI(Component)
+	java.lang.Class resource = null;
+	Component[] children = null;
+	if (component instanceof JMenu) {
+		children = ((JMenu)component).getMenuComponents();
+	} else if (component instanceof Container) {
+		children = ((Container)component).getComponents();
+		if (!(component.getClass().getName().startsWith("javax.swing") ||
+				component.getClass().getName().startsWith("java.awt"))) {
+			// container might be an own Part with its own properties-Resource-File
+			resource = component.getClass();
+		}
+	}
+	if (children != null) {
+		for(int i = 0; i < children.length; i++) {
+			Component child = children[i];
+			// try change potential NLS-properties
+			updateStringProperty(resource, child, "text");
+			updateStringProperty(resource, child, "toolTipText");
+			// go down UI-Tree recursively
+			updateStringComponent(child);
+		}
+	}
 }
-
 /**
- * @see ListMenuChoice#copyObject(Object).
+ * Look up a String in a properties-Resource-File, according to 
+ * the following rule:
+ * Component	  = javax.swing.JLabel
+ * Component#name = LblMyLabel
+ *   => entry in properties-File for "text"        = LblMyLabel_text
+ *   => entry in properties-File for "toolTipText" = LblMyLabel_toolTipText
+ * @param component Component having the given property
+ * @param property (usually "text" or "toolTipText")
  */
-protected final void executeCopyObject(Object source) {
-	Class types[] = { Object.class };
-	Object parameters[] = { source };
-	showBusyCursor(types, parameters, "copyObject", this);
-}
-
-/**
- * @see ListMenuChoice#newObject(Object).
- */
-protected final void executeNewObject(Object source) {
-	Class types[] = { Object.class };
-	Object parameters[] = { source };
-	showBusyCursor(types, parameters, "newObject", this);
-}
-
-/**
- * @see ListMenuChoice#removeObjects(Object).
- */
-protected final void executeRemoveObjects(Object source) {
-	Class types[] = { Object.class };
-	Object parameters[] = { source };
-	showBusyCursor(types, parameters, "removeObjects", this);
+private void updateStringProperty(java.lang.Class resource, Component component, String property) {
+	if (component.getName() != null) {
+		BeanReflector bean = new BeanReflector(component, property);
+		if (bean.hasProperty() == BeanReflector.GETTER_AND_SETTER) {
+			try {
+				String nls = null;
+				if (resource == null) {
+					nls = getResourceString(component.getName() + "_" + property);
+				} else {
+					nls = getResourceString(resource, component.getName() + "_" + property);
+				}
+				bean.setValue(nls);
+			} catch(Throwable e) {
+				if ((e instanceof MissingResourceException) && 
+						(component instanceof javax.swing.JMenuItem)) {
+					// try CommonUserAccess.properties
+					try {
+						String nls = getResourceString(CommonUserAccess.class, component.getName() + "_" + property);
+						bean.setValue(nls);
+					} catch(Throwable cua) {
+						Tracer.getInstance().debug("Resource missing: " + cua.getLocalizedMessage());
+					}
+				} else {
+					Tracer.getInstance().debug("Resource missing: " + e.getLocalizedMessage());
+				}
+			}
+		}
+	}
 }
 }
