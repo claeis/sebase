@@ -17,7 +17,7 @@ import ch.softenvironment.util.ResourceManager;
 /**
  * StandardToolbar.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
+ * @version $Revision: 1.4 $ $Date: 2004-07-05 19:34:35 $
  */
 public class ToolBar extends javax.swing.JToolBar {
 	// list of Objects to treat by selector
@@ -492,6 +492,7 @@ private javax.swing.JComboBox getCbxItems() {
 			ivjCbxItems.setToolTipText("");
 			ivjCbxItems.setVisible(true);
 			ivjCbxItems.setMaximumSize(new java.awt.Dimension(300, 23));
+			ivjCbxItems.setForeground(java.awt.Color.red);
 			// user code begin {1}
 			ivjCbxItems.setToolTipText(getResourceString("CbxItems_toolTipText"));
 			// user code end
@@ -503,6 +504,7 @@ private javax.swing.JComboBox getCbxItems() {
 	}
 	return ivjCbxItems;
 }
+
 /**
  * Gets the currentObject property (java.lang.Object) value.
  * @return The currentObject property value.
