@@ -25,7 +25,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.13 $ $Date: 2004-09-14 17:02:58 $
+ * @version $Revision: 1.14 $ $Date: 2004-10-26 19:22:56 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -378,9 +378,10 @@ protected final void executeUndoObject() {
  * @see #exportTableData(JTable)
  */
 public final void exportTableData(File file, JTable table) {
+	PrintStream stream = null;
 	try {
 	 	FileOutputStream outStream = new FileOutputStream(file);
-	  	PrintStream stream = new PrintStream(outStream);
+	  	stream = new PrintStream(outStream);
 
 	  	char separator = ';';
 
@@ -405,6 +406,10 @@ public final void exportTableData(File file, JTable table) {
 	  	outStream.close();
 	} catch(Throwable e) {
 		handleException(e);
+	} finally {
+		if (stream != null) {
+			stream.close();
+		}
 	}
 }
 /**
@@ -515,7 +520,7 @@ Tracer.getInstance().debug(BaseFrame.class, "getStartupPath(jarfile)", "home[JAR
     return home;
 }
 /**
- * Retunr GUI Configuration.
+ * Return GUI Configuration Options.
  */
 protected final ViewOptions getViewOptions() {
 	return viewOptions;
@@ -624,9 +629,11 @@ public void setVisible(boolean visible) {
 	super.setVisible(visible);
 
 	if (getViewOptions() != null) {
-		// remind model-instances represented by this GUI
-		// to suppress multiple GUI's for the same model-instance
-		getViewOptions().getViewManager().checkIn(getObjects(), this);
+	    if (visible) {
+			// remind model-instances represented by this GUI
+			// to suppress multiple GUI's for the same model-instance
+			getViewOptions().getViewManager().checkIn(getObjects(), this);
+	    }
 	}
 }
 /**
