@@ -1,16 +1,31 @@
 package ch.softenvironment.view;
 
+/* 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ */
+
 /**
  * Extended JTextField to show a Date.
  * Allows visual connection of Attribute-to-Attribute connection from e.g.
  * a Double-Property of a Model to this Components value-Property. Make sure
  * to trigger <b>propertyChange</b>-Event from this Component towards the Model.
  * The Model will be updated after a focusLost-Event.
+ *
  * @author: Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.3 $ $Date: 2004-02-14 16:43:37 $
  */
 public class DateTextField extends javax.swing.JTextField {
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
 	private java.util.Date fieldDate = null;
+	private transient String format = ch.softenvironment.util.NlsUtils.DATE_EUROPE_PATTERN;
 
 class IvjEventHandler implements java.awt.event.KeyListener {
 		public void keyPressed(java.awt.event.KeyEvent e) {};
@@ -26,41 +41,6 @@ class IvjEventHandler implements java.awt.event.KeyListener {
 public DateTextField() {
 	super();
 	initialize();
-}
-/**
- * DateTextField constructor comment.
- * @param columns int
- */
-public DateTextField(int columns) {
-	super(columns);
-	setToolTipText(ch.softenvironment.util.NlsUtils.DATE_EUROPE_PATTERN);
-}
-/**
- * DateTextField constructor comment.
- * @param text java.lang.String
- */
-public DateTextField(String text) {
-	super(text);
-	setToolTipText(ch.softenvironment.util.NlsUtils.DATE_EUROPE_PATTERN);
-}
-/**
- * DateTextField constructor comment.
- * @param text java.lang.String
- * @param columns int
- */
-public DateTextField(String text, int columns) {
-	super(text, columns);
-	setToolTipText(ch.softenvironment.util.NlsUtils.DATE_EUROPE_PATTERN);
-}
-/**
- * DateTextField constructor comment.
- * @param doc javax.swing.text.Document
- * @param text java.lang.String
- * @param columns int
- */
-public DateTextField(javax.swing.text.Document doc, String text, int columns) {
-	super(doc, text, columns);
-	setToolTipText(ch.softenvironment.util.NlsUtils.DATE_EUROPE_PATTERN);
 }
 /**
  * connEtoC1:  (DateTextField.key.keyReleased(java.awt.event.KeyEvent) --> DateTextField.getDate()Ljava.util.Date;)
@@ -93,12 +73,12 @@ public java.util.Date getDate() {
 			fieldDate = null;
 		} else {
 			// try convertion of current String into Date
-			java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat(ch.softenvironment.util.NlsUtils.DATE_EUROPE_PATTERN);
+			java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat(format);
 			java.util.Date date = sf.parse(getText());
 			// fire date-Event (correctly changed) !
 			fieldDate = new java.util.Date(date.getTime());
 			setForeground(java.awt.Color.black);
-			setToolTipText(ch.softenvironment.util.NlsUtils.DATE_EUROPE_PATTERN);
+//			setToolTipText(format);
 		}
 	} catch(java.text.ParseException e) {
 		// no valid change yet => don't fire date-Event
@@ -143,6 +123,7 @@ private void initialize() {
 		handleException(ivjExc);
 	}
 	// user code begin {2}
+	setToolTipText(format);
 	// user code end
 }
 /**
@@ -179,7 +160,7 @@ public void setDate(java.util.Date date) {
 		setText(null);
 	} else {
 		// change format as desired
-		java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat(ch.softenvironment.util.NlsUtils.DATE_EUROPE_PATTERN);
+		java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat(format);
 		// only first time
 		setText(sf.format(date));
 //setText(String.valueOf(date));

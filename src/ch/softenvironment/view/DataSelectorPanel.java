@@ -16,6 +16,7 @@ import ch.softenvironment.util.*;
 /**
  * Browser to walk through a List of Objects.
  * @author: Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.3 $ $Date: 2004-02-05 11:32:59 $
  */
 public class DataSelectorPanel extends javax.swing.JPanel {
 	private static java.util.ResourceBundle resDataSelectorPanel = ch.ehi.basics.i18n.ResourceBundle.getBundle(DataSelectorPanel.class);
@@ -266,15 +267,19 @@ private javax.swing.JButton getTbbDelete() {
 		try {
 			ivjTbbDelete = new javax.swing.JButton();
 			ivjTbbDelete.setName("TbbDelete");
-			ivjTbbDelete.setToolTipText(resDataSelectorPanel.getString("TbbDelete_toolTipText"));
+			ivjTbbDelete.setToolTipText("Delete");
 			ivjTbbDelete.setText("");
+			ivjTbbDelete.setMaximumSize(new java.awt.Dimension(23, 23));
 			ivjTbbDelete.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 			ivjTbbDelete.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-			ivjTbbDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ch/softenvironment/images/delete.gif")));
+			ivjTbbDelete.setIcon(null);
 			ivjTbbDelete.setPreferredSize(new java.awt.Dimension(23, 23));
 			ivjTbbDelete.setMargin(new java.awt.Insets(0, 0, 0, 0));
 			ivjTbbDelete.setEnabled(false);
+			ivjTbbDelete.setMinimumSize(new java.awt.Dimension(23, 23));
 			// user code begin {1}
+			ivjTbbDelete.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(DataSelectorPanel.class, "delete.gif"));
+			ivjTbbDelete.setToolTipText(resDataSelectorPanel.getString("TbbDelete_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -294,17 +299,19 @@ private javax.swing.JButton getTbbFirst() {
 		try {
 			ivjTbbFirst = new javax.swing.JButton();
 			ivjTbbFirst.setName("TbbFirst");
-			ivjTbbFirst.setToolTipText(resDataSelectorPanel.getString("TbbFirst_toolTipText"));
+			ivjTbbFirst.setToolTipText("First");
 			ivjTbbFirst.setText("");
 			ivjTbbFirst.setMaximumSize(new java.awt.Dimension(23, 23));
 			ivjTbbFirst.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 			ivjTbbFirst.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-			ivjTbbFirst.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ch/softenvironment/images/first_arrow.gif")));
+			ivjTbbFirst.setIcon(null);
 			ivjTbbFirst.setPreferredSize(new java.awt.Dimension(23, 23));
 			ivjTbbFirst.setMargin(new java.awt.Insets(0, 0, 0, 0));
 			ivjTbbFirst.setEnabled(false);
 			ivjTbbFirst.setMinimumSize(new java.awt.Dimension(23, 23));
 			// user code begin {1}
+			ivjTbbFirst.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(DataSelectorPanel.class, "first_arrow.gif"));
+			ivjTbbFirst.setToolTipText(resDataSelectorPanel.getString("TbbFirst_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -324,17 +331,19 @@ private javax.swing.JButton getTbbLast() {
 		try {
 			ivjTbbLast = new javax.swing.JButton();
 			ivjTbbLast.setName("TbbLast");
-			ivjTbbLast.setToolTipText(resDataSelectorPanel.getString("TbbLast_toolTipText"));
+			ivjTbbLast.setToolTipText("Last");
 			ivjTbbLast.setText("");
 			ivjTbbLast.setMaximumSize(new java.awt.Dimension(23, 23));
 			ivjTbbLast.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 			ivjTbbLast.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-			ivjTbbLast.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ch/softenvironment/images/last_arrow.gif")));
+			ivjTbbLast.setIcon(null);
 			ivjTbbLast.setPreferredSize(new java.awt.Dimension(23, 23));
 			ivjTbbLast.setMargin(new java.awt.Insets(0, 0, 0, 0));
 			ivjTbbLast.setEnabled(false);
 			ivjTbbLast.setMinimumSize(new java.awt.Dimension(23, 23));
 			// user code begin {1}
+			ivjTbbLast.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(DataSelectorPanel.class, "last_arrow.gif"));
+			ivjTbbLast.setToolTipText(resDataSelectorPanel.getString("TbbLast_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -354,17 +363,19 @@ private javax.swing.JButton getTbbNew() {
 		try {
 			ivjTbbNew = new javax.swing.JButton();
 			ivjTbbNew.setName("TbbNew");
-			ivjTbbNew.setToolTipText(resDataSelectorPanel.getString("TbbNew_toolTipText"));
+			ivjTbbNew.setToolTipText("New");
 			ivjTbbNew.setText("");
 			ivjTbbNew.setMaximumSize(new java.awt.Dimension(23, 23));
 			ivjTbbNew.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 			ivjTbbNew.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-			ivjTbbNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ch/softenvironment/images/new.gif")));
+			ivjTbbNew.setIcon(null);
 			ivjTbbNew.setPreferredSize(new java.awt.Dimension(23, 23));
 			ivjTbbNew.setMargin(new java.awt.Insets(0, 0, 0, 0));
 			ivjTbbNew.setEnabled(true);
 			ivjTbbNew.setMinimumSize(new java.awt.Dimension(23, 23));
 			// user code begin {1}
+			ivjTbbNew.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(DataSelectorPanel.class, "new.gif"));
+			ivjTbbNew.setToolTipText(resDataSelectorPanel.getString("TbbNew_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -384,17 +395,19 @@ private javax.swing.JButton getTbbNext() {
 		try {
 			ivjTbbNext = new javax.swing.JButton();
 			ivjTbbNext.setName("TbbNext");
-			ivjTbbNext.setToolTipText(resDataSelectorPanel.getString("TbbNext_toolTipText"));
+			ivjTbbNext.setToolTipText("Next");
 			ivjTbbNext.setText("");
 			ivjTbbNext.setMaximumSize(new java.awt.Dimension(23, 23));
 			ivjTbbNext.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 			ivjTbbNext.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-			ivjTbbNext.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ch/softenvironment/images/right_arrow.gif")));
+			ivjTbbNext.setIcon(null);
 			ivjTbbNext.setPreferredSize(new java.awt.Dimension(60, 23));
 			ivjTbbNext.setMargin(new java.awt.Insets(0, 0, 0, 0));
 			ivjTbbNext.setEnabled(false);
 			ivjTbbNext.setMinimumSize(new java.awt.Dimension(23, 23));
 			// user code begin {1}
+			ivjTbbNext.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(DataSelectorPanel.class, "right_arrow.gif"));
+			ivjTbbNext.setToolTipText(resDataSelectorPanel.getString("TbbNext_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -414,17 +427,19 @@ private javax.swing.JButton getTbbPrevious() {
 		try {
 			ivjTbbPrevious = new javax.swing.JButton();
 			ivjTbbPrevious.setName("TbbPrevious");
-			ivjTbbPrevious.setToolTipText(resDataSelectorPanel.getString("TbbPrevious_toolTipText"));
+			ivjTbbPrevious.setToolTipText("Previous");
 			ivjTbbPrevious.setText("");
 			ivjTbbPrevious.setMaximumSize(new java.awt.Dimension(23, 23));
 			ivjTbbPrevious.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 			ivjTbbPrevious.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-			ivjTbbPrevious.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ch/softenvironment/images/left_arrow.gif")));
+			ivjTbbPrevious.setIcon(null);
 			ivjTbbPrevious.setPreferredSize(new java.awt.Dimension(60, 23));
 			ivjTbbPrevious.setMargin(new java.awt.Insets(0, 0, 0, 0));
 			ivjTbbPrevious.setEnabled(false);
 			ivjTbbPrevious.setMinimumSize(new java.awt.Dimension(23, 23));
 			// user code begin {1}
+			ivjTbbPrevious.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(DataSelectorPanel.class, "left_arrow.gif"));
+			ivjTbbPrevious.setToolTipText(resDataSelectorPanel.getString("TbbPrevious_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -503,7 +518,7 @@ private void initialize() {
 		setName("DataSelectorPanel");
 		setPreferredSize(new java.awt.Dimension(300, 23));
 		setLayout(new javax.swing.BoxLayout(this, javax.swing.BoxLayout.X_AXIS));
-		setSize(256, 24);
+		setSize(264, 24);
 		setMaximumSize(new java.awt.Dimension(500, 23));
 		setMinimumSize(new java.awt.Dimension(300, 23));
 		add(getTbbFirst(), getTbbFirst().getName());
@@ -519,31 +534,6 @@ private void initialize() {
 	}
 	// user code begin {2}
 	// user code end
-}
-/**
- * main entrypoint - starts the part when it is run as an application
- * @param args java.lang.String[]
- */
-public static void main(java.lang.String[] args) {
-	try {
-		javax.swing.JFrame frame = new javax.swing.JFrame();
-		DataSelectorPanel aDataSelectorPanel;
-		aDataSelectorPanel = new DataSelectorPanel();
-		frame.setContentPane(aDataSelectorPanel);
-		frame.setSize(aDataSelectorPanel.getSize());
-		frame.addWindowListener(new java.awt.event.WindowAdapter() {
-			public void windowClosing(java.awt.event.WindowEvent e) {
-				System.exit(0);
-			};
-		});
-		frame.show();
-		java.awt.Insets insets = frame.getInsets();
-		frame.setSize(frame.getWidth() + insets.left + insets.right, frame.getHeight() + insets.top + insets.bottom);
-		frame.setVisible(true);
-	} catch (Throwable exception) {
-		System.err.println("Exception occurred in main() of javax.swing.JPanel");
-		exception.printStackTrace(System.out);
-	}
 }
 /**
  * Remove the currentObject from list.

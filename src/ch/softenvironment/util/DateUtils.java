@@ -1,8 +1,21 @@
 package ch.softenvironment.util;
 
+/* 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ */
+ 
 /**
  * Utilities for Date calculations.
  * @author: Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.3 $ $Date: 2004-02-14 16:47:28 $
  */
 public class DateUtils {
 /**
@@ -67,5 +80,23 @@ public static java.util.Date getEndOfWeek() {
 public static java.util.Date getFirstOfMonth() {
 	java.util.Date now = new java.util.Date();
 	return new java.util.Date(now.getYear(), now.getMonth(), 1);
+}
+
+/**
+ * Return the first day of current month.
+ * @return java.util.Date
+ */
+public static java.util.Date getEndOfYear() {
+	java.util.Date now = new java.util.Date();
+	return new java.util.Date(now.getYear(), java.util.Calendar.DECEMBER, 31);
+}
+
+/**
+ * Return the first day of current month.
+ * @return java.util.Date
+ */
+public static java.util.Date getFirstOfYear() {
+	java.util.Date now = new java.util.Date();
+	return new java.util.Date(now.getYear(), java.util.Calendar.JANUARY, 1);
 }
 }

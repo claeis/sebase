@@ -16,6 +16,7 @@ package ch.softenvironment.view;
  * Simple Panel to represent a certain Object which
  * allows changes to be saved.
  * @author: Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2004-02-05 11:32:59 $
  */
 public abstract class DataPanel extends javax.swing.JPanel implements CommonUserAccess {
 /**

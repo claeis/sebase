@@ -12,14 +12,17 @@ package ch.softenvironment.view;
  * Lesser General Public License for more details.
  */
  
-import ch.softenvironment.util.*;
 import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
+import java.io.*;
+import ch.ehi.basics.view.*;
+import ch.softenvironment.util.*;
 import ch.softenvironment.util.Tracer;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2004-02-05 11:32:59 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -255,6 +258,12 @@ protected final void executeBusy(String methodName) {
 	showBusyCursor(types, parameters, methodName, this);
 }
 /**
+ * @see SearchView#newObject().
+ */
+protected final void executeNewObject() {
+	executeBusy("newObject");
+}
+/**
  * @see SearchView#openObjects().
  */
 protected final void executeOpenObjects() {
@@ -285,6 +294,52 @@ protected final void executeSetCurrentObject(Object object) {
 	Class methodParameterTypes[] = { Object.class };
 	Object methodParameters[] = { object };
 	showBusyCursor(methodParameterTypes, methodParameters, "setCurrentObject", this);
+}
+/**
+ * @see DetailView#undoObject().
+ */
+protected final void executeUndoObject() {
+	executeBusy("undoObject");
+}
+/**
+ * Export Data of table into a file.
+ */
+protected final void exportTableData(JTable table) {
+	FileChooser saveDialog =  new FileChooser(/*getSettings().getWorkingDirectory()*/);
+	saveDialog.setDialogTitle(CommonUserAccess.MENU_FILE_SAVEAS);//$NON-NLS-1$
+	saveDialog.addChoosableFileFilter(ch.ehi.basics.view.GenericFileFilter.createCsvFilter());
+
+	if (saveDialog.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+		try {
+		  	File myFile = saveDialog.getSelectedFile();
+		 	FileOutputStream outStream = new FileOutputStream(myFile);
+		  	PrintStream stream = new PrintStream(outStream);
+
+		  	char separator = ';';
+
+		  	// header
+			int columnCount = table.getModel().getColumnCount();
+			for (int col=0; col<columnCount; col++) {
+				stream.print(table.getModel().getColumnName(col) + separator);
+			}
+			stream.println();
+
+			// data
+			int rowCount = table.getModel().getRowCount();
+			for (int row=0; row<rowCount; row++) {
+				for (int col=0; col<columnCount; col++) {
+					Object value = table.getModel().getValueAt(row, col);
+					stream.print(StringUtils.getString(value) + separator);
+				}
+				stream.println();
+			}
+
+			outStream.flush();
+		  	outStream.close();
+		} catch(Throwable e) {
+			handleException(e);
+		}
+	}
 }
 /**
  * Critical Error. Application must be shut down.
@@ -639,19 +694,5 @@ protected final void updateProgress(int percentage, String currentActivity) {
 		waitDialog.updateProgress(percentage, currentActivity);
 		waitDialog.paint(waitDialog.getGraphics());
 	}
-}
-
-/**
- * @see SearchView#newObject().
- */
-protected final void executeNewObject() {
-	executeBusy("newObject");
-}
-
-/**
- * @see DetailView#undoObject().
- */
-protected final void executeUndoObject() {
-	executeBusy("undoObject");
 }
 }

@@ -14,6 +14,8 @@ package ch.softenvironment.view;
  
 /**
  * The bean information class for ch.softenvironment.view.SimpleEditorPanel.
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2004-02-05 11:33:00 $
  */
 public class SimpleEditorPanelBeanInfo extends java.beans.SimpleBeanInfo {
 /**

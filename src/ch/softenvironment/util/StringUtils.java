@@ -15,6 +15,7 @@ package ch.softenvironment.util;
 /**
  * Set of reusable String Utilities.
  * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2004-02-05 11:30:43 $
  */
 public abstract class StringUtils {
 /**
@@ -57,8 +58,15 @@ public static String getPureClassName(Object object) {
 	return getPureClassName(object.getClass());
 }
 /**
- * Return whether String is null or contains nothing.
- * @return boolean
+ * Return either String of value or empty String if nothing contained.
+ * @return String
+ */
+public static String getString(Object value) {
+	return value == null ? new String() : value.toString();
+}
+/**
+ * Return either String or empty String if nothing contained.
+ * @return String
  */
 public static String getString(String value) {
 	return value == null ? new String() : value;

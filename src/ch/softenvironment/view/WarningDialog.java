@@ -16,6 +16,7 @@ import ch.softenvironment.util.*;
 /**
  * Dialog for user Warning.
  * @author: Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2004-02-05 11:33:00 $
  */
 public class WarningDialog extends BaseDialog {
 	private static java.util.ResourceBundle resWarningDialog = ch.ehi.basics.i18n.ResourceBundle.getBundle(WarningDialog.class);

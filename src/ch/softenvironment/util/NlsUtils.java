@@ -17,6 +17,7 @@ import java.text.*;
 /**
  * Set of reusable String Utilities.
  * @author: Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2004-02-05 11:30:43 $
  */
 public abstract class NlsUtils {
 	public final static String DATE_EUROPE_PATTERN = "dd.MM.yyyy";

@@ -14,6 +14,8 @@ package ch.softenvironment.view;
  
 /**
  * The bean information class for ch.ehi.basics.view.DataSelectorPanel.
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2004-02-05 11:32:59 $
  */
 public class DataSelectorPanelBeanInfo extends java.beans.SimpleBeanInfo {
 /**

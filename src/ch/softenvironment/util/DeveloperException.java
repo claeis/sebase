@@ -15,6 +15,7 @@ package ch.softenvironment.util;
 /**
  * Show Developer failures.
  * @author: Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2004-02-05 11:30:43 $
  */
 public class DeveloperException extends RuntimeException {
 	private static java.util.ResourceBundle resDeveloperException = ch.ehi.basics.i18n.ResourceBundle.getBundle(DeveloperException.class);

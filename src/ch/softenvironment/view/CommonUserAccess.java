@@ -15,6 +15,7 @@ package ch.softenvironment.view;
 /**
  * Define any behaviour for User Interface Handling (CUA).
  * @author: Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2004-02-05 11:32:59 $
  */
 public interface CommonUserAccess {
 	static java.util.ResourceBundle _resourceBundle_CUA = ch.ehi.basics.i18n.ResourceBundle.getBundle(CommonUserAccess.class);

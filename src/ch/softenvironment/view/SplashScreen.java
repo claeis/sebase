@@ -17,6 +17,7 @@ import javax.swing.*;
 /**
  * Splash screen for Application startup.
  * @author: Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2004-02-05 11:33:00 $
  */
 public class SplashScreen extends JWindow {
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();

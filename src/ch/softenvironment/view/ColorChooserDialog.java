@@ -16,6 +16,7 @@ import java.awt.*;
 /**
  * Show a Dialog to select a Color.
  * @author: Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2004-02-05 11:32:59 $
  */
 public class ColorChooserDialog extends BaseDialog {
 	private static java.util.ResourceBundle resColorChooserDialog = ch.ehi.basics.i18n.ResourceBundle.getBundle(ColorChooserDialog.class);
