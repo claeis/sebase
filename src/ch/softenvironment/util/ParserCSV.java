@@ -17,7 +17,7 @@ import java.io.*;
 /**
  * Parser-Tool to parse comma separated files (*.CSV).
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2005-01-06 09:49:10 $
+ * @version $Revision: 1.8 $ $Date: 2005-02-03 14:21:49 $
  */
 public class ParserCSV {
 	private String line = null;
@@ -40,11 +40,15 @@ public ParserCSV(String line, String separator) {
  */
 public static String arrayToString(java.util.List items, String separator) {
 	String serializedList = "";
-	java.util.Iterator iterator = items.iterator();
-	while (iterator.hasNext()) {
-		serializedList = serializedList + iterator.next() + separator;
+	if (items == null) {
+		return serializedList;
+	} else {
+		java.util.Iterator iterator = items.iterator();
+		while (iterator.hasNext()) {
+			serializedList = serializedList + iterator.next() + separator;
+		}
+		return serializedList;
 	}
-	return serializedList;
 }
 /**
  * Return next Integer between to Separators.
@@ -191,17 +195,21 @@ public void skip(int nrOfFields) {
  * @return java.util.List
  */
 public static java.util.List stringToArray(String serializedList, String separator) {
-	ParserCSV parser = new ParserCSV(serializedList, separator);
-	
-	java.util.List list = new java.util.ArrayList();
-	String item = parser.getNextString();
-	while (item != null) {
-//		if (!StringUtils.isNullOrEmpty(item)) {
-			list.add(item);
-//Tracer.getInstance().debug(ParserCSV.class, "stringToArray(..)", "adding: " + item);
-//		}
-		item = parser.getNextString();
+	if (serializedList == null) {
+		return new java.util.ArrayList();
+	} else {
+		ParserCSV parser = new ParserCSV(serializedList, separator);
+		
+		java.util.List list = new java.util.ArrayList();
+		String item = parser.getNextString();
+		while (item != null) {
+	//		if (!StringUtils.isNullOrEmpty(item)) {
+				list.add(item);
+	//Tracer.getInstance().debug(ParserCSV.class, "stringToArray(..)", "adding: " + item);
+	//		}
+			item = parser.getNextString();
+		}
+		return list;
 	}
-	return list;
 }
 }
