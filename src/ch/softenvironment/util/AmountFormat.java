@@ -15,42 +15,45 @@ package ch.softenvironment.util;
 /**
  * Format a number to look like a financial value.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-09-27 11:11:15 $
+ * @version $Revision: 1.5 $ $Date: 2005-01-06 09:45:18 $
  */
-public class AmountFormat extends java.text.DecimalFormat {
+public class AmountFormat /*extends java.text.NumberFormat*/ {
+
 /**
- * AmountFormat constructor.
- * Set representation to: "1'234'349.30"
+ * 
  */
-public AmountFormat() {
-	super();
-	setMinimumFractionDigits(2);
-	setMaximumFractionDigits(2);
-	setGroupingSize(3);			// separate thousand's
-	setGroupingUsed(true);
-	setDecimalSeparatorAlwaysShown(true);
+public static java.text.NumberFormat getAmountInstance() {
+	java.text.NumberFormat formatter = java.text.NumberFormat.getNumberInstance();
+	//		                           java.text.NumberFormat.getCurrencyInstance();
+	formatter.setMinimumFractionDigits(2);
+	formatter.setMaximumFractionDigits(2);
+//	formatter.setGroupingSize(3);			// separate thousand's
+	formatter.setGroupingUsed(true);
+//	formatter.setDecimalSeparatorAlwaysShown(true);
+
+	return formatter;
 }
 /**
- * Convert Amount into String.
+ * @deprecated
  */
 public static String toString(double amount) {
 	return toString(new Double(amount));
 }
 /**
- * Convert Amount into String.
+ * @deprecated
  */
 public static String toString(long amount) {
 	return toString(new Long(amount));
 }
 /**
  * Convert given amount into formatted String.
+ * This is a convenience Method.
  */
 public static String toString(Number amount) {
 	if (amount == null) {
 		return "";
 	} else {
-		AmountFormat amountFormat = new AmountFormat();
-		return amountFormat.format(amount);
+		return getAmountInstance().format(amount);
 	}
 }
 }
