@@ -13,36 +13,30 @@ package ch.softenvironment.view;
  */
  
 /**
- * Wait-Dialog for user.
+ * Wait-Dialog for busy actions.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2004-10-26 19:17:59 $
+ * @version $Revision: 1.6 $ $Date: 2005-01-24 09:59:52 $
+ * @see BaseFrame#showBusy()
  */
-public class WaitDialog extends BaseDialog {
+class WaitDialog extends BaseDialog {
 	private javax.swing.JPanel ivjBaseDialogContentPane = null;
 	private javax.swing.JLabel ivjLblText = null;
 	private javax.swing.JLabel ivjLblImage = null;
 	private javax.swing.JProgressBar ivjPrgBar = null;
 
 	private String title = null;
-	private javax.swing.ImageIcon imageIcon = null;
 /**
  * WaitDialog constructor comment.
  * @param owner java.awt.Frame
  * @param modal boolean
  */
-public WaitDialog(java.awt.Frame owner, String title, String imagePath) {
+public WaitDialog(java.awt.Frame owner, String title) {
 	super(owner, false /* otherwise will not terminate */);
 
 	if (title == null) {
-		this.title = getResourceString("DlgTitle");
+		this.title = getResourceString(WaitDialog.class, "DlgTitle");
 	} else {
 		this.title = title;
-	}
-
-	if (imagePath == null) {
-		this.imageIcon = ch.ehi.basics.i18n.ResourceBundle.getImageIcon(WaitDialog.class, "traffic_redlight.png");
-	} else {
-		this.imageIcon = new javax.swing.ImageIcon(WaitDialog.class.getResource(imagePath));
 	}
 
 	initialize();
@@ -85,7 +79,7 @@ private javax.swing.JLabel getLblImage() {
 			ivjLblImage.setBounds(16, 14, 120, 232);
 			// user code begin {1}
 			ivjLblImage.setText("");
-			ivjLblImage.setIcon(imageIcon);
+			ivjLblImage.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(WaitDialog.class, "traffic_redlight.png"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -100,7 +94,7 @@ private javax.swing.JLabel getLblImage() {
  * @return javax.swing.JLabel
  */
 /* WARNING: THIS METHOD WILL BE REGENERATED. */
-private javax.swing.JLabel getLblText() {
+protected javax.swing.JLabel getLblText() {
 	if (ivjLblText == null) {
 		try {
 			ivjLblText = new javax.swing.JLabel();
@@ -123,7 +117,7 @@ private javax.swing.JLabel getLblText() {
  * @return javax.swing.JProgressBar
  */
 /* WARNING: THIS METHOD WILL BE REGENERATED. */
-public javax.swing.JProgressBar getPrgBar() {
+protected javax.swing.JProgressBar getPrgBar() {
 	if (ivjPrgBar == null) {
 		try {
 			ivjPrgBar = new javax.swing.JProgressBar();
@@ -131,6 +125,7 @@ public javax.swing.JProgressBar getPrgBar() {
 			ivjPrgBar.setBounds(162, 93, 167, 14);
 			ivjPrgBar.setValue(0);
 			// user code begin {1}
+			getPrgBar().setStringPainted(true);
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -171,11 +166,19 @@ private void initialize() {
 }
 /**
  * Let User know what happens.
- * @param percentage Current activities done yet
+ * @param percentage Current activities done yet (-1 if Unknown)
  * @param currentActivity User speaking name
  */
-public final void updateProgress(int percentage, String currentActivity) {
-	getPrgBar().setValue(percentage);
+protected final void updateProgress(int percentage, String currentActivity) {
+//  TUNE!!!
+	getPrgBar().setVisible(true);
+	if (percentage > 0) {
+		getPrgBar().setValue(percentage);
+	} else {
+		getPrgBar().setIndeterminate(false);
+//		getPrgBar().setStringPainted(false);
+	}
+
 	if (currentActivity != null) {
 		getLblText().setText(currentActivity);
 	}
