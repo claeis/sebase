@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir="." default="jar" name="sebase">
-
+  <description>
+        Build the Base Framework by http://www.softenvironment.ch
+	using Ant.
+  </description>
+  
   <!-- set global properties for this build -->
   <property name="src" value="${basedir}/src"/>
   <property name="build" value="${basedir}/build"/>
@@ -50,6 +54,8 @@
     	<fileset dir="${src}" includes="**/*.gif"/>
     	<fileset dir="${src}" includes="**/*.jpg"/>
     	<fileset dir="${src}" includes="**/*.png"/>
+	<fileset dir="." includes="other/LICENSE.*"/>
+	<fileset dir="." includes="other/ReadMe.*"/>
     </jar>
   </target>
 
@@ -69,6 +75,7 @@
     	</zipfileset>
     </zip>
   </target>
+  
   <target name="clean">
     <!-- Delete the ${build} and ${dist} directory trees -->
     <delete dir="${build}"/>
