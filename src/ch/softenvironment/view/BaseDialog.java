@@ -19,7 +19,7 @@ import ch.softenvironment.util.Tracer;
 /**
  * Template-Dialog defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-06-29 11:28:42 $
+ * @version $Revision: 1.5 $ $Date: 2004-08-18 09:26:08 $
  */
 public abstract class BaseDialog extends javax.swing.JDialog {
 	private javax.swing.JPanel ivjJDialogContentPane = null;
@@ -32,6 +32,7 @@ public abstract class BaseDialog extends javax.swing.JDialog {
  */
 public BaseDialog(java.awt.Dialog owner, String title, boolean modal) {
 	super(owner, title, modal);
+	setRelativeLocation(owner);
 	initialize();
 }
 /**
@@ -42,6 +43,7 @@ public BaseDialog(java.awt.Dialog owner, String title, boolean modal) {
  */
 public BaseDialog(Frame owner, String title, boolean modal) {
 	super(owner, title, modal);
+	setRelativeLocation(owner);
 	initialize();
 }
 /**
@@ -51,6 +53,7 @@ public BaseDialog(Frame owner, String title, boolean modal) {
  */
 public BaseDialog(Frame owner, boolean modal) {
 	super(owner, modal);
+	setRelativeLocation(owner);
 	initialize();
 }
 /**
@@ -277,14 +280,16 @@ private void setCenterLocation(Dimension outerSize) {
 			(outerSize.height - frameSize.height) / 2));
 }
 /**
- * Set this Dialog relative to parent.
+ * Set this Dialog relative to parent Window.
+ * @see BaseFrame#setRelativeLocation()
  */
-public void setRelativeLocation(java.awt.Window parent) {
+protected void setRelativeLocation(java.awt.Window parent) {
 	if (parent != null) {
 /*		setLocation(new Point(parent.getX() + BaseFrame.X_CHILD_OFFSET,
 								parent.getY() + BaseFrame.Y_CHILD_OFFSET));
 */
-		setCenterLocation(parent.getSize());
+//		setCenterLocation(parent.getSize());
+		setLocationRelativeTo(parent);
 	}
 }
 /**
