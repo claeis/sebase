@@ -19,9 +19,9 @@ package ch.softenvironment.view;
  * - undefined
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:33:00 $
+ * @version $Revision: 1.3 $ $Date: 2004-10-26 19:21:21 $
  */
-public class TriStatePanel extends javax.swing.JPanel {
+public class TriStatePanel extends BasePanel {
 	private javax.swing.JRadioButton ivjRbtFalse = null;
 	private javax.swing.JRadioButton ivjRbtTrue = null;
 	private javax.swing.JRadioButton ivjRbtAll = null;
@@ -156,6 +156,7 @@ private javax.swing.JRadioButton getRbtAll() {
 			ivjRbtAll.setText("Alle");
 			ivjRbtAll.setBounds(0, 0, 93, 22);
 			// user code begin {1}
+			ivjRbtAll.setText(getResourceString("CI_All_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -178,6 +179,7 @@ private javax.swing.JRadioButton getRbtFalse() {
 			ivjRbtFalse.setText("Nein");
 			ivjRbtFalse.setBounds(200, 0, 93, 22);
 			// user code begin {1}
+			ivjRbtFalse.setText(getResourceString(ch.softenvironment.util.StringUtils.class, "CI_No_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -200,6 +202,7 @@ private javax.swing.JRadioButton getRbtTrue() {
 			ivjRbtTrue.setText("Ja");
 			ivjRbtTrue.setBounds(100, 0, 93, 21);
 			// user code begin {1}
+			ivjRbtTrue.setText(getResourceString(ch.softenvironment.util.StringUtils.class, "CI_Yes_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -218,11 +221,10 @@ public java.lang.Boolean getValue() {
 	return fieldValue;
 }
 /**
- * Called whenever the part throws an exception.
- * @param exception java.lang.Throwable
+ * Overwrites.
  */
-private void handleException(java.lang.Throwable exception) {
-	ch.softenvironment.util.Tracer.getInstance().uncaughtException(this, "handleException(..)", exception);//$NON-NLS-1$
+protected void handleException(java.lang.Throwable exception) {
+	super.handleException(exception);
 }
 /**
  * Initializes connections
@@ -261,31 +263,6 @@ private void initialize() {
 	group.add(getRbtFalse());
 	getRbtAll().setSelected(true);
 	// user code end
-}
-/**
- * main entrypoint - starts the part when it is run as an application
- * @param args java.lang.String[]
- */
-public static void main(java.lang.String[] args) {
-	try {
-		javax.swing.JFrame frame = new javax.swing.JFrame();
-		TriStatePanel aTriStatePanel;
-		aTriStatePanel = new TriStatePanel();
-		frame.setContentPane(aTriStatePanel);
-		frame.setSize(aTriStatePanel.getSize());
-		frame.addWindowListener(new java.awt.event.WindowAdapter() {
-			public void windowClosing(java.awt.event.WindowEvent e) {
-				System.exit(0);
-			};
-		});
-		frame.show();
-		java.awt.Insets insets = frame.getInsets();
-		frame.setSize(frame.getWidth() + insets.left + insets.right, frame.getHeight() + insets.top + insets.bottom);
-		frame.setVisible(true);
-	} catch (Throwable exception) {
-		System.err.println("Exception occurred in main() of javax.swing.JPanel");
-		exception.printStackTrace(System.out);
-	}
 }
 /**
  * Sets the value property (java.lang.Boolean) value.
