@@ -15,7 +15,7 @@ package ch.softenvironment.client;
 /**
  * Utility to manage opened GUI's for associated Object's.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-09-15 20:38:03 $
+ * @version $Revision: 1.3 $ $Date: 2004-10-26 19:07:47 $
  */
 public class ViewManager {
 	java.util.Map searchViews = new java.util.HashMap();
@@ -34,6 +34,11 @@ private boolean activateView(java.awt.Window view) {
 		return false;
 	} else {
 		view.setVisible(true);
+		if (view instanceof java.awt.Frame) {
+			// deiconize eventually
+			((java.awt.Frame)view).setState(java.awt.Frame.NORMAL);
+		}
+		view.toFront();
 		return true;
 	}
 }
@@ -49,7 +54,14 @@ public boolean activateView(java.lang.Class searchView) {
  * then focus on it.
  */
 public boolean activateView(java.util.List objects) {
-	if (objects.size() > 1) {
+	if (objects.size() == 1) {
+		// return activateView((java.awt.Window)detailViews.get(objects.get(0))); => does NOT compare to overwritten #equals()
+		java.awt.Window view = getView(objects.get(0));
+		if (view != null) {
+			return activateView(view);
+		}
+		return false;
+	} else {
 ch.softenvironment.util.Tracer.getInstance().nyi(this, "activateView(List)", "Multi-Objects representables are not focused yet!)");
 
 		// difficulty: View may represent one or several of given objects
@@ -60,23 +72,12 @@ ch.softenvironment.util.Tracer.getInstance().nyi(this, "activateView(List)", "Mu
 
 		//  => or always force reopen new view (may contain same object's a second time!)
 		return false;
-	} else {
-		// return activateView((java.awt.Window)detailViews.get(objects.get(0))); => does NOT compare to overwritten #equals()
-		Object entry = objects.get(0);
-		java.util.Iterator iterator = detailViews.keySet().iterator();
-		while (iterator.hasNext()) {
-			Object key = iterator.next();
-			if (key.equals(entry)) {
-				return activateView((java.awt.Window)detailViews.get(key));
-			}
-		}
-		return false;
 	}
 }
 /**
  * Register objects to be represented by the given View.
- * @param objects model-instances to be represented
- * @param view "Decorator" of object
+ * @param objects model-instances to be represented (null for SearchView's)
+ * @param view DetailView AND/OR SearchView
  */
 public void checkIn(java.util.List objects, java.awt.Window view) {
 	// some GUI's might be DetailView and SearchView in ONE
@@ -88,19 +89,18 @@ public void checkIn(java.util.List objects, java.awt.Window view) {
 				detailViews.put(object, view);
 			}
 		}
-	} else if (view instanceof ch.softenvironment.view.SearchView) {
-		if (!detailViews.containsKey(view.getClass())) {
+	}
+	
+	if ((objects == null) && (view instanceof ch.softenvironment.view.SearchView)) {
+//		if (!detailViews.containsKey(view.getClass())) {
 			searchViews.put(view.getClass(), view);
-		}
-	} else {
-		// dialogs usually are modal anyway
-		ch.softenvironment.util.Tracer.getInstance().developerWarning(this, "checkIn()", "View-type not supported: " + view.getClass().getName());
+//		}
 	}
 }
 /**
  * Unregister the closing View, to be no more representable
  * for registered objects any more.
- * @param view DetailView representing model-instances
+ * @param view DetailView AND/OR SearchView
  */
 public void checkOut(java.awt.Window view) {
 	if (view instanceof ch.softenvironment.view.DetailView) {
@@ -118,20 +118,19 @@ public void checkOut(java.awt.Window view) {
 		while (iterator.hasNext()) {
 			detailViews.remove(iterator.next());
 		}
-	} else if (view instanceof ch.softenvironment.view.SearchView) {
+	}
+	
+	if (view instanceof ch.softenvironment.view.SearchView) {
 		if (searchViews.containsKey(view.getClass())) {
 			searchViews.remove(view.getClass());
 		}
-	} else {
-		// dialogs usually are modal anyway
-		ch.softenvironment.util.Tracer.getInstance().developerWarning(this, "checkOut()", "View-type not supported: " + view.getClass().getName());
 	}
 }
 /**
  * Close all View's managed by this GUI-Manager.
  */
 public void closeAll() {
-	// be awara of ConcurrentModificationException
+	// be aware of ConcurrentModificationException
 	java.util.List views = new java.util.ArrayList();
 	views.addAll(searchViews.values());
 	views.addAll(detailViews.values());
@@ -143,5 +142,36 @@ public void closeAll() {
 	while (iterator.hasNext()) {
 		((java.awt.Window)iterator.next()).dispose();
 	}
+}
+
+/**
+ * Close all View's representing an Object in given List.
+ */
+public void closeAll(java.util.List objects) {
+	java.util.Iterator iterator = objects.iterator();
+	while (iterator.hasNext()) {
+		java.awt.Window view = getView(iterator.next());
+		if (view != null) {
+			java.awt.Window windows[] = view.getOwnedWindows();
+			for (int i=0; i<windows.length; i++) {
+				windows[i].dispose();
+			}
+			view.dispose();
+		}
+	}
+}
+
+/**
+ * Return view showing given object, null for none.
+ */
+private java.awt.Window getView(Object object) {
+	java.util.Iterator iterator = detailViews.keySet().iterator();
+	while (iterator.hasNext()) {
+		Object key = iterator.next();
+		if (key.equals(object)) {
+			return (java.awt.Window)detailViews.get(key);
+		}
+	}
+	return null;
 }
 }
