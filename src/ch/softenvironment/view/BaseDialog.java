@@ -19,7 +19,7 @@ import ch.softenvironment.util.Tracer;
 /**
  * Template-Dialog defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2005-01-06 09:39:00 $
+ * @version $Revision: 1.8 $ $Date: 2005-02-23 16:34:35 $
  */
 public abstract class BaseDialog extends javax.swing.JDialog {
 	private javax.swing.JPanel ivjJDialogContentPane = null;
@@ -79,24 +79,6 @@ protected void cancelPressed() {
 	dispose();
 }
 /**
- * Ask user whether the remove action shall be proceeded or not.
- * @see BaseFrame#checkDeletion()
- */
-protected boolean checkDeletion() {
-	return checkDeletion(getResourceString(BaseDialog.class, "CTDeletion"), getResourceString(BaseDialog.class, "CIQueryForDeletion")); //$NON-NLS-2$ //$NON-NLS-1$
-}
-/**
- * Ask user whether the remove action shall be proceeded or not.
- * @param title String (of Deletion Message Box)
- * @param question String (of Deletion question)
- * @see BaseFrame#checkDeletion()
- */
-protected boolean checkDeletion(String title, String question) {
-	QueryDialog dialog = new QueryDialog(this, title, question);
-	dialog.dispose();
-	return dialog.isYes();
-}
-/**
  * @see BaseFrame#genericPopupDisplay(..)
  */
 protected void genericPopupDisplay(java.awt.event.MouseEvent event, javax.swing.JPopupMenu popupMenu) {
@@ -119,19 +101,19 @@ protected void genericPopupDisplay(java.awt.event.MouseEvent event, javax.swing.
 /**
  * Return Apply-Button Label-String.
  */
-protected String getApplyString() {
+protected static String getApplyString() {
 	return getResourceString(BaseDialog.class, "BtnApply_text");
 }
 /**
  * Return Button Label-String.
  */
-protected String getAssignString() {
+protected static String getAssignString() {
 	return getResourceString(BaseDialog.class, "BtnAssign_text");
 }
 /**
  * Return Cancel-Button Label-String.
  */
-protected String getCancelString() {
+protected static String getCancelString() {
 	return getResourceString(BaseDialog.class, "BtnCancel_text");
 }
 /**
@@ -189,7 +171,7 @@ protected String getNewWindowString() {
 /**
  * Return OK-Button Label-String.
  */
-protected String getOKString() {
+protected static String getOKString() {
 	return getResourceString(BaseDialog.class, "BtnOK_text");
 }
 /**
@@ -298,19 +280,6 @@ private void setCenterLocation(Dimension outerSize) {
 			(outerSize.height - frameSize.height) / 2));
 }
 /**
- * Set this Dialog relative to parent Window.
- * @see BaseFrame#setRelativeLocation()
- */
-protected void setRelativeLocation(java.awt.Window parent) {
-	if (parent != null) {
-		setLocation(new Point(parent.getX() + BaseFrame.X_CHILD_OFFSET,
-								parent.getY() + BaseFrame.Y_CHILD_OFFSET));
-
-//		setCenterLocation(parent.getSize());
-//		setLocationRelativeTo(parent);
-	}
-}
-/**
  * Trace the exception.
  * @param exception java.lang.Throwable
  */
@@ -323,5 +292,144 @@ protected void traceOnly(java.lang.Throwable exception) {
  */
 protected void undo() {
 	// do nothing by default
+}
+
+/**
+ * BaseDialog constructor comment.
+ * @param owner Component (for e.g. JPanel)
+ * @param title java.lang.String
+ * @param modal boolean
+ */
+public BaseDialog(java.awt.Component owner, String title, boolean modal) {
+	super((javax.swing.JFrame)null, title, modal);
+//	this(owner, title, modal); -> does not relocate
+	setRelativeLocation(owner);
+	initialize();
+}
+
+/**
+ * Set this Dialog relative to parent Window.
+ * @see BaseFrame#setRelativeLocation()
+ */
+protected void setRelativeLocation(java.awt.Component parent) {
+	if (parent != null) {
+		setLocation(new Point(parent.getX() + BaseFrame.X_CHILD_OFFSET,
+								parent.getY() + BaseFrame.Y_CHILD_OFFSET));
+
+//		setCenterLocation(parent.getSize());
+//		setLocationRelativeTo(parent);
+	}
+}
+
+/**
+ * Create and open a Confirmation-Dialog modally.
+ * YES or a NO are possible options.
+ * @see #showWarning()
+ * @return true->YES was pressed; false->NO was pressed
+ */
+public static boolean showConfirm(java.awt.Component owner, String title, Object message) {
+	Object[] options = { getResourceString(BaseDialog.class, "BtnYes_text"), getResourceString(BaseDialog.class, "BtnNo_text") };
+	return (showOptionPane(owner,
+		        (title == null ? getResourceString(BaseDialog.class, "CTQuestion") : title),
+		        message,
+		        options,
+		        "question-icon.gif") == 0);
+}
+
+/**
+ * Create and open a Confirmation-Dialog modally.
+ * YES, NO or CANCEL are possible options.
+ * @see #showWarning()
+ * @return Boolen.TRUE->YES was pressed; Boolean.FALSE->NO was pressed; null->CANCEL was pressed
+ */
+public static Boolean showConfirmCancel(java.awt.Component owner, String title, Object message) {
+	Object[] options = { getResourceString(BaseDialog.class, "BtnYes_text"), getResourceString(BaseDialog.class, "BtnNo_text"), getCancelString() };
+	int answer = showOptionPane(owner,
+	        (title == null ? getResourceString(BaseDialog.class, "CTQuestion") : title),
+	        message,
+	        options,
+	        "question-icon.gif");
+	switch (answer) {
+		case 0: {
+			return Boolean.TRUE;
+		}
+		case 1: {
+			return Boolean.FALSE;
+		}
+	};
+	
+	return null;
+}
+
+/**
+ * @see #showConfirmDeletion(Component, Object, String)
+ */
+public static boolean showConfirmDeletion(java.awt.Component owner) {
+	return showConfirmDeletion(owner, getResourceString(BaseDialog.class, "CTDeletion"), getResourceString(BaseDialog.class, "CIQueryForDeletion"));
+}
+
+/**
+ * Create and open Confirmation for Deletion Dialog modally.
+ * @see #showWarning()
+ * @return true->Deletion may proceed; false->otherwise
+ */
+public static boolean showConfirmDeletion(java.awt.Component owner, String title, Object message) {
+	Object[] options = { getResourceString(BaseDialog.class, "BtnYes_text"), getResourceString(BaseDialog.class, "BtnNo_text") };
+	return (showOptionPane(owner,
+	        	(title == null ? getResourceString(BaseDialog.class, "CTDeletion") : title),
+	        	message,
+	        	options,
+	        	"dustbin.png") == 0);
+}
+
+/**
+ * Create and open an Confirmation-Dialog for application termination.
+ * @see #showConfirmCancel()
+ */
+public static Boolean showConfirmExit(java.awt.Component owner) {
+	return showConfirmCancel(owner, CommonUserAccess.getTitleSaveChanges(), CommonUserAccess.getQuestionSaveChanges());
+}
+
+/**
+ * Create and open Error-Dialog modally.
+ * @param exception optional Exception which may be showed as Stacktrace
+ * @see #showWarning()
+ */
+public static void showError(java.awt.Component owner, String title, Object message, Throwable exception) {
+//TODO replace ErrorDialog by JOptionPane
+	new ErrorDialog(owner, title, message==null? null: message.toString(), exception);
+}
+
+/**
+ * Create and open a JOptionPane-Dialog modally.
+ * 
+ * @param options where first option is assumed as default
+ * @return option index in options pressed (-1 for any unexpected failures)
+ */
+private static int showOptionPane(java.awt.Component owner, String title, Object message, Object[] options, String iconFile) {
+	try {
+		return javax.swing.JOptionPane.showOptionDialog(owner, message, title,
+            javax.swing.JOptionPane.DEFAULT_OPTION, javax.swing.JOptionPane.PLAIN_MESSAGE,
+            ch.ehi.basics.i18n.ResourceBundle.getImageIcon(BaseDialog.class, iconFile),
+            options, options[0]);
+	} catch(Throwable e) {
+Tracer.getInstance().developerError(BaseDialog.class, "showOptionPane()", e.getLocalizedMessage());
+		return -1;
+	}
+}
+
+/**
+ * Create and open Warning-Dialog modally.
+ * @param owner
+ * @param title of Dialog (null for default-Warning-Title)
+ * @param message (formatting Symbols such as '\n' are allowed)
+ */
+public static void showWarning(java.awt.Component owner, String title, Object message) {
+	Object[] options = { getCancelString() };
+	showOptionPane(owner, 
+	        		(title == null ? getResourceString(BaseDialog.class, "CTWarning") : title), 
+	        		message,
+	        		options,
+	        		"warning-icon.gif");
 }
 }

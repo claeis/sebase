@@ -26,7 +26,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.18 $ $Date: 2005-02-22 10:25:46 $
+ * @version $Revision: 1.19 $ $Date: 2005-02-23 16:34:36 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -82,29 +82,6 @@ public BaseFrame(String title) {
  * @see #genericPopupDisplay(..)
  */
 protected void adaptSelection(MouseEvent event, JPopupMenu popupMenu) {
-}
-/**
- * Ask user whether the remove action shall be proceeded or not.
- * @see BaseDialog#checkDeletion()
- */
-protected final boolean checkDeletion() {
-	return checkDeletion(getResourceString(BaseFrame.class, "CTDeletion"), getResourceString(BaseFrame.class, "CQAcceptDeletion")); //$NON-NLS-2$ //$NON-NLS-1$
-}
-/**
- * Ask user whether the remove action shall be proceeded or not.
- * @param title String (of Deletion Message Box)
- * @param question String (of Deletion question)
- * @see BaseDialog#checkDeletion()
- */
-protected final boolean checkDeletion(String title, String question) {
-	try {
-		QueryDialog dialog = new QueryDialog(this, title, question);
-//		dialog.dispose();
-		return dialog.isYes();
-	} catch(Throwable e) {
-		handleException(e);
-		return false;
-	}
 }
 /**
  * Close this View after save.
@@ -333,7 +310,7 @@ protected final void exportTableData(JTable table) {
  * @see #stopWaitDialog()
  */
 public final void fatalError(JFrame frame, String title, String message, Throwable exception) {
-	new ErrorDialog(frame, title, message + "\n" + getResourceString(BaseFrame.class, "CEFatalError"), exception);
+	ch.softenvironment.view.BaseDialog.showError(frame, title, message + "\n" + getResourceString(BaseFrame.class, "CEFatalError"), exception);
 	System.exit(-1);
 }
 /**
@@ -423,7 +400,7 @@ public final void nyi(String title) {
  * @param message Speaking info for user
  */
 public final void nyi(String title, String message) {
-	new WarningDialog(this, title, message);
+	BaseDialog.showWarning(this, title, message);
 }
 /**
  * Set this Frame at center of screen.
@@ -469,16 +446,7 @@ protected void setLookAndFeel(String style) {
 		}
 		SwingUtilities.updateComponentTreeUI(this);
 	} catch (Throwable e) {
-		new WarningDialog(this, getResourceString(BaseFrame.class, "CTlookAndFeel"), NlsUtils.formatMessage(getResourceString(BaseFrame.class, "CWManagerNotAvailable"), style) + "\n" + getResourceString(BaseFrame.class, "CWSuppressManager")); //$NON-NLS-4$//$NON-NLS-3$ //$NON-NLS-2$ //$NON-NLS-1$
-	}
-}
-/**
- * Set this Frame relative to parent.
- */
-public final void setRelativeLocation(java.awt.Window parent) {
-	if (parent != null) {
-		setLocation(new Point(parent.getX() + X_CHILD_OFFSET,
-								parent.getY() + Y_CHILD_OFFSET));
+		BaseDialog.showWarning(this, getResourceString(BaseFrame.class, "CTlookAndFeel"), NlsUtils.formatMessage(getResourceString(BaseFrame.class, "CWManagerNotAvailable"), style) + "\n" + getResourceString(BaseFrame.class, "CWSuppressManager")); //$NON-NLS-4$//$NON-NLS-3$ //$NON-NLS-2$ //$NON-NLS-1$
 	}
 }
 /**
@@ -516,8 +484,9 @@ public void setVisible(boolean visible) {
  */
 private final void showBusy(final Class parameterTypes[], final Object parameters[], final String methodName) {
 	final BaseFrame view = this;
-    showBusy(new Runnable() {
-        public void run() {
+//TODO Patch: calling shwoBusy(Runnable) compiles but corrupt execution
+//    showBusy(new Runnable() {
+//        public void run() {
             try {
 	            java.lang.reflect.Method method = view.getClass().getMethod(methodName, parameterTypes);
 	    		method.invoke(view, parameters);
@@ -525,8 +494,8 @@ private final void showBusy(final Class parameterTypes[], final Object parameter
                 Tracer.getInstance().runtimeError(view, "showBusy(.., " + methodName + ")", e.toString());
         		handleException(e);
             }
-        }
-    });
+//        }
+//    });
 }
 /**
  * Top-level Handler.
@@ -562,30 +531,11 @@ Tracer.getInstance().developerWarning(BaseFrame.class, "showException(..)", "exc
 			@see DbBaseFrame#handleException(..)
 		} */
 		
-		if ((owner == null) || (owner instanceof Frame)) {
-			new ErrorDialog((Frame)owner, title , message, exception);
-		} else if (owner instanceof Dialog) {
-			new ErrorDialog((Dialog)owner, title , message, exception);
-		} else {
-			new ErrorDialog((Frame)null, title , message, exception);
-		}
+		BaseDialog.showError(owner, title , message, exception);
 	} catch(Throwable e) {
 		Tracer.getInstance().developerError(BaseFrame.class, "showException(..)", "should not have been reached => " + e.getLocalizedMessage());
 	} finally {
 		// this method must not throw an Exception under any circumstances
-	}
-}
-/**
- * Show Dialog to shut down application.
- * @return boolean whether exiting was copnfirmed or not
- */
-protected boolean showExitDialog(String title) {
-	try {
-		QueryDialog dialog = new QueryDialog(this, title, getResourceString(BaseFrame.class, "CIExit"));
-		return dialog.isYes();
-	} catch (Throwable e) {
-		Tracer.getInstance().runtimeWarning(BaseFrame.class, "showExitDialog(..)", e.toString());//$NON-NLS-2$
-		return true;
 	}
 }
 /**
@@ -810,5 +760,15 @@ public final void showBusy(final Runnable block) {
 	
 	// always fork Swing-Thread resp. execute block
 	worker.start();
+}
+
+/**
+ * Set this Frame relative to parent.
+ */
+public final void setRelativeLocation(java.awt.Component parent) {
+	if (parent != null) {
+		setLocation(new Point(parent.getX() + X_CHILD_OFFSET,
+								parent.getY() + Y_CHILD_OFFSET));
+	}
 }
 }

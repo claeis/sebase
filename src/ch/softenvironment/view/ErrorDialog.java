@@ -16,9 +16,10 @@ import ch.softenvironment.util.*;
 /**
  * Output Dialog for application failures.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-09-06 17:28:02 $
+ * @version $Revision: 1.5 $ $Date: 2005-02-23 16:34:38 $
+ * @deprecated
  */
-public class ErrorDialog extends BaseDialog {
+class ErrorDialog extends BaseDialog {
 	// exception to show
 	private Throwable exception = null;
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
@@ -46,35 +47,9 @@ class IvjEventHandler implements java.awt.event.ActionListener {
 /**
  * Create and open ErrorDialog modally.
  */
-public ErrorDialog(java.awt.Dialog owner, String title, String message, Throwable original) {
+protected ErrorDialog(java.awt.Component owner, String title, String message, Throwable original) {
 	super(owner, title, true);
 	setUp(owner, title, message, original);
-}
-/**
- * Create and open ErrorDialog modally.
- */
-public ErrorDialog(java.awt.Frame owner, String title, String message, Throwable original) {
-	super(owner, title, true);
-	setUp(owner, title, message, original);
-}
-/**
- * Constructor
- * @param owner Symbol
- * @param modal Symbol
- */
-/* WARNING: THIS METHOD WILL BE REGENERATED. */
-public ErrorDialog(java.awt.Frame owner, boolean modal) {
-	super(owner, modal);
-	initialize();
-	setUp(owner, null, "", null);
-}
-/**
- * Create and open ErrorDialog modally.
- */
-public ErrorDialog(javax.swing.JPanel owner, String title, String message, Throwable original) {
-	super(null, true);
-Tracer.getInstance().nyi(this, "ErrorDialog(Panel..)", "relative location gets lost");//$NON-NLS-2$//$NON-NLS-1$
-	setUp(null, title, message, original);
 }
 /**
  * connEtoC1:  (BtnStacktrace.action.actionPerformed(java.awt.event.ActionEvent) --> ErrorDialog.stacktrace()V)
@@ -462,6 +437,17 @@ private void setException(Throwable exception) {
  */
 public void setText(String text) {
 	getPnlErrorText().setText(text);
+}
+/**
+ * Initialize the Dialog.
+ */
+private void setUp(java.awt.Component owner, String title, String message, Throwable original) {
+	initialize();
+	setTitle(title == null ? getResourceString("CTUnexpectedError") : title); //$NON-NLS-1$
+	getPnlErrorText().setText(message);
+	setException(original);
+	setRelativeLocation(owner);
+	show();
 }
 /**
  * Initialize the Dialog.
