@@ -17,7 +17,7 @@ import java.io.*;
 /**
  * Parser-Tool to parse comma separated files (*.CSV).
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-05-17 14:05:45 $
+ * @version $Revision: 1.5 $ $Date: 2004-05-20 15:14:06 $
  */
 public class ParserCSV {
 	private String line = null;
@@ -131,15 +131,14 @@ public static String maskSeparator(Object object, char sep) {
 	}
 	return text.replace(sep, replacement).replace('\n', replacement);
 }
+
 /**
- * Read a File where fields are separated by a given separator and return a List
+ * Read a File where fields/cells are separated by a given separator and return a List
  * where each item contains a line of the given Stream.
  *
- * Only the combination of CR + LF ("\r\n") is accepted as EndOfLine
- * (typical for Windows ASCII files).
- *
- * This is useful for CSV's where a single cell contains several lines
- * ended by LF ('\n') only.
+ * @param stream
+ * @param separator
+ * @return list of lines
  */
 public static java.util.List readFile(InputStream stream, String separator) {
 	java.util.List arrayList = new java.util.ArrayList();
@@ -147,10 +146,19 @@ public static java.util.List readFile(InputStream stream, String separator) {
 
 	try {
 		String line = "";
+		
+		while ((line = inFile.readLine()) != null) {
+			if (line.indexOf(separator) >= 0) {
+				// only add if at least on "cell" is contained
+				arrayList.add(line);
+			}
+		}
 
-		int c;
+/*
+ 		// try if a Cell may contain LF as possible character
+ 		int c;
 		while ((c = inFile.read()) != -1) {
-			if (c == '\r' /*CR*/) {
+			if (c == '\r') { //CR
   				c = inFile.read();
   				if (c == -1) {
   					// EOF reached
@@ -158,9 +166,12 @@ public static java.util.List readFile(InputStream stream, String separator) {
 		  				arrayList.add(line);
 	  				}
 	  				return arrayList;
-  				} else if (c == '\n' /*LF*/) {
+  				} else if (c == '\n') { // LF
 	  				// Windows: EndOfLine reached
-	  				arrayList.add(line);
+  					if (line.indexOf(separator) >= 0) {
+  						// only add if "cells" contained
+  						arrayList.add(line);
+  					}
   					line = "";
   				} else {
   					// Linux evtl. other EndOfLine
@@ -172,7 +183,7 @@ public static java.util.List readFile(InputStream stream, String separator) {
 		   		line = line + (char)c;
 	   		}
 		}
-
+*/
 		inFile.close();
 	} catch(IOException e) {
 		Tracer.getInstance().runtimeWarning(ParserCSV.class, "readFile(..)", "Could not read from Stream: " + e.toString());
