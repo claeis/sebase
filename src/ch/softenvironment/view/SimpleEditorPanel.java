@@ -16,7 +16,7 @@ import ch.softenvironment.util.*;
 /**
  * Provide a simple editor Area with minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
+ * @version $Revision: 1.4 $ $Date: 2004-05-17 14:01:25 $
  */
 public class SimpleEditorPanel extends javax.swing.JPanel {
 	private boolean hasContentsChanged = false;
@@ -832,5 +832,12 @@ public void setTxaEditorEditable(boolean arg1) {
  */
 private void txaEditor_KeyReleased(java.awt.event.KeyEvent keyEvent) {
 	hasContentsChanged = true;
+}
+
+/**
+ * Append text at the end.
+ */
+public void append(String text) {
+	getTxaEditor().append(text);
 }
 }
