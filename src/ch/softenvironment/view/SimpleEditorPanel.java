@@ -16,7 +16,7 @@ import ch.softenvironment.util.*;
 /**
  * Provide a simple editor Area with minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-05-17 14:01:25 $
+ * @version $Revision: 1.5 $ $Date: 2004-06-29 11:29:27 $
  */
 public class SimpleEditorPanel extends javax.swing.JPanel {
 	private boolean hasContentsChanged = false;
@@ -839,5 +839,14 @@ private void txaEditor_KeyReleased(java.awt.event.KeyEvent keyEvent) {
  */
 public void append(String text) {
 	getTxaEditor().append(text);
+}
+
+/**
+ * Remove the whole contents from editing area.
+ * If TextArea is not enabled no erasing will be performed.
+ */
+public void clearAll() {
+	getTxaEditor().selectAll();
+	getTxaEditor().replaceSelection("");
 }
 }
