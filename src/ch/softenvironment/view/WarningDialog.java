@@ -16,10 +16,9 @@ import ch.softenvironment.util.*;
 /**
  * Dialog for user Warning.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:33:00 $
+ * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
  */
 public class WarningDialog extends BaseDialog {
-	private static java.util.ResourceBundle resWarningDialog = ch.ehi.basics.i18n.ResourceBundle.getBundle(WarningDialog.class);
 	private javax.swing.JPanel ivjJDialogContentPane = null;
 	private javax.swing.JLabel ivjLblWarningIcon = null;
 	private javax.swing.JTextArea ivjTxaWarning = null;
@@ -254,7 +253,7 @@ private void initialize() {
 		handleException(ivjExc);
 	}
 	// user code begin {2}
-	setTitle(resWarningDialog.getString("CTWarningDialog"));
+	setTitle(getResourceString("CTWarningDialog"));
 	// user code end
 }
 /**

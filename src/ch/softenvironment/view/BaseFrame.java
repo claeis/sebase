@@ -16,20 +16,20 @@ import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
 import java.io.*;
+import java.util.MissingResourceException;
+
 import ch.ehi.basics.view.*;
 import ch.softenvironment.util.*;
 import ch.softenvironment.util.Tracer;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-04-17 19:58:07 $
+ * @version $Revision: 1.5 $ $Date: 2004-04-27 09:14:58 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
-	private static java.util.ResourceBundle resBaseFrame = setResourceBundle();
 	public final static int X_CHILD_OFFSET = 20;
 	public final static int Y_CHILD_OFFSET = 15;
-protected static final String JAR_FILENAME = "Startup.jar";
 	private WaitDialog waitDialog = null;
 	private ViewOptions viewOptions = null;
 	
@@ -56,9 +56,14 @@ class WaitBlock extends Thread {
 	 * should not be a problem.
 	 */
 	public void run() {
-		if (waitDialog != null) {
-			waitDialog.show();
-			waitDialog.paint(waitDialog.getGraphics());
+		try {
+			if (waitDialog != null) {
+				waitDialog.show();
+				waitDialog.paint(waitDialog.getGraphics());
+			}
+		} catch(NullPointerException e) {
+			// waitDialog may be null'ed -> not Thread-save
+			Tracer.getInstance().developerWarning(this, "run()", "NullPointerException ignored");
 		}
 	}
 }
@@ -96,11 +101,16 @@ Tracer.getInstance().nyi(this, "Block.run()", "Multi-WaitDialog is possible yet"
 			Tracer.getInstance().runtimeError(this, "Block.run()", "Thread failed: " + e.toString());
 			handleException(e);
 		} finally {
-			if (waitDialog != null) {
-				waitDialog.dispose();
-				waitDialog = null;
+			try {
+				if (waitDialog != null) {
+					waitDialog.dispose();
+					waitDialog = null;
+				}
+			} catch(NullPointerException e) {
+				// waitDialog may be null'ed -> not Thread-save
+				Tracer.getInstance().developerWarning(this, "run()", "NullPointerException ignored");
 			}
- 				setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+ 			setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
 		}
 	}
 }
@@ -164,7 +174,7 @@ protected final void addDefaultClosingListener() {
  * @see BaseDialog#checkDeletion()
  */
 protected final boolean checkDeletion() {
-	return checkDeletion(resBaseFrame.getString("CTDeletion"), resBaseFrame.getString("CQAcceptDeletion")); //$NON-NLS-2$ //$NON-NLS-1$
+	return checkDeletion(getResourceString(BaseFrame.class, "CTDeletion"), getResourceString(BaseFrame.class, "CQAcceptDeletion")); //$NON-NLS-2$ //$NON-NLS-1$
 }
 /**
  * Ask user whether the remove action shall be proceeded or not.
@@ -306,7 +316,7 @@ protected final void executeUndoObject() {
  */
 protected final void exportTableData(JTable table) {
 	FileChooser saveDialog =  new FileChooser(/*getSettings().getWorkingDirectory()*/);
-	saveDialog.setDialogTitle(CommonUserAccess.MENU_FILE_SAVEAS);//$NON-NLS-1$
+	saveDialog.setDialogTitle(CommonUserAccess.getMniFileSaveAsText());//$NON-NLS-1$
 	saveDialog.addChoosableFileFilter(ch.ehi.basics.view.GenericFileFilter.createCsvFilter());
 
 	if (saveDialog.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -346,7 +356,7 @@ protected final void exportTableData(JTable table) {
  * @param title Dialogtitle
  */
 public final void fatalError(JFrame frame, String title, String message, Throwable exception) {
-	new ErrorDialog(frame, title, message + "\n" + resBaseFrame.getString("CEFatalError"), exception);
+	new ErrorDialog(frame, title, message + "\n" + getResourceString(BaseFrame.class, "CEFatalError"), exception);
 	System.exit(-1);
 }
 /**
@@ -378,10 +388,95 @@ protected final void genericPopupDisplay(java.awt.event.MouseEvent event, javax.
    	}
 }
 /**
+ * Return an NLS-String.
+ * @param propertyName
+ * @return String
+ */
+protected static String getResourceString(java.lang.Class owner, String propertyName) {
+	return ResourceManager.getInstance().getResource(owner, propertyName);
+}
+/**
+ * Return an NLS-String.
+ * @return
+ */
+protected String getResourceString(String propertyName) {
+	return getResourceString(this.getClass(), propertyName);
+}
+/**
+ * Look up a String in a properties-Resource-File, according to 
+ * the following rule:
+ * Component	  = javax.swing.JLabel
+ * Component#name = LblMyLabel
+ *   => entry in properties-File for "text"        = LblMyLabel_text
+ *   => entry in properties-File for "toolTipText" = LblMyLabel_toolTipText
+ * @param component Component having the given property
+ * @param property (usually "text" or "toolTipText")
+ */
+private void updateStringProperty(java.lang.Class resource, Component component, String property) {
+	if (component.getName() != null) {
+		BeanReflector bean = new BeanReflector(component, property);
+		if (bean.hasProperty() == BeanReflector.GETTER_AND_SETTER) {
+			try {
+				String nls = null;
+				if (resource == null) {
+					nls = getResourceString(component.getName() + "_" + property);
+				} else {
+					nls = getResourceString(resource, component.getName() + "_" + property);
+				}
+				bean.setValue(nls);
+			} catch(Throwable e) {
+				if ((e instanceof MissingResourceException) && 
+						(component instanceof javax.swing.JMenuItem)) {
+					// try CommonUserAccess.properties
+					try {
+						String nls = getResourceString(CommonUserAccess.class, component.getName() + "_" + property);
+						bean.setValue(nls);
+					} catch(Throwable cua) {
+						Tracer.getInstance().debug("Resource missing: " + cua.getLocalizedMessage());
+					}
+				} else {
+					Tracer.getInstance().debug("Resource missing: " + e.getLocalizedMessage());
+				}
+			}
+		}
+	}
+}
+/**
+ * Reset GUI-Components NLS-Strings, such as Component-text 
+ * or Component-textToolTip, usually after the Locale#getDefault() has changed.
+ * Property "text" and "toolTipText" are changed in a generic, recursive matter.
+ * 
+ * @see  #getResourceString(..)
+ */
+protected void updateStringComponent(Component component) {
+	// @see SwingUtilities#updateComponentTreeUI(Component)
+	java.lang.Class resource = null;
+	Component[] children = null;
+	if (component instanceof JMenu) {
+		children = ((JMenu)component).getMenuComponents();
+	} else if (component instanceof Container) {
+		children = ((Container)component).getComponents();
+		if (!(component.getClass().getName().startsWith("javax.swing") ||
+				component.getClass().getName().startsWith("java.awt"))) {
+			// container might be an own Part with its own properties-Resource-File
+			resource = component.getClass();
+		}
+	}
+	if (children != null) {
+		for(int i = 0; i < children.length; i++) {
+			Component child = children[i];
+			// try change potential NLS-properties
+			updateStringProperty(resource, child, "text");
+			updateStringProperty(resource, child, "toolTipText");
+			// go down UI-Tree recursively
+			updateStringComponent(child);
+		}
+	}
+}
+/**
  * Calculate the screen size
  * @return Dimension
  */
-
 protected final static Dimension getScreenSize() {
 	return(Toolkit.getDefaultToolkit().getScreenSize());
 }
@@ -390,20 +485,23 @@ protected final static Dimension getScreenSize() {
  * without a Path-Separator at the end.
  */
 public static String getStartupPath(String jarFileName) {
-	String home = null;
-
+	String home = System.getProperty("user.dir");//$NON-NLS-1$
+Tracer.getInstance().debug(BaseFrame.class, "getStartupPath(jarfile)", "user.dir = " + home);
+	
     String classpath = System.getProperty("java.class.path");//$NON-NLS-1$
-    int index = classpath.toLowerCase().indexOf(jarFileName.toLowerCase());//$NON-NLS-1$
+Tracer.getInstance().debug(BaseFrame.class, "getStartupPath(jarfile)", "java.class.path = " + classpath);
+/*    int index = classpath.toLowerCase().indexOf(jarFileName.toLowerCase());//$NON-NLS-1$
 Tracer.getInstance().debug(BaseFrame.class, "getStartupPath(jarfile)", "index of jarfile = " + index);
-    int start = classpath.lastIndexOf(java.io.File.pathSeparator,index) + 1;
-    if (index > start) {
-		home = classpath.substring(start, index - 1);
+    int start = classpath.lastIndexOf(java.io.File.pathSeparator, index) + 1;
+    if (start >= 0) {
+    	if (index > start) {
+    		home = classpath.substring(start, index - 1);
+    	} else {
+    		home = ".";
+    	}
 Tracer.getInstance().debug(BaseFrame.class, "getStartupPath(jarfile)", "home[JAR] = " + home);
-    } else {
-
-		home = System.getProperty("user.dir");//$NON-NLS-1$
-Tracer.getInstance().debug(BaseFrame.class, "getStartupPath(jarfile)", "home[user.dir] = " + home);
-	}
+    }
+ */
 
     return home;
 }
@@ -433,7 +531,16 @@ protected abstract void initializeView() throws Throwable;
  * @param title Dialogtitle
  */
 public final void nyi(String title) {
-	nyi(title, resBaseFrame.getString("CWNotYetImplemented")); //$NON-NLS-1$
+	nyi(title, getResourceString(BaseFrame.class, "CWNotYetImplemented")); //$NON-NLS-1$
+}
+/**
+ * Developer utility.
+ * Inform user of <Not Yet Implemented> Feature.
+ * @param title Dialogtitle
+ * @param message Speaking info for user
+ */
+public final void nyi(String title, String message) {
+	new WarningDialog(this, title, message);
 }
 /**
  * Set this Frame at center of screen.
@@ -479,7 +586,7 @@ protected void setLookAndFeel(String style) {
 		}
 		SwingUtilities.updateComponentTreeUI(this);
 	} catch (Throwable e) {
-		new WarningDialog(this, resBaseFrame.getString("CTlookAndFeel"), NlsUtils.formatMessage(resBaseFrame.getString("CWManagerNotAvailable"), style) + "\n" + resBaseFrame.getString("CWSuppressManager")); //$NON-NLS-4$//$NON-NLS-3$ //$NON-NLS-2$ //$NON-NLS-1$
+		new WarningDialog(this, getResourceString(BaseFrame.class, "CTlookAndFeel"), NlsUtils.formatMessage(getResourceString(BaseFrame.class, "CWManagerNotAvailable"), style) + "\n" + getResourceString(BaseFrame.class, "CWSuppressManager")); //$NON-NLS-4$//$NON-NLS-3$ //$NON-NLS-2$ //$NON-NLS-1$
 	}
 }
 /**
@@ -490,13 +597,6 @@ public final void setRelativeLocation(java.awt.Window parent) {
 		setLocation(new Point(parent.getX() + X_CHILD_OFFSET,
 								parent.getY() + Y_CHILD_OFFSET));
 	}
-}
-/**
- * Allow reset in case Locale can be determined after UserLogin.
- */
-protected static java.util.ResourceBundle setResourceBundle() {
-	resBaseFrame = ch.ehi.basics.i18n.ResourceBundle.getBundle(BaseFrame.class);
-	return resBaseFrame;
 }
 /**
  * Set Look & Feel at startup of Application.
@@ -564,7 +664,7 @@ public final static void showException(Window owner, java.lang.Throwable excepti
 
 	// inform user
 	String title = null; //$NON-NLS-1$
-	String message = resBaseFrame.getString("CWTopLevelHandler"); //$NON-NLS-1$
+	String message = getResourceString(BaseFrame.class, "CWTopLevelHandler"); //$NON-NLS-1$
 	if (exception instanceof NumberFormatException) {
 		
 		if ((exception.getMessage().length() == 0) || exception.getMessage().equals("empty String") || (exception.getMessage().equals("-"))) {//$NON-NLS-2$//$NON-NLS-1$
@@ -573,8 +673,8 @@ Tracer.getInstance().hack(BaseFrame.class, "showException(..)", "exception messa
 			return;
 		}
 
-		title = resBaseFrame.getString("CTInputError"); //$NON-NLS-1$
-		message = resBaseFrame.getString("CENumberFormat") + "\n  => " + exception.getLocalizedMessage();//$NON-NLS-2$ //$NON-NLS-1$
+		title = getResourceString(BaseFrame.class, "CTInputError"); //$NON-NLS-1$
+		message = getResourceString(BaseFrame.class, "CENumberFormat") + "\n  => " + exception.getLocalizedMessage();//$NON-NLS-2$ //$NON-NLS-1$
 	} else if (exception instanceof DeveloperException) {
 		title = ((DeveloperException)exception).getTitle();
 		message = exception.getMessage();
@@ -596,10 +696,10 @@ Tracer.getInstance().nyi(BaseFrame.class, "showException(..)");//$NON-NLS-1$
  */
 protected boolean showExitDialog(String title) {
 	try {
-		QueryDialog dialog = new QueryDialog(this, title, resBaseFrame.getString("CIExit"));
+		QueryDialog dialog = new QueryDialog(this, title, getResourceString(BaseFrame.class, "CIExit"));
 		return dialog.isYes();
 	} catch (Throwable e) {
-		Tracer.getInstance().runtimeWarning(BaseFrame.class, "showExitDialog(..)", e.toString());//$NON-NLS-2$//$NON-NLS-1$
+		Tracer.getInstance().runtimeWarning(BaseFrame.class, "showExitDialog(..)", e.toString());//$NON-NLS-2$
 		return true;
 	}
 }
@@ -608,27 +708,11 @@ protected boolean showExitDialog(String title) {
  * Typically used at Application startup.
  */
 protected final static void showSplashScreen() {
-	try {
-		Window window = new SplashScreen(new Dimension(436, 293), ch.ehi.basics.i18n.ResourceBundle.getImageIcon(BaseFrame.class, "splash.png"));
-		
-		/* Create the splash screen */
-		window.pack();
-
-		/* Center splash screen */
-		setCenterLocation(window);
-		window.setVisible(true);
-
-		Thread.sleep(5000);
-
-		window.dispose();
-	} catch (Throwable e) {
-		Tracer.getInstance().runtimeWarning(BaseFrame.class, "showSplashScreen(..)", e.toString());//$NON-NLS-2$//$NON-NLS-1$
-	}
+	showSplashScreen(new Dimension(436, 293), ch.ehi.basics.i18n.ResourceBundle.getImageIcon(BaseFrame.class, "splash.png"));
 }
 /**
  * Show a SplashScreen.
  * Typically used at Application startup.
- * @deprecated
  */
 protected final static void showSplashScreen(Dimension preferredWindowSize, String image) {
 	try {
@@ -652,7 +736,7 @@ protected final static void showSplashScreen(Dimension preferredWindowSize, Stri
  * Show a SplashScreen.
  * Typically used at Application startup.
  */
-protected final static void showSplashScreen(Dimension preferredWindowSize, ImageIcon image) {
+protected final static void showSplashScreen(Dimension preferredWindowSize, ImageIcon image, long timeOut) {
 	try {
 		Window window = new SplashScreen(preferredWindowSize, image);
 		
@@ -663,12 +747,18 @@ protected final static void showSplashScreen(Dimension preferredWindowSize, Imag
 		setCenterLocation(window);
 		window.setVisible(true);
 
-		Thread.sleep(5000);
+		Thread.sleep(timeOut);
 
 		window.dispose();
 	} catch (Throwable e) {
 		Tracer.getInstance().runtimeWarning(BaseFrame.class, "showSplashScreen(<image=" + image + ">)", e.toString());//$NON-NLS-2$//$NON-NLS-1$
 	}
+}
+/**
+ * @see #showSplashScreen(Dimension, ImageIcon, long)
+ */
+protected final static void showSplashScreen(Dimension preferredWindowSize, ImageIcon image) {
+	showSplashScreen(preferredWindowSize, image, 5000);
 }
 /**
  * Show Progress in WaitDialog if any.
@@ -681,15 +771,5 @@ protected final void updateProgress(int percentage, String currentActivity) {
 		waitDialog.updateProgress(percentage, currentActivity);
 		waitDialog.paint(waitDialog.getGraphics());
 	}
-}
-
-/**
- * Developer utility.
- * Inform user of <Not Yet Implemented> Feature.
- * @param title Dialogtitle
- * @param message Speaking info for user
- */
-public final void nyi(String title, String message) {
-	new WarningDialog(this, title, message);
 }
 }

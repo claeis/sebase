@@ -17,7 +17,7 @@ import javax.swing.*;
 /**
  * Splash screen for Application startup.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:33:00 $
+ * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
  */
 public class SplashScreen extends JWindow {
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
@@ -37,7 +37,7 @@ class IvjEventHandler implements java.awt.event.WindowListener {
 		public void windowOpened(java.awt.event.WindowEvent e) {};
 	};
 /**
- * XSplashScreen constructor.
+ * SplashScreen constructor.
  * Show a certain picture.
  */
 public SplashScreen(Dimension windowSize, String image) {
@@ -47,7 +47,7 @@ public SplashScreen(Dimension windowSize, String image) {
 	setImage(image);
 }
 /**
- * XSplashScreen constructor.
+ * SplashScreen constructor.
  * Show a certain picture.
  */
 public SplashScreen(Dimension windowSize, ImageIcon image) {

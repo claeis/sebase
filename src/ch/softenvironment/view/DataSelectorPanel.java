@@ -16,10 +16,9 @@ import ch.softenvironment.util.*;
 /**
  * Browser to walk through a List of Objects.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-02-05 11:32:59 $
+ * @version $Revision: 1.4 $ $Date: 2004-04-27 09:14:58 $
  */
 public class DataSelectorPanel extends javax.swing.JPanel {
-	private static java.util.ResourceBundle resDataSelectorPanel = ch.ehi.basics.i18n.ResourceBundle.getBundle(DataSelectorPanel.class);
 	private DataSelectorPanelListener listener = null;
 	private java.util.List objects = null;
 	private int currentIndex = -1;
@@ -279,7 +278,7 @@ private javax.swing.JButton getTbbDelete() {
 			ivjTbbDelete.setMinimumSize(new java.awt.Dimension(23, 23));
 			// user code begin {1}
 			ivjTbbDelete.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(DataSelectorPanel.class, "delete.gif"));
-			ivjTbbDelete.setToolTipText(resDataSelectorPanel.getString("TbbDelete_toolTipText"));
+			ivjTbbDelete.setToolTipText(ResourceManager.getInstance().getResource(DataSelectorPanel.class, "TbbDelete_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -311,7 +310,7 @@ private javax.swing.JButton getTbbFirst() {
 			ivjTbbFirst.setMinimumSize(new java.awt.Dimension(23, 23));
 			// user code begin {1}
 			ivjTbbFirst.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(DataSelectorPanel.class, "first_arrow.gif"));
-			ivjTbbFirst.setToolTipText(resDataSelectorPanel.getString("TbbFirst_toolTipText"));
+			ivjTbbFirst.setToolTipText(ResourceManager.getInstance().getResource(DataSelectorPanel.class, "TbbFirst_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -343,7 +342,7 @@ private javax.swing.JButton getTbbLast() {
 			ivjTbbLast.setMinimumSize(new java.awt.Dimension(23, 23));
 			// user code begin {1}
 			ivjTbbLast.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(DataSelectorPanel.class, "last_arrow.gif"));
-			ivjTbbLast.setToolTipText(resDataSelectorPanel.getString("TbbLast_toolTipText"));
+			ivjTbbLast.setToolTipText(ResourceManager.getInstance().getResource(DataSelectorPanel.class, "TbbLast_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -375,7 +374,7 @@ private javax.swing.JButton getTbbNew() {
 			ivjTbbNew.setMinimumSize(new java.awt.Dimension(23, 23));
 			// user code begin {1}
 			ivjTbbNew.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(DataSelectorPanel.class, "new.gif"));
-			ivjTbbNew.setToolTipText(resDataSelectorPanel.getString("TbbNew_toolTipText"));
+			ivjTbbNew.setToolTipText(ResourceManager.getInstance().getResource(DataSelectorPanel.class, "TbbNew_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -407,7 +406,7 @@ private javax.swing.JButton getTbbNext() {
 			ivjTbbNext.setMinimumSize(new java.awt.Dimension(23, 23));
 			// user code begin {1}
 			ivjTbbNext.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(DataSelectorPanel.class, "right_arrow.gif"));
-			ivjTbbNext.setToolTipText(resDataSelectorPanel.getString("TbbNext_toolTipText"));
+			ivjTbbNext.setToolTipText(ResourceManager.getInstance().getResource(DataSelectorPanel.class, "TbbNext_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -439,7 +438,7 @@ private javax.swing.JButton getTbbPrevious() {
 			ivjTbbPrevious.setMinimumSize(new java.awt.Dimension(23, 23));
 			// user code begin {1}
 			ivjTbbPrevious.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(DataSelectorPanel.class, "left_arrow.gif"));
-			ivjTbbPrevious.setToolTipText(resDataSelectorPanel.getString("TbbPrevious_toolTipText"));
+			ivjTbbPrevious.setToolTipText(ResourceManager.getInstance().getResource(DataSelectorPanel.class, "TbbPrevious_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}

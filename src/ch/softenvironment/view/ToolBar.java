@@ -1,5 +1,7 @@
 package ch.softenvironment.view;
 
+import ch.softenvironment.util.ResourceManager;
+
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,11 +17,10 @@ package ch.softenvironment.view;
 /**
  * StandardToolbar.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:33:00 $
+ * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
  */
 public class ToolBar extends javax.swing.JToolBar {
 	// list of Objects to treat by selector
-	private static java.util.ResourceBundle resToolBar = ch.ehi.basics.i18n.ResourceBundle.getBundle(ToolBar.class);
 	private int currentIndex = -1;
 	private javax.swing.JButton ivjTbbCopy = null;
 	private javax.swing.JButton ivjTbbCut = null;
@@ -492,7 +493,7 @@ private javax.swing.JComboBox getCbxItems() {
 			ivjCbxItems.setVisible(true);
 			ivjCbxItems.setMaximumSize(new java.awt.Dimension(300, 23));
 			// user code begin {1}
-			ivjCbxItems.setToolTipText(resToolBar.getString("CbxItems_toolTipText"));
+			ivjCbxItems.setToolTipText(getResourceString("CbxItems_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -592,7 +593,7 @@ private javax.swing.JButton getTbbCopy() {
 			ivjTbbCopy.setEnabled(false);
 			// user code begin {1}
 			ivjTbbCopy.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(ToolBar.class, "copy.gif"));
-			ivjTbbCopy.setToolTipText(resToolBar.getString("TbbCopy_toolTipText"));
+			ivjTbbCopy.setToolTipText(getResourceString("TbbCopy_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -628,7 +629,7 @@ private javax.swing.JButton getTbbCut() {
 			ivjTbbCut.setEnabled(false);
 			// user code begin {1}
 			ivjTbbCut.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(ToolBar.class, "cut.gif"));
-			ivjTbbCut.setToolTipText(resToolBar.getString("TbbCut_toolTipText"));
+			ivjTbbCut.setToolTipText(getResourceString("TbbCut_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -664,7 +665,7 @@ private javax.swing.JButton getTbbDelete() {
 			ivjTbbDelete.setEnabled(false);
 			// user code begin {1}
 			ivjTbbDelete.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(ToolBar.class, "delete.gif"));
-			ivjTbbDelete.setToolTipText(resToolBar.getString("TbbDelete_toolTipText"));
+			ivjTbbDelete.setToolTipText(getResourceString("TbbDelete_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -700,7 +701,7 @@ private javax.swing.JButton getTbbFind() {
 			ivjTbbFind.setEnabled(false);
 			// user code begin {1}
 			ivjTbbFind.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(ToolBar.class, "find.gif"));
-			ivjTbbFind.setToolTipText(resToolBar.getString("TbbFind_toolTipText"));
+			ivjTbbFind.setToolTipText(getResourceString("TbbFind_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -736,7 +737,7 @@ private javax.swing.JButton getTbbFirst() {
 			ivjTbbFirst.setEnabled(false);
 			// user code begin {1}
 			ivjTbbFirst.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(ToolBar.class, "first_arrow.gif"));
-			ivjTbbFirst.setToolTipText(resToolBar.getString("TbbFirst_toolTipText"));
+			ivjTbbFirst.setToolTipText(getResourceString("TbbFirst_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -765,7 +766,7 @@ private javax.swing.JButton getTbbLast() {
 			ivjTbbLast.setEnabled(false);
 			// user code begin {1}
 			ivjTbbLast.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(ToolBar.class, "last_arrow.gif"));
-			ivjTbbLast.setToolTipText(resToolBar.getString("TbbLast_toolTipText"));
+			ivjTbbLast.setToolTipText(getResourceString("TbbLast_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -794,7 +795,7 @@ private javax.swing.JButton getTbbNew() {
 			ivjTbbNew.setEnabled(false);
 			// user code begin {1}
 			ivjTbbNew.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(ToolBar.class, "new.gif"));
-			ivjTbbNew.setToolTipText(resToolBar.getString("TbbNew_toolTipText"));
+			ivjTbbNew.setToolTipText(getResourceString("TbbNew_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -830,7 +831,7 @@ private javax.swing.JButton getTbbNext() {
 			ivjTbbNext.setEnabled(false);
 			// user code begin {1}
 			ivjTbbNext.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(ToolBar.class, "right_arrow.gif"));
-			ivjTbbNext.setToolTipText(resToolBar.getString("TbbNext_toolTipText"));
+			ivjTbbNext.setToolTipText(getResourceString("TbbNext_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -859,7 +860,7 @@ private javax.swing.JButton getTbbOpen() {
 			ivjTbbOpen.setEnabled(false);
 			// user code begin {1}
 			ivjTbbOpen.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(ToolBar.class, "open.gif"));
-			ivjTbbOpen.setToolTipText(resToolBar.getString("TbbOpen_toolTipText"));
+			ivjTbbOpen.setToolTipText(getResourceString("TbbOpen_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -895,7 +896,7 @@ private javax.swing.JButton getTbbPaste() {
 			ivjTbbPaste.setEnabled(false);
 			// user code begin {1}
 			ivjTbbPaste.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(ToolBar.class, "paste.gif"));
-			ivjTbbPaste.setToolTipText(resToolBar.getString("TbbPaste_toolTipText"));
+			ivjTbbPaste.setToolTipText(getResourceString("TbbPaste_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -931,7 +932,7 @@ private javax.swing.JButton getTbbPrevious() {
 			ivjTbbPrevious.setEnabled(false);
 			// user code begin {1}
 			ivjTbbPrevious.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(ToolBar.class, "left_arrow.gif"));
-			ivjTbbPrevious.setToolTipText(resToolBar.getString("TbbPrevious_toolTipText"));
+			ivjTbbPrevious.setToolTipText(getResourceString("TbbPrevious_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -960,7 +961,7 @@ private javax.swing.JButton getTbbPrint() {
 			ivjTbbPrint.setEnabled(false);
 			// user code begin {1}
 			ivjTbbPrint.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(ToolBar.class, "print.gif"));
-			ivjTbbPrint.setToolTipText(resToolBar.getString("TbbPrint_toolTipText"));
+			ivjTbbPrint.setToolTipText(getResourceString("TbbPrint_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -996,7 +997,7 @@ private javax.swing.JButton getTbbRedo() {
 			ivjTbbRedo.setEnabled(false);
 			// user code begin {1}
 			ivjTbbRedo.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(ToolBar.class, "redo.gif"));
-			ivjTbbRedo.setToolTipText(resToolBar.getString("MniRedo_text"));
+			ivjTbbRedo.setToolTipText(getResourceString("MniRedo_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -1032,7 +1033,7 @@ private javax.swing.JButton getTbbSave() {
 			ivjTbbSave.setEnabled(false);
 			// user code begin {1}
 			ivjTbbSave.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(ToolBar.class, "save.gif"));
-			ivjTbbSave.setToolTipText(resToolBar.getString("TbbSave_toolTipText"));
+			ivjTbbSave.setToolTipText(getResourceString("TbbSave_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -1068,7 +1069,7 @@ private javax.swing.JButton getTbbUndo() {
 			ivjTbbUndo.setEnabled(false);
 			// user code begin {1}
 			ivjTbbUndo.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(ToolBar.class, "undo.gif"));
-			ivjTbbUndo.setToolTipText(resToolBar.getString("TbbUndo_toolTipText"));
+			ivjTbbUndo.setToolTipText(getResourceString("TbbUndo_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -1328,5 +1329,11 @@ private void treatNextPreviousButtons() {
 		getTbbLast().setEnabled(false);
 		getLblSelector().setText(" 0/0 ");//$NON-NLS-1$
 	}
+}
+/**
+ * @see BaseFrame#getResourceString(String)
+ */
+protected String getResourceString(String propertyName) {
+	return ResourceManager.getInstance().getResource(this.getClass(), propertyName);
 }
 }

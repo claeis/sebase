@@ -1,5 +1,7 @@
 package ch.softenvironment.view;
 
+import ch.softenvironment.util.ResourceManager;
+
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,10 +17,9 @@ package ch.softenvironment.view;
 /**
  * Panel for structured Phone Number representation.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:32:59 $
+ * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
  */
 public class PhoneNumberPanel extends javax.swing.JPanel {
-	private static java.util.ResourceBundle resPhoneNumberPanel = ch.ehi.basics.i18n.ResourceBundle.getBundle(PhoneNumberPanel.class);
 	private String separator = "/";//$NON-NLS-1$
 	private javax.swing.JTextField ivjTxtCountryPrefix = null;
 	private javax.swing.JTextField ivjTxtNumber = null;
@@ -218,7 +219,7 @@ private javax.swing.JTextField getTxtCountryPrefix() {
 			ivjTxtCountryPrefix.setBounds(0, 1, 45, 20);
 			ivjTxtCountryPrefix.setNextFocusableComponent(getTxtSitePrefix());
 			// user code begin {1}
-			ivjTxtCountryPrefix.setToolTipText(resPhoneNumberPanel.getString("TxtCountryPrefix_toolTipText"));
+			ivjTxtCountryPrefix.setToolTipText(ResourceManager.getInstance().getResource(PhoneNumberPanel.class, "TxtCountryPrefix_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -244,7 +245,7 @@ private javax.swing.JTextField getTxtNumber() {
 			ivjTxtNumber.setBounds(95, 1, 129, 20);
 			ivjTxtNumber.setColumns(6);
 			// user code begin {1}
-			ivjTxtNumber.setToolTipText(resPhoneNumberPanel.getString("TxtNumber_toolTipText"));
+			ivjTxtNumber.setToolTipText(ResourceManager.getInstance().getResource(PhoneNumberPanel.class, "TxtNumber_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -271,7 +272,7 @@ private javax.swing.JTextField getTxtSitePrefix() {
 			ivjTxtSitePrefix.setBounds(48, 1, 43, 20);
 			ivjTxtSitePrefix.setNextFocusableComponent(getTxtNumber());
 			// user code begin {1}
-			ivjTxtSitePrefix.setToolTipText(resPhoneNumberPanel.getString("TxtSitePrefix_toolTipText"));
+			ivjTxtSitePrefix.setToolTipText(ResourceManager.getInstance().getResource(PhoneNumberPanel.class, "TxtSitePrefix_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}

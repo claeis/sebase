@@ -16,10 +16,9 @@ import java.awt.*;
 /**
  * Show a Dialog to select a Color.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:32:59 $
+ * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
  */
 public class ColorChooserDialog extends BaseDialog {
-	private static java.util.ResourceBundle resColorChooserDialog = ch.ehi.basics.i18n.ResourceBundle.getBundle(ColorChooserDialog.class);
 	private java.awt.Color chosenColor = null;
 	private javax.swing.JPanel ivjBaseDialogContentPane = null;
 	private javax.swing.JButton ivjBtnOk = null;
@@ -232,7 +231,7 @@ private void initialize() {
 		handleException(ivjExc);
 	}
 	// user code begin {2}
-	setTitle(resColorChooserDialog.getString("CTColorChooser"));
+	setTitle(getResourceString("CTColorChooser"));
 	javax.swing.event.ChangeListener changeListener =
 		new javax.swing.event.ChangeListener() {
 			public void stateChanged(javax.swing.event.ChangeEvent e) {

@@ -15,7 +15,7 @@ package ch.softenvironment.view;
 /**
  * Product Info Dialog.
  * @author: @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:32:59 $
+ * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
  */
 public class AboutDialog extends BaseDialog {
 	private javax.swing.JPanel ivjBaseDialogContentPane = null;
@@ -241,28 +241,5 @@ private void initialize() {
 	}
 	// user code begin {2}
 	// user code end
-}
-/**
- * main entrypoint - starts the part when it is run as an application
- * @param args java.lang.String[]
- */
-public static void main(java.lang.String[] args) {
-	try {
-		AboutDialog aAboutDialog;
-		aAboutDialog = new AboutDialog(new java.awt.Frame(), new java.lang.String(), new java.lang.String(), new java.lang.String(), new java.lang.String());
-		aAboutDialog.setModal(true);
-		aAboutDialog.addWindowListener(new java.awt.event.WindowAdapter() {
-			public void windowClosing(java.awt.event.WindowEvent e) {
-				System.exit(0);
-			};
-		});
-		aAboutDialog.show();
-		java.awt.Insets insets = aAboutDialog.getInsets();
-		aAboutDialog.setSize(aAboutDialog.getWidth() + insets.left + insets.right, aAboutDialog.getHeight() + insets.top + insets.bottom);
-		aAboutDialog.setVisible(true);
-	} catch (Throwable exception) {
-		System.err.println("Exception occurred in main() of ch.softenvironment.view.BaseDialog");
-		exception.printStackTrace(System.out);
-	}
 }
 }

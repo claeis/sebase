@@ -1,5 +1,7 @@
 package ch.softenvironment.view;
 
+import ch.softenvironment.util.ResourceManager;
+
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,9 +18,9 @@ package ch.softenvironment.view;
  * Simple Panel to represent a certain Object which
  * allows changes to be saved.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:32:59 $
+ * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
  */
-public abstract class DataPanel extends javax.swing.JPanel implements CommonUserAccess {
+public abstract class DataPanel extends javax.swing.JPanel {
 /**
  * DataPanel constructor comment.
  */
@@ -47,6 +49,12 @@ protected void genericPopupDisplay(java.awt.event.MouseEvent event, javax.swing.
  * Return the changed object displayed.
  */
 public abstract Object getObject();
+/**
+ * @see BaseFrame#getResourceString(String)
+ */
+protected String getResourceString(String propertyName) {
+	return ResourceManager.getInstance().getResource(this.getClass(), propertyName);
+}
 /**
  * Popup an error Dialog.
  * @param exception java.lang.Throwable

@@ -13,14 +13,15 @@ package ch.softenvironment.view;
  */
 
 import java.awt.*;
+
+import ch.softenvironment.util.ResourceManager;
 import ch.softenvironment.util.Tracer;
 /**
  * Template-Dialog defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:32:59 $
+ * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
  */
 public abstract class BaseDialog extends javax.swing.JDialog {
-	private static java.util.ResourceBundle resourceBundle = ch.ehi.basics.i18n.ResourceBundle.getBundle(BaseDialog.class);
 	private javax.swing.JPanel ivjJDialogContentPane = null;
 	private boolean saved = false;
 /**
@@ -80,7 +81,7 @@ protected void cancelPressed() {
  * @see BaseFrame#checkDeletion()
  */
 protected boolean checkDeletion() {
-	return checkDeletion(resourceBundle.getString("CTDeletion"), resourceBundle.getString("CIQueryForDeletion")); //$NON-NLS-2$ //$NON-NLS-1$
+	return checkDeletion(getResourceString(BaseDialog.class, "CTDeletion"), getResourceString(BaseDialog.class, "CIQueryForDeletion")); //$NON-NLS-2$ //$NON-NLS-1$
 }
 /**
  * Ask user whether the remove action shall be proceeded or not.
@@ -106,37 +107,37 @@ protected void genericPopupDisplay(java.awt.event.MouseEvent event, javax.swing.
  * Return Apply-Button Label-String.
  */
 protected String getApplyString() {
-	return resourceBundle.getString("BtnApply_text");
+	return getResourceString(BaseDialog.class, "BtnApply_text");
 }
 /**
  * Return Button Label-String.
  */
 protected String getAssignString() {
-	return resourceBundle.getString("BtnAssign_text");
+	return getResourceString(BaseDialog.class, "BtnAssign_text");
 }
 /**
  * Return Cancel-Button Label-String.
  */
 protected String getCancelString() {
-	return resourceBundle.getString("BtnCancel_text");
+	return getResourceString(BaseDialog.class, "BtnCancel_text");
 }
 /**
  * Return New-Button Label-String.
  */
 protected String getChangeWindowString() {
-	return resourceBundle.getString("BtnChangeWindow_text");
+	return getResourceString(BaseDialog.class, "BtnChangeWindow_text");
 }
 /**
  * Return Description Label-String.
  */
 protected String getDescriptionString() {
-	return resourceBundle.getString("CIDescription");
+	return getResourceString(BaseDialog.class, "CIDescription");
 }
 /**
  * Return Detail-String.
  */
 protected String getDetailString() {
-	return resourceBundle.getString("CIDetail");
+	return getResourceString(BaseDialog.class, "CIDetail");
 }
 /**
  * Return the JDialogContentPane property value.
@@ -164,31 +165,31 @@ private javax.swing.JPanel getJDialogContentPane() {
  * @see DataPanel
  */
 protected String getNewString() {
-	return resourceBundle.getString("BtnNew_text");
+	return getResourceString(BaseDialog.class, "BtnNew_text");
 }
 /**
  * Return New-Button Label-String.
  */
 protected String getNewWindowString() {
-	return resourceBundle.getString("BtnNewWindow_text");
+	return getResourceString(BaseDialog.class, "BtnNewWindow_text");
 }
 /**
  * Return OK-Button Label-String.
  */
 protected String getOKString() {
-	return resourceBundle.getString("BtnOK_text");
+	return getResourceString(BaseDialog.class, "BtnOK_text");
 }
 /**
  * Return Remove-Button Label-String.
  */
 protected String getRemoveString() {
-	return resourceBundle.getString("BtnRemove_text");
+	return getResourceString(BaseDialog.class, "BtnRemove_text");
 }
 /**
  * Return Button Label-String.
  */
 protected String getSearchWindowString() {
-	return resourceBundle.getString("BtnSearchWindow_text");
+	return getResourceString(BaseDialog.class, "BtnSearchWindow_text");
 }
 /**
  * Popup an error Dialog.
@@ -295,5 +296,18 @@ protected void traceOnly(java.lang.Throwable exception) {
  */
 protected void undo() {
 	// do nothing by default
+}
+
+/**
+ * @see BaseFrame#getResourceString(String)
+ */
+protected static String getResourceString(java.lang.Class resourceClass, String propertyName) {
+	return ResourceManager.getInstance().getResource(resourceClass, propertyName);
+}
+/**
+ * @see BaseFrame#getResourceString(String)
+ */
+protected String getResourceString(String propertyName) {
+	return ResourceManager.getInstance().getResource(this.getClass(), propertyName);
 }
 }

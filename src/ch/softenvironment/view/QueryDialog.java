@@ -16,10 +16,9 @@ import ch.softenvironment.util.*;
 /**
  * Dialog for user query. Provides only YES or NO Options.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:33:00 $
+ * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
  */
 public class QueryDialog extends BaseDialog {
-	private static java.util.ResourceBundle resQueryDialog = ch.ehi.basics.i18n.ResourceBundle.getBundle(QueryDialog.class);
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
 	private javax.swing.JPanel ivjJDialogContentPane = null;
 	private javax.swing.JButton ivjBtnNo = null;
@@ -124,7 +123,7 @@ private javax.swing.JButton getBtnNo() {
 			ivjBtnNo.setText("No");
 			ivjBtnNo.setBounds(234, 2, 106, 25);
 			// user code begin {1}
-			ivjBtnNo.setText(resQueryDialog.getString("BtnNo_text"));
+			ivjBtnNo.setText(getResourceString("BtnNo_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -147,7 +146,7 @@ private javax.swing.JButton getBtnYes() {
 			ivjBtnYes.setText("Yes");
 			ivjBtnYes.setBounds(101, 2, 106, 25);
 			// user code begin {1}
-			ivjBtnYes.setText(resQueryDialog.getString("BtnYes_text"));
+			ivjBtnYes.setText(getResourceString("BtnYes_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -341,7 +340,7 @@ private void initialize() {
 		handleException(ivjExc);
 	}
 	// user code begin {2}
-	setTitle(resQueryDialog.getString("CTTitle"));
+	setTitle(getResourceString("CTTitle"));
 	// user code end
 }
 /**

@@ -15,10 +15,9 @@ package ch.softenvironment.view;
 /**
  * Wait-Dialog for user.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:33:00 $
+ * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
  */
 public class WaitDialog extends BaseDialog {
-	private static java.util.ResourceBundle resources = ch.ehi.basics.i18n.ResourceBundle.getBundle(WaitDialog.class);
 	private javax.swing.JPanel ivjBaseDialogContentPane = null;
 	private javax.swing.JLabel ivjLblText = null;
 	private javax.swing.JLabel ivjLblImage = null;
@@ -35,7 +34,7 @@ public WaitDialog(java.awt.Frame owner, String title, String imagePath) {
 	super(owner, false /* otherwise will not terminate */);
 
 	if (title == null) {
-		this.title = resources.getString("DlgTitle");
+		this.title = getResourceString("DlgTitle");
 	} else {
 		this.title = title;
 	}
@@ -119,7 +118,7 @@ private javax.swing.JLabel getLblText() {
 			ivjLblText.setText("Bitte gedulden Sie sich einen Moment...");
 			ivjLblText.setBounds(162, 176, 254, 14);
 			// user code begin {1}
-			ivjLblText.setText(resources.getString("LblText_text"));
+			ivjLblText.setText(getResourceString("LblText_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}

@@ -1,5 +1,7 @@
 package ch.softenvironment.view;
 
+import ch.softenvironment.util.ResourceManager;
+
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,10 +17,9 @@ package ch.softenvironment.view;
 /**
  * Dialog for user query. Provides only YES or NO Options.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:32:59 $
+ * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
  */
 public class QueryCancelDialog extends BaseDialog {
-	private static java.util.ResourceBundle resQueryDialog = ch.ehi.basics.i18n.ResourceBundle.getBundle(QueryDialog.class);
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
 	private javax.swing.JPanel ivjJDialogContentPane = null;
 	private javax.swing.JButton ivjBtnNo = null;
@@ -174,7 +175,7 @@ private javax.swing.JButton getBtnNo() {
 			ivjBtnNo.setText("No");
 			ivjBtnNo.setBounds(167, 3, 103, 25);
 			// user code begin {1}
-			ivjBtnNo.setText(resQueryDialog.getString("BtnNo_text"));
+			ivjBtnNo.setText(ResourceManager.getInstance().getResource(QueryDialog.class, "BtnNo_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -197,7 +198,7 @@ private javax.swing.JButton getBtnYes() {
 			ivjBtnYes.setText("Yes");
 			ivjBtnYes.setBounds(63, 3, 93, 25);
 			// user code begin {1}
-			ivjBtnYes.setText(resQueryDialog.getString("BtnYes_text"));
+			ivjBtnYes.setText(ResourceManager.getInstance().getResource(QueryDialog.class, "BtnYes_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}

@@ -16,11 +16,9 @@ import ch.softenvironment.util.*;
 /**
  * Output Dialog for application failures.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:32:59 $
+ * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
  */
 public class ErrorDialog extends BaseDialog {
-	// NLS Settings
-	private static java.util.ResourceBundle resErrorDialog = ch.ehi.basics.i18n.ResourceBundle.getBundle(ErrorDialog.class);
 	// exception to show
 	private Throwable exception = null;
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
@@ -156,7 +154,7 @@ private javax.swing.JButton getBtnStacktrace() {
 			ivjBtnStacktrace.setName("BtnStacktrace");
 			ivjBtnStacktrace.setText("Stacktrace");
 			// user code begin {1}
-			ivjBtnStacktrace.setText(resErrorDialog.getString("BtnStacktrace_text"));
+			ivjBtnStacktrace.setText(getResourceString("BtnStacktrace_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -181,7 +179,7 @@ private javax.swing.JDialog getDlgException() {
 			ivjDlgException.setTitle("Exception");
 			getDlgException().setContentPane(getJDialogContentPane1());
 			// user code begin {1}
-			ivjDlgException.setTitle(resErrorDialog.getString("DlgException_title"));
+			ivjDlgException.setTitle(getResourceString("DlgException_title"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -356,7 +354,7 @@ private javax.swing.JLabel getLblMessage() {
 			ivjLblMessage.setText("");
 			ivjLblMessage.setComponentOrientation(java.awt.ComponentOrientation.LEFT_TO_RIGHT);
 			// user code begin {1}
-			ivjLblMessage.setText(resErrorDialog.getString("LblMessage_text"));
+			ivjLblMessage.setText(getResourceString("LblMessage_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -468,7 +466,7 @@ public void setText(String text) {
  */
 private void setUp(java.awt.Window owner, String title, String message, Throwable original) {
 	initialize();
-	setTitle(title == null ? resErrorDialog.getString("CTUnexpectedError") : title); //$NON-NLS-1$
+	setTitle(title == null ? getResourceString("CTUnexpectedError") : title); //$NON-NLS-1$
 	getPnlErrorText().setText(message);
 	setException(original);
 	setRelativeLocation(owner);

@@ -1,5 +1,7 @@
 package ch.softenvironment.view;
 
+import ch.softenvironment.util.ResourceManager;
+
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,10 +22,9 @@ package ch.softenvironment.view;
  * The Model will be updated after a focusLost-Event.
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:32:59 $
+ * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
  */
 public class NumberTextField extends javax.swing.JTextField implements java.awt.event.InputMethodListener {
-	private static java.util.ResourceBundle resources = ch.ehi.basics.i18n.ResourceBundle.getBundle(NumberTextField.class);
 	private java.text.DecimalFormat decFormat = null;
 /**
  * Constructor.
@@ -85,8 +86,8 @@ public void inputMethodTextChanged(java.awt.event.InputMethodEvent event) {
 	char lastChar = event.getText().last();
 	if (!(((lastChar >= '0') && (lastChar <= '9')) || (lastChar == '-') || (lastChar == '+') || (lastChar == '.'))) {
 		Object parent = getRootPane().getParent();
-		String title = resources.getString("CTInvalidInput"); //$NON-NLS-1$
-		String message = resources.getString("CICorrectInput"); //$NON-NLS-1$
+		String title = ResourceManager.getInstance().getResource(NumberTextField.class, "CTInvalidInput"); //$NON-NLS-1$
+		String message = ResourceManager.getInstance().getResource(NumberTextField.class, "CICorrectInput"); //$NON-NLS-1$
 		// reset wrong value
 		if (parent instanceof java.awt.Dialog) {
 			new WarningDialog((java.awt.Dialog)parent, title, message);
