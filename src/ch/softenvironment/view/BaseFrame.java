@@ -22,7 +22,7 @@ import ch.softenvironment.util.Tracer;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-02-25 07:04:34 $
+ * @version $Revision: 1.4 $ $Date: 2004-04-17 19:58:07 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -433,7 +433,7 @@ protected abstract void initializeView() throws Throwable;
  * @param title Dialogtitle
  */
 public final void nyi(String title) {
-	new WarningDialog(this, title, resBaseFrame.getString("CWNotYetImplemented")); //$NON-NLS-1$
+	nyi(title, resBaseFrame.getString("CWNotYetImplemented")); //$NON-NLS-1$
 }
 /**
  * Set this Frame at center of screen.
@@ -681,5 +681,15 @@ protected final void updateProgress(int percentage, String currentActivity) {
 		waitDialog.updateProgress(percentage, currentActivity);
 		waitDialog.paint(waitDialog.getGraphics());
 	}
+}
+
+/**
+ * Developer utility.
+ * Inform user of <Not Yet Implemented> Feature.
+ * @param title Dialogtitle
+ * @param message Speaking info for user
+ */
+public final void nyi(String title, String message) {
+	new WarningDialog(this, title, message);
 }
 }
