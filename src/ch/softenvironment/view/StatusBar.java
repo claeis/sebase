@@ -15,6 +15,7 @@ package ch.softenvironment.view;
 /**
  * StatusBar (bottom-Line of a Window).
  * @author: Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2004-02-05 11:33:00 $
  * @see ApplicationFrame Subclasses
  */
 public class StatusBar extends javax.swing.JPanel {

@@ -16,6 +16,7 @@ import ch.softenvironment.util.*;
 /**
  * Output Dialog for application failures.
  * @author: Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2004-02-05 11:32:59 $
  */
 public class ErrorDialog extends BaseDialog {
 	// NLS Settings

@@ -16,18 +16,20 @@ package ch.softenvironment.util;
  * Global Tracer.
  * Design Pattern: Singleton
  *
- * This Tracer is meant to be a development tool,
+ * This Tracer is useful as a development tool
  * to trace any Information while running an Application.
- * This Tool is not foreseen for NLS-Support.
+ * (This Tool is not foreseen for NLS-Support.)
+ *
  * @author: Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2004-02-05 11:30:43 $
  */
 public class Tracer {
 	// Mode's
-	public final static int SILENT = 1;
-	public final static int NORMAL = 2;
-	public final static int DEBUG = 3;
-	public final static int TRACE_SQL = 4;
-	public final static int ALL = 5;
+	public final static int SILENT = 1;  	// supress all Trace-logs
+	public final static int NORMAL = 2;	 	// ~User-Compatible
+	public final static int DEBUG = 3;   	// show specific debug-messages
+	public final static int TRACE_SQL = 4;	// show specific SQL-logs
+	public final static int ALL = 5;		// show all Trace-logs
 	
 	private static Tracer instance = null;
 	private java.io.PrintStream outStream = null;
@@ -175,7 +177,7 @@ public void sql(String sqlString) {
 }
 /**
  * Start Tracer and use ConsoleOut.
- * @param args Command line arguments ("-silent", "-trace" or "-debug")
+ * @param args Command line arguments ("-all, -silent", "-trace", "traceSQL" or "-debug")
  */
 public static void start(java.lang.String[] args) {
 	int mode = SILENT;	// default
@@ -203,6 +205,7 @@ public static void start(java.lang.String[] args) {
 }
 /**
  * Start Tracer and use ConsoleOut.
+ * @param mode (SILENT, NORMAL, DEBUG, TRACE_SQL, ALL)
  */
 public static void start(int mode) {
 	start((java.io.PrintStream)getConsoleOut(), mode);

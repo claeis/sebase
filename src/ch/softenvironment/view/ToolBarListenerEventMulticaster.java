@@ -14,6 +14,8 @@ package ch.softenvironment.view;
  
 /**
  * This is the event multicaster class to support the ch.softenvironment.view.ToolBarListenerEventMulticaster interface.
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2004-02-05 11:33:00 $
  */
 public class ToolBarListenerEventMulticaster extends java.awt.AWTEventMulticaster implements ToolBarListener {
 /**

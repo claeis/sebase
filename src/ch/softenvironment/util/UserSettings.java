@@ -15,6 +15,7 @@ package ch.softenvironment.util;
 /**
  * Interface for a minimal UserProfile resp. User-Settings for a specific Application.
  * @author: Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2004-02-05 11:30:43 $
  */
 public interface UserSettings {
 	public static final String BLUEWIN = "mail.bluewin.ch";

@@ -11,6 +11,11 @@ package ch.softenvironment.view;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  */
+
+/**
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2004-02-05 11:33:00 $
+ */
 public interface ToolBarListener extends java.util.EventListener {
 /**
  * 

@@ -16,6 +16,7 @@ import ch.softenvironment.util.*;
 /**
  * Provide a simple editor Area with minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2004-02-05 11:33:00 $
  */
 public class SimpleEditorPanel extends javax.swing.JPanel {
 	private static java.util.ResourceBundle resSimpleEditorPanel = ch.ehi.basics.i18n.ResourceBundle.getBundle(SimpleEditorPanel.class);  //$NON-NLS-1$

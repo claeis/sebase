@@ -15,6 +15,7 @@ package ch.softenvironment.view;
 /**
  * StandardToolbar.
  * @author: Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2004-02-05 11:33:00 $
  */
 public class ToolBar extends javax.swing.JToolBar {
 	// list of Objects to treat by selector

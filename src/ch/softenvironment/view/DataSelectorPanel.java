@@ -16,6 +16,7 @@ import ch.softenvironment.util.*;
 /**
  * Browser to walk through a List of Objects.
  * @author: Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.3 $ $Date: 2004-02-05 11:32:59 $
  */
 public class DataSelectorPanel extends javax.swing.JPanel {
 	private static java.util.ResourceBundle resDataSelectorPanel = ch.ehi.basics.i18n.ResourceBundle.getBundle(DataSelectorPanel.class);
