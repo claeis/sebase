@@ -4,6 +4,8 @@
   <!-- set global properties for this build -->
   <property name="src" value="${basedir}/src"/>
   <property name="build" value="${basedir}/build"/>
+  <property name="buildnr" value="3.2.0"/>
+  <property name="dist" value="${basedir}/dist"/>
 
   <target name="init">
     <!-- Create the time stamp -->
@@ -12,6 +14,7 @@
     <!-- Create the build directory structure used by compile -->
     <mkdir dir="${build}"/>
     <mkdir dir="${build}/jar"/>
+    <mkdir dir="${dist}"/>
   </target>
 
   <target depends="init" name="compile">
@@ -50,6 +53,21 @@
     </jar>
   </target>
 
+  <target depends="init" name="srcdist">
+    <delete file="${dist}/${ant.project.name}-${buildnr}.src.zip" quiet="true"/>
+    <zip zipfile="${dist}/${ant.project.name}-${buildnr}.src.zip">
+    	<zipfileset dir="." prefix="${ant.project.name}-${buildnr}">
+	    	<patternset includes="build.xml"/>
+	    	<patternset includes="lib/**"/>
+	    	<patternset includes="other/manifest"/>
+	    	<patternset includes="other/LICENSE.*"/>
+	    	<patternset includes="src/**" excludes="**/CVS/*;**/bak~/*"/>
+		<patternset includes="resources/de/**/*.properties"/>
+		<patternset includes="resources/fr/**/*.properties"/>
+		<patternset includes="resources/it/**/*.properties"/>
+    	</zipfileset>
+    </zip>
+  </target>
   <target name="clean">
     <!-- Delete the ${build} and ${dist} directory trees -->
     <delete dir="${build}"/>
