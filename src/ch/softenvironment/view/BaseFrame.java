@@ -21,10 +21,11 @@ import java.util.MissingResourceException;
 import ch.ehi.basics.view.*;
 import ch.softenvironment.util.*;
 import ch.softenvironment.util.Tracer;
+import ch.softenvironment.client.ResourceManager;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.12 $ $Date: 2004-06-29 11:27:15 $
+ * @version $Revision: 1.13 $ $Date: 2004-09-14 17:02:58 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -33,6 +34,7 @@ public abstract class BaseFrame extends javax.swing.JFrame {
 	private WaitDialog waitDialog = null;
 	private volatile int waitCounter = 0;
 	private ViewOptions viewOptions = null;
+	private java.util.List objects = null;
 
 /**
  * Simply allow forking the display of a WaitDialog.
@@ -125,6 +127,17 @@ public BaseFrame(ViewOptions viewOptions) {
 	this.viewOptions = viewOptions;
 }
 /**
+ * Typical DetailView Constructor.
+ * @param viewOptions Special options valid for all GUI's in an application
+ * @param object Model-instances to be represented by this GUI
+ */
+public BaseFrame(ViewOptions viewOptions, java.util.List objects) {
+	super();
+
+	this.viewOptions = viewOptions;
+	this.objects = objects;
+}
+/**
  * BaseFrame constructor comment.
  * @param title java.lang.String
  */
@@ -189,6 +202,17 @@ protected final boolean checkDeletion(String title, String question) {
 	}
 }
 /**
+ * Close this View after save.
+ * @see DetailView#saveObject()
+ */
+protected void closeOnSave() {
+	if (getViewOptions().getCloseOnSave()) {
+		if (getObjects().size() == 1) {
+			dispose();
+		} // else other model-instances may be changed by same view
+	}
+}
+/**
  * Extend the given menu generically with plattform dependent Look&Feel styles.
  * @see #setLookAndFeel(String)
  */
@@ -209,6 +233,18 @@ protected final void createLookAndFeelMenu(JMenu lookAndFeelMenu) {
 		});
 		lookAndFeelMenu.add(menuItem);
 	}
+}
+/**
+ * Overwrites.
+ * @see #setVisible(boolean)
+ */
+public void dispose() {
+	if (getViewOptions() != null) {
+		// forget about this reminded GUI
+		getViewOptions().getViewManager().checkOut(this);
+	}
+
+	super.dispose();
 }
 /**
  * Overwrite the #dispose() method for Launcher's of any Application extending this
@@ -339,6 +375,39 @@ protected final void executeUndoObject() {
 	showBusy("undoObject");
 }
 /**
+ * @see #exportTableData(JTable)
+ */
+public final void exportTableData(File file, JTable table) {
+	try {
+	 	FileOutputStream outStream = new FileOutputStream(file);
+	  	PrintStream stream = new PrintStream(outStream);
+
+	  	char separator = ';';
+
+	  	// header
+		int columnCount = table.getModel().getColumnCount();
+		for (int col=0; col<columnCount; col++) {
+			stream.print(table.getModel().getColumnName(col) + separator);
+		}
+		stream.println();
+
+		// data
+		int rowCount = table.getModel().getRowCount();
+		for (int row=0; row<rowCount; row++) {
+			for (int col=0; col<columnCount; col++) {
+				Object value = table.getModel().getValueAt(row, col);
+				stream.print(StringUtils.getString(value) + separator);
+			}
+			stream.println();
+		}
+
+		outStream.flush();
+	  	outStream.close();
+	} catch(Throwable e) {
+		handleException(e);
+	}
+}
+/**
  * Export Data of given table into a file.
  * The table data is exported in a generic manner,
  * say given table is exported 1:1 to CSV including
@@ -393,6 +462,12 @@ protected final void genericPopupDisplay(java.awt.event.MouseEvent event, javax.
    	}
 }
 /**
+ * Return model-instances to be treated by this GUI.
+ */
+protected final java.util.List getObjects() {
+	return objects;
+}
+/**
  * Return an NLS-String.
  * @param propertyName
  * @return String
@@ -404,7 +479,7 @@ protected static String getResourceString(java.lang.Class owner, String property
  * Return an NLS-String.
  * @return
  */
-protected String getResourceString(String propertyName) {
+protected final String getResourceString(String propertyName) {
 	return getResourceString(this.getClass(), propertyName);
 }
 /**
@@ -538,16 +613,21 @@ public final void setRelativeLocation(java.awt.Window parent) {
  */
 public final static void setSystemLookAndFeel() throws Throwable {
 	UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	//Make sure we have nice window decorations.
+//	JFrame.setDefaultLookAndFeelDecorated(true);
 }
 /**
- * Display Window.
+ * Overwrites.
+ * @see #dispose()
  */
 public void setVisible(boolean visible) {
-//	setSize(getFrameSize());
-	
-	// setModal @see Dialog.show()
-	
-	super.setVisible(true);
+	super.setVisible(visible);
+
+	if (getViewOptions() != null) {
+		// remind model-instances represented by this GUI
+		// to suppress multiple GUI's for the same model-instance
+		getViewOptions().getViewManager().checkIn(getObjects(), this);
+	}
 }
 /**
  * Execute a <b>public Method</b> in the hierarchy <b>NON-threaded</b> and 
@@ -576,14 +656,14 @@ protected final void showBusy(Class parameterTypes[], Object parameters[], Strin
 	try {
 		startWaitDialog(null, null);
 		// only the WaitDialog is forked here!
-		WaitBlock block = new WaitBlock();
+/*		WaitBlock block = new WaitBlock();
 		block.start();
-
+*/
 		// be careful with threading sequential tasks, such as Database-Transactions!!!
 		java.lang.reflect.Method method = this.getClass().getMethod(methodName, parameterTypes);
 		method.invoke(this, parameters);
 
-		block.interrupt();
+//		block.interrupt();
 	} catch(Throwable e) {
 		Tracer.getInstance().runtimeError(this, "showBusy(..)", e.toString());
 		handleException(e);
@@ -721,29 +801,32 @@ protected final static void showSplashScreen(Dimension preferredWindowSize, Imag
  */
 private synchronized final void startWaitDialog(String title, String imagePath) {
 	if (waitCounter == 0) {
+		waitCounter++;
 		try {
 			setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
 			waitDialog = new WaitDialog(this, title, imagePath);
+waitDialog.show();
+waitDialog.paint(waitDialog.getGraphics());
 		} catch(Throwable e) {
 			Tracer.getInstance().runtimeError(this, "startWaitDialog(..)", e.toString());
+			setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
 		} 
 	}
-	waitCounter++;
 }
 /**
- * 
+ * Close the WaitDialog if blocked action is finished.
  */
 private synchronized final void stopWaitDialog() {
-	waitCounter--;
-	if (waitCounter == 0) {
+	if (--waitCounter == 0) {
 		try {
 			if (waitDialog != null) {
 				waitDialog.dispose();
 				waitDialog = null;
 			}
 		} catch(Throwable e) {
-			Tracer.getInstance().runtimeError(this, "stopWaitDialog(..)", e.toString());
+			Tracer.getInstance().runtimeError(this, "stopWaitDialog()", e.toString());
 		} finally {
+			waitDialog = null;
 	 		setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
 		} 
 	}
@@ -833,40 +916,6 @@ private void updateStringProperty(java.lang.Class resource, Component component,
 				}
 			}
 		}
-	}
-}
-
-/**
- * @see #exportTableData(JTable)
- */
-public final void exportTableData(File file, JTable table) {
-	try {
-	 	FileOutputStream outStream = new FileOutputStream(file);
-	  	PrintStream stream = new PrintStream(outStream);
-
-	  	char separator = ';';
-
-	  	// header
-		int columnCount = table.getModel().getColumnCount();
-		for (int col=0; col<columnCount; col++) {
-			stream.print(table.getModel().getColumnName(col) + separator);
-		}
-		stream.println();
-
-		// data
-		int rowCount = table.getModel().getRowCount();
-		for (int row=0; row<rowCount; row++) {
-			for (int col=0; col<columnCount; col++) {
-				Object value = table.getModel().getValueAt(row, col);
-				stream.print(StringUtils.getString(value) + separator);
-			}
-			stream.println();
-		}
-
-		outStream.flush();
-	  	outStream.close();
-	} catch(Throwable e) {
-		handleException(e);
 	}
 }
 }
