@@ -22,13 +22,12 @@ import java.util.*;
  * the mapped *.properties files are cached during runtime.
  * 
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-05-03 20:26:14 $
+ * @version $Revision: 1.3 $ $Date: 2004-06-11 20:36:17 $
  */
 public class ResourceManager {
 	private static ResourceManager manager = null;
 	private Map resources = new HashMap();
 	private Locale currentLocale = null;
-	
 	/**
 	 * Return an application wide ResourceManager.
 	 * Design Pattern: Singleton.
@@ -43,7 +42,7 @@ public class ResourceManager {
 	/**
 	 * @see getResource(java.lang.Class, Locale, String)
 	 */
-	public String getResource(java.lang.Class holder, String propertyName) throws MissingResourceException {
+	public String getResource(java.lang.Class holder, String propertyName) {
 		return getResource(holder, Locale.getDefault(), propertyName);
 	}
 	/**
@@ -53,9 +52,8 @@ public class ResourceManager {
 	 * @param propertyName
 	 * @return String NLS-String
 	 * @see ch.ehi.basics.i18n.ResourceBundle
-	 * @throws MissingResourceException
 	 */
-	public String getResource(java.lang.Class holder, Locale locale, String propertyName) throws MissingResourceException {
+	public String getResource(java.lang.Class holder, Locale locale, String propertyName) {
 		if (!locale.equals(currentLocale)) {
 			// reset cached resources
 			Tracer.getInstance().debug(this, "getResource(..)", "Reset resource-properties");
