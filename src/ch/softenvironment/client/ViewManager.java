@@ -15,7 +15,7 @@ package ch.softenvironment.client;
 /**
  * Utility to manage opened GUI's for associated Object's.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2004-09-14 16:50:21 $
+ * @version $Revision: 1.2 $ $Date: 2004-09-15 20:38:03 $
  */
 public class ViewManager {
 	java.util.Map searchViews = new java.util.HashMap();
@@ -61,7 +61,16 @@ ch.softenvironment.util.Tracer.getInstance().nyi(this, "activateView(List)", "Mu
 		//  => or always force reopen new view (may contain same object's a second time!)
 		return false;
 	} else {
-		return activateView((java.awt.Window)detailViews.get(objects.get(0)));
+		// return activateView((java.awt.Window)detailViews.get(objects.get(0))); => does NOT compare to overwritten #equals()
+		Object entry = objects.get(0);
+		java.util.Iterator iterator = detailViews.keySet().iterator();
+		while (iterator.hasNext()) {
+			Object key = iterator.next();
+			if (key.equals(entry)) {
+				return activateView((java.awt.Window)detailViews.get(key));
+			}
+		}
+		return false;
 	}
 }
 /**
