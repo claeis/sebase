@@ -16,7 +16,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * StandardToolbar.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2005-02-23 16:58:10 $
+ * @version $Revision: 1.7 $ $Date: 2005-03-01 15:31:51 $
  */
 public class ToolBar extends javax.swing.JToolBar {
 	// list of Objects to treat by selector
@@ -1181,15 +1181,19 @@ public void removeToolBarListener(ch.softenvironment.view.ToolBarListener newLis
  * @param currentObject The new value for the property.
  * @see #getCurrentObject
  */
-private void setCurrentObject(java.lang.Object currentObject) {
-	Object oldValue = fieldCurrentObject;
-	fieldCurrentObject = currentObject;
-	firePropertyChange("currentObject", oldValue, currentObject);//$NON-NLS-1$
+private void setCurrentObject(final java.lang.Object currentObject) {
+    WaitDialog.showBusy(this, new Runnable() {
+        public void run() {
+			Object oldValue = fieldCurrentObject;
+			fieldCurrentObject = currentObject;
+			firePropertyChange("currentObject", oldValue, currentObject);//$NON-NLS-1$
 
-	// show CurrentObject relevant Widgets
-	boolean show = fieldObjects.size() > 1;
-	getTbbPrevious().setVisible(show);
-	getTbbNext().setVisible(show);
+			// show CurrentObject relevant Widgets
+			boolean show = fieldObjects.size() > 1;
+			getTbbPrevious().setVisible(show);
+			getTbbNext().setVisible(show);
+        }
+    });
 }
 /**
  * Show a list of items in the ComboBox.

@@ -21,27 +21,19 @@ import java.util.MissingResourceException;
 import ch.ehi.basics.view.*;
 import ch.softenvironment.util.*;
 import ch.softenvironment.util.Tracer;
-import ch.softenvironment.view.swingext.SwingWorker;
 import ch.softenvironment.client.ResourceManager;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.19 $ $Date: 2005-02-23 16:34:36 $
+ * @version $Revision: 1.20 $ $Date: 2005-03-01 15:31:51 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
 	public final static int X_CHILD_OFFSET = 50;
 	public final static int Y_CHILD_OFFSET = 50;
 	
-	// WaitDialog
-	public static final int UNKNOWN_PROGRESS = -1;
-	private volatile WaitDialog waitDialog = null; // global for #updateProgress()
-	private volatile int waitCounter = 0;
-	
 	private ViewOptions viewOptions = null;
 	private java.util.List objects = null;	// for DetailView's
-
-
 /**
  * BaseFrame constructor comment.
  */
@@ -155,153 +147,55 @@ public static String exceptionToString(Throwable exception) {
     return stringWriter.toString();
 }
 /**
- * @deprecated
- */
-protected final void executeChangeObjects() {
-	executeChangeObjects(null);
-}
-/**
- * @see ListMenuChoice#changeObjects(Object).
- */
-protected final void executeChangeObjects(Object source) {
-	Class types[] = { Object.class };
-	Object parameters[] = { source };
-	showBusy(types, parameters, "changeObjects");
-}
-/**
- * @see ListMenuChoice#copyObject(Object).
- */
-protected final void executeCopyObject(Object source) {
-	Class types[] = { Object.class };
-	Object parameters[] = { source };
-	showBusy(types, parameters, "copyObject");
-}
-/**
- * @deprecated
- */
-protected final void executeNewObject() {
-	executeNewObject(null);
-}
-/**
- * @see ListMenuChoice#newObject(Object).
- */
-protected final void executeNewObject(Object source) {
-	Class types[] = { Object.class };
-	Object parameters[] = { source };
-	showBusy(types, parameters, "newObject");
-}
-/**
- * @see DetailView#redoObject().
- */
-protected final void executeRedoObject() {
-	Class types[] = {};
-	Object parameters[] = {};
-	showBusy(types, parameters, "redoObject");
-}
-/**
- * @deprecated
- */
-protected void executeRemoveObjects() {
-	executeRemoveObjects(null);
-}
-/**
- * @see ListMenuChoice#removeObjects(Object).
- */
-protected final void executeRemoveObjects(Object source) {
-	Class types[] = { Object.class };
-	Object parameters[] = { source };
-	showBusy(types, parameters, "removeObjects");
-}
-/**
- * @see DetailView#saveObject().
- */
-protected final void executeSaveObject() {
-	Class types[] = {};
-	Object parameters[] = {};
-	showBusy(types, parameters, "saveObject");
-}
-/**
- * @see SearchView#searchObjects().
- */
-protected final void executeSearchObjects() {
-	Class types[] = {};
-	Object parameters[] = {};
-	showBusy(types, parameters, "searchObjects");
-}
-/**
- * @see DetailView#setCurrentObject(Object).
- */
-protected final void executeSetCurrentObject(Object object) {
-	Class methodParameterTypes[] = { Object.class };
-	Object methodParameters[] = { object };
-	showBusy(methodParameterTypes, methodParameters, "setCurrentObject");
-}
-/**
- * @see DetailView#undoObject().
- */
-protected final void executeUndoObject() {
-	Class types[] = {};
-	Object parameters[] = {};
-	showBusy(types, parameters, "undoObject");
-}
-/**
- * @see #exportTableData(JTable)
- */
-public final void exportTableData(File file, JTable table) {
-	PrintStream stream = null;
-	try {
-	 	FileOutputStream outStream = new FileOutputStream(file);
-	  	stream = new PrintStream(outStream);
-
-	  	char separator = ';';
-
-	  	// header
-		int columnCount = table.getModel().getColumnCount();
-		for (int col=0; col<columnCount; col++) {
-			stream.print(table.getModel().getColumnName(col) + separator);
-		}
-		stream.println();
-
-		// data
-		int rowCount = table.getModel().getRowCount();
-		for (int row=0; row<rowCount; row++) {
-			for (int col=0; col<columnCount; col++) {
-				Object value = table.getModel().getValueAt(row, col);
-				stream.print(StringUtils.getString(value) + separator);
-			}
-			stream.println();
-		}
-
-		outStream.flush();
-	  	outStream.close();
-	} catch(Throwable e) {
-		handleException(e);
-	} finally {
-		if (stream != null) {
-			stream.close();
-		}
-	}
-}
-/**
  * Export Data of given table into a file.
  * The table data is exported in a generic manner,
  * say given table is exported 1:1 to CSV including
  * Header-Data.
  * @param table
  */
-protected final void exportTableData(JTable table) {
-	FileChooser saveDialog =  new FileChooser(/*getSettings().getWorkingDirectory()*/);
+protected final void exportTableData(final JTable table) {
+	final FileChooser saveDialog =  new FileChooser(/*getSettings().getWorkingDirectory()*/);
 	saveDialog.setDialogTitle(CommonUserAccess.getMniFileSaveAsText());//$NON-NLS-1$
 	saveDialog.addChoosableFileFilter(ch.ehi.basics.view.GenericFileFilter.createCsvFilter());
 
 	if (saveDialog.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-		try {
-			Class types[] = {java.io.File.class, javax.swing.JTable.class};
-			Object parameters[] = {saveDialog.getSelectedFile(), table};
-			showBusy(types, parameters, "exportTableData");
-		} catch(Throwable e) {
-			handleException(e);
-		}
+		showBusy(new Runnable() {
+			public void run() {
+				PrintStream stream = null;
+				try {
+				 	FileOutputStream outStream = new FileOutputStream(saveDialog.getSelectedFile());
+				  	stream = new PrintStream(outStream);
+
+				  	char separator = ';';
+
+				  	// header
+					int columnCount = table.getModel().getColumnCount();
+					for (int col=0; col<columnCount; col++) {
+						stream.print(table.getModel().getColumnName(col) + separator);
+					}
+					stream.println();
+
+					// data
+					int rowCount = table.getModel().getRowCount();
+					for (int row=0; row<rowCount; row++) {
+						for (int col=0; col<columnCount; col++) {
+							Object value = table.getModel().getValueAt(row, col);
+							stream.print(StringUtils.getString(value) + separator);
+						}
+						stream.println();
+					}
+
+					outStream.flush();
+				  	outStream.close();
+				} catch(Throwable e) {
+					handleException(e);
+				} finally {
+					if (stream != null) {
+						stream.close();
+					}
+				}
+			}
+		});
 	}
 }
 /**
@@ -328,7 +222,7 @@ protected final void genericPopupDisplay(java.awt.event.MouseEvent event, javax.
 		 	// case: double-click
 			if (this instanceof ListMenuChoice) {
 //				((ListMenuChoice)this).defaultDoubleClickAction(event);
-				executeChangeObjects(event.getSource());
+				((ListMenuChoice)this).changeObjects(event.getSource());
 			}
 	 	} else if (event.isPopupTrigger() && (popupMenu != null)) {
 			popupMenu.show(event.getComponent(), event.getX(), event.getY());
@@ -344,12 +238,10 @@ protected final java.util.List getObjects() {
 	return objects;
 }
 /**
- * Return an NLS-String.
- * @param propertyName
- * @return String
+ * @deprecated
  */
 protected static String getResourceString(java.lang.Class owner, String propertyName) {
-	return ResourceManager.getInstance().getResource(owner, propertyName);
+	return ResourceManager.getResource(owner, propertyName);
 }
 /**
  * Return an NLS-String.
@@ -368,7 +260,7 @@ protected final static Dimension getScreenSize() {
 /**
  * Return GUI Configuration Options.
  */
-protected final ViewOptions getViewOptions() {
+public final ViewOptions getViewOptions() {
 	return viewOptions;
 }
 /**
@@ -450,6 +342,15 @@ protected void setLookAndFeel(String style) {
 	}
 }
 /**
+ * Set this Frame relative to parent.
+ */
+public final void setRelativeLocation(java.awt.Component parent) {
+	if (parent != null) {
+		setLocation(new Point(parent.getX() + X_CHILD_OFFSET,
+								parent.getY() + Y_CHILD_OFFSET));
+	}
+}
+/**
  * Set Look & Feel at startup of Application.
  * @see #setLookAndFeel(String)
  */
@@ -474,35 +375,17 @@ public void setVisible(boolean visible) {
 	}
 }
 /**
- * Execute a <b>public Method</b> in the hierarchy.
- *
- * @param parameterTypes	Class parameterTypes[] = { Integer.class, String.class }
- * @param parameters		Object parameters[] = { new Integer(3), "Hello" }
- * @param methodName		methodName "doAnything" must be <b>public</b>
- * @see showBusy(Runnable)
- * @deprecated (use showBusy(Runnable) instead)
+ * @see WaitDialog#showBusy()
  */
-private final void showBusy(final Class parameterTypes[], final Object parameters[], final String methodName) {
-	final BaseFrame view = this;
-//TODO Patch: calling shwoBusy(Runnable) compiles but corrupt execution
-//    showBusy(new Runnable() {
-//        public void run() {
-            try {
-	            java.lang.reflect.Method method = view.getClass().getMethod(methodName, parameterTypes);
-	    		method.invoke(view, parameters);
-            } catch(Throwable e) {
-                Tracer.getInstance().runtimeError(view, "showBusy(.., " + methodName + ")", e.toString());
-        		handleException(e);
-            }
-//        }
-//    });
+protected final void showBusy(final Runnable block) {
+	WaitDialog.showBusy(this, block);
 }
 /**
  * Top-level Handler.
  * Called whenever the part throws an exception.
  * @param exception java.lang.Throwable
  */
-public final static void showException(Window owner, java.lang.Throwable exception) {
+public final static void showException(Component owner, java.lang.Throwable exception) {
 	try {
 		// update log
 		Tracer.getInstance().runtimeWarning(owner, "handleException(..) -> stackTrace follows...", exception.getLocalizedMessage());//$NON-NLS-1$
@@ -590,26 +473,10 @@ protected final static void showSplashScreen(Dimension preferredWindowSize, Imag
 	}
 }
 /**
- * Show Progress in WaitDialog started by #showBusy(..).
- *
- * @param percentage Progress of current activity [0..100] or BaseFrame.UNKNOWN_PROGRESS
- * @param currentActivity User friendly description of current activity
- * @see showBusy(Runnable)
  * @see WaitDialog#updateProgress()
  */
-public synchronized final void updateProgress(final int percentage, final String currentActivity) {
-	javax.swing.SwingUtilities.invokeLater(new Runnable() {
-		public void run() {
-			try {
-				if (waitDialog != null) {
-					waitDialog.updateProgress(percentage, currentActivity);
-//					waitDialog.paint(waitDialog.getGraphics()); // force refresh
-				}
-			} catch(Throwable e) {
-				Tracer.getInstance().developerWarning(this, "updateProgress(..)", "Ignoring: " + e.getLocalizedMessage());
-			}
-		}
-	});
+protected final void showProgress(final int percentage, final String currentActivity) {
+	WaitDialog.updateProgress(percentage, currentActivity);
 }
 /**
  * Reset GUI-Components NLS-Strings, such as Component-text 
@@ -682,93 +549,6 @@ private void updateStringProperty(java.lang.Class resource, Component component,
 				}
 			}
 		}
-	}
-}
-
-/**
- * Execute a given Block and show Busy-Cursor and WaitDialog meanwhile.
- * There is only ONE WaitDialog in case of nested calls of this method.
- * Use #updateProgress(..) to show any Progress-Messages meanwhile in the WaitDialog.
- *
- * The actions within the given Block are handled by a Throwable-Handler resp.
- * #handleException().
- * 
- * Ex. 
- * class MyView extends BaseFrame {
- *   public void doAnything(Integer c, String s) {
- 		showBusy(new Runnable() {
-				public void run() {
-					// do anything
-					...
-					updateProgress(10, "start activity");
-					...
-				}
-	   });
- *   }
- *
- * @param block	executable Block that might take a while
- * @see #updateProgress(..)
- * @see #handleException()
- */
-public final void showBusy(final Runnable block) {
-    if (++waitCounter == 1) {
-		// show ONE WaitDialog only
-		try {
-// Tracer.getInstance().debug("opening WaitDialog");
-            setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
-			waitDialog = new WaitDialog(this, null /*default title*/);
-			waitDialog.show();
-//			waitDialog.paint(waitDialog.getGraphics()); // make sure refresh is forced NOW	
-		} catch(Throwable e) {
-			Tracer.getInstance().runtimeError(this, "showBusy(Runnable)", "show WaitDialog failed: " + e.toString());
-		    waitDialog = null;
-		    setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-		    waitCounter = 0;
-		}
-    }
-    
-    // define Swing-Thread
-	SwingWorker worker = new SwingWorker() {
-	    public Object construct() {
-	        try {
-	            block.run();
-	        } catch (Throwable e) {
-	            // handler is necessary, otherwise #finished() won't be called
-	            // in case of a failure in block
-	            Tracer.getInstance().runtimeError(this, "showBusy(Runnable)", "Block failed: " + e.getLocalizedMessage());
-	            handleException(e);
-	        }
-	        return null;
-	    }
-	    /**
-	     * Will be called when #construct() has finished.
-	     * Close the WaitDialog and reset Cursor.
-	     */
-	    public void finished() {
-		    if (--waitCounter == 0) {
-		    	// close WaitDialog when last actions are done
-//Tracer.getInstance().debug("closing WaitDialog");
-		        if (waitDialog != null) {
-		            // @see Exeption-Handler at opening WaitDialog
-					waitDialog.dispose();
-		        }
-				waitDialog = null;
-		    	setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
-    		}
-		}
-	};
-	
-	// always fork Swing-Thread resp. execute block
-	worker.start();
-}
-
-/**
- * Set this Frame relative to parent.
- */
-public final void setRelativeLocation(java.awt.Component parent) {
-	if (parent != null) {
-		setLocation(new Point(parent.getX() + X_CHILD_OFFSET,
-								parent.getY() + Y_CHILD_OFFSET));
 	}
 }
 }

@@ -11,35 +11,43 @@ package ch.softenvironment.view;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  */
- 
+
+import ch.softenvironment.view.swingext.SwingWorker;
+import ch.softenvironment.client.ResourceManager;
+import ch.softenvironment.util.Tracer;
 /**
  * Wait-Dialog for busy actions.
+ * Design Pattern: Singleton
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2005-01-24 09:59:52 $
+ * @version $Revision: 1.7 $ $Date: 2005-03-01 15:31:51 $
  * @see BaseFrame#showBusy()
  */
-class WaitDialog extends BaseDialog {
+public class WaitDialog extends BaseDialog {
+	public static final int UNKNOWN_PROGRESS = -1;
+
+	// single instance #showBusy
+	private static volatile WaitDialog waitDialog = null;
+	private static volatile int waitCounter = 0;
+	// single instance #showBusyThread
+	private static volatile WaitDialog waitDialogThread = null;
+	private static volatile int waitCounterThread = 0;
+	
 	private javax.swing.JPanel ivjBaseDialogContentPane = null;
 	private javax.swing.JLabel ivjLblText = null;
 	private javax.swing.JLabel ivjLblImage = null;
 	private javax.swing.JProgressBar ivjPrgBar = null;
-
-	private String title = null;
 /**
  * WaitDialog constructor comment.
  * @param owner java.awt.Frame
  * @param modal boolean
  */
-public WaitDialog(java.awt.Frame owner, String title) {
-	super(owner, false /* otherwise will not terminate */);
-
-	if (title == null) {
-		this.title = getResourceString(WaitDialog.class, "DlgTitle");
-	} else {
-		this.title = title;
-	}
+private WaitDialog(java.awt.Component owner, String title) {
+	super(owner,
+	        title,
+			false /* otherwise will not terminate */);
 
 	initialize();
+//	setTitle(title == null ? getResourceString(WaitDialog.class, "DlgTitle") : title);
 }
 /**
  * Return the BaseDialogContentPane property value.
@@ -102,7 +110,7 @@ protected javax.swing.JLabel getLblText() {
 			ivjLblText.setText("Bitte gedulden Sie sich einen Moment...");
 			ivjLblText.setBounds(162, 176, 254, 14);
 			// user code begin {1}
-			ivjLblText.setText(getResourceString("LblText_text"));
+			ivjLblText.setText(ResourceManager.getResource(WaitDialog.class, "LblText_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -149,38 +157,224 @@ protected void handleException(java.lang.Throwable exception) {
 private void initialize() {
 	try {
 		// user code begin {1}
-		setLocation(100, 100);
+//		setLocation(100, 100);
 		// user code end
+		this.setResizable(false);
 		setName("WaitDialog");
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setSize(426, 289);
-		setTitle("Kurze Pause");
+//		setTitle("Kurze Pause");
 		setContentPane(getBaseDialogContentPane());
 	} catch (java.lang.Throwable ivjExc) {
 		handleException(ivjExc);
 	}
 	// user code begin {2}
 	getPrgBar().setVisible(false);
-	setTitle(title);
 	// user code end
 }
 /**
- * Let User know what happens.
- * @param percentage Current activities done yet (-1 if Unknown)
- * @param currentActivity User speaking name
+ * Execute a given Block and show Busy-Cursor and WaitDialog meanwhile.
+ * There is only ONE WaitDialog in case of nested calls of this method.
+ * Use #updateProgress(..) to show any Progress-Messages meanwhile in the WaitDialog.
+ * (The given Block is not threaded)
+ *
+ * The actions within the given Block are handled by a Throwable-Handler resp.
+ * #handleException().
+ * 
+ * Ex. 
+ * class MyView extends BaseFrame {
+ *   public void doAnything(Integer c, String s) {
+ 		showBusy(new Runnable() {
+				public void run() {
+					// do anything
+					...
+					updateProgress(10, "start activity");
+					...
+				}
+	   });
+ *   }
+ *
+ * @param block	executable Block that might take a while
+ * @see #updateProgress(..)
  */
-protected final void updateProgress(int percentage, String currentActivity) {
-//  TUNE!!!
-	getPrgBar().setVisible(true);
-	if (percentage > 0) {
-		getPrgBar().setValue(percentage);
-	} else {
-		getPrgBar().setIndeterminate(false);
-//		getPrgBar().setStringPainted(false);
-	}
+public static void showBusy(final java.awt.Component owner, final Runnable block) {
+    if (++waitCounter == 1) {
+	    		// show ONE WaitDialog only
+	    		try {
+//Tracer.getInstance().debug("opening WaitDialog");
+	                owner.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+	    			waitDialog = new WaitDialog(owner, ResourceManager.getResource(WaitDialog.class, "DlgTitle"));
+	    			waitDialog.setVisible(true);
+// make sure refresh is forced NOW
+waitDialog.paint(waitDialog.getGraphics()); 
+	    		} catch(Throwable e) {
+	    			Tracer.getInstance().runtimeWarning(WaitDialog.class, "showBusy(Runnable)", "fork WaitDialog failed: " + e.toString());
+	    		    waitDialog = null;
+	    		    owner.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+	    		    waitCounter = 0;
+	    		}
+    }
+	
+    // always execute block => non-threaded
+	try {
+    	block.run();
+    } catch (Throwable e) {
+        // handler is necessary, otherwise #finished() won't be called
+        // in case of a failure in block
+        Tracer.getInstance().runtimeError(WaitDialog.class, "showBusy(Runnable)", "Block failed: " + e.getLocalizedMessage());
+        BaseFrame.showException(owner, e);
+    }
 
-	if (currentActivity != null) {
-		getLblText().setText(currentActivity);
+    if (--waitCounter == 0) {
+    	// close WaitDialog when last actions are done
+//Tracer.getInstance().debug("closing WaitDialog");
+        try {
+            // @see Exeption-Handler at opening WaitDialog
+			waitDialog.dispose();
+        } catch(Throwable e) {
+            Tracer.getInstance().runtimeWarning(WaitDialog.class, "showBusy()", "#finished() could not dispose() WaitDialog correctly!");
+        }
+		waitDialog = null;
+    	owner.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
 	}
+}
+/**
+ * <b>Execute a given Block in an own Thread</b> and show WaitDialog meanwhile.
+ * There is only ONE WaitDialog in case of nested calls of this method.
+ * Use #updateProgressThread(..) to show any Progress-Messages meanwhile in the WaitDialog.
+ *
+ * The actions within the given Block are handled by a Throwable-Handler resp.
+ * #handleException().
+ * 
+ * Ex. 
+ * class MyView extends BaseFrame {
+ *   public void doAnything(Integer c, String s) {
+ 		showBusy(new Runnable() {
+				public void run() {
+					// do anything
+					...
+					updateProgressThread(10, "start activity");
+					...
+				}
+	   });
+ *   }
+ *
+ * @param block	executable Block to fork that might take a while
+ * @see #updateProgressThread(..)
+ */
+public static void showBusyThread(final java.awt.Component owner, final Runnable block) {
+    if (++waitCounterThread == 1) {
+		// show ONE WaitDialog only
+		try {
+// Tracer.getInstance().debug("Thread: opening WaitDialog");
+//          owner.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.WAIT_CURSOR));
+			waitDialogThread = new WaitDialog(owner, ResourceManager.getResource(WaitDialog.class, "DlgTitleThread"));
+			waitDialogThread.setVisible(true);
+			updateProgressThread(UNKNOWN_PROGRESS, ResourceManager.getResource(WaitDialog.class, "LblText_text"));
+		} catch(Throwable e) {
+			Tracer.getInstance().runtimeWarning(WaitDialog.class, "showBusyThread(Runnable)", "show WaitDialog failed: " + e.toString());
+		    waitDialogThread = null;
+//		    owner.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+		    waitCounterThread = 0;
+		}
+    }
+    
+    // define Swing-Thread
+	SwingWorker worker = new SwingWorker() {
+	    public Object construct() {
+	        try {
+	            block.run();
+	        } catch (Throwable e) {
+	            // handler is necessary, otherwise #finished() won't be called
+	            // in case of a failure in block
+	            Tracer.getInstance().runtimeError(WaitDialog.class, "showBusyThread(Runnable)", "Block failed: " + e.getLocalizedMessage());
+	            BaseFrame.showException(owner, e);
+	        }
+	        return null;
+	    }
+	    /**
+	     * Will be called when #construct() has finished.
+	     * Close the WaitDialog and reset Cursor.
+	     */
+	    public void finished() {
+		    if (--waitCounterThread == 0) {
+		    	// close WaitDialog when last actions are done
+//Tracer.getInstance().debug("Thread: closing WaitDialog");
+		        try {
+		            // @see Exeption-Handler at opening WaitDialog
+					waitDialogThread.dispose();
+		        } catch(Throwable e) {
+		            Tracer.getInstance().runtimeWarning(WaitDialog.class, "showBusyThread()", "#finished() could not dispose() WaitDialog correctly!");
+		        }
+				waitDialogThread = null;
+//		    	owner.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.DEFAULT_CURSOR));
+    		}
+		}
+	};
+	
+	// fork the block
+	worker.start();
+}
+/**
+ * Show Progress in WaitDialog started by #showBusy(..).
+ *
+ * @param percentage Progress of current activity [0..100] or WaitDialog.UNKNOWN_PROGRESS
+ * @param currentActivity User friendly description of current activity
+ * @see showBusy(Runnable)
+ */
+public static void updateProgress(final int percentage, final String currentActivity) {
+//TODO Tune!!!
+//	javax.swing.SwingUtilities.invokeLater(new Runnable() {
+//		public void run() {
+			try {
+				waitDialog.getPrgBar().setVisible(true);
+				if (percentage > 0) {
+				    waitDialog.getPrgBar().setValue(percentage);
+				} else {
+				    waitDialog.getPrgBar().setIndeterminate(false);
+				}
+
+				if (currentActivity != null) {
+				    waitDialog.getLblText().setText(currentActivity);
+				}
+waitDialog.paint(waitDialog.getGraphics()); // force refresh
+				waitDialog.toFront();
+			} catch(Throwable e) {
+			    // waitDialog could be closed before Update is made
+				Tracer.getInstance().developerWarning(WaitDialog.class, "updateProgress(..)", "Ignoring: " + e.getLocalizedMessage());
+			}
+//		}
+//	});
+}
+/**
+ * Show Progress in WaitDialog started by #showBusyThread(..).
+ *
+ * @param percentage Progress of current activity [0..100] or WaitDialog.UNKNOWN_PROGRESS
+ * @param currentActivity User friendly description of current activity
+ * @see showBusyThread(Runnable)
+ */
+public static void updateProgressThread(final int percentage, final String currentActivity) {
+//TODO Tune!!!
+	javax.swing.SwingUtilities.invokeLater(new Runnable() {
+		public void run() {
+			try {
+				waitDialogThread.getPrgBar().setVisible(true);
+				if (percentage > 0) {
+				    waitDialogThread.getPrgBar().setValue(percentage);
+				} else {
+				    waitDialogThread.getPrgBar().setIndeterminate(false);
+				}
+
+				if (currentActivity != null) {
+				    waitDialogThread.getLblText().setText(currentActivity);
+				}
+//waitDialog.paint(waitDialog.getGraphics()); // force refresh
+				waitDialogThread.toFront();
+			} catch(Throwable e) {
+			    // waitDialogThread could be closed before Update is made
+				Tracer.getInstance().developerWarning(WaitDialog.class, "updateProgressThread(..)", "Ignoring: " + e.getLocalizedMessage());
+			}
+		}
+	});
 }
 }

@@ -17,9 +17,9 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * Browser to walk through a List of Objects.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2005-02-23 16:34:38 $
+ * @version $Revision: 1.7 $ $Date: 2005-03-01 15:31:51 $
  */
-public class DataSelectorPanel extends javax.swing.JPanel {
+public class DataSelectorPanel extends BasePanel {
 	private DataSelectorPanelListener listener = null;
 	private java.util.List objects = null;
 	private int currentIndex = -1;
@@ -479,8 +479,8 @@ private javax.swing.JTextField getTxtSelector() {
  * Called whenever the part throws an exception.
  * @param exception java.lang.Throwable
  */
-private void handleException(java.lang.Throwable exception) {
-	BaseDialog.showError(this, null, exception.toString(), exception);
+protected void handleException(java.lang.Throwable exception) {
+	super.handleException(exception);
 }
 /**
  * Initializes connections

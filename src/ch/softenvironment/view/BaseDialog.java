@@ -19,7 +19,7 @@ import ch.softenvironment.util.Tracer;
 /**
  * Template-Dialog defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.8 $ $Date: 2005-02-23 16:34:35 $
+ * @version $Revision: 1.9 $ $Date: 2005-03-01 15:31:51 $
  */
 public abstract class BaseDialog extends javax.swing.JDialog {
 	private javax.swing.JPanel ivjJDialogContentPane = null;
@@ -181,16 +181,16 @@ protected String getRemoveString() {
 	return getResourceString(BaseDialog.class, "BtnRemove_text");
 }
 /**
- * @see BaseFrame#getResourceString(String)
+ * @deprecated
  */
 protected static String getResourceString(java.lang.Class resourceClass, String propertyName) {
-	return ResourceManager.getInstance().getResource(resourceClass, propertyName);
+	return ResourceManager.getResource(resourceClass, propertyName);
 }
 /**
- * @see BaseFrame#getResourceString(String)
+ * @deprecated
  */
 protected String getResourceString(String propertyName) {
-	return ResourceManager.getInstance().getResource(this.getClass(), propertyName);
+	return ResourceManager.getResource(this.getClass(), propertyName);
 }
 /**
  * Return Button Label-String.
@@ -216,7 +216,7 @@ private void initialize() {
 		setName("BaseDialog");
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 		setSize(426, 240);
-		setTitle("<Abstract/Template Dialog>");
+//		setTitle("<Abstract/Template Dialog>");
 		setContentPane(getJDialogContentPane());
 	} catch (java.lang.Throwable ivjExc) {
 		handleException(ivjExc);
@@ -431,5 +431,17 @@ public static void showWarning(java.awt.Component owner, String title, Object me
 	        		message,
 	        		options,
 	        		"warning-icon.gif");
+}
+/**
+ * @see WaitDialog#showBusy()
+ */
+protected final void showBusy(final Runnable block) {
+	WaitDialog.showBusy(this, block);
+}
+/**
+ * @see WaitDialog#updateProgress()
+ */
+protected final void showProgress(final int percentage, final String currentActivity) {
+	WaitDialog.updateProgress(percentage, currentActivity);
 }
 }
