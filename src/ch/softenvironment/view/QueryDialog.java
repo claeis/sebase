@@ -17,10 +17,11 @@ import ch.softenvironment.util.*;
  * Dialog for user query. Provides YES and NO Options,
  * and optionally CANCEL Option can be configured.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-10-20 11:56:38 $
+ * @version $Revision: 1.5 $ $Date: 2004-10-26 19:15:07 $
  */
 public class QueryDialog extends BaseDialog {
 	private Boolean buttonPressed = null;
+	private boolean showCancelButton = false;
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
 	private javax.swing.JPanel ivjJDialogContentPane = null;
 	private javax.swing.JButton ivjBtnNo = null;
@@ -30,6 +31,7 @@ public class QueryDialog extends BaseDialog {
 	private javax.swing.JScrollPane ivjScpText = null;
 	private javax.swing.JPanel ivjPnlCenter = null;
 	private javax.swing.JPanel ivjPnlSouth = null;
+	private javax.swing.JButton ivjBtnCancel = null;
 
 class IvjEventHandler implements java.awt.event.ActionListener {
 		public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -41,12 +43,18 @@ class IvjEventHandler implements java.awt.event.ActionListener {
 				connEtoC3(e);
 		};
 	};
-	private javax.swing.JButton ivjBtnCancel = null;
 /**
  * Create and open QuestionDialog modally.
  */
 public QueryDialog(java.awt.Dialog owner, String title, String question) {
+	this(owner, title, question, false);
+}
+/**
+ * Create and open QuestionDialog modally.
+ */
+public QueryDialog(java.awt.Dialog owner, String title, String question, boolean showCancelButton) {
 	super(owner, title, true);
+	this.showCancelButton = showCancelButton;
 	setUp(owner, title, question);
 }
 /**
@@ -60,14 +68,31 @@ public QueryDialog(java.awt.Frame owner, String title, String question) {
  */
 public QueryDialog(java.awt.Frame owner, String title, String question, boolean showCancelButton) {
 	super(owner, title, true);
+	this.showCancelButton = showCancelButton;
 	setUp(owner, title, question);
-	getBtnCancel().setVisible(showCancelButton);
+}
+/**
+ * Constructor
+ * @param owner Symbol
+ * @param modal Symbol
+ */
+/* WARNING: THIS METHOD WILL BE REGENERATED. */
+public QueryDialog(java.awt.Frame owner, boolean modal) {
+	super(owner, modal);
+	initialize();
 }
 /**
  * Create and open QuestionDialog modally.
  */
 public QueryDialog(javax.swing.JPanel owner, String title, String question) {
+	this((javax.swing.JPanel)null, title, question, false);
+}
+/**
+ * Create and open QuestionDialog modally.
+ */
+public QueryDialog(javax.swing.JPanel owner, String title, String question, boolean showCancelButton) {
 	super(null, true);
+	this.showCancelButton = showCancelButton;
 Tracer.getInstance().nyi(this, "QueryDialog(Panel..)", "relative location gets lost");//$NON-NLS-2$//$NON-NLS-1$
 	setUp(null, title, question);
 }
@@ -392,7 +417,7 @@ private void initialize() {
 		// user code end
 		setName("QueryDialog");
 		setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-		setSize(426, 140);
+		setSize(426, 202);
 		setTitle("Question");
 		setContentPane(getJDialogContentPane());
 		initConnections();
@@ -432,6 +457,7 @@ private void setUp(java.awt.Window owner, String title, String question) {
 	setTitle(title);
 	getTxaQuery().setText(question);
 	setRelativeLocation(owner);
+	getBtnCancel().setVisible(showCancelButton);
 	show();
 }
 }
