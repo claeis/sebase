@@ -21,7 +21,7 @@ package ch.softenvironment.util;
  * (This Tool is not foreseen for NLS-Support.)
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2004-12-10 16:48:55 $
+ * @version $Revision: 1.6 $ $Date: 2005-01-06 09:49:58 $
  */
 public class Tracer {
 	// Mode's
@@ -120,7 +120,7 @@ private void log(String errorType, Object obj, String methodName, String comment
  * Keep Not Yet Implemented code references.
  */
 public void nyi(Object obj, String methodName) {
-	nyi(obj, methodName, null);
+	nyi(obj, methodName, "");
 }
 /**
  * Keep Not Yet Implemented code references.
