@@ -20,7 +20,7 @@ import ch.softenvironment.client.ResourceManager;
  * The Model will be updated after a focusLost-Event.
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-09-14 16:56:57 $
+ * @version $Revision: 1.5 $ $Date: 2004-09-16 15:12:11 $
  */
 public class NumberTextField extends javax.swing.JTextField implements java.awt.event.InputMethodListener {
 	private java.text.DecimalFormat decFormat = null;
@@ -83,14 +83,16 @@ public java.lang.Long getLongValue() throws NumberFormatException {
 public void inputMethodTextChanged(java.awt.event.InputMethodEvent event) {
 	char lastChar = event.getText().last();
 	if (!(((lastChar >= '0') && (lastChar <= '9')) || (lastChar == '-') || (lastChar == '+') || (lastChar == '.'))) {
-		Object parent = getRootPane().getParent();
-		String title = ResourceManager.getInstance().getResource(NumberTextField.class, "CTInvalidInput"); //$NON-NLS-1$
-		String message = ResourceManager.getInstance().getResource(NumberTextField.class, "CICorrectInput"); //$NON-NLS-1$
-		// reset wrong value
-		if (parent instanceof java.awt.Dialog) {
-			new WarningDialog((java.awt.Dialog)parent, title, message);
-		} else {
-			new WarningDialog((java.awt.Frame)parent, title, message);
+		if (isEditable() && isEnabled()) {
+			Object parent = getRootPane().getParent();
+			String title = ResourceManager.getInstance().getResource(NumberTextField.class, "CTInvalidInput"); //$NON-NLS-1$
+			String message = ResourceManager.getInstance().getResource(NumberTextField.class, "CICorrectInput"); //$NON-NLS-1$
+			// reset wrong value
+			if (parent instanceof java.awt.Dialog) {
+				new WarningDialog((java.awt.Dialog)parent, title, message);
+			} else {
+				new WarningDialog((java.awt.Frame)parent, title, message);
+			}
 		}
 
 		// ignore last Char Input
