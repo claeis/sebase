@@ -15,7 +15,7 @@ package ch.softenvironment.util;
 /**
  * Show Developer failures.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:30:43 $
+ * @version $Revision: 1.3 $ $Date: 2004-02-25 07:07:54 $
  */
 public class DeveloperException extends RuntimeException {
 	private static java.util.ResourceBundle resDeveloperException = ch.ehi.basics.i18n.ResourceBundle.getBundle(DeveloperException.class);
@@ -89,7 +89,7 @@ public DeveloperException(Object errorObject, String errorMethod, String message
 	this(errorObject.getClass(), errorMethod, message, title, e);
 }
 public String getMessage() {
-	return message + "\n" + resDeveloperException.getString("CISource") + errorObject + "." + errorMethod;//$NON-NLS-3$ //$NON-NLS-2$//$NON-NLS-1$
+	return message + "\n" + resDeveloperException.getString("CISource") + ": " + errorObject + "." + errorMethod;//$NON-NLS-3$ //$NON-NLS-2$//$NON-NLS-1$
 }
 public String getTitle() {
 	return title;
