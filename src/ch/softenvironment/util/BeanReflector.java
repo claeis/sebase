@@ -22,7 +22,7 @@ package ch.softenvironment.util;
  *   -> MyObject#getMyProperty()			// the getter-Method
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-05-03 12:06:01 $
+ * @version $Revision: 1.4 $ $Date: 2004-05-17 14:06:50 $
  */
 public class BeanReflector extends java.util.EventObject {
 	private transient String property = null;
@@ -49,8 +49,12 @@ public BeanReflector(Object source, String property) {
 /**
  * Return the Field for given Property-Name.
  */
-public java.lang.reflect.Field getField() throws NoSuchFieldException {
-	return getSource().getClass().getField("field" + getPropertyUpper());
+public java.lang.reflect.Field getField() {
+	try {
+		return getSource().getClass().getField("field" + getPropertyUpper());
+	} catch(NoSuchFieldException e) {
+		throw new DeveloperException(this, "getField()", "<" + getSource().getClass().getName() + "> must implement <" + "field" + getPropertyUpper() + ">");
+	}
 }
 /**
  * Return the Getter Method for the property.
@@ -88,9 +92,13 @@ public java.lang.Class getType() throws NoSuchMethodException {
  * Return the Source's Property-value
  * by calling the sources getter-Method.
  */
-public Object getValue() throws NoSuchMethodException, IllegalAccessException, java.lang.reflect.InvocationTargetException {
-	Object parameters[] = {};
- 	return getGetterMethod().invoke(getSource(), parameters);
+public Object getValue() throws IllegalAccessException, java.lang.reflect.InvocationTargetException {
+	try {
+		Object parameters[] = {};
+ 		return getGetterMethod().invoke(getSource(), parameters);
+ 	} catch(NoSuchMethodException e) {
+		throw new DeveloperException(this, "getValue()", "<" + getSource().getClass().getName() + "> must implement <" + "get" + getPropertyUpper() + "()");
+	}
 }
 /**
  * Return how the encapsulated Object implements the given property.
@@ -102,14 +110,14 @@ public int hasProperty() {
 		getGetterMethod();
 		implementationDegree = GETTER;
 	} catch (NoSuchMethodException e) {
-		// ignore: no public getter-Method implemented
+		Tracer.getInstance().developerWarning(this, "hasProperty()", "NoSuchMethodException ignored: no public getter-Method for property <" + getProperty() + "> implemented");
 	}
 
 	try {
 		getSetterMethod();
 		implementationDegree = implementationDegree + SETTER;
 	} catch (NoSuchMethodException e) {
-		// ignore: no public setter-Method implemented
+		Tracer.getInstance().developerWarning(this, "hasProperty()", "NoSuchMethodException ignored: no public setter-Method for property <" + getProperty() + "> implemented");
 	}
 
 	return implementationDegree;
@@ -118,17 +126,25 @@ public int hasProperty() {
  * Set the Property by its <b>Field</b> with given value => no change-event.
  * Suppose property-Field to be public.
  */
-public void setField(Object value) throws NoSuchFieldException, IllegalAccessException {
-	getField().set(getSource(), value);
+public void setField(Object value) {
+	try {
+		getField().set(getSource(), value);
+	} catch(IllegalAccessException e) {
+		throw new DeveloperException(this, "setField(Object)", "<" + getSource().getClass().getName() + "#field" + getPropertyUpper() + ">  must be PUBLIC!");
+	}
 }
 /**
  * Set the Property by its <b>setter-Method</b> with given value.
  * The Setter-Method must be public.
  * For e.g.: source.setProperty(Object value)
  */
-public void setValue(Object value) throws NoSuchMethodException, java.lang.reflect.InvocationTargetException, IllegalAccessException {
-	Object args[] = { value };
-	getSetterMethod().invoke(getSource(), args);
+public void setValue(Object value) throws java.lang.reflect.InvocationTargetException, IllegalAccessException {
+	try {
+		Object args[] = { value };
+		getSetterMethod().invoke(getSource(), args);
+	} catch(NoSuchMethodException e) {
+		throw new DeveloperException(this, "setValue()", "<" + getSource().getClass().getName() + "> must implement <" + "set" + getPropertyUpper() + "(<type>)");
+	}
 }
 
 /**
@@ -136,10 +152,16 @@ public void setValue(Object value) throws NoSuchMethodException, java.lang.refle
  * MyObject object = (MyObject)BeanReflector.createInstance(MyObject.class);
  * @param target The Target-Object's Type
  */
-public static java.lang.Object createInstance(java.lang.Class target) throws NoSuchMethodException, InstantiationException, IllegalAccessException, java.lang.reflect.InvocationTargetException {
-	Class types[] = {};
-	Object args[] = {};
-	java.lang.reflect.Constructor constructor = target.getConstructor(types);
-	return constructor.newInstance(args);
+public static java.lang.Object createInstance(java.lang.Class target) throws InstantiationException, java.lang.reflect.InvocationTargetException {
+	try {
+		Class types[] = {};
+		Object args[] = {};
+		java.lang.reflect.Constructor constructor = target.getConstructor(types);
+		return constructor.newInstance(args);
+	} catch(NoSuchMethodException e) {
+		throw new DeveloperException(BeanReflector.class, "creatInstance(Class)", "Class <" + target + "> must implement: Constructor()!");
+	} catch(IllegalAccessException e) {
+		throw new DeveloperException(BeanReflector.class, "creatInstance(Class)", "Class <" + target + ".Constructor()> must be: PUBLIC!");
+	}
 }
 }
