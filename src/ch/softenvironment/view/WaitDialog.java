@@ -15,7 +15,7 @@ package ch.softenvironment.view;
 /**
  * Wait-Dialog for user.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-04-27 09:14:58 $
+ * @version $Revision: 1.4 $ $Date: 2004-05-10 12:53:00 $
  */
 public class WaitDialog extends BaseDialog {
 	private javax.swing.JPanel ivjBaseDialogContentPane = null;
@@ -45,16 +45,6 @@ public WaitDialog(java.awt.Frame owner, String title, String imagePath) {
 		this.imageIcon = new javax.swing.ImageIcon(getClass().getResource(imagePath));
 	}
 
-	initialize();
-}
-/**
- * Constructor
- * @param owner Symbol
- * @param modal Symbol
- */
-/* WARNING: THIS METHOD WILL BE REGENERATED. */
-public WaitDialog(java.awt.Frame owner, boolean modal) {
-	super(owner, modal);
 	initialize();
 }
 /**
@@ -180,7 +170,9 @@ private void initialize() {
 	// user code end
 }
 /**
- * Let User know what happens
+ * Let User know what happens.
+ * @param percentage Current activities done yet
+ * @param currentActivity User speaking name
  */
 public final void updateProgress(int percentage, String currentActivity) {
 	getPrgBar().setValue(percentage);
