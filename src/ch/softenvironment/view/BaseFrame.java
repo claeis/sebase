@@ -24,7 +24,7 @@ import ch.softenvironment.util.Tracer;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2004-05-10 12:51:41 $
+ * @version $Revision: 1.8 $ $Date: 2004-05-28 19:51:42 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -339,7 +339,11 @@ protected final void executeUndoObject() {
 	showBusy("undoObject");
 }
 /**
- * Export Data of table into a file.
+ * Export Data of given table into a file.
+ * The table data is exported in a generic manner,
+ * say given table is exported 1:1 to CSV including
+ * Header-Data.
+ * @param table
  */
 protected final void exportTableData(JTable table) {
 	FileChooser saveDialog =  new FileChooser(/*getSettings().getWorkingDirectory()*/);
@@ -348,31 +352,9 @@ protected final void exportTableData(JTable table) {
 
 	if (saveDialog.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
 		try {
-		  	File myFile = saveDialog.getSelectedFile();
-		 	FileOutputStream outStream = new FileOutputStream(myFile);
-		  	PrintStream stream = new PrintStream(outStream);
-
-		  	char separator = ';';
-
-		  	// header
-			int columnCount = table.getModel().getColumnCount();
-			for (int col=0; col<columnCount; col++) {
-				stream.print(table.getModel().getColumnName(col) + separator);
-			}
-			stream.println();
-
-			// data
-			int rowCount = table.getModel().getRowCount();
-			for (int row=0; row<rowCount; row++) {
-				for (int col=0; col<columnCount; col++) {
-					Object value = table.getModel().getValueAt(row, col);
-					stream.print(StringUtils.getString(value) + separator);
-				}
-				stream.println();
-			}
-
-			outStream.flush();
-		  	outStream.close();
+			Class types[] = {java.io.File.class, javax.swing.JTable.class};
+			Object parameters[] = {saveDialog.getSelectedFile(), table};
+			showBusy(types, parameters, "exportTableData");
 		} catch(Throwable e) {
 			handleException(e);
 		}
@@ -842,6 +824,40 @@ private void updateStringProperty(java.lang.Class resource, Component component,
 				}
 			}
 		}
+	}
+}
+
+/**
+ * @see #exportTableData(JTable)
+ */
+public final void exportTableData(File file, JTable table) {
+	try {
+	 	FileOutputStream outStream = new FileOutputStream(file);
+	  	PrintStream stream = new PrintStream(outStream);
+
+	  	char separator = ';';
+
+	  	// header
+		int columnCount = table.getModel().getColumnCount();
+		for (int col=0; col<columnCount; col++) {
+			stream.print(table.getModel().getColumnName(col) + separator);
+		}
+		stream.println();
+
+		// data
+		int rowCount = table.getModel().getRowCount();
+		for (int row=0; row<rowCount; row++) {
+			for (int col=0; col<columnCount; col++) {
+				Object value = table.getModel().getValueAt(row, col);
+				stream.print(StringUtils.getString(value) + separator);
+			}
+			stream.println();
+		}
+
+		outStream.flush();
+	  	outStream.close();
+	} catch(Throwable e) {
+		handleException(e);
 	}
 }
 }
