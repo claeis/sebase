@@ -15,7 +15,7 @@ import ch.softenvironment.util.DateUtils;
 /**
  * Define a Date-Range especially for SearchView's.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2004-02-14 16:45:04 $
+ * @version $Revision: 1.2 $ $Date: 2004-08-25 15:59:52 $
  */
 public class DateRangePanel extends javax.swing.JPanel {
 	private javax.swing.JLabel ivjLblBilled32 = null;
@@ -198,10 +198,7 @@ private DateTextField getTxtDateTo() {
  * @param exception java.lang.Throwable
  */
 private void handleException(java.lang.Throwable exception) {
-
-	/* Uncomment the following lines to print uncaught exceptions to stdout */
-	// System.out.println("--------- UNCAUGHT EXCEPTION ---------");
-	// exception.printStackTrace(System.out);
+	BaseFrame.showException(null, exception);
 }
 /**
  * Initializes connections
