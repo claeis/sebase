@@ -16,7 +16,7 @@ package ch.softenvironment.view;
  * Method-Set for a DetailView
  * @see BaseFrame (as a Parent-Class)
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-05-09 17:22:22 $
+ * @version $Revision: 1.4 $ $Date: 2004-05-10 12:52:18 $
  */
 public interface DetailView {
 	/**
@@ -37,4 +37,9 @@ public interface DetailView {
 	 * Undo the changes of an Object represented by this GUI.
 	 */
 	void undoObject();
+
+	/**
+	 * Redo the last undoing changes of an Object represented by this GUI.
+	 */
+	void redoObject();
 }
