@@ -15,7 +15,7 @@ package ch.softenvironment.view;
 /**
  * Basic javax.swing.JPanel.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2004-04-27 18:49:23 $
+ * @version $Revision: 1.2 $ $Date: 2004-06-11 20:39:54 $
  */
 public class BasePanel extends javax.swing.JPanel {
 /**
@@ -81,6 +81,6 @@ protected String getResourceString(String propertyName) {
  * @param exception java.lang.Throwable
  */
 protected void handleException(java.lang.Throwable exception) {
-	new ErrorDialog(this, null, exception.toString(), exception);
+	BaseFrame.showException(null, exception);
 }
 }
