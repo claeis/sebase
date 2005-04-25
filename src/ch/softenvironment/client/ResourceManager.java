@@ -22,7 +22,7 @@ import java.util.*;
  * the mapped *.properties files are cached during runtime.
  * 
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2005-03-01 15:29:25 $
+ * @version $Revision: 1.4 $ $Date: 2005-04-25 15:29:27 $
  */
 public class ResourceManager {
 	private static ResourceManager manager = null;
@@ -68,4 +68,33 @@ public static String getResource(java.lang.Class owner, String propertyName) {
 			return bundle.getString(propertyName);
 		}
 	}
+
+/**
+ * Convenience Method.
+ * Often a property ressource ends with ":" in case of a label or without ":"
+ * in case of a Window-Title, Table-Column etc.
+ * Therefore it might be better to add or cut off this character than providing
+ * different Translations for likely the same word.
+ * @param asLabel true->show ":" at end of String; false->suppress ":" at end of String
+ * @see #getResource(java.lang.Class, Locale, String)
+ */
+public static String getResource(java.lang.Class owner, String propertyName, boolean asLabel) {
+	try {
+		String ressource = getInstance().getResource(owner, Locale.getDefault(), propertyName).trim();
+		if (asLabel) {
+			if (ressource.charAt(ressource.length()-1) != ':') {
+			    // add ":"
+				return ressource + ":";
+			}
+		} else {
+			if (ressource.charAt(ressource.length()-1) == ':') {
+			    // cut off ":"
+				return ressource.substring(0, ressource.length()-1);
+			}
+		}
+		return ressource;
+	} catch(NullPointerException e) {
+		return null;
+	}
+}
 }
