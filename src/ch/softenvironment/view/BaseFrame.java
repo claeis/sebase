@@ -25,7 +25,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.20 $ $Date: 2005-03-01 15:31:51 $
+ * @version $Revision: 1.21 $ $Date: 2005-04-25 15:37:13 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -80,7 +80,7 @@ protected void adaptSelection(MouseEvent event, JPopupMenu popupMenu) {
  * @see DetailView#saveObject()
  */
 protected void closeOnSave() {
-	if (getViewOptions().getCloseOnSave()) {
+	if ((getViewOptions() == null) || getViewOptions().getCloseOnSave()) {
 		if (getObjects().size() == 1) {
 			dispose();
 		} // else other model-instances may be changed by same view
@@ -147,13 +147,15 @@ public static String exceptionToString(Throwable exception) {
     return stringWriter.toString();
 }
 /**
- * Export Data of given table into a file.
+ * Export all (if none selected) or selected Data of given table into a file,
+ * where a Filechooser allows selecting File before.
  * The table data is exported in a generic manner,
  * say given table is exported 1:1 to CSV including
  * Header-Data.
  * @param table
+ * @return Path of file saved
  */
-protected final void exportTableData(final JTable table) {
+protected final String exportTableData(final JTable table) {
 	final FileChooser saveDialog =  new FileChooser(/*getSettings().getWorkingDirectory()*/);
 	saveDialog.setDialogTitle(CommonUserAccess.getMniFileSaveAsText());//$NON-NLS-1$
 	saveDialog.addChoosableFileFilter(ch.ehi.basics.view.GenericFileFilter.createCsvFilter());
@@ -176,13 +178,26 @@ protected final void exportTableData(final JTable table) {
 					stream.println();
 
 					// data
-					int rowCount = table.getModel().getRowCount();
-					for (int row=0; row<rowCount; row++) {
-						for (int col=0; col<columnCount; col++) {
-							Object value = table.getModel().getValueAt(row, col);
-							stream.print(StringUtils.getString(value) + separator);
+					int list[] = table.getSelectedRows(); 
+					if (list.length == 0) {
+					    // print all rows
+						int rowCount = table.getModel().getRowCount();
+						for (int row=0; row<rowCount; row++) {
+							for (int col=0; col<columnCount; col++) {
+								Object value = table.getModel().getValueAt(row, col);
+								stream.print(StringUtils.getString(value) + separator);
+							}
+							stream.println();
 						}
-						stream.println();
+					} else {
+						// print selected rows only
+					    for (int i=0; i<list.length; i++) {
+							for (int col=0; col<columnCount; col++) {
+								Object value = table.getModel().getValueAt(list[i], col);
+								stream.print(StringUtils.getString(value) + separator);
+							}
+							stream.println();
+						}
 					}
 
 					outStream.flush();
@@ -196,7 +211,11 @@ protected final void exportTableData(final JTable table) {
 				}
 			}
 		});
+		if ((saveDialog != null) && (saveDialog.getSelectedFile() != null)) {
+			return saveDialog.getSelectedFile().getAbsolutePath();
+		}
 	}
+	return null;
 }
 /**
  * Critical Error. Application must be shut down.
@@ -244,11 +263,10 @@ protected static String getResourceString(java.lang.Class owner, String property
 	return ResourceManager.getResource(owner, propertyName);
 }
 /**
- * Return an NLS-String.
- * @return
+ * Convenience Method.
  */
 protected final String getResourceString(String propertyName) {
-	return getResourceString(this.getClass(), propertyName);
+	return ResourceManager.getResource(this.getClass(), propertyName);
 }
 /**
  * Calculate the screen size
@@ -534,7 +552,7 @@ private void updateStringProperty(java.lang.Class resource, Component component,
 				bean.setValue(nls);
 			} catch(Throwable e) {
 				// it is quite possible to get an exception here, because not all components are translateable
-				// for e.g. ImageIcon's
+				// for e.g. ImageIcon's or language independent Strings like "..."
 				if ((e instanceof MissingResourceException) && 
 						(component instanceof javax.swing.JMenuItem)) {
 					// try CommonUserAccess.properties
@@ -542,10 +560,10 @@ private void updateStringProperty(java.lang.Class resource, Component component,
 						String nls = getResourceString(CommonUserAccess.class, component.getName() + "_" + property);
 						bean.setValue(nls);
 					} catch(Throwable cua) {
-						Tracer.getInstance().debug(this, "updateStringProperty()", "Resource missing: " + e.getLocalizedMessage());
+//						Tracer.getInstance().debug(this, "updateStringProperty()", "Resource missing: " + e.getLocalizedMessage());
 					}
 				} else {
-					Tracer.getInstance().debug(this, "updateStringProperty()", "Resource missing: " + e.getLocalizedMessage());
+//					Tracer.getInstance().debug(this, "updateStringProperty()", "Resource missing: " + e.getLocalizedMessage());
 				}
 			}
 		}
