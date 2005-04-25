@@ -12,11 +12,10 @@ package ch.softenvironment.view;
  * Lesser General Public License for more details.
  */
  
-import ch.softenvironment.util.*;
 /**
  * Output Dialog for application failures.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2005-02-23 16:34:38 $
+ * @version $Revision: 1.6 $ $Date: 2005-04-25 15:38:50 $
  * @deprecated
  */
 class ErrorDialog extends BaseDialog {
@@ -428,7 +427,7 @@ private void setException(Throwable exception) {
 	} else {
 		this.exception = exception;
 		// show minimal presentation
-		getPnlException().setText(exception.toString());
+		getPnlException().setText(exception.getLocalizedMessage());
 		getBtnStacktrace().setEnabled(true);
 	}
 }
@@ -442,17 +441,6 @@ public void setText(String text) {
  * Initialize the Dialog.
  */
 private void setUp(java.awt.Component owner, String title, String message, Throwable original) {
-	initialize();
-	setTitle(title == null ? getResourceString("CTUnexpectedError") : title); //$NON-NLS-1$
-	getPnlErrorText().setText(message);
-	setException(original);
-	setRelativeLocation(owner);
-	show();
-}
-/**
- * Initialize the Dialog.
- */
-private void setUp(java.awt.Window owner, String title, String message, Throwable original) {
 	initialize();
 	setTitle(title == null ? getResourceString("CTUnexpectedError") : title); //$NON-NLS-1$
 	getPnlErrorText().setText(message);
