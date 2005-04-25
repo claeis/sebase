@@ -16,13 +16,14 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * Show Developer failures.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2005-03-12 17:46:42 $
+ * @version $Revision: 1.7 $ $Date: 2005-04-25 15:31:36 $
  */
 public class DeveloperException extends RuntimeException {
 	private String message = null;
 	private String title = null;
 	private String errorObject = null;
 	private String errorMethod = null;
+	private Throwable originalException = null;
 /**
  * Construct a DeveloperException.
  */
@@ -49,7 +50,8 @@ public DeveloperException(Class aClass, String method, String message, String ti
  */
 public DeveloperException(Class aClass, String method, String message, String title, Throwable e) {
 	super();
-
+	this. originalException = e;
+	
 	String msg = message;
 	if (e != null) {
 		msg = msg + "[Original fault: " + e.getMessage() + "]";
@@ -94,8 +96,24 @@ public String getMessage() {
 public String getTitle() {
 	return title;
 }
+/*
 public String toString() {
     String s = getClass().getName();
     return (message != null) ? (s + ": " + message) : s;//$NON-NLS-1$
+}
+*/
+/**
+ * Overwrites
+ */
+public String getLocalizedMessage() {
+    StringBuffer buffer = new StringBuffer();
+/*    if (message != null) {
+        buffer.append("Developer note:\n- " + message);
+    }
+*/
+    if (originalException != null) {
+        buffer.append("\nOriginal exception:\n- " + originalException.getLocalizedMessage());
+    }
+    return buffer.toString();
 }
 }
