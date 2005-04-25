@@ -15,7 +15,7 @@ package ch.softenvironment.view;
 /**
  * NLS-Utility for common resuable User Interface expressions (CUA).
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2005-01-24 10:00:37 $
+ * @version $Revision: 1.6 $ $Date: 2005-04-25 15:38:01 $
  */
 public abstract class CommonUserAccess {
 	public static String getMncViewStatusbarText() {
@@ -171,7 +171,7 @@ public abstract class CommonUserAccess {
 	 * @return
 	 */
 	private static String getResource(String property) {
-		return ch.softenvironment.client.ResourceManager.getInstance().getResource(CommonUserAccess.class, property);
+		return ch.softenvironment.client.ResourceManager.getResource(CommonUserAccess.class, property);
 	}
 	public static String getTitleFileOpen() {
 		return getResource("CTFileOpen");
