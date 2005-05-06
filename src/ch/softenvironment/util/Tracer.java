@@ -25,7 +25,8 @@ package ch.softenvironment.util;
  * Design Pattern: Singleton
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.8 $ $Date: 2005-03-12 17:46:42 $
+ * @version $Revision: 1.9 $ $Date: 2005-05-06 12:40:56 $
+ * @deprecated (will soon be replaced by other Logger)
  */
 public class Tracer {
 	// Mode's
@@ -173,8 +174,8 @@ public void runtimeWarning(Object source, String methodName, String warning) {
  */
 public static java.lang.String[] start(java.lang.String[] args) {
 	int mode = SILENT;	// default
-	java.util.ArrayList ret=new java.util.ArrayList(java.util.Arrays.asList(args));
 	if (args != null) {
+	    java.util.ArrayList ret=new java.util.ArrayList(java.util.Arrays.asList(args));
 		java.util.Iterator it=ret.iterator();
 		while (it.hasNext()) {
 			String option = (String)it.next();
@@ -196,9 +197,12 @@ public static java.lang.String[] start(java.lang.String[] args) {
 				break;
 			}
 		}
+		start((java.io.PrintStream)getConsoleError(), mode);
+		return (java.lang.String[])ret.toArray(new String[0]);
+	} else {
+	    start((java.io.PrintStream)getConsoleError(), mode);
+		return null;
 	}
-	start((java.io.PrintStream)getConsoleError(), mode);
-	return (java.lang.String[])ret.toArray(new String[0]);
 }
 /**
  * Start Tracer and use Console-Error.
