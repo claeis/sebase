@@ -12,15 +12,20 @@ package ch.softenvironment.view;
  * Lesser General Public License for more details.
  */
  
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import ch.ehi.basics.view.*;
 import ch.softenvironment.client.ResourceManager;
 /**
  * TextField representing a File-Name and Chooser-Button.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-09-14 16:56:57 $
+ * @version $Revision: 1.5 $ $Date: 2005-06-05 09:04:42 $
  */
 public class FileNamePanel extends javax.swing.JPanel {
 	private javax.swing.JButton ivjBtnChooseFile = null;
+	private List filters = null;
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
 	private javax.swing.JTextField ivjTxtFileName = null;
 	protected transient ch.softenvironment.view.FileNamePanelListener fieldFileNamePanelListenerEventMulticaster = null;
@@ -84,7 +89,13 @@ private void chooseFile() {
 		FileChooser dialog =  new FileChooser(/*LauncherView.getSettings().getWorkingDirectory()*/);
 		dialog.setDialogTitle(ResourceManager.getInstance().getResource(FileNamePanel.class, "CT_ChooseFile"));//$NON-NLS-1$
 //		dialog.setSelectedFile(new File(fileName));
-//		dialog.addChoosableFileFilter(HTMLUtility.createHtmlFilter());
+		if (filters != null) {
+		    Iterator it = filters.iterator();
+		    while(it.hasNext()) {
+				dialog.addChoosableFileFilter((GenericFileFilter)it.next());
+		    }
+		}
+
 		if (dialog.showOpenDialog(this) == FileChooser.APPROVE_OPTION) {
 /*		    FileOutputStream out = new FileOutputStream(dialog.getSelectedFile()); //dialog.getSelectedFile().getName());
 		   	PrintStream s = new PrintStream(out);
@@ -266,5 +277,15 @@ public void removeFileNamePanelListener(ch.softenvironment.view.FileNamePanelLis
  */
 public void setText(java.lang.String arg1) {
 	getTxtFileName().setText(arg1);
+}
+/**
+ * Will be used at FileChoosing.
+ * @param filter
+ */
+public void add(GenericFileFilter filter) {
+    if (filters == null) {
+        filters = new ArrayList();
+    }
+    filters.add(filter);
 }
 }
