@@ -14,8 +14,8 @@ package ch.softenvironment.client;
  
 /**
  * Utility to manage opened GUI's for associated Object's.
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-10-26 19:07:47 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.4 $ $Date: 2005-06-05 09:03:20 $
  */
 public class ViewManager {
 	java.util.Map searchViews = new java.util.HashMap();

@@ -14,8 +14,8 @@ package ch.softenvironment.client;
  
 /**
  * Interface for a minimal UserProfile resp. User-Settings for a specific Application.
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2004-05-08 15:21:54 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2005-06-05 09:03:20 $
  */
 public interface UserSettings {
 /**

@@ -22,7 +22,7 @@ import java.util.*;
  * the mapped *.properties files are cached during runtime.
  * 
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2005-04-25 15:29:27 $
+ * @version $Revision: 1.5 $ $Date: 2005-06-05 09:03:20 $
  */
 public class ResourceManager {
 	private static ResourceManager manager = null;
@@ -39,22 +39,30 @@ public class ResourceManager {
 		}
 		return manager;
 	}
-/**
- * Convenience Method.
- * @see #getResource(java.lang.Class, Locale, String)
- */
-public static String getResource(java.lang.Class owner, String propertyName) {
-	return getInstance().getResource(owner, Locale.getDefault(), propertyName);
-}
+	/**
+	 * Convenience Method.
+	 * @see #getResource(java.lang.Class, Locale, String, ClassLoader)
+	 */
+	public static String getResource(java.lang.Class owner, String propertyName, ClassLoader loader) {
+	    return getInstance().getResource(owner, Locale.getDefault(), propertyName, loader);
+	}
+	/**
+	 * Convenience Method.
+	 * @see #getResource(java.lang.Class, Locale, String, ClassLoader)
+	 */
+	public static String getResource(java.lang.Class owner, String propertyName) {
+		return getInstance().getResource(owner, Locale.getDefault(), propertyName, null);
+	}
 	/**
 	 * Return NLS-String for a certain Property.
 	 * @param holder A <holder-Class>[_<language>].properties file must exist
 	 * @param locale
 	 * @param propertyName
+	 * @param loader null for default ClassLoader
 	 * @return String NLS-String
 	 * @see ch.ehi.basics.i18n.ResourceBundle
 	 */
-	public String getResource(java.lang.Class holder, Locale locale, String propertyName) throws MissingResourceException {
+	public String getResource(java.lang.Class holder, Locale locale, String propertyName, ClassLoader loader) throws MissingResourceException {
 		if (!locale.equals(currentLocale)) {
 			// reset cached resources
 			resources = new HashMap();
@@ -63,12 +71,16 @@ public static String getResource(java.lang.Class owner, String propertyName) {
 		if (resources.containsKey(holder)) {
 			return ((ResourceBundle)resources.get(holder)).getString(propertyName);
 		} else {
-			ResourceBundle bundle = ch.ehi.basics.i18n.ResourceBundle.getBundle(holder, locale);
+			ResourceBundle bundle = null;
+			if (loader == null) {
+			    bundle = ch.ehi.basics.i18n.ResourceBundle.getBundle(holder, locale);
+			} else {
+			     bundle = ch.ehi.basics.i18n.ResourceBundle.getBundle(holder, locale, loader);
+			}
 			resources.put(holder, bundle);
 			return bundle.getString(propertyName);
 		}
 	}
-
 /**
  * Convenience Method.
  * Often a property ressource ends with ":" in case of a label or without ":"
@@ -80,7 +92,7 @@ public static String getResource(java.lang.Class owner, String propertyName) {
  */
 public static String getResource(java.lang.Class owner, String propertyName, boolean asLabel) {
 	try {
-		String ressource = getInstance().getResource(owner, Locale.getDefault(), propertyName).trim();
+		String ressource = getInstance().getResource(owner, Locale.getDefault(), propertyName, null).trim();
 		if (asLabel) {
 			if (ressource.charAt(ressource.length()-1) != ':') {
 			    // add ":"

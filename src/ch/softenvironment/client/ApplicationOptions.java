@@ -27,8 +27,8 @@ import ch.softenvironment.util.Tracer;
 /**
  * Manage the Application Settings by Properties file.
  *
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2005-02-03 14:20:58 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.3 $ $Date: 2005-06-05 09:03:18 $
  */
 public class ApplicationOptions extends java.util.Properties implements UserSettings {
 	// values for Key-Values
@@ -102,51 +102,11 @@ protected ApplicationOptions(String filename, java.util.Properties defaults) {
 
 		FileInputStream inputStream = new FileInputStream(filename);
 		/*tmp=*/ super.load(inputStream);
-
-/*
-		// try to reuse given keys
-		// copy mechanism makes sure newer Versions of this Class
-		// with additional keys cause no problems
-		java.util.Iterator keys = getKeySet().iterator();
-		while (keys.hasNext()) {
-			String key = (String)keys.next();
-			if (tmp.containsKey(key)) {
-				userSettings.setProperty(key, tmp.getProperty(key));
-			}
-		}
-*/
 	} catch(FileNotFoundException fe) {
 		Tracer.getInstance().runtimeWarning(ApplicationOptions.class, "load()", "File not found: " + fe.getLocalizedMessage());
 	} catch(IOException ioe) {
 	    Tracer.getInstance().runtimeWarning(ApplicationOptions.class, "load()", "IO failure: " + ioe.getLocalizedMessage());
 	}
-}
-/**
- * Create new Default Settings.
- */
-protected static java.util.Properties createDs() {
-	ApplicationOptions defaults = new ApplicationOptions();
-
-	// create Default
-	defaults.setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
-	defaults.setBackgroundColor(java.awt.Color.white);
-//	defaults.setFont("Default-PLAIN-9");
-	defaults.setForegroundColor(java.awt.Color.black);
-	defaults.setImportDirectory(System.getProperty(HOME_DIRECTORY));
-//	defaults.setLanguage(java.util.Locale.GERMAN.getLanguage());
-//	defaults.setCountry("CH");
-	
-	defaults.setShowStatusBar(Boolean.TRUE);
-	defaults.setShowToolBar(Boolean.TRUE);
-	defaults.setWorkingDirectory(System.getProperty(HOME_DIRECTORY));
-	defaults.setLastFiles(new ArrayList());
-
-	defaults.setWindowHeight(new Integer(600));
-	defaults.setWindowWidth(new Integer(800));
-	defaults.setWindowX(new Integer(10));
-	defaults.setWindowY(new Integer(10));
-
-	return defaults;
 }
 /**
  * Return whether the User is allowed to use Application or not.
