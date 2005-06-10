@@ -15,7 +15,7 @@ package ch.softenvironment.view;
 /**
  * NLS-Utility for common resuable User Interface expressions (CUA).
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2005-04-25 15:38:01 $
+ * @version $Revision: 1.7 $ $Date: 2005-06-10 16:11:14 $
  */
 public abstract class CommonUserAccess {
 	public static String getMncViewStatusbarText() {
@@ -41,6 +41,9 @@ public abstract class CommonUserAccess {
 	}
 	public static String getMniEditCutText() {
 		return getResource("MniEditCut_text");
+	}
+	public static String getMniEditFindText() {
+		return getResource("MniEditFindWindow_text");
 	}
 	public static String getMniEditFindReplaceText() {
 		return getResource("MniEditFindReplaceWindow_text");

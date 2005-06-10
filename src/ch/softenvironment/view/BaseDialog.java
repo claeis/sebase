@@ -1,5 +1,4 @@
 package ch.softenvironment.view;
-
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,45 +13,35 @@ package ch.softenvironment.view;
 
 import java.awt.*;
 
+import javax.swing.JFrame;
 import ch.softenvironment.client.ResourceManager;
 import ch.softenvironment.util.Tracer;
 /**
  * Template-Dialog defining minimal functionality.
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.9 $ $Date: 2005-03-01 15:31:51 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.10 $ $Date: 2005-06-10 16:10:50 $
  */
 public abstract class BaseDialog extends javax.swing.JDialog {
 	private javax.swing.JPanel ivjJDialogContentPane = null;
 	private boolean saved = false;
+	private ch.softenvironment.view.ViewOptions viewOptions = null;
 /**
  * BaseDialog constructor comment.
- * @param owner java.awt.Frame
- * @param title java.lang.String
+ * @param owner java.awt.Component
  * @param modal boolean
  */
-public BaseDialog(java.awt.Dialog owner, String title, boolean modal) {
-	super(owner, title, modal);
-	setRelativeLocation(owner);
-	initialize();
+public BaseDialog(Component owner, boolean modal) {
+	this(owner, modal, null);
 }
 /**
  * BaseDialog constructor comment.
- * @param owner java.awt.Frame
- * @param title java.lang.String
+ * @param owner java.awt.Component
  * @param modal boolean
+ * @param viewOptions
  */
-public BaseDialog(Frame owner, String title, boolean modal) {
-	super(owner, title, modal);
-	setRelativeLocation(owner);
-	initialize();
-}
-/**
- * BaseDialog constructor comment.
- * @param owner java.awt.Frame
- * @param modal boolean
- */
-public BaseDialog(Frame owner, boolean modal) {
-	super(owner, modal);
+public BaseDialog(Component owner, boolean modal, ViewOptions viewOptions) {
+	super((JFrame)null, modal);
+	this.viewOptions = viewOptions;
 	setRelativeLocation(owner);
 	initialize();
 }
@@ -99,6 +88,21 @@ protected void genericPopupDisplay(java.awt.event.MouseEvent event, javax.swing.
    	}
 }
 /**
+ * Overwrites.
+ */
+public void dispose() {
+	if (getViewOptions() != null) {
+	    getViewOptions().getViewManager().checkOut(this);
+	}
+	super.dispose();
+}
+/**
+ * @see BaseFrame#getViewOptions()
+ */
+protected final ViewOptions getViewOptions() {
+	return viewOptions;
+}
+/**
  * Return Apply-Button Label-String.
  */
 protected static String getApplyString() {
@@ -117,10 +121,10 @@ protected static String getCancelString() {
 	return getResourceString(BaseDialog.class, "BtnCancel_text");
 }
 /**
- * Return New-Button Label-String.
+ * @deprecated
  */
 protected String getChangeWindowString() {
-	return getResourceString(BaseDialog.class, "BtnChangeWindow_text");
+	return CommonUserAccess.getMniEditChangeWindowText(); //getResourceString(BaseDialog.class, "BtnChangeWindow_text");
 }
 /**
  * Return Description Label-String.
@@ -156,17 +160,10 @@ private javax.swing.JPanel getJDialogContentPane() {
 	return ivjJDialogContentPane;
 }
 /**
- * Return New-Button Label-String.
- * @see DataPanel
+ * @deprecated
  */
 protected String getNewString() {
-	return getResourceString(BaseDialog.class, "BtnNew_text");
-}
-/**
- * Return New-Button Label-String.
- */
-protected String getNewWindowString() {
-	return getResourceString(BaseDialog.class, "BtnNewWindow_text");
+	return CommonUserAccess.getMniFileNewText(); //getResourceString(BaseDialog.class, "BtnNew_text");
 }
 /**
  * Return OK-Button Label-String.
@@ -187,16 +184,10 @@ protected static String getResourceString(java.lang.Class resourceClass, String 
 	return ResourceManager.getResource(resourceClass, propertyName);
 }
 /**
- * @deprecated
+ * Convenience method.
  */
 protected String getResourceString(String propertyName) {
 	return ResourceManager.getResource(this.getClass(), propertyName);
-}
-/**
- * Return Button Label-String.
- */
-protected String getSearchWindowString() {
-	return getResourceString(BaseDialog.class, "BtnSearchWindow_text");
 }
 /**
  * Popup an error Dialog.
@@ -299,6 +290,7 @@ protected void undo() {
  * @param owner Component (for e.g. JPanel)
  * @param title java.lang.String
  * @param modal boolean
+ * @deprecated
  */
 public BaseDialog(java.awt.Component owner, String title, boolean modal) {
 	super((javax.swing.JFrame)null, title, modal);

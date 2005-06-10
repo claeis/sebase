@@ -15,7 +15,7 @@ package ch.softenvironment.view;
 /**
  * Product Info Dialog.
  * @author: @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2004-08-25 16:00:33 $
+ * @version $Revision: 1.5 $ $Date: 2005-06-10 16:11:54 $
  */
 public class AboutDialog extends BaseDialog {
 	private javax.swing.JPanel ivjBaseDialogContentPane = null;
@@ -32,7 +32,7 @@ public class AboutDialog extends BaseDialog {
  * @param modal boolean
  */
 public AboutDialog(java.awt.Frame owner, String application, String version, String copyrightPeriod, String licence) {
-	super(owner, null, true);
+	super(owner, true);
 	initialize();
 
 	setTitle(getResourceString("DlgTitle") + " " + application);

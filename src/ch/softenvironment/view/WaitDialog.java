@@ -19,7 +19,7 @@ import ch.softenvironment.util.Tracer;
  * Wait-Dialog for busy actions.
  * Design Pattern: Singleton
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2005-03-01 15:31:51 $
+ * @version $Revision: 1.8 $ $Date: 2005-06-10 16:13:16 $
  * @see BaseFrame#showBusy()
  */
 public class WaitDialog extends BaseDialog {
@@ -43,9 +43,9 @@ public class WaitDialog extends BaseDialog {
  */
 private WaitDialog(java.awt.Component owner, String title) {
 	super(owner,
-	        title,
+//	        title,
 			false /* otherwise will not terminate */);
-
+	setTitle(title);
 	initialize();
 //	setTitle(title == null ? getResourceString(WaitDialog.class, "DlgTitle") : title);
 }
