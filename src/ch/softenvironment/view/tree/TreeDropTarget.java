@@ -20,21 +20,22 @@ import java.awt.datatransfer.*;
 import javax.swing.*;
 import javax.swing.tree.*;
 
-import ch.softenvironment.util.Tracer;
-import ch.softenvironment.util.UserException;
+import ch.softenvironment.view.BaseFrame;
 
 /**
- * Tool for Mouse-Drop withing a JTree.
+ * Tool for Mouse-Drop within a JTree.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2005-06-15 08:39:21 $
+ * @version $Revision: 1.2 $ $Date: 2005-06-15 11:33:35 $
  */
 class TreeDropTarget implements DropTargetListener {
-	private DropTarget target = null;
+//	private DropTarget target = null;
 	private AutoScrollingTree targetTree = null;
 
 	public TreeDropTarget(AutoScrollingTree tree) {
 		targetTree = tree;
-		target = new DropTarget(targetTree, this);
+		
+		// register tree as DropTarget @see #drop()
+		/*target =*/ new DropTarget(targetTree, this);
 	}
 
   // Drop Event Handlers
@@ -70,9 +71,9 @@ class TreeDropTarget implements DropTargetListener {
    */
   public void drop(DropTargetDropEvent dtde) {
     Point pt = dtde.getLocation();
-    DropTargetContext dtc = dtde.getDropTargetContext();
-    JTree tree = (JTree)dtc.getComponent();
-    TreePath parentpath = tree.getClosestPathForLocation(pt.x, pt.y);
+//  DropTargetContext dtc = dtde.getDropTargetContext();
+//  JTree tree = (JTree)dtc.getComponent();
+    TreePath parentpath = targetTree.getClosestPathForLocation(pt.x, pt.y);
     Object /*DefaultMutableTreeNode*/ parent = /*(DefaultMutableTreeNode)*/ parentpath.getLastPathComponent();
     if (targetTree.getUtility().isLeaf(parent)) {
       dtde.rejectDrop();
@@ -87,7 +88,7 @@ class TreeDropTarget implements DropTargetListener {
 		  dtde.acceptDrop(dtde.getDropAction());
 		  TreePath p = (TreePath)tr.getTransferData(flavors[i]);
 		  Object /*DefaultMutableTreeNode*/ node = /*(DefaultMutableTreeNode)*/ p.getLastPathComponent();
-		  NavigationTreeModel /*DefaultTreeModel*/ model = (NavigationTreeModel)tree.getModel();
+//		  NavigationTreeModel /*DefaultTreeModel*/ model = (NavigationTreeModel)targetTree.getModel();
 		  targetTree.getUtility().relocateElement(node, parent); //model.insertNodeInto(node, parent, 0);
 		  dtde.dropComplete(true);
 		  return;
@@ -95,8 +96,8 @@ class TreeDropTarget implements DropTargetListener {
       }
       dtde.rejectDrop();
     } catch(Throwable e) {
-      dtde.rejectDrop();
-Tracer.getInstance().runtimeWarning(TreeDropTarget.class, "drop()", "Drag/Drop failed: " + e.getLocalizedMessage());
+//      dtde.rejectDrop();
+        BaseFrame.showException(targetTree, e); // part of view mechanism => Dialog is ok here
     }
   }
 }

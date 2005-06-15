@@ -21,13 +21,11 @@ import javax.swing.tree.*;
 /**
  * Tool for Mouse-Drag withing a JTree.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2005-06-15 08:39:21 $
+ * @version $Revision: 1.2 $ $Date: 2005-06-15 11:33:29 $
  */
 class TreeDragSource implements DragSourceListener, DragGestureListener {
     private DragSource source = null;
     private DragGestureRecognizer recognizer = null;
-//    private TransferableTreeNode transferable = null;
-//    private Object /*DefaultMutableTreeNode*/ oldNode = null;
     private AutoScrollingTree sourceTree = null;
 
     public TreeDragSource(AutoScrollingTree tree, final int actions) {
@@ -45,10 +43,9 @@ class TreeDragSource implements DragSourceListener, DragGestureListener {
         // We can't move the root node or an empty selection
         return;
       }
-      Object oldNode = /*(DefaultMutableTreeNode)*/path.getLastPathComponent();
+      Object /*DefaultMutableTreeNode*/ oldNode = /*(DefaultMutableTreeNode)*/path.getLastPathComponent();
       TransferableTreeNode transferable = new TransferableTreeNode(path);
-	  // If you support dropping the node anywhere, you should probably
-      // start with a valid move cursor:
+	  // if you support dropping the node anywhere, you should probably start with a valid move cursor
       source.startDrag(dge, DragSource.DefaultMoveDrop /*DragSource.DefaultMoveDrop*/, transferable, this);
     }
 
@@ -62,8 +59,9 @@ class TreeDragSource implements DragSourceListener, DragGestureListener {
      */
     public void dragDropEnd(DragSourceDropEvent dsde) {
       // to support move or copy, we have to check which occurred:
-//    if (dsde.getDropSuccess() && (dsde.getDropAction() == DnDConstants.ACTION_MOVE)) {
-//        ((DefaultTreeModel)sourceTree.getModel()).removeNodeFromParent(oldNode);
-//      }
+/*    if (dsde.getDropSuccess() && (dsde.getDropAction() == DnDConstants.ACTION_MOVE)) {
+        ((DefaultTreeModel)sourceTree.getModel()).removeNodeFromParent(oldNode);
+      }
+*/
     }
 }
