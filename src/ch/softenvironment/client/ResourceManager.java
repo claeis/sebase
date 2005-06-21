@@ -13,6 +13,11 @@ package ch.softenvironment.client;
  */
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import ch.softenvironment.util.DeveloperException;
+import ch.softenvironment.util.Tracer;
 
 /**
  * Manage a Map of Resources, resp *.properties for different Classes 
@@ -22,7 +27,7 @@ import java.util.*;
  * the mapped *.properties files are cached during runtime.
  * 
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2005-06-05 09:03:20 $
+ * @version $Revision: 1.6 $ $Date: 2005-06-21 14:47:09 $
  */
 public class ResourceManager {
 	private static ResourceManager manager = null;
@@ -63,22 +68,36 @@ public class ResourceManager {
 	 * @see ch.ehi.basics.i18n.ResourceBundle
 	 */
 	public String getResource(java.lang.Class holder, Locale locale, String propertyName, ClassLoader loader) throws MissingResourceException {
+	    java.util.ResourceBundle bundle = getBundle(holder, locale, loader);
+	    if (bundle == null) {
+	        throw new DeveloperException(this, "getResource(Class, Locale, ClassLoader)", "no bundle for holder=" + holder.getName());
+	    }
+		return bundle.getString(propertyName);
+	}
+	/**
+	 * Return cached bundle or instantiate it otherwise.
+	 * @param holder
+	 * @param locale
+	 * @param loader
+	 * @return
+	 */
+	private java.util.ResourceBundle getBundle(Class holder, Locale locale, ClassLoader loader) {
 		if (!locale.equals(currentLocale)) {
 			// reset cached resources
 			resources = new HashMap();
 			currentLocale = locale;
 		}
 		if (resources.containsKey(holder)) {
-			return ((ResourceBundle)resources.get(holder)).getString(propertyName);
+			return ((java.util.ResourceBundle)resources.get(holder));
 		} else {
-			ResourceBundle bundle = null;
+			java.util.ResourceBundle bundle = null;
 			if (loader == null) {
 			    bundle = ch.ehi.basics.i18n.ResourceBundle.getBundle(holder, locale);
 			} else {
-			     bundle = ch.ehi.basics.i18n.ResourceBundle.getBundle(holder, locale, loader);
+			    bundle = ch.ehi.basics.i18n.ResourceBundle.getBundle(holder, locale, loader);
 			}
 			resources.put(holder, bundle);
-			return bundle.getString(propertyName);
+			return bundle;
 		}
 	}
 /**
@@ -92,21 +111,58 @@ public class ResourceManager {
  */
 public static String getResource(java.lang.Class owner, String propertyName, boolean asLabel) {
 	try {
-		String ressource = getInstance().getResource(owner, Locale.getDefault(), propertyName, null).trim();
-		if (asLabel) {
-			if (ressource.charAt(ressource.length()-1) != ':') {
-			    // add ":"
-				return ressource + ":";
-			}
-		} else {
-			if (ressource.charAt(ressource.length()-1) == ':') {
-			    // cut off ":"
-				return ressource.substring(0, ressource.length()-1);
-			}
-		}
-		return ressource;
+		String resource = getInstance().getResource(owner, Locale.getDefault(), propertyName, null).trim();
+		return convertLabel(resource, asLabel);
 	} catch(NullPointerException e) {
 		return null;
 	}
+}
+/**
+ * Return the first translation found for key matching given pattern.
+ * This might be useful for generic mappings for e.g. from an Object properties
+ * to a Label corresponding in a GUI.
+ * @param owner
+ * @param pattern (for e.g. "LblMy[a-zA-Z0-9]*_text")
+ * @param asLabel
+ * @return
+ * @throws MissingResourceException
+ * @see http://java.sun.com/j2se/1.4.2/docs/api/java/util/regex/Pattern.html
+ */
+public static String getResourceMatch(java.lang.Class owner, String pattern, boolean asLabel) throws MissingResourceException {
+    java.util.ResourceBundle bundle = getInstance().getBundle(owner, Locale.getDefault(), null);
+    Enumeration keys = bundle.getKeys();
+    Pattern p = Pattern.compile(pattern); //"Lbl*myKey*_text"
+    while (keys.hasMoreElements()) {
+        String key = (String)keys.nextElement();
+        Matcher m = p.matcher(key);
+        if (m.matches()) {
+            return convertLabel(bundle.getString(key), asLabel);
+        }
+    }
+    throw new MissingResourceException("No key matching pattern: " + pattern, owner.getName(), pattern);
+}
+/**
+ * Add or cut off ':'.
+ * @param resource
+ * @param asLabel
+ * @return
+ */
+private static String convertLabel(String resource, boolean asLabel) {
+    if (resource == null) {
+        return resource;
+    }
+    
+    if (asLabel) {
+		if (resource.charAt(resource.length()-1) != ':') {
+		    // add ":"
+			return resource + ":";
+		}
+	} else {
+		if (resource.charAt(resource.length()-1) == ':') {
+		    // cut off ":"
+			return resource.substring(0, resource.length()-1);
+		}
+	}
+    return resource;
 }
 }
