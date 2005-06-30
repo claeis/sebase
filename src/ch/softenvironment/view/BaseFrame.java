@@ -25,7 +25,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.21 $ $Date: 2005-04-25 15:37:13 $
+ * @version $Revision: 1.22 $ $Date: 2005-06-30 07:27:35 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -406,14 +406,13 @@ protected final void showBusy(final Runnable block) {
 public final static void showException(Component owner, java.lang.Throwable exception) {
 	try {
 		// update log
-		Tracer.getInstance().runtimeWarning(owner, "handleException(..) -> stackTrace follows...", exception.getLocalizedMessage());//$NON-NLS-1$
+		Tracer.getInstance().runtimeWarning(owner, "showException(..) -> stackTrace follows...", exception.getLocalizedMessage());//$NON-NLS-1$
 		exception.printStackTrace(System.out);
 
 		// inform user
 		String title = null; //$NON-NLS-1$
 		String message = getResourceString(BaseFrame.class, "CWTopLevelHandler"); //$NON-NLS-1$
 		if (exception instanceof NumberFormatException) {
-			
 			if ((exception.getMessage().length() == 0) || exception.getMessage().equals("empty String") || (exception.getMessage().equals("-"))) {//$NON-NLS-2$//$NON-NLS-1$
 Tracer.getInstance().developerWarning(BaseFrame.class, "showException(..)", "exception message might change -> use another recognition");//$NON-NLS-2$//$NON-NLS-1$
 				Tracer.getInstance().runtimeWarning(BaseFrame.class, "showException(.)", "NumberFormatException ignored: " + exception.toString());

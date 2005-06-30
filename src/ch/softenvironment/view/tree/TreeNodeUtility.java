@@ -19,7 +19,7 @@ package ch.softenvironment.view.tree;
  * Interface for a utility using an AutoScrollingJTree.
  * 
  * @author Peter Hirzel <i>soft</i>Environment 
- * @version $Revision: 1.1 $ $Date: 2005-06-15 08:39:21 $
+ * @version $Revision: 1.2 $ $Date: 2005-06-30 07:29:02 $
  */
 public interface TreeNodeUtility {
 /**
@@ -57,6 +57,13 @@ Object getRoot();
  * Returns the a ToolTip if cursor is on node.
  */
 String getToolTip(Object node);
+/**
+ * Return whether child my be owned by owner. 
+ * @param child
+ * @param owner
+ * @return non-acceptable reason or null if ok
+ */
+public String isAddable(Object child, Object owner);
 /**
  * Return whether Node must not have any children.
  */

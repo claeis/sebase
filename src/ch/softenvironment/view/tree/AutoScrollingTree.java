@@ -15,12 +15,13 @@ package ch.softenvironment.view.tree;
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 import java.awt.dnd.DnDConstants;
+
 /**
  * Extension to JTree to enable autoscrolling and Drag and Drop.
  * 
  * @author ce
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2005-06-15 08:39:21 $
+ * @version $Revision: 1.2 $ $Date: 2005-06-30 07:29:01 $
  */
 public class AutoScrollingTree extends javax.swing.JTree implements java.awt.dnd.Autoscroll {
     private int margin = 12;
@@ -84,7 +85,7 @@ public void startEditingAtPath(javax.swing.tree.TreePath path) {
 //	((javax.swing.CellRendererPane)c).setBackground(java.awt.Color.black);
 }
 /**
- * Convencience Method.
+ * Convenience Method.
  */
 protected TreeNodeUtility getUtility() {
     return ((NavigationTreeModel)getModel()).getUtility();

@@ -19,18 +19,17 @@ import javax.swing.tree.*;
 /**
  * Tool for Mouse-Drag withing a JTree.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2005-06-15 08:39:21 $
+ * @version $Revision: 1.2 $ $Date: 2005-06-30 07:29:01 $
  */
 class TransferableTreeNode implements Transferable {
-
-  public static final DataFlavor TREE_PATH_FLAVOR = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType,
+  protected static final DataFlavor TREE_PATH_FLAVOR = new DataFlavor(DataFlavor.javaJVMLocalObjectMimeType,
 							     									"Tree Path");
   private DataFlavor flavors[] = { TREE_PATH_FLAVOR };
   private TreePath path = null;
 
-  public TransferableTreeNode(TreePath tp) {
+  public TransferableTreeNode(TreePath path) {
       super();
-      path = tp;
+      this.path = path;
   }
   public synchronized Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
     if (isDataFlavorSupported(flavor)) {
@@ -43,7 +42,8 @@ class TransferableTreeNode implements Transferable {
     return flavors;
   }
   public boolean isDataFlavorSupported(DataFlavor flavor) {
-    //return (flavor.getRepresentationClass() == TreePath.class);
-    return true;
+    return (flavor != null) && 
+    		flavor.getMimeType().equals(TREE_PATH_FLAVOR.getMimeType()) &&
+    		flavor.getHumanPresentableName().equals(TREE_PATH_FLAVOR.getHumanPresentableName());
   }
 }

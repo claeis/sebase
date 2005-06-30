@@ -15,7 +15,7 @@ package ch.softenvironment.client;
 /**
  * Utility to manage opened GUI's for associated Object's.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2005-06-05 09:03:20 $
+ * @version $Revision: 1.5 $ $Date: 2005-06-30 07:25:23 $
  */
 public class ViewManager {
 	java.util.Map searchViews = new java.util.HashMap();
@@ -62,7 +62,7 @@ public boolean activateView(java.util.List objects) {
 		}
 		return false;
 	} else {
-ch.softenvironment.util.Tracer.getInstance().nyi(this, "activateView(List)", "Multi-Objects representables are not focused yet!)");
+//TODO NYI: Multi-Objects representables are not focused yet!
 
 		// difficulty: View may represent one or several of given objects
 		//				but may also contain some other objects

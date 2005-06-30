@@ -1,5 +1,9 @@
 package ch.softenvironment.view;
 
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Toolkit;
+
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,9 +19,10 @@ package ch.softenvironment.view;
 /**
  * Basic javax.swing.JPanel.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2005-03-01 15:31:51 $
+ * @version $Revision: 1.6 $ $Date: 2005-06-30 07:27:43 $
  */
 public class BasePanel extends javax.swing.JPanel {
+    private Image image = null;
 /**
  * BasePanel constructor comment.
  */
@@ -105,5 +110,33 @@ protected final void showBusy(final Runnable block) {
  */
 protected final void showProgress(final int percentage, final String currentActivity) {
 	WaitDialog.updateProgress(percentage, currentActivity);
+}
+/**
+ * Display given image as Background-Image on Panel.
+ * @param path
+ * @see #paintComponent()
+ */
+public void setImage(Image image) {
+//    image = Toolkit.getDefaultToolkit().createImage(path);
+    this.image = image;
+}
+/**
+ * Overwrites.
+ * @see #setImage()
+ */
+public void paintComponent(Graphics g) {
+    super.paintComponent(g);
+    if (image != null) {
+/*
+        int w = getWidth();
+        int h = getHeight();
+        int x = (w - imageWidth)/2;
+        int y = (h - imageHeight)/2;
+*/
+	    g.drawImage(image,
+	    		new Double(g.getClipBounds().getCenterX() - (image.getWidth(this) / 2)).intValue(),
+	    		new Double(g.getClipBounds().getCenterY() - (image.getHeight(this) / 2)).intValue(),
+	    		this);
+    }
 }
 }

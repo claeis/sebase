@@ -27,7 +27,7 @@ import java.util.Iterator;
  *
  * @author ce
  * @author Peter Hirzel <i>soft</i>Environment 
- * @version $Revision: 1.1 $ $Date: 2005-06-15 08:39:21 $
+ * @version $Revision: 1.2 $ $Date: 2005-06-30 07:29:01 $
  */
 public class NavigationTreeModel implements javax.swing.tree.TreeModel, java.beans.PropertyChangeListener {
 	private TreeNodeUtility utility = null;
@@ -83,11 +83,12 @@ public class NavigationTreeModel implements javax.swing.tree.TreeModel, java.bea
     }
     /** 
      * Invoked after a node (or a set of siblings) has changed in some way.
+     * @see #propertyChange()
      */
     protected void fireTreeNodesChanged(Object node){
 //ch.softenvironment.util.Tracer.getInstance().debug(this, "fireTreeNodesChanged(Element)", "node CHANGED");
         int len = treeModelListeners.size();
-        TreeModelEvent e;
+        TreeModelEvent e = null;
         if (node.equals(utility.getRoot())) {
           e = new TreeModelEvent(this, getTreePath(node));
         } else {
@@ -103,17 +104,20 @@ public class NavigationTreeModel implements javax.swing.tree.TreeModel, java.bea
     /** 
      * Invoked after nodes have been inserted into the tree.
      */
-    protected void fireTreeNodesInserted(Object e){
+    protected void fireTreeNodesInserted(Object e) {
+//TODO NYI: ((TreeModelListener)...).treeNodesInserted(new TreeModelEvent());
 //ch.softenvironment.util.Tracer.getInstance().debug(this, "fireTreeNodesInserted(Element)", "node INSERTED");
     }
     /**
      * Invoked after nodes have been removed from the tree.
      */
-    protected void fireTreeNodesRemoved(Object e){
+    protected void fireTreeNodesRemoved(Object e) {
+//TODO NYI: ((TreeModelListener)...).treeNodesRemoved(new TreeModelEvent());
 //ch.softenvironment.util.Tracer.getInstance().debug(this, "fireTreeNodesRemoved(Element)", "node REMOVED");
     }
     /**
      * Invoked after the tree has drastically changed structure from a given node down.
+     * @see #propertyChange()
      */
     protected void fireTreeStructureChanged(Object node) {
 //ch.softenvironment.util.Tracer.getInstance().debug(this, "fireTreeStructureChanged(Element)", "node STRUCTURE CHANGED");

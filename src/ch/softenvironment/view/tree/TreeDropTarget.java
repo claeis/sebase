@@ -20,17 +20,32 @@ import java.awt.datatransfer.*;
 import javax.swing.*;
 import javax.swing.tree.*;
 
+
+import ch.softenvironment.view.BaseDialog;
 import ch.softenvironment.view.BaseFrame;
 
 /**
  * Tool for Mouse-Drop within a JTree.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2005-06-15 11:33:35 $
+ * @version $Revision: 1.3 $ $Date: 2005-06-30 07:29:02 $
  */
 class TreeDropTarget implements DropTargetListener {
 //	private DropTarget target = null;
 	private AutoScrollingTree targetTree = null;
 
+	/**
+	 * Return the source node to be dropped somewhere else.
+	 * @param dtde
+	 * @deprecated
+	 */
+	private static Object getNodeForEvent(DropTargetDragEvent dtde) {
+	  Point p = dtde.getLocation();
+	  DropTargetContext dtc = dtde.getDropTargetContext();
+	  JTree tree = (JTree)dtc.getComponent(); // by default => targetTree
+	  TreePath path = tree.getClosestPathForLocation(p.x, p.y);
+	  return /*(TreeNode)*/path.getLastPathComponent();
+	}
+	
 	public TreeDropTarget(AutoScrollingTree tree) {
 		targetTree = tree;
 		
@@ -38,65 +53,54 @@ class TreeDropTarget implements DropTargetListener {
 		/*target =*/ new DropTarget(targetTree, this);
 	}
 
-  // Drop Event Handlers
-  private Object getNodeForEvent(DropTargetDragEvent dtde) {
-    Point p = dtde.getLocation();
-    DropTargetContext dtc = dtde.getDropTargetContext();
-    JTree tree = (JTree)dtc.getComponent();
-    TreePath path = tree.getClosestPathForLocation(p.x, p.y);
-    return /*(TreeNode)*/path.getLastPathComponent();
-  }
   public void dragEnter(DropTargetDragEvent dtde) {
-    Object /*TreeNode*/ node = getNodeForEvent(dtde);
-    if (targetTree.getUtility().isLeaf(node)) {
-      dtde.rejectDrag();
-    } else {
-      // start by supporting move operations
-      dtde.acceptDrag(dtde.getDropAction() /*DnDConstants.ACTION_MOVE*/);
-    }
+//Tracer.getInstance().debug("dragEnter");
+//    Object /*TreeNode*/ dropTargetNode = getNodeForEvent(dtde);
+/*    if (targetTree.getUtility().isAddable(dropTargetNode)) {
+        dtde.rejectDrag();
+      } else {
+        // start by supporting move operations
+        dtde.acceptDrag(dtde.getDropAction()); //=DnDConstants.ACTION_MOVE
+      }
+*/
   }
-  public void dragOver(DropTargetDragEvent dtde) {
-    Object /*TreeNode*/ node = getNodeForEvent(dtde);
-    if (targetTree.getUtility().isLeaf(node)) {
-      dtde.rejectDrag();
-    } else {
-      // start by supporting move operations
-      dtde.acceptDrag(dtde.getDropAction() /*DnDConstants.ACTION_MOVE*/);
-    }
-  }
+  /**
+   * @see #dragEnter()
+   */
+  public void dragOver(DropTargetDragEvent dtde) {}
   public void dragExit(DropTargetEvent dte) {}
   public void dropActionChanged(DropTargetDragEvent dtde) {}
   /**
    * @see TreeDragSource#dragGestureRecognized()
    */
   public void drop(DropTargetDropEvent dtde) {
+    // find target node to drop source to
     Point pt = dtde.getLocation();
-//  DropTargetContext dtc = dtde.getDropTargetContext();
-//  JTree tree = (JTree)dtc.getComponent();
-    TreePath parentpath = targetTree.getClosestPathForLocation(pt.x, pt.y);
-    Object /*DefaultMutableTreeNode*/ parent = /*(DefaultMutableTreeNode)*/ parentpath.getLastPathComponent();
-    if (targetTree.getUtility().isLeaf(parent)) {
-      dtde.rejectDrop();
-      return;
-    }
+    DropTargetContext dtc = dtde.getDropTargetContext();
+    JTree tree = (JTree)dtc.getComponent(); // by default => targetTree
+    TreePath parentpath = tree.getClosestPathForLocation(pt.x, pt.y);
+    Object /*DefaultMutableTreeNode*/ target = /*(DefaultMutableTreeNode)*/ parentpath.getLastPathComponent();
 
     try {
       Transferable tr = dtde.getTransferable();
       DataFlavor[] flavors = tr.getTransferDataFlavors();
-      for (int i = 0; i < flavors.length; i++) {
-		if (tr.isDataFlavorSupported(flavors[i])) {
-		  dtde.acceptDrop(dtde.getDropAction());
-		  TreePath p = (TreePath)tr.getTransferData(flavors[i]);
-		  Object /*DefaultMutableTreeNode*/ node = /*(DefaultMutableTreeNode)*/ p.getLastPathComponent();
-//		  NavigationTreeModel /*DefaultTreeModel*/ model = (NavigationTreeModel)targetTree.getModel();
-		  targetTree.getUtility().relocateElement(node, parent); //model.insertNodeInto(node, parent, 0);
-		  dtde.dropComplete(true);
-		  return;
-		}
-      }
-      dtde.rejectDrop();
+      if ((flavors.length == 1) && tr.isDataFlavorSupported(flavors[0])) {
+		  TreePath p = (TreePath)tr.getTransferData(flavors[0]);
+		  Object /*DefaultMutableTreeNode*/ sourceNode = /*(DefaultMutableTreeNode)*/ p.getLastPathComponent();
+		  String msg = targetTree.getUtility().isAddable(sourceNode, target);
+		  if (msg == null) {
+		    dtde.acceptDrop(dtde.getDropAction());
+		  	targetTree.getUtility().relocateElement(sourceNode, target); //model.insertNodeInto(node, parent, 0);
+		  	dtde.dropComplete(true);
+		  } else {
+		  	dtde.rejectDrop();
+		  	BaseDialog.showWarning(targetTree, null, msg); // part of view mechanism => Dialog is ok here
+		  }
+	  } else {
+      	dtde.rejectDrop();
+	  }
     } catch(Throwable e) {
-//      dtde.rejectDrop();
+        dtde.rejectDrop();
         BaseFrame.showException(targetTree, e); // part of view mechanism => Dialog is ok here
     }
   }

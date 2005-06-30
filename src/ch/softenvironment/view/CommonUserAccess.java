@@ -1,5 +1,9 @@
 package ch.softenvironment.view;
 
+import javax.swing.Icon;
+
+import ch.ehi.basics.i18n.ResourceBundle;
+
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,7 +19,7 @@ package ch.softenvironment.view;
 /**
  * NLS-Utility for common resuable User Interface expressions (CUA).
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2005-06-10 16:11:14 $
+ * @version $Revision: 1.8 $ $Date: 2005-06-30 07:27:43 $
  */
 public abstract class CommonUserAccess {
 	public static String getMncViewStatusbarText() {
@@ -181,5 +185,39 @@ public abstract class CommonUserAccess {
 	}
 	public static String getTitleSaveChanges() {
 		return getResource("CTSaveChanges");
+	}
+	// return typical Icons use in any application
+	public static Icon getIconNew() {
+	    return ResourceBundle.getImageIcon(CommonUserAccess.class, "new.gif");
+	}
+	public static Icon getIconChange() {
+	    return ResourceBundle.getImageIcon(CommonUserAccess.class, "open.gif");
+	}
+	public static Icon getIconCopy() {
+	    return ResourceBundle.getImageIcon(CommonUserAccess.class, "copy.gif");
+	}
+	public static Icon getIconCut() {
+	    return ResourceBundle.getImageIcon(CommonUserAccess.class, "cut.gif");
+	}
+	public static Icon getIconFind() {
+	    return ResourceBundle.getImageIcon(CommonUserAccess.class, "find.gif");
+	}
+	public static Icon getIconPaste() {
+	    return ResourceBundle.getImageIcon(CommonUserAccess.class, "paste.gif");
+	}
+	public static Icon getIconPrint() {
+	    return ResourceBundle.getImageIcon(CommonUserAccess.class, "print.gif");
+	}
+	public static Icon getIconRemove() {
+	    return ResourceBundle.getImageIcon(CommonUserAccess.class, "delete.gif");
+	}
+	public static Icon getIconRedo() {
+	    return ResourceBundle.getImageIcon(CommonUserAccess.class, "redo.gif");
+	}
+	public static Icon getIconSave() {
+	    return ResourceBundle.getImageIcon(CommonUserAccess.class, "save.gif");
+	}
+	public static Icon getIconUndo() {
+	    return ResourceBundle.getImageIcon(CommonUserAccess.class, "undo.gif");
 	}
 }

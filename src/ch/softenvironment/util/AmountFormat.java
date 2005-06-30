@@ -1,7 +1,4 @@
 package ch.softenvironment.util;
-
-import java.text.NumberFormat;
-
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,7 +14,7 @@ import java.text.NumberFormat;
 /**
  * Format a number to look like a financial value.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2005-04-25 15:32:23 $
+ * @version $Revision: 1.7 $ $Date: 2005-06-30 07:26:42 $
  */
 public class AmountFormat /*extends java.text.NumberFormat*/ {
 

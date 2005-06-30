@@ -14,8 +14,8 @@ package ch.softenvironment.util;
 
 /**
  * Provides some often used features in using java.util.List.
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2005-03-12 17:45:50 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2005-06-30 07:26:43 $
  */
 public abstract class ListUtils {
 /**

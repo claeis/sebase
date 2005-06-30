@@ -20,8 +20,8 @@ package ch.softenvironment.util;
  *   -> MyObject#setMyProperty(Object any)	// the setter-Method
  *   -> MyObject#getMyProperty()			// the getter-Method
  *
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.8 $ $Date: 2005-03-12 17:46:42 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.9 $ $Date: 2005-06-30 07:26:43 $
  */
 public class BeanReflector extends java.util.EventObject {
 	private transient String property = null;
@@ -67,7 +67,7 @@ public java.lang.reflect.Field getField() {
 	try {
 		return getSource().getClass().getField("field" + getPropertyUpper());
 	} catch(NoSuchFieldException e) {
-		throw new DeveloperException(this, "getField()", "<" + getSource().getClass().getName() + "> must implement <" + "field" + getPropertyUpper() + ">");
+		throw new DeveloperException(this, "getField()", "<" + getSource().getClass().getName() + "> must implement <" + "public field" + getPropertyUpper() + ">");
 	}
 }
 /**
@@ -140,7 +140,7 @@ public int hasProperty() {
 }
 /**
  * Set the Property by its <b>Field</b> with given value => no change-event.
- * Suppose property-Field to be public.
+ * Property-Field is assumed to be <b>public</b>.
  */
 public void setField(Object value) {
 	try {
