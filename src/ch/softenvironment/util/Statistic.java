@@ -1,5 +1,4 @@
 package ch.softenvironment.util;
-
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -11,70 +10,126 @@ package ch.softenvironment.util;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  */
- 
 import java.io.*;
 import java.util.*;
-
 /**
- * Register performance times for any tasks.
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:30:43 $
+ * Statistical utility to evaluate performance for named Use-Cases
+ * within an application (for e.g. DBMS Transaction times).
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.3 $ $Date: 2005-09-07 11:45:43 $
  */
 public final class Statistic {
-	public transient String useCase;
-	public transient int count;
-	public transient int max;
-	public transient int min;
-	public transient int total;
+	private volatile transient long count;
+	private volatile transient long max;
+	private volatile transient long min;
+	private volatile transient long total;
 
 	private static TreeMap statisticMap = new TreeMap();
 /**
+ * Create a new Statistic for given UseCase if not 
+ * already existing.
+ * 
+ * <code>
+ * Statistic stat = Statistic.createEntry("My performant loop");
+ * long start = Statistic.getTimeMeasure();
+ * doMyPerformantLoop();
+ * long end = Statistic.getTimeMeasure();
+ * stat.add(end-start);
+ * ..
+ * Statistic.dump(..);
+ * </code>
+ * 
  * @param name of UseCase to measure in time.
  */
-public Statistic(String useCase) {
-    this.useCase = useCase;
-    clear();
+public static Statistic createEntry(final String useCase) {
     synchronized (statisticMap) {
-        statisticMap.put(useCase, this);
-    }
-}
-public final void add(int sampleValue) {
-    if (sampleValue > max) {
-        max = sampleValue;
-    }
-    if (sampleValue < min) {
-        min = sampleValue;
-    }
-    total += sampleValue;
-    count++;
-}
-public void clear() {
-    count = 0;
-    max = Integer.MIN_VALUE;
-    min = Integer.MAX_VALUE;
-    total = 0;
-}
-public final static void clear_all() {
-    for (Iterator i = statisticMap.entrySet().iterator(); i.hasNext();) {
-        Map.Entry e = (Map.Entry) i.next();
-        ((Statistic) e.getValue()).clear();
+        Statistic statistic = null;
+        if (statisticMap.containsKey(useCase)) {
+            statistic = (Statistic)statisticMap.get(useCase);
+        } else {
+            statistic = new Statistic();
+        	statisticMap.put(useCase, statistic);
+        }
+        return statistic;
     }
 }
 /**
- * Print measured statistics into given Stream.
+ * Convenience Method to measure current time resolution.
+ * @return long (milli-second)
  */
-public final static void dump(PrintStream out) {
-    for (Iterator i = statisticMap.entrySet().iterator(); i.hasNext();) {
-        Map.Entry e = (Map.Entry) i.next();
-        Statistic s = (Statistic) e.getValue();
+public static long getTimeMeasure() {
+//TODO be aware of different algorithms and OS support => accuracy problems
+    
+    // needs additional Java3D package => good accuracy
+    // com.sun.j3d.utils.timer.J3DTimer.getResolution() 
+    
+    // only on J2SE 1.4.2
+    // sun.misc.Perf hiResTimer = sun.misc.Perf.getPerf(); 
+    // long freq = hiResTimer.highResFrequency();
+    // long startTime = hiResTimer.highResCounter(); }
+
+    // J2SE V1.5/5.0
+    // System.nanoTime() => more accurate than System.currentTimeMillis()
+    
+    // J2SE V1.4 default => ok for Win/XP (bad for older Win/OS)
+    return System.currentTimeMillis();
+}
+private Statistic() {
+    clear();
+}
+/**
+ * Add a new measured value (usually in milli-seconds) for current UseCase.
+ * @param sampleValue (other values than >0 are ignored)
+ * @see #getTimeMeasure()
+ */
+public final void add(long sampleValue) {
+    if (sampleValue > 0) {
+	    if (sampleValue > max) {
+	        max = sampleValue;
+	    }
+	    if ((sampleValue < min) || (min == 0 /*not yet set*/)){
+	        min = sampleValue;
+	    }
+	    total += sampleValue;
+	    count++;
+    }
+}
+/**
+ * Reset all measures for UseCase-Statistic.
+ */
+public void clear() {
+    count = 0;
+    max = 0;
+    min = 0;
+    total = 0;
+}
+/**
+ * Reset all values for all Statistic-instances,
+ * where given UseCases remain in List.
+ */
+public final static void clear_all() {
+    Iterator iterator = statisticMap.values().iterator();
+    while (iterator.hasNext()) {
+        ((Statistic)iterator.next()).clear();
+    }
+}
+/**
+ * Print measured statistics to given Writer.
+ */
+public final static void dump(PrintWriter out) {
+    Iterator iterator = statisticMap.entrySet().iterator();
+    while (iterator.hasNext()) {
+        Map.Entry e = (Map.Entry)iterator.next();
+        Statistic s = (Statistic)e.getValue();
         if (s.count > 0) {
-	    	out.println(s.useCase);
- 	    	out.println("count  =" + s.count);
-  	    	out.println("min    =" + s.min);
-   	    	out.println("max    =" + s.max);
-    		out.println("average=" + s.total / s.count);
-     		out.println("total  =" + s.total);
+	    	out.println("Use-Case: " + e.getKey());
+ 	    	out.println("  Count  = " + s.count);
+  	    	out.println("  Min    = " + s.min);
+   	    	out.println("  Max    = " + s.max);
+    		out.println("  Average= " + (double)s.total / (double)s.count);
+     		out.println("  Total  = " + s.total);
         }
     }
+    out.flush();
 }
 }
