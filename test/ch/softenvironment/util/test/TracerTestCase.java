@@ -11,12 +11,12 @@ import junit.framework.TestCase;
 /**
  * <Description>
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2005-08-26 10:16:19 $
+ * @version $Revision: 1.2 $ $Date: 2005-09-07 11:51:39 $
  */
 public class TracerTestCase extends TestCase {
     public void testLogFile() {
         try {
-	        FileOutputStream stream = new FileOutputStream("C:/Temp/TracerTestCase.log", false);
+	        FileOutputStream stream = new FileOutputStream(System.getProperty("java.io.tmpdir") + "TracerTestCase.log", false);
 	//      PrintWriter printer = new PrintWriter(new OutputStreamWriter(stream, "UTF-8"); 
 	                
 	        Tracer.start(new PrintStream(stream), Tracer.ALL);

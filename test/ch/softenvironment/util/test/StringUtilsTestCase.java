@@ -2,7 +2,7 @@ package ch.softenvironment.util.test;
 
 /**
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2005-08-26 10:16:19 $
+ * @version $Revision: 1.2 $ $Date: 2005-09-07 11:51:39 $
  */
 public class StringUtilsTestCase extends junit.framework.TestCase {
 /**
@@ -39,13 +39,14 @@ public void testPackageName() {
  */
 public void testPureClassName() {
 	assertTrue("StringUtils", "Object".equals(ch.softenvironment.util.StringUtils.getPureClassName(new Object())));
-	assertTrue("StringUtils", "Statistic".equals(ch.softenvironment.util.StringUtils.getPureClassName(new ch.softenvironment.util.Statistic("test"))));
+	assertTrue("StringUtils", "Statistic".equals(ch.softenvironment.util.StringUtils.getPureClassName(ch.softenvironment.util.Statistic.createEntry("test"))));
 	assertTrue("StringUtils", "Statistic".equals(ch.softenvironment.util.StringUtils.getPureClassName(ch.softenvironment.util.Statistic.class)));
 }
 public void testPureFileName() {
 	assertTrue("no Path", "MyFile.xml".equals(ch.softenvironment.util.StringUtils.getPureFileName("MyFile.xml")));
 	assertTrue("DOS-Path", "MyFile.xml".equals(ch.softenvironment.util.StringUtils.getPureFileName("C:\\tmp\\dummy\\MyFile.xml")));
 	assertTrue("Unix-Path", "MyFile.xml".equals(ch.softenvironment.util.StringUtils.getPureFileName("/usr/local/MyFile.xml")));
+	assertTrue("System-Property", "MyFile.xml".equals(ch.softenvironment.util.StringUtils.getPureFileName(System.getProperty("java.io.tmpdir") + "MyFile.xml")));
 }
 /**
  * 
