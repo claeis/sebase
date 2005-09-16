@@ -15,7 +15,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * Panel for structured Phone Number representation.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2005-02-23 16:19:18 $
+ * @version $Revision: 1.7 $ $Date: 2005-09-16 09:38:40 $
  */
 public class PhoneNumberPanel extends javax.swing.JPanel {
 	private String separator = "/";//$NON-NLS-1$
@@ -347,7 +347,7 @@ private void setInternalText(String text) {
  * @see #getList
  */
 public void setList(java.util.List list) {
-ch.softenvironment.util.Tracer.getInstance().nyi(this, "setList(..)", "Only ONE entry is supported yet");
+//TODO Only ONE entry is supported yet
 	java.util.List oldValue = fieldList;
 	fieldList = list;
 	firePropertyChange("list", oldValue, list);

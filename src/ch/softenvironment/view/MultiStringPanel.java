@@ -15,7 +15,7 @@ package ch.softenvironment.view;
 /**
  * Display a String with Cardinality's upper-Range > 1.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:32:59 $
+ * @version $Revision: 1.3 $ $Date: 2005-09-16 09:38:40 $
  */
 public class MultiStringPanel extends javax.swing.JPanel {
 	private javax.swing.JComboBox ivjCbxCount = null;
@@ -174,7 +174,7 @@ public void setList(java.util.List list) {
 	java.util.Vector elements = new java.util.Vector(1);
 	elements.add(new Integer(1));
 	getCbxCount().setModel(new javax.swing.DefaultComboBoxModel(elements));
-ch.softenvironment.util.Tracer.getInstance().nyi(this, "setList(List)", "only ONE element is implemented yet");
+//TODO only ONE element is implemented yet
 	if (list.size() >= 1) {
 		getPnlEditor().setText((String)list.get(0));
 	}
