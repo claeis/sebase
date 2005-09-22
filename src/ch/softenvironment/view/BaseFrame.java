@@ -25,7 +25,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.22 $ $Date: 2005-06-30 07:27:35 $
+ * @version $Revision: 1.23 $ $Date: 2005-09-22 18:28:37 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -147,13 +147,14 @@ public static String exceptionToString(Throwable exception) {
     return stringWriter.toString();
 }
 /**
- * Export all (if none selected) or selected Data of given table into a file,
+ * Convienience method to Export table-data into a file,
  * where a Filechooser allows selecting File before.
  * The table data is exported in a generic manner,
  * say given table is exported 1:1 to CSV including
  * Header-Data.
  * @param table
  * @return Path of file saved
+ * @see ParserCSV#writeFile()
  */
 protected final String exportTableData(final JTable table) {
 	final FileChooser saveDialog =  new FileChooser(/*getSettings().getWorkingDirectory()*/);
@@ -167,39 +168,7 @@ protected final String exportTableData(final JTable table) {
 				try {
 				 	FileOutputStream outStream = new FileOutputStream(saveDialog.getSelectedFile());
 				  	stream = new PrintStream(outStream);
-
-				  	char separator = ';';
-
-				  	// header
-					int columnCount = table.getModel().getColumnCount();
-					for (int col=0; col<columnCount; col++) {
-						stream.print(table.getModel().getColumnName(col) + separator);
-					}
-					stream.println();
-
-					// data
-					int list[] = table.getSelectedRows(); 
-					if (list.length == 0) {
-					    // print all rows
-						int rowCount = table.getModel().getRowCount();
-						for (int row=0; row<rowCount; row++) {
-							for (int col=0; col<columnCount; col++) {
-								Object value = table.getModel().getValueAt(row, col);
-								stream.print(StringUtils.getString(value) + separator);
-							}
-							stream.println();
-						}
-					} else {
-						// print selected rows only
-					    for (int i=0; i<list.length; i++) {
-							for (int col=0; col<columnCount; col++) {
-								Object value = table.getModel().getValueAt(list[i], col);
-								stream.print(StringUtils.getString(value) + separator);
-							}
-							stream.println();
-						}
-					}
-
+				  	ParserCSV.writeFile(stream, table, ";");
 					outStream.flush();
 				  	outStream.close();
 				} catch(Throwable e) {
