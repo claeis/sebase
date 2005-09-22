@@ -5,13 +5,14 @@ import ch.softenvironment.util.test.AmountFormatTestCase;
 import ch.softenvironment.util.test.BeanReflectorTestCase;
 import ch.softenvironment.util.test.DateUtilsTestCase;
 import ch.softenvironment.util.test.NlsUtilsTestCase;
+import ch.softenvironment.util.test.ParserCSVTestCase;
 import ch.softenvironment.util.test.StringUtilsTestCase;
 
 import junit.framework.*;
 /**
  * Run this class for all <b>seBase</b> TestCases.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2005-08-26 10:18:03 $
+ * @version $Revision: 1.2 $ $Date: 2005-09-22 15:18:55 $
  */
 public class SeBaseTestSuite extends junit.framework.TestSuite {
 /**
@@ -56,6 +57,7 @@ public static junit.framework.Test suite() {
 	suite.addTest(new TestSuite(AmountFormatTestCase.class));
 	suite.addTest(new TestSuite(ApplicationOptionsTestCase.class));
 	suite.addTest(new TestSuite(ResourceManagerTestCase.class));
+	suite.addTest(new TestSuite(ParserCSVTestCase.class));
 	
 	suite.addTest(MathTestSuite.suite());
 
