@@ -14,12 +14,16 @@ package ch.softenvironment.util;
  
 import java.io.*;
 
+import javax.swing.JTable;
+
 /**
  * Parser-Tool to parse comma separated files (*.CSV).
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.8 $ $Date: 2005-02-03 14:21:49 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.9 $ $Date: 2005-09-22 18:27:14 $
  */
 public class ParserCSV {
+    public static final String DEFAULT_SEPARATOR = ";";
+    
 	private String line = null;
 	private String separator = null;
 	private int lastIndex = -1;
@@ -34,7 +38,7 @@ public ParserCSV(String line, String separator) {
 	this.separator = separator;
 }
 /**
- * Transform a List into a String with items separated by a Separator.
+ * Transform a List into a String with items (according to their #toString()) separated by a Separator.
  * @param items
  * @return String
  */
@@ -99,10 +103,10 @@ public String getNextString() {
 	return result.trim();
 }
 /**
- * Replace separator in text.
- * @deprecated (use CsvSerializer#encodeString() instead)
+ * Replace separator in text (by means '\n' and ';' will be replaced by ',').
+ * @deprecated (see CsvSerializer#encodeString() instead)
  */
-public static String maskSeparator(Object object, char sep) {
+public static String maskSeparator(Object object, String sep) {
 	if (object == null) {
 		return "";
 	}
@@ -114,7 +118,14 @@ public static String maskSeparator(Object object, char sep) {
 	} else {
 		text = object.toString();
 	}
-	return text.replace(sep, replacement).replace('\n', replacement);
+	text = text.replace('\n', replacement);
+	if (sep.equals(DEFAULT_SEPARATOR)) {
+//TODO mask other separators
+		return text.replace(';', replacement);
+	} else {
+	    Tracer.getInstance().developerWarning(ParserCSV.class, "maskSeparator()", "non-default CSV-Separator <" + sep + "> not yet masked");
+	    return text;
+	}
 }
 /**
  * Read a File where fields/cells are separated by a given separator and return a List
@@ -210,6 +221,51 @@ public static java.util.List stringToArray(String serializedList, String separat
 			item = parser.getNextString();
 		}
 		return list;
+	}
+}
+/**
+ * Convert the given table as is in CSV-Stream. Useful for dumping contents within a JTable
+ * generically into CSV-file. If table selection is made, then only the selected elements will 
+ * be printed otherwise the whole contents is written.
+ * @param stream
+ * @param table
+ * @param separator
+ */
+public static void writeFile(PrintStream stream, final JTable table, final String separator) {
+  	// header
+	int columnCount = table.getModel().getColumnCount();
+	for (int col=0; col<columnCount; col++) {
+		stream.print(table.getModel().getColumnName(col) + separator);
+	}
+	stream.println();
+
+	// data
+	int list[] = table.getSelectedRows(); 
+	if (list.length == 0) {
+	    // print all rows
+		int rowCount = table.getModel().getRowCount();
+		for (int row=0; row<rowCount; row++) {
+			for (int col=0; col<columnCount; col++) {
+				Object value = table.getModel().getValueAt(row, col);
+				//	!!! same algorithm for "selected rows" below
+				String field = StringUtils.getString(value);
+				field = ParserCSV.maskSeparator(field, separator);
+				stream.print(field + separator);
+			}
+			stream.println();
+		}
+	} else {
+		// print selected rows only
+	    for (int i=0; i<list.length; i++) {
+			for (int col=0; col<columnCount; col++) {
+				Object value = table.getModel().getValueAt(list[i], col);
+				// !!! same algorithm for "all rows" above
+				String field = StringUtils.getString(value);
+				field = ParserCSV.maskSeparator(field, separator);
+				stream.print(field + separator);
+			}
+			stream.println();
+		}
 	}
 }
 }
