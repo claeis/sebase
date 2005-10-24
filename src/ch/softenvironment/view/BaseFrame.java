@@ -20,12 +20,11 @@ import java.util.MissingResourceException;
 
 import ch.ehi.basics.view.*;
 import ch.softenvironment.util.*;
-import ch.softenvironment.util.Tracer;
 import ch.softenvironment.client.ResourceManager;
 /**
  * TemplateFrame defining minimal functionality.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.23 $ $Date: 2005-09-22 18:28:37 $
+ * @version $Revision: 1.24 $ $Date: 2005-10-24 13:12:32 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -206,7 +205,7 @@ protected final void genericPopupDisplay(java.awt.event.MouseEvent event, javax.
 	try {
 	 	adaptSelection(event, popupMenu);
 
-	 	if (event.getClickCount() == 2) {
+	 	if ((event.getID() == MouseEvent.MOUSE_PRESSED) && (event.getClickCount() == 2)) {
 		 	// case: double-click
 			if (this instanceof ListMenuChoice) {
 //				((ListMenuChoice)this).defaultDoubleClickAction(event);
