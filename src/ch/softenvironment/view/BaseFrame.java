@@ -23,8 +23,8 @@ import ch.softenvironment.util.*;
 import ch.softenvironment.client.ResourceManager;
 /**
  * TemplateFrame defining minimal functionality.
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.24 $ $Date: 2005-10-24 13:12:32 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.25 $ $Date: 2005-11-05 20:00:24 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -71,6 +71,7 @@ public BaseFrame(String title) {
  * For e.g. Adapt PopupMenuItems after a selection of a SearchTable-Row.
  * Overwrite this method.
  * @see #genericPopupDisplay(..)
+ * @deprecated (should be implemented by ListMenuChoice)
  */
 protected void adaptSelection(MouseEvent event, JPopupMenu popupMenu) {
 }
@@ -196,24 +197,33 @@ public final void fatalError(JFrame frame, String title, String message, Throwab
 }
 /**
  * Display a popup menu.
- * Ex. SearchTable to JPopupMenu
+ * Example SearchTable to JPopupMenu
  * 1) Connect MouseReleased-Event (for Windows) and MousePressed-Event (for Unix) from Panel (for e.g. JScrollPane, JTablePane, etc) to this method.
  * 2) Connect JPopupMenu's this-property visually to the MouseReleased-Event's Parameter popupMenu.
  * 3) Overwrite #adaptSelection(MouseEvent, JPopupMenu)
+ * @see BaseDialog#genericPopupDisplay(java.awt.event.MouseEvent, javax.swing.JPopupMenu)
  */
 protected final void genericPopupDisplay(java.awt.event.MouseEvent event, javax.swing.JPopupMenu popupMenu) {
+//TODO same implementation as in BaseFrame#genericPopupMenu()
 	try {
-	 	adaptSelection(event, popupMenu);
-
-	 	if ((event.getID() == MouseEvent.MOUSE_PRESSED) && (event.getClickCount() == 2)) {
-		 	// case: double-click
-			if (this instanceof ListMenuChoice) {
-//				((ListMenuChoice)this).defaultDoubleClickAction(event);
-				((ListMenuChoice)this).changeObjects(event.getSource());
-			}
-	 	} else if (event.isPopupTrigger() && (popupMenu != null)) {
-			popupMenu.show(event.getComponent(), event.getX(), event.getY());
-		}
+        adaptSelection(event, popupMenu); // @deprecated mechanism
+        
+        if (this instanceof ListMenuChoice) {
+            // might be necessary in following cases:
+            // - before opening a PopupMenu
+            // - in combined Detail/SearchView's when TableSelection must update current row in detailed fields
+            ((ListMenuChoice)this).adaptUserAction(event, popupMenu);
+            
+            if (event.getClickCount() == 2) { // && ((event.getID() == MouseEvent.MOUSE_PRESSED /*Linux*/) ||(event.getID() == MouseEvent.MOUSE_RELEASED /*Windows*/))) {
+                // case: double-click -> defaultAction
+                ((ListMenuChoice)this).changeObjects(event.getSource());
+            }
+        }
+        
+        if (event.isPopupTrigger() && (popupMenu != null)) {
+           // might depend on ListMenuChoice#adaptUserAction() or #adaptSelection()
+           popupMenu.show(event.getComponent(), event.getX(), event.getY());
+        }
    	} catch(Throwable e) {
 	   	handleException(e);
    	}
