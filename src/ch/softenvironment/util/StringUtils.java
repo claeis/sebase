@@ -17,7 +17,7 @@ import java.io.File;
 /**
  * Set of reusable String Utilities.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2005-03-12 17:46:42 $
+ * @version $Revision: 1.6 $ $Date: 2005-11-20 15:49:20 $
  */
 public abstract class StringUtils {
 
@@ -119,5 +119,19 @@ public static String getBooleanString(Boolean value) {
 	} else {
 		return ch.softenvironment.client.ResourceManager.getResource(StringUtils.class, "CI_No_text");
 	}
+}
+/**
+ * Append the given suffix to given filename if not already added
+ * and return expression.
+ * @param filename
+ * @param suffix
+ * @return
+ */
+public static String tryAppendSuffix(String filename, String suffix) {
+    if (filename.toLowerCase().endsWith(suffix.toLowerCase())) {
+        return filename;
+    } else {
+        return filename + suffix;
+    }
 }
 }

@@ -28,12 +28,10 @@ import ch.softenvironment.util.Tracer;
  * Manage the Application Settings by Properties file.
  *
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2005-06-05 09:03:18 $
+ * @version $Revision: 1.4 $ $Date: 2005-11-20 15:47:52 $
  */
 public class ApplicationOptions extends java.util.Properties implements UserSettings {
 	// values for Key-Values
-	private final static String TRUE = "TRUE";
-	private final static String FALSE = "FALSE";
 	private final static String SEPARATOR = ";";
 	protected final static String HOME_DIRECTORY = "user.home";
 
@@ -50,7 +48,7 @@ public class ApplicationOptions extends java.util.Properties implements UserSett
 	private final static String SHOW_TOOLBAR = "SHOW_TOOLBAR";
 	private final static String WORKING_DIRECTORY = "WORKING_DIRECTORY";
 	private final static String LAST_FILES = "LAST_FILES";
-	private final static String QUERY_DELETION = "QUERY_DELETION";
+//	private final static String QUERY_DELETION = "QUERY_DELETION";
 	private final static String WINDOW_HEIGHT = "WINDOW_HEIGHT";
 	private final static String WINDOW_WIDTH = "WINDOW_WIDTH";
 	private final static String WINDOW_X = "WINDOW_X";
@@ -103,9 +101,9 @@ protected ApplicationOptions(String filename, java.util.Properties defaults) {
 		FileInputStream inputStream = new FileInputStream(filename);
 		/*tmp=*/ super.load(inputStream);
 	} catch(FileNotFoundException fe) {
-		Tracer.getInstance().runtimeWarning(ApplicationOptions.class, "load()", "File not found: " + fe.getLocalizedMessage());
+		Tracer.getInstance().runtimeWarning(ApplicationOptions.class, "ApplicationOptions(String, Properties)", "File not found: " + fe.getLocalizedMessage());
 	} catch(IOException ioe) {
-	    Tracer.getInstance().runtimeWarning(ApplicationOptions.class, "load()", "IO failure: " + ioe.getLocalizedMessage());
+	    Tracer.getInstance().runtimeWarning(ApplicationOptions.class, "ApplicationOptions(String, Properties)", "IO failure: " + ioe.getLocalizedMessage());
 	}
 }
 /**
