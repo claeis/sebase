@@ -19,7 +19,7 @@ import ch.softenvironment.util.Tracer;
 /**
  * Template-Dialog defining minimal functionality.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.11 $ $Date: 2005-11-05 20:00:24 $
+ * @version $Revision: 1.12 $ $Date: 2005-11-20 15:49:48 $
  */
 public abstract class BaseDialog extends javax.swing.JDialog {
 	private javax.swing.JPanel ivjJDialogContentPane = null;
@@ -46,13 +46,6 @@ public BaseDialog(Component owner, boolean modal, ViewOptions viewOptions) {
 	initialize();
 }
 /**
- * Overwrite for specific adaptions.
- * @see BaseFrame#adaptSelection(..)
- * @deprecated (will be implemented by ListMenuChoice)
- */
-protected void adaptSelection(java.awt.event.MouseEvent event, javax.swing.JPopupMenu popupMenu) {
-}
-/**
  * Typical Apply-Action.
  * 
  * @see #save()
@@ -72,29 +65,7 @@ protected void cancelPressed() {
  * @see BaseFrame#genericPopupDisplay(..)
  */
 protected void genericPopupDisplay(java.awt.event.MouseEvent event, javax.swing.JPopupMenu popupMenu) {
-//TODO same implementation as in BaseFrame#genericPopupMenu()
-    try {
-        adaptSelection(event, popupMenu); // @deprecated mechanism
-        
-        if (this instanceof ListMenuChoice) {
-            // might be necessary in following cases:
-            // - before opening a PopupMenu
-            // - in combined Detail/SearchView's when TableSelection must update current row in detailed fields
-            ((ListMenuChoice)this).adaptUserAction(event, popupMenu);
-            
-            if (event.getClickCount() == 2) { // && ((event.getID() == MouseEvent.MOUSE_PRESSED /*Linux*/) ||(event.getID() == MouseEvent.MOUSE_RELEASED /*Windows*/))) {
-                // case: double-click -> defaultAction
-                ((ListMenuChoice)this).changeObjects(event.getSource());
-            }
-        }
-        
-        if (event.isPopupTrigger() && (popupMenu != null)) {
-           // might depend on ListMenuChoice#adaptUserAction() or #adaptSelection()
-           popupMenu.show(event.getComponent(), event.getX(), event.getY());
-        }
-    } catch(Throwable e) {
-        handleException(e);
-    }
+    BaseFrame.popupDisplay(this, event, popupMenu);
 }
 /**
  * Overwrites.

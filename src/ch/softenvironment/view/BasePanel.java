@@ -1,9 +1,4 @@
 package ch.softenvironment.view;
-
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
-
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,11 +10,13 @@ import java.awt.Toolkit;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  */
+import java.awt.Graphics;
+import java.awt.Image;
 
 /**
  * Basic javax.swing.JPanel.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2005-06-30 07:27:43 $
+ * @version $Revision: 1.7 $ $Date: 2005-11-20 15:49:48 $
  */
 public class BasePanel extends javax.swing.JPanel {
     private Image image = null;
@@ -55,30 +52,17 @@ public BasePanel(boolean isDoubleBuffered) {
  * @see BaseFrame#genericPopupDisplay(..)
  */
 protected void genericPopupDisplay(java.awt.event.MouseEvent event, javax.swing.JPopupMenu popupMenu) {
-	try {
-	 	adaptSelection(event, popupMenu);
-
-	 	if (event.getClickCount() == 2) {
-		 	// case: double-click
-			if (this instanceof ListMenuChoice) {
-//				((ListMenuChoice)this).defaultDoubleClickAction(event);
-				((ListMenuChoice)this).changeObjects(event.getSource());
-			}
-	 	} else if (event.isPopupTrigger() && (popupMenu != null)) {
-			popupMenu.show(event.getComponent(), event.getX(), event.getY());
-		}
-   	} catch(Throwable e) {
-	   	handleException(e);
-   	}
+    BaseFrame.popupDisplay(this, event, popupMenu);
 }
 /**
- * @see BaseFrame#getResourceString(Class, String)
+ * Convenience method.
  */
 protected static String getResourceString(java.lang.Class resource, String propertyName) {
-	return ch.softenvironment.client.ResourceManager.getInstance().getResource(resource, propertyName);
+	return ch.softenvironment.client.ResourceManager.getResource(resource, propertyName);
 }
 /**
- * @see BaseFrame#getResourceString(String)
+ * Convenience method.
+ * @see #getResourceString(Class, String)
  */
 protected String getResourceString(String propertyName) {
 	return getResourceString(this.getClass(), propertyName);
@@ -89,13 +73,6 @@ protected String getResourceString(String propertyName) {
  */
 protected void handleException(java.lang.Throwable exception) {
 	BaseFrame.showException(null, exception);
-}
-
-/**
- * Overwrite for specific adaptions.
- * @see BaseFrame#adaptSelection(..)
- */
-protected void adaptSelection(java.awt.event.MouseEvent event, javax.swing.JPopupMenu popupMenu) {
 }
 
 /**

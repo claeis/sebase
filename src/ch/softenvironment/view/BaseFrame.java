@@ -24,7 +24,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * TemplateFrame defining minimal functionality.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.25 $ $Date: 2005-11-05 20:00:24 $
+ * @version $Revision: 1.26 $ $Date: 2005-11-20 15:49:48 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -64,16 +64,6 @@ public BaseFrame(ViewOptions viewOptions, java.util.List objects) {
  */
 public BaseFrame(String title) {
 	super(title);
-}
-/**
- * Adapt the entries of a PopupMenu in relation to a mouseEvent.
- *
- * For e.g. Adapt PopupMenuItems after a selection of a SearchTable-Row.
- * Overwrite this method.
- * @see #genericPopupDisplay(..)
- * @deprecated (should be implemented by ListMenuChoice)
- */
-protected void adaptSelection(MouseEvent event, JPopupMenu popupMenu) {
 }
 /**
  * Close this View after save.
@@ -204,19 +194,19 @@ public final void fatalError(JFrame frame, String title, String message, Throwab
  * @see BaseDialog#genericPopupDisplay(java.awt.event.MouseEvent, javax.swing.JPopupMenu)
  */
 protected final void genericPopupDisplay(java.awt.event.MouseEvent event, javax.swing.JPopupMenu popupMenu) {
-//TODO same implementation as in BaseFrame#genericPopupMenu()
-	try {
-        adaptSelection(event, popupMenu); // @deprecated mechanism
-        
-        if (this instanceof ListMenuChoice) {
+    popupDisplay(this, event, popupMenu);
+}
+protected final static void popupDisplay(Component owner, java.awt.event.MouseEvent event, javax.swing.JPopupMenu popupMenu) {
+	try {        
+        if (owner instanceof ListMenuChoice) {
             // might be necessary in following cases:
             // - before opening a PopupMenu
             // - in combined Detail/SearchView's when TableSelection must update current row in detailed fields
-            ((ListMenuChoice)this).adaptUserAction(event, popupMenu);
+            ((ListMenuChoice)owner).adaptUserAction(event, popupMenu);
             
             if (event.getClickCount() == 2) { // && ((event.getID() == MouseEvent.MOUSE_PRESSED /*Linux*/) ||(event.getID() == MouseEvent.MOUSE_RELEASED /*Windows*/))) {
                 // case: double-click -> defaultAction
-                ((ListMenuChoice)this).changeObjects(event.getSource());
+                ((ListMenuChoice)owner).changeObjects(event.getSource());
             }
         }
         
@@ -225,7 +215,7 @@ protected final void genericPopupDisplay(java.awt.event.MouseEvent event, javax.
            popupMenu.show(event.getComponent(), event.getX(), event.getY());
         }
    	} catch(Throwable e) {
-	   	handleException(e);
+        showException(owner, e);
    	}
 }
 /**
