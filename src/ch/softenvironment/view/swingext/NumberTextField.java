@@ -18,7 +18,7 @@ import ch.softenvironment.client.ResourceManager;
  * to trigger <b>propertyChange</b>-Event from this Component towards the Model.
  *
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2005-03-12 17:48:42 $
+ * @version $Revision: 1.3 $ $Date: 2005-11-20 15:50:20 $
  */
 public class NumberTextField extends javax.swing.JTextField implements java.awt.event.InputMethodListener {
 	private java.text.DecimalFormat decFormat = null;
@@ -45,6 +45,10 @@ public java.lang.Double getDoubleValue() throws NumberFormatException {
 	if (ch.softenvironment.util.StringUtils.isNullOrEmpty(getText())) {
 		return null;
 	} else {
+        if (getText().equals("-") || getText().equals("+")) {
+            // legal input but still no value
+            return null;
+        }
 		return new Double(Double.parseDouble(getText()));
 	}
 }
