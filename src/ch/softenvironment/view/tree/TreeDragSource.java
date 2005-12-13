@@ -25,7 +25,7 @@ import ch.softenvironment.util.Tracer;
 /**
  * Tool for Mouse-Drag withing a JTree.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2005-06-30 07:29:01 $
+ * @version $Revision: 1.4 $ $Date: 2005-12-13 17:25:56 $
  */
 class TreeDragSource implements DragSourceListener, DragGestureListener {
     private DragSource source = null;
@@ -40,7 +40,9 @@ class TreeDragSource implements DragSourceListener, DragGestureListener {
       	recognizer = source.createDefaultDragGestureRecognizer(sourceTree, actions, this);
     }
     /*
-     * Drag Gesture Handler
+     * Only MOVE action supported.
+     * Drag Gesture Handler.
+     * @see TreeDropTarget#drop()
      */
     public void dragGestureRecognized(DragGestureEvent dge) {
       TreePath path = sourceTree.getSelectionPath();
@@ -57,13 +59,13 @@ class TreeDragSource implements DragSourceListener, DragGestureListener {
     // Drag Event Handlers
     public void dragEnter(DragSourceDragEvent dsde) {
 //Tracer.getInstance().debug("DragSource#Enter");
-//        setDragDropCursor(dsde);
     }
-    public void dragExit(DragSourceEvent dse) {}
+    public void dragExit(DragSourceEvent dse) { }
     public void dragOver(DragSourceDragEvent dsde) {
-//TODO   setDragDropCursor(dsde); => buggy yet
+//Tracer.getInstance().debug("DragSource#Over");
+//TODO     setDragDropCursor(dsde); //=> buggy
     }
-    public void dropActionChanged(DragSourceDragEvent dsde) {}
+    public void dropActionChanged(DragSourceDragEvent dsde) { }
     /**
      * @see TreeDropTarget#drop()
      */
@@ -85,11 +87,6 @@ class TreeDragSource implements DragSourceListener, DragGestureListener {
 	        Object /*TreeNode*/ dropTargetNode = path.getLastPathComponent();
 	        Object source = ((TreePath)transferable.getTransferData(TransferableTreeNode.TREE_PATH_FLAVOR)).getLastPathComponent();
 
-if (source.equals(dropTargetNode)) {
-//TODO BUG -> why, evtl. mouse-positioning not accurate enough?
-Tracer.getInstance().developerWarning(this, "isDropAcceptable()", "PATCH: sometimes dropTargetNode is equal to source");
-    return true;
-}
 	       	String msg = sourceTree.getUtility().isAddable(source, dropTargetNode);
 	       	if (msg == null) {
 	       	    return true;

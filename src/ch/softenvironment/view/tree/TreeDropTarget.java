@@ -19,33 +19,18 @@ import java.awt.dnd.*;
 import java.awt.datatransfer.*;
 import javax.swing.*;
 import javax.swing.tree.*;
-
-
 import ch.softenvironment.view.BaseDialog;
 import ch.softenvironment.view.BaseFrame;
 
 /**
- * Tool for Mouse-Drop within a JTree.
+ * Listener for Mouse-Drop within a JTree.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2005-06-30 07:29:02 $
+ * @version $Revision: 1.4 $ $Date: 2005-12-13 17:25:56 $
  */
 class TreeDropTarget implements DropTargetListener {
 //	private DropTarget target = null;
 	private AutoScrollingTree targetTree = null;
 
-	/**
-	 * Return the source node to be dropped somewhere else.
-	 * @param dtde
-	 * @deprecated
-	 */
-	private static Object getNodeForEvent(DropTargetDragEvent dtde) {
-	  Point p = dtde.getLocation();
-	  DropTargetContext dtc = dtde.getDropTargetContext();
-	  JTree tree = (JTree)dtc.getComponent(); // by default => targetTree
-	  TreePath path = tree.getClosestPathForLocation(p.x, p.y);
-	  return /*(TreeNode)*/path.getLastPathComponent();
-	}
-	
 	public TreeDropTarget(AutoScrollingTree tree) {
 		targetTree = tree;
 		
@@ -67,10 +52,16 @@ class TreeDropTarget implements DropTargetListener {
   /**
    * @see #dragEnter()
    */
-  public void dragOver(DropTargetDragEvent dtde) {}
+  public void dragOver(DropTargetDragEvent dtde) { }
   public void dragExit(DropTargetEvent dte) {}
-  public void dropActionChanged(DropTargetDragEvent dtde) {}
+  public void dropActionChanged(DropTargetDragEvent dtde) {
+/*    if (dsde.getDropAction() != DnDConstants.ACTION_MOVE) {
+        
+      }
+*/
+  }
   /**
+   * Only MOVE supported.
    * @see TreeDragSource#dragGestureRecognized()
    */
   public void drop(DropTargetDropEvent dtde) {
@@ -84,14 +75,14 @@ class TreeDropTarget implements DropTargetListener {
     try {
       Transferable tr = dtde.getTransferable();
       DataFlavor[] flavors = tr.getTransferDataFlavors();
-      if ((flavors.length == 1) && tr.isDataFlavorSupported(flavors[0])) {
+      if ((flavors.length == 1) && tr.isDataFlavorSupported(flavors[0]) && (dtde.getDropAction() == DnDConstants.ACTION_MOVE)) {
 		  TreePath p = (TreePath)tr.getTransferData(flavors[0]);
 		  Object /*DefaultMutableTreeNode*/ sourceNode = /*(DefaultMutableTreeNode)*/ p.getLastPathComponent();
 		  String msg = targetTree.getUtility().isAddable(sourceNode, target);
 		  if (msg == null) {
 		    dtde.acceptDrop(dtde.getDropAction());
-		  	targetTree.getUtility().relocateElement(sourceNode, target); //model.insertNodeInto(node, parent, 0);
 		  	dtde.dropComplete(true);
+            targetTree.getUtility().relocateElement(sourceNode, target); //model.insertNodeInto(node, parent, 0);
 		  } else {
 		  	dtde.rejectDrop();
 		  	BaseDialog.showWarning(targetTree, null, msg); // part of view mechanism => Dialog is ok here
