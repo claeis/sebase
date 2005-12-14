@@ -27,7 +27,7 @@ import java.util.Iterator;
  *
  * @author ce
  * @author Peter Hirzel <i>soft</i>Environment 
- * @version $Revision: 1.2 $ $Date: 2005-06-30 07:29:01 $
+ * @version $Revision: 1.3 $ $Date: 2005-12-14 13:18:57 $
  */
 public class NavigationTreeModel implements javax.swing.tree.TreeModel, java.beans.PropertyChangeListener {
 	private TreeNodeUtility utility = null;
@@ -88,12 +88,7 @@ public class NavigationTreeModel implements javax.swing.tree.TreeModel, java.bea
     protected void fireTreeNodesChanged(Object node){
 //ch.softenvironment.util.Tracer.getInstance().debug(this, "fireTreeNodesChanged(Element)", "node CHANGED");
         int len = treeModelListeners.size();
-        TreeModelEvent e = null;
-        if (node.equals(utility.getRoot())) {
-          e = new TreeModelEvent(this, getTreePath(node));
-        } else {
-          e = new TreeModelEvent(this, getTreePath(utility.findParent(node)));
-        }
+        TreeModelEvent e = new TreeModelEvent(this, getTreePath(node)); //getTreePath(utility.findParent(node)));
         
         for (int i = 0; i < len; i++) {
 	        if (e.getPath()[0] != null) {
@@ -103,20 +98,36 @@ public class NavigationTreeModel implements javax.swing.tree.TreeModel, java.bea
     }
     /** 
      * Invoked after nodes have been inserted into the tree.
+     * @deprecated (done by #fireTreeStructureChanged())
      */
-    protected void fireTreeNodesInserted(Object e) {
-//TODO NYI: ((TreeModelListener)...).treeNodesInserted(new TreeModelEvent());
+    protected void fireTreeNodesInserted(Object node) {
 //ch.softenvironment.util.Tracer.getInstance().debug(this, "fireTreeNodesInserted(Element)", "node INSERTED");
+        int len = treeModelListeners.size();
+        TreeModelEvent e = new TreeModelEvent(this, getTreePath(node)); //getTreePath(utility.findParent(node)));
+        
+        for (int i = 0; i < len; i++) {
+            if (e.getPath()[0] != null) {
+                ((TreeModelListener)treeModelListeners.elementAt(i)).treeNodesInserted(e);
+            }
+        }
     }
     /**
      * Invoked after nodes have been removed from the tree.
+     * @deprecated (done by #fireTreeStructureChanged())
      */
-    protected void fireTreeNodesRemoved(Object e) {
-//TODO NYI: ((TreeModelListener)...).treeNodesRemoved(new TreeModelEvent());
+    protected void fireTreeNodesRemoved(Object node) {
 //ch.softenvironment.util.Tracer.getInstance().debug(this, "fireTreeNodesRemoved(Element)", "node REMOVED");
+        int len = treeModelListeners.size();
+        TreeModelEvent e = new TreeModelEvent(this, getTreePath(node)); //getTreePath(utility.findParent(node)));
+        
+        for (int i = 0; i < len; i++) {
+            if (e.getPath()[0] != null) {
+                ((TreeModelListener)treeModelListeners.elementAt(i)).treeNodesRemoved(e);
+            }
+        }
     }
     /**
-     * Invoked after the tree has drastically changed structure from a given node down.
+     * Invoked after the tree has drastically changed structure from the given node down.
      * @see #propertyChange()
      */
     protected void fireTreeStructureChanged(Object node) {
@@ -124,8 +135,7 @@ public class NavigationTreeModel implements javax.swing.tree.TreeModel, java.bea
         int len = treeModelListeners.size();
         TreeModelEvent e = new TreeModelEvent(this, getTreePath(node));
         for (int i = 0; i < len; i++) {
-            ((TreeModelListener)treeModelListeners.elementAt(i)).
-                    treeStructureChanged(e);
+            ((TreeModelListener)treeModelListeners.elementAt(i)).treeStructureChanged(e);
         }
     }
 /**
@@ -208,11 +218,17 @@ public boolean isLeaf(Object node) {
  *   	and the property that has changed.
  */
 public void propertyChange(java.beans.PropertyChangeEvent event) {
-	if (utility.isNodeStructureChanged(event)) {
+/*  if ((event.getNewValue() instanceof List) && (event.getOldValue() instanceof List)) {
+            if (((List)event.getNewValue()).size() > ((List)event.getOldValue()).size()) {
+                // assume last element in list has changed
+                fireTreeNodesInserted(((List)event.getNewValue()).get(((List)event.getNewValue()).size() - 1)); //event.getSource());
+            }
+    }
+*/
+    if (utility.isNodeStructureChanged(event)) {
 		fireTreeStructureChanged(event.getSource());
     } else if (utility.isNodeChanged(event)) {
 	   	fireTreeNodesChanged(event.getSource());
-//TODO width of text not correctly updated in Tree
     }
 }
   public void refresh(){
