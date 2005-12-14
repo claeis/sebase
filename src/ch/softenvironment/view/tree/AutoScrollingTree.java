@@ -21,13 +21,12 @@ import java.awt.dnd.DnDConstants;
  * 
  * @author ce
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2005-06-30 07:29:01 $
+ * @version $Revision: 1.3 $ $Date: 2005-12-14 13:12:14 $
  */
 public class AutoScrollingTree extends javax.swing.JTree implements java.awt.dnd.Autoscroll {
     private int margin = 12;
     private TreeDragSource ds = null;
     private TreeDropTarget dt = null;
-    private TreeNodeUtility utility = null;
 /**
  * Create an AutoScrolling JTree with "drag and drop" support.
  * @param dndType according to java.awt.dnd.DnDConstants
@@ -35,7 +34,7 @@ public class AutoScrollingTree extends javax.swing.JTree implements java.awt.dnd
 public AutoScrollingTree(final int dndType) {
     super();
 	//  drag/drop support
-	if ((dndType == DnDConstants.ACTION_MOVE) || (dndType == DnDConstants.ACTION_NONE)) {
+	if (dndType == DnDConstants.ACTION_MOVE) {
 		ds = new TreeDragSource(this, dndType);
     	dt = new TreeDropTarget(this);
 	} else {
@@ -74,15 +73,6 @@ public java.awt.Insets getAutoscrollInsets() {
         inner.x - outer.x + margin,
         outer.height - inner.height - inner.y + outer.y + margin,
         outer.width - inner.width - inner.x + outer.x + margin);
-}
-/**
- * Overwrites.
- */
-public void startEditingAtPath(javax.swing.tree.TreePath path) {
-	super.startEditingAtPath(path);
-//TODO mark contents here???
-//	java.awt.Component c = getComponent(0);
-//	((javax.swing.CellRendererPane)c).setBackground(java.awt.Color.black);
 }
 /**
  * Convenience Method.
