@@ -1,5 +1,4 @@
 package ch.softenvironment.util;
-
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -11,12 +10,11 @@ package ch.softenvironment.util;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  */
-
 import ch.softenvironment.client.ResourceManager;
 /**
  * Show Developer failures.
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2005-04-25 15:31:36 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.8 $ $Date: 2005-12-15 14:03:51 $
  */
 public class DeveloperException extends RuntimeException {
 	private String message = null;
@@ -26,29 +24,27 @@ public class DeveloperException extends RuntimeException {
 	private Throwable originalException = null;
 /**
  * Construct a DeveloperException.
+ * @see #DeveloperException(Class, String, String, String)
  */
-public DeveloperException(Class aClass, String method, String message) {
-	this(aClass, method, message, null);
+public DeveloperException(Class type, String method, String message) {
+	this(type, method, message, null);
 }
 /**
  * Construct a DeveloperException.
- * @param aClass (Class where error happened)
- * @param method (producing the error)
- * @param title (Title for ErrorDialog)
- * @param message (Message for ErrorDialog)
+ * @see #DeveloperException(Class, String, String, String, Throwable)
  */
-public DeveloperException(Class aClass, String method, String message, String title) {
-	this(aClass, method, message, title, null);
+public DeveloperException(Class type, String method, String message, String title) {
+	this(type, method, message, title, null);
 }
 /**
  * Construct a DeveloperException.
- * @param aClass Class where error happened
+ * @param type Class where error happened
  * @param method producing the error
  * @param title Title for ErrorDialog
  * @param message Message for ErrorDialog
  * @param e Original Exception happened
  */
-public DeveloperException(Class aClass, String method, String message, String title, Throwable e) {
+public DeveloperException(Class type, String method, String message, String title, Throwable e) {
 	super();
 	this. originalException = e;
 	
@@ -57,9 +53,11 @@ public DeveloperException(Class aClass, String method, String message, String ti
 		msg = msg + "[Original fault: " + e.getMessage() + "]";
 	}
 	
-	Tracer.getInstance().developerError(aClass, method, msg);
+	Tracer.getInstance().developerError(type, method, msg);
 	
-	this.errorObject = aClass.getName();
+    if (type != null) {
+	   this.errorObject = type.getName();
+    }
 	this.errorMethod = method;
 	this.message = msg;
 	if (title == null) {
@@ -70,29 +68,35 @@ public DeveloperException(Class aClass, String method, String message, String ti
 }
 /**
  * Construct a DeveloperException.
+ * @see #DeveloperException(Object, String, String, String)
  */
 public DeveloperException(Object object, String method, String message) {
 	this(object, method, message, null);
 }
 /**
  * Construct a DeveloperException.
- * @param title (Title for ErrorDialog)
- * @param message (Message for ErrorDialog)
+ * @see #DeveloperException(Object, String, String, String, Throwable)
  */
 public DeveloperException(Object errorObject, String errorMethod, String message, String title) {
 	this(errorObject, errorMethod, message, title, null);
 }
 /**
  * Construct a DeveloperException.
- * @param title (Title for ErrorDialog)
- * @param message (Message for ErrorDialog)
+ * @param errorObject Instance where error happened
+ * @see #DeveloperException(Class, String, String, String, Throwable)
  */
 public DeveloperException(Object errorObject, String errorMethod, String message, String title, Throwable e) {
-	this(errorObject.getClass(), errorMethod, message, title, e);
+	this(errorObject == null ? null : errorObject.getClass(), errorMethod, message, title, e);
 }
+/**
+ * Return the original message and the source where Error happened.
+ */
 public String getMessage() {
 	return message + "\n" + ResourceManager.getResource(DeveloperException.class, "CISource") + ": " + errorObject + "." + errorMethod;
 }
+/**
+ * Return the original title of error.
+ */
 public String getTitle() {
 	return title;
 }
