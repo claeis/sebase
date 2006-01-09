@@ -12,12 +12,13 @@ package ch.softenvironment.view;
  * Lesser General Public License for more details.
  */
  
+import java.util.EventObject;
 import ch.softenvironment.util.*;
 import ch.softenvironment.client.ResourceManager;
 /**
  * Provide a simple editor Area with minimal functionality.
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2004-09-14 16:56:57 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.7 $ $Date: 2006-01-09 13:56:27 $
  */
 public class SimpleEditorPanel extends javax.swing.JPanel {
 	private boolean hasContentsChanged = false;
@@ -62,8 +63,6 @@ class IvjEventHandler implements java.awt.event.ActionListener, java.awt.event.F
 		public void keyReleased(java.awt.event.KeyEvent e) {
 			if (e.getSource() == SimpleEditorPanel.this.getTxaEditor()) 
 				connEtoC5(e);
-			if (e.getSource() == SimpleEditorPanel.this.getTxaEditor()) 
-				connEtoC8(e);
 		};
 		public void keyTyped(java.awt.event.KeyEvent e) {};
 		public void mouseClicked(java.awt.event.MouseEvent e) {};
@@ -91,6 +90,7 @@ public SimpleEditorPanel() {
  */
 public SimpleEditorPanel(java.awt.LayoutManager layout) {
 	super(layout);
+    initialize();
 }
 /**
  * SimpleEditorPanel constructor comment.
@@ -99,14 +99,9 @@ public SimpleEditorPanel(java.awt.LayoutManager layout) {
  */
 public SimpleEditorPanel(java.awt.LayoutManager layout, boolean isDoubleBuffered) {
 	super(layout, isDoubleBuffered);
+    initialize();
 }
-/**
- * SimpleEditorPanel constructor comment.
- * @param isDoubleBuffered boolean
- */
-public SimpleEditorPanel(boolean isDoubleBuffered) {
-	super(isDoubleBuffered);
-}
+
 /**
  * 
  * @param newListener ch.softenvironment.view.SimpleEditorPanelListener
@@ -120,6 +115,7 @@ public void addSimpleEditorPanelListener(ch.softenvironment.view.SimpleEditorPan
  */
 public void append(String text) {
 	getTxaEditor().append(text);
+    setContentsChanged();
 }
 /**
  * Remove the whole contents from editing area.
@@ -127,7 +123,7 @@ public void append(String text) {
  */
 public void clearAll() {
 	getTxaEditor().selectAll();
-	getTxaEditor().replaceSelection("");
+	mniDelete();
 }
 /**
  * connEtoC1:  (MniDelete.action.actionPerformed(java.awt.event.ActionEvent) --> SimpleEditorPanel.mniDelete()V)
@@ -228,7 +224,7 @@ private void connEtoC5(java.awt.event.KeyEvent arg1) {
 	try {
 		// user code begin {1}
 		// user code end
-		this.txaEditor_KeyReleased(arg1);
+		this.setContentsChanged();
 		// user code begin {2}
 		// user code end
 	} catch (java.lang.Throwable ivjExc) {
@@ -265,24 +261,6 @@ private void connEtoC7(java.awt.event.ActionEvent arg1) {
 		// user code begin {1}
 		// user code end
 		this.mniCopy();
-		// user code begin {2}
-		// user code end
-	} catch (java.lang.Throwable ivjExc) {
-		// user code begin {3}
-		// user code end
-		handleException(ivjExc);
-	}
-}
-/**
- * connEtoC8:  (TxaEditor.key.keyReleased(java.awt.event.KeyEvent) --> SimpleEditorPanel.fireTxaEditorKey_keyReleased(Ljava.util.EventObject;)V)
- * @param arg1 java.awt.event.KeyEvent
- */
-/* WARNING: THIS METHOD WILL BE REGENERATED. */
-private void connEtoC8(java.awt.event.KeyEvent arg1) {
-	try {
-		// user code begin {1}
-		// user code end
-		this.fireTxaEditorKey_keyReleased(new java.util.EventObject(this));
 		// user code begin {2}
 		// user code end
 	} catch (java.lang.Throwable ivjExc) {
@@ -346,7 +324,7 @@ private void connEtoM2(java.awt.event.FocusEvent arg1) {
 	}
 }
 /**
- * Method to support listener events.
+ * Method to support listener events whenever contents changes.
  * @param newEvent java.util.EventObject
  */
 protected void fireTxaEditorKey_keyReleased(java.util.EventObject newEvent) {
@@ -357,6 +335,7 @@ protected void fireTxaEditorKey_keyReleased(java.util.EventObject newEvent) {
 }
 /**
  * @see BaseFrame (same method)
+ * @deprecated (TODO: inherit this Panel from BasePanel and implement ListMenuChoice)
  */
 private void genericPopupDisplay(java.awt.event.MouseEvent event, javax.swing.JPopupMenu popupMenu) {
 	if (event.isPopupTrigger() && getTxaEditorEditable())  {
@@ -426,7 +405,7 @@ private javax.swing.JMenuItem getMniCopy() {
 			ivjMniCopy.setText("Kopieren");
 			ivjMniCopy.setEnabled(false);
 			// user code begin {1}
-			ivjMniCopy.setText(ResourceManager.getInstance().getResource(SimpleEditorPanel.class, "MniCopy_text"));
+			ivjMniCopy.setText(ResourceManager.getResource(SimpleEditorPanel.class, "MniCopy_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -449,7 +428,7 @@ private javax.swing.JMenuItem getMniCut() {
 			ivjMniCut.setText("Ausschneiden");
 			ivjMniCut.setEnabled(false);
 			// user code begin {1}
-			ivjMniCut.setText(ResourceManager.getInstance().getResource(SimpleEditorPanel.class, "MniCut_text"));
+			ivjMniCut.setText(ResourceManager.getResource(SimpleEditorPanel.class, "MniCut_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -472,7 +451,7 @@ private javax.swing.JMenuItem getMniDelete() {
 			ivjMniDelete.setText("Löschen");
 			ivjMniDelete.setEnabled(false);
 			// user code begin {1}
-			ivjMniDelete.setText(ResourceManager.getInstance().getResource(SimpleEditorPanel.class, "MniDelete_text"));
+			ivjMniDelete.setText(ResourceManager.getResource(SimpleEditorPanel.class, "MniDelete_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -495,7 +474,7 @@ private javax.swing.JMenuItem getMniPaste() {
 			ivjMniPaste.setText("Einfügen");
 			ivjMniPaste.setEnabled(false);
 			// user code begin {1}
-			ivjMniPaste.setText(ResourceManager.getInstance().getResource(SimpleEditorPanel.class, "MniPaste_text"));
+			ivjMniPaste.setText(ResourceManager.getResource(SimpleEditorPanel.class, "MniPaste_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -518,7 +497,7 @@ private javax.swing.JMenuItem getMniRedo() {
 			ivjMniRedo.setText("Wiederherstellen");
 			ivjMniRedo.setEnabled(false);
 			// user code begin {1}
-			ivjMniRedo.setText(ResourceManager.getInstance().getResource(SimpleEditorPanel.class, "MniRedo_text"));
+			ivjMniRedo.setText(ResourceManager.getResource(SimpleEditorPanel.class, "MniRedo_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -541,7 +520,7 @@ private javax.swing.JMenuItem getMniSelectAll() {
 			ivjMniSelectAll.setText("Alles markieren");
 			ivjMniSelectAll.setEnabled(false);
 			// user code begin {1}
-			ivjMniSelectAll.setText(ResourceManager.getInstance().getResource(SimpleEditorPanel.class, "MniSelectAll_text"));
+			ivjMniSelectAll.setText(ResourceManager.getResource(SimpleEditorPanel.class, "MniSelectAll_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -564,7 +543,7 @@ private javax.swing.JMenuItem getMniUndo() {
 			ivjMniUndo.setText("Rückgängig");
 			ivjMniUndo.setEnabled(false);
 			// user code begin {1}
-			ivjMniUndo.setText(ResourceManager.getInstance().getResource(SimpleEditorPanel.class, "MniUndo_text"));
+			ivjMniUndo.setText(ResourceManager.getResource(SimpleEditorPanel.class, "MniUndo_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -626,7 +605,8 @@ private javax.swing.JScrollPane getScpEditor() {
 	return ivjScpEditor;
 }
 /**
- * Return contents.
+ * Adapter-Method.
+ * @see JTextArea
  */
 public String getText() {
 	return getTxaEditor().getText();
@@ -669,9 +649,8 @@ private void handleException(java.lang.Throwable exception) {
 	Tracer.getInstance().uncaughtException(this, "handleException(..)", exception);//$NON-NLS-1$
 }
 /**
- * Set contents from outside.
- * Reset of contentsChanged.
- * @see hasContentsChanged()
+ * Check whether contents has changed.
+ * @see #setContentsChanged()
  */
 public boolean hasContentsChanged() {
 	return hasContentsChanged;
@@ -716,75 +695,45 @@ private void initialize() {
 	// user code end
 }
 /**
- * main entrypoint - starts the part when it is run as an application
- * @param args java.lang.String[]
- */
-public static void main(java.lang.String[] args) {
-	try {
-		javax.swing.JFrame frame = new javax.swing.JFrame();
-		SimpleEditorPanel aSimpleEditorPanel;
-		aSimpleEditorPanel = new SimpleEditorPanel();
-		frame.setContentPane(aSimpleEditorPanel);
-		frame.setSize(aSimpleEditorPanel.getSize());
-		frame.addWindowListener(new java.awt.event.WindowAdapter() {
-			public void windowClosing(java.awt.event.WindowEvent e) {
-				System.exit(0);
-			};
-		});
-		frame.show();
-		java.awt.Insets insets = frame.getInsets();
-		frame.setSize(frame.getWidth() + insets.left + insets.right, frame.getHeight() + insets.top + insets.bottom);
-		frame.setVisible(true);
-	} catch (Throwable exception) {
-		System.err.println("Exception occurred in main() of javax.swing.JPanel");//$NON-NLS-1$
-		exception.printStackTrace(System.out);
-	}
-}
-/**
  * Copy selection-contents into Clipboard.
  */
 private void mniCopy() {
 	getTxaEditor().copy();
-	hasContentsChanged = true;
 }
 /**
- * Cut text into Clipboard.
+ * Cut selection-contents into Clipboard.
  */
 private void mniCut() {
 	getTxaEditor().cut();
-	hasContentsChanged = true;
+    setContentsChanged();
 }
 /**
  * Remove the selected contents.
  */
 private void mniDelete() {
-	getTxaEditor().replaceSelection("");//$NON-NLS-1$
-	hasContentsChanged = true;
-}
-/**
- * Comment
- */
-private void mniFindReplace() {
-	return;
+	getTxaEditor().replaceSelection("");
+    setContentsChanged();
 }
 /**
  * Paste Clipboard contents into TextArea.
  */
 private void mniPaste() {
 	getTxaEditor().paste();
-	hasContentsChanged = true;
+	setContentsChanged();
 }
 /**
  * Comment
  */
 private void mniRedo() {
-	return;
+//TODO NYI
+    setContentsChanged();
 }
 /**
  * Comment
  */
 private void mniUndo() {
-	return;
+//TODO NYI
+    setContentsChanged();
 }
 /**
  * 
@@ -795,12 +744,18 @@ public void removeSimpleEditorPanelListener(ch.softenvironment.view.SimpleEditor
 	return;
 }
 /**
+ * Adapter-Method.
  * @see JTextArea.
  */
 public void setBackground(java.awt.Color color) {
 	getTxaEditor().setBackground(color);
 }
+private void setContentsChanged() {
+    hasContentsChanged = true;
+    fireTxaEditorKey_keyReleased(new EventObject(this));
+}
 /**
+ * Adapter-Method.
  * @see JTextArea.
  */
 public void setEditable(boolean isEditable) {
@@ -812,40 +767,38 @@ public void setEditable(boolean isEditable) {
 	}
 }
 /**
+ * Adapter-Method.
  * @see JTextArea.
  */
 public void setEnabled(boolean isEnabled) {
 	getTxaEditor().setEnabled(isEnabled);
 }
 /**
+ * Adapter-Method.
  * @see JTextArea.
  */
 public void setLineWrap(boolean isLineWrap) {
 	getTxaEditor().setLineWrap(isLineWrap);
 }
 /**
+ * Adapter-Method.
  * @see JTextArea.
  */
 public void setText(String text) {
 	getTxaEditor().setText(text);
 }
 /**
+ * Adapter-Method.
  * @see JTextArea.
  */
 public void setToolTipText(String toolTip) {
 	getTxaEditor().setToolTipText(toolTip);
 }
 /**
- * Method generated to support the promotion of the txaEditorEditable attribute.
- * @param arg1 boolean
+ * Adapter-Method.
+ * @see JTextArea
  */
 public void setTxaEditorEditable(boolean arg1) {
 	getTxaEditor().setEditable(arg1);
-}
-/**
- * Keyboard typed.
- */
-private void txaEditor_KeyReleased(java.awt.event.KeyEvent keyEvent) {
-	hasContentsChanged = true;
 }
 }
