@@ -17,8 +17,8 @@ import ch.softenvironment.client.ResourceManager;
  * a Double-Property of a Model to this Components value-Property. Make sure
  * to trigger <b>propertyChange</b>-Event from this Component towards the Model.
  *
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2005-11-20 15:50:20 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.4 $ $Date: 2006-01-17 15:19:08 $
  */
 public class NumberTextField extends javax.swing.JTextField implements java.awt.event.InputMethodListener {
 	private java.text.DecimalFormat decFormat = null;
@@ -106,19 +106,7 @@ public void inputMethodTextChanged(java.awt.event.InputMethodEvent event) {
 		event.consume();
 	}
 }
-/**
- * Set the number of digits after comma to be displayed.
- */
-public void setFractionDigits(int numberOfDigits) {
-	if (numberOfDigits >= 0) {
-		decFormat = new java.text.DecimalFormat();
-		decFormat.setMinimumFractionDigits(numberOfDigits);
-		decFormat.setMaximumFractionDigits(numberOfDigits);
-		decFormat.setGroupingSize(3);			// separate thousand's
-		decFormat.setGroupingUsed(true);
-		decFormat.setDecimalSeparatorAlwaysShown(numberOfDigits > 0);
-	}
-}
+
 /**
  * Overwrites.
  */
@@ -127,11 +115,18 @@ public void setText(String t) {
 		// ignore String "null"
 		super.setText("");
 	} else {
-//		setText(getDecimalFormat().format(value.doubleValue()));
 /*
+        decFormat = new java.text.DecimalFormat();
+        decFormat.setMinimumFractionDigits(numberOfDigits);
+        decFormat.setMaximumFractionDigits(numberOfDigits);
+        decFormat.setGroupingSize(3);           // separate thousand's
+        decFormat.setGroupingUsed(true);
+        decFormat.setDecimalSeparatorAlwaysShown(numberOfDigits > 0);
+
+        setText(decFormat.format(value.doubleValue()));
 	try {
 		if (getText().length() > 0) {
-			setValue(new Double(getDecimalFormat().parse(getText()).doubleValue()));
+			setValue(new Double(decFormat.parse(getText()).doubleValue()));
 		} else {
 			setValue(null);
 		}
