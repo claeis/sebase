@@ -14,23 +14,19 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * Show Developer failures.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.8 $ $Date: 2005-12-15 14:03:51 $
+ * @version $Revision: 1.9 $ $Date: 2006-01-17 19:10:15 $
  */
 public class DeveloperException extends RuntimeException {
-	private String message = null;
 	private String title = null;
 	private String errorObject = null;
 	private String errorMethod = null;
-	private Throwable originalException = null;
 /**
- * Construct a DeveloperException.
  * @see #DeveloperException(Class, String, String, String)
  */
 public DeveloperException(Class type, String method, String message) {
 	this(type, method, message, null);
 }
 /**
- * Construct a DeveloperException.
  * @see #DeveloperException(Class, String, String, String, Throwable)
  */
 public DeveloperException(Class type, String method, String message, String title) {
@@ -42,24 +38,22 @@ public DeveloperException(Class type, String method, String message, String titl
  * @param method producing the error
  * @param title Title for ErrorDialog
  * @param message Message for ErrorDialog
- * @param e Original Exception happened
+ * @param cause Original Exception happened
  */
-public DeveloperException(Class type, String method, String message, String title, Throwable e) {
-	super();
-	this. originalException = e;
+public DeveloperException(Class type, String method, String message, String title, Throwable cause) {
+	super(message, cause);
 	
-	String msg = message;
-	if (e != null) {
-		msg = msg + "[Original fault: " + e.getMessage() + "]";
+	String msg = "";
+	if (cause != null) {
+		msg = "[" + ResourceManager.getResource(DeveloperException.class, "CIOriginalException") + ": " + cause.getMessage() + "]";
 	}
 	
-	Tracer.getInstance().developerError(type, method, msg);
+	Tracer.getInstance().developerError(type, method, message + " " + msg);
 	
     if (type != null) {
 	   this.errorObject = type.getName();
     }
 	this.errorMethod = method;
-	this.message = msg;
 	if (title == null) {
 		this.title = ResourceManager.getResource(DeveloperException.class, "CTDevelopmentError");
 	} else {
@@ -67,21 +61,18 @@ public DeveloperException(Class type, String method, String message, String titl
 	}
 }
 /**
- * Construct a DeveloperException.
  * @see #DeveloperException(Object, String, String, String)
  */
 public DeveloperException(Object object, String method, String message) {
 	this(object, method, message, null);
 }
 /**
- * Construct a DeveloperException.
  * @see #DeveloperException(Object, String, String, String, Throwable)
  */
 public DeveloperException(Object errorObject, String errorMethod, String message, String title) {
 	this(errorObject, errorMethod, message, title, null);
 }
 /**
- * Construct a DeveloperException.
  * @param errorObject Instance where error happened
  * @see #DeveloperException(Class, String, String, String, Throwable)
  */
@@ -89,34 +80,24 @@ public DeveloperException(Object errorObject, String errorMethod, String message
 	this(errorObject == null ? null : errorObject.getClass(), errorMethod, message, title, e);
 }
 /**
- * Return the original message and the source where Error happened.
- */
-public String getMessage() {
-	return message + "\n" + ResourceManager.getResource(DeveloperException.class, "CISource") + ": " + errorObject + "." + errorMethod;
-}
-/**
- * Return the original title of error.
+ * Return the original title of error,
+ * for e.g. to use in ErrorDialog as Title.
  */
 public String getTitle() {
 	return title;
 }
-/*
-public String toString() {
-    String s = getClass().getName();
-    return (message != null) ? (s + ": " + message) : s;//$NON-NLS-1$
-}
-*/
 /**
- * Overwrites
+ * Overwrites.
+ * Print also source of failure and causing Exception if available.
  */
 public String getLocalizedMessage() {
     StringBuffer buffer = new StringBuffer();
-/*    if (message != null) {
-        buffer.append("Developer note:\n- " + message);
-    }
-*/
-    if (originalException != null) {
-        buffer.append("\nOriginal exception:\n- " + originalException.getLocalizedMessage());
+    buffer.append(getMessage());
+    // source of failure
+    buffer.append("\n" + ResourceManager.getResource(DeveloperException.class, "CISource") + ": " + errorObject + "#" + errorMethod);
+    if (getCause() != null) {
+        // initiating Exception
+        buffer.append("\n" + ResourceManager.getResource(DeveloperException.class, "CIOriginalException") + "=[" + getCause().getLocalizedMessage() + "]");
     }
     return buffer.toString();
 }
