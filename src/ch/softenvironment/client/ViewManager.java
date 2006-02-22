@@ -1,5 +1,4 @@
 package ch.softenvironment.client;
-
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -11,15 +10,17 @@ package ch.softenvironment.client;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  */
+import ch.softenvironment.view.ListMenuChoice;
  
 /**
  * Utility to manage opened GUI's for associated Object's.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2005-06-30 07:25:23 $
+ * @version $Revision: 1.6 $ $Date: 2006-02-22 07:21:33 $
  */
 public class ViewManager {
 	java.util.Map searchViews = new java.util.HashMap();
 	java.util.Map detailViews = new java.util.HashMap();
+    java.util.Map userActionRights = new java.util.HashMap();
 /**
  * ViewManager constructor comment.
  */
@@ -173,5 +174,28 @@ private java.awt.Window getView(Object object) {
 		}
 	}
 	return null;
+}
+/**
+ * Return specified rights for a model class represented by different views.
+ * By default all rights are allowed, unless otherwise registered
+ * by {@link #setRights(Class, UserActionRights) }
+ * @param model (Model class to be checked for manipulating rights)
+ * @return
+ * @see ListMenuChoice#adaptUserAction(java.util.EventObject, Object)
+ */
+public UserActionRights getRights(Class model) {
+    if (userActionRights.containsKey(model)) {
+        return (UserActionRights)userActionRights.get(model);
+    } else {
+        return new UserActionRights(UserActionRights.ALL);
+    }
+}
+/**
+ * Register rights for a model-class.
+ * @param model
+ * @param rights
+ */
+public void setRights(Class model, UserActionRights rights) {
+    userActionRights.put(model, rights);
 }
 }
