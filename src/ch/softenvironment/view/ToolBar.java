@@ -1,22 +1,12 @@
 package ch.softenvironment.view;
 
 
-/* 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- */
 import ch.softenvironment.client.ResourceManager;
+import ch.softenvironment.client.UserActionRights;
 /**
  * StandardToolbar.
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.8 $ $Date: 2005-06-30 07:27:43 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.9 $ $Date: 2006-02-22 08:06:26 $
  */
 public class ToolBar extends javax.swing.JToolBar {
 	// list of Objects to treat by selector
@@ -684,9 +674,13 @@ private javax.swing.JButton getTbbDelete() {
 /**
  * Method generated to support the promotion of the tbbDeleteEnabled attribute.
  * @return boolean
+ * @deprecated (use {@link #getTbbRemoveEnabled() } instead)
  */
 public boolean getTbbDeleteEnabled() {
-	return getTbbDelete().isEnabled();
+	return getTbbRemoveEnabled();
+}
+public boolean getTbbRemoveEnabled() {
+    return getTbbDelete().isEnabled();
 }
 /**
  * Return the TbbFindReplace property value.
@@ -879,9 +873,13 @@ private javax.swing.JButton getTbbOpen() {
 /**
  * Method generated to support the promotion of the tbbOpenEnabled attribute.
  * @return boolean
+ * @deprecated (use {@link #getTbbChangeEnabled() } instead)
  */
 public boolean getTbbOpenEnabled() {
-	return getTbbOpen().isEnabled();
+	return getTbbChangeEnabled();
+}
+public boolean getTbbChangeEnabled() {
+    return getTbbOpen().isEnabled();
 }
 /**
  * Return the TbbPaste property value.
@@ -1249,9 +1247,17 @@ public void setTbbCutEnabled(boolean arg1) {
 /**
  * Method generated to support the promotion of the tbbDeleteEnabled attribute.
  * @param arg1 boolean
+ * @deprecated (use {@link #setTbbRemoveEnabled(boolean) instead} 
  */
 public void setTbbDeleteEnabled(boolean arg1) {
-	getTbbDelete().setEnabled(arg1);
+	setTbbRemoveEnabled(arg1);
+}
+/**
+ * Set status of button "Remove".
+ * @param enabled boolean
+ */
+public void setTbbRemoveEnabled(boolean enabled) {
+    getTbbDelete().setEnabled(enabled);
 }
 /**
  * Method generated to support the promotion of the tbbFindEnabled attribute.
@@ -1270,9 +1276,17 @@ public void setTbbNewEnabled(boolean arg1) {
 /**
  * Method generated to support the promotion of the tbbOpenEnabled attribute.
  * @param arg1 boolean
+ * @deprecated (use {@link #setTbbChangeEnabled(boolean) instead} 
  */
 public void setTbbOpenEnabled(boolean arg1) {
-	getTbbOpen().setEnabled(arg1);
+	setTbbChangeEnabled(arg1);
+}
+/**
+ * Set status of button "Change".
+ * @param enabled boolean
+ */
+public void setTbbChangeEnabled(boolean enabled) {
+    getTbbOpen().setEnabled(enabled);
 }
 /**
  * Method generated to support the promotion of the tbbPasteEnabled attribute.
@@ -1339,5 +1353,28 @@ private void treatNextPreviousButtons() {
 		getTbbLast().setEnabled(false);
 		getLblSelector().setText(" 0/0 ");//$NON-NLS-1$
 	}
+}
+/**
+ * Adapt Toolbar according to given rights for the allowed user actions.
+ * @param rights
+ */
+public void adaptRights(UserActionRights rights) {
+    if (rights != null) {
+        if (!rights.isNewObjectAllowed()) {
+            remove(getTbbNew());
+        }
+        if (!rights.isChangeObjectAllowed()) {
+            remove(getTbbOpen());
+            remove(getTbbFind());
+        }
+        if (!rights.isRemoveObjectsAllowed()) {
+            remove(getTbbDelete());
+        }
+        if (!rights.isSaveObjectAllowed()) {
+            remove(getTbbSave());
+            remove(getTbbUndo());
+            remove(getTbbRedo());
+        }
+    }
 }
 }

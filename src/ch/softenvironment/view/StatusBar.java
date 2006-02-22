@@ -1,5 +1,7 @@
 package ch.softenvironment.view;
 
+import ch.softenvironment.client.UserActionRights;
+
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,8 +16,8 @@ package ch.softenvironment.view;
  
 /**
  * StatusBar (bottom-Line of a Window).
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-09-14 17:00:52 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.4 $ $Date: 2006-02-22 08:06:26 $
  * @see ApplicationFrame Subclasses
  */
 public class StatusBar extends BasePanel {
@@ -232,6 +234,17 @@ public void setMark(String status) {
  */
 public void setStatus(String status) {
 	getLblStatus().setText(status);
+}
+/**
+ * Display User-Rights for the GUI, this StatusBar is attached to.
+ * @param rights
+ */
+public void setRights(UserActionRights rights) {
+    if (rights != null) {
+        if (!rights.isSaveObjectAllowed()) {
+            setStatus(getResourceString("CIReadOnly"));
+        }
+    }
 }
 /**
  * The owning View is in state of an "Assignment".
