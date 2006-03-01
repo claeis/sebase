@@ -1,12 +1,26 @@
 package ch.softenvironment.view;
 
-
+/*
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 import ch.softenvironment.client.ResourceManager;
 import ch.softenvironment.client.UserActionRights;
 /**
  * StandardToolbar.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.9 $ $Date: 2006-02-22 08:06:26 $
+ * @version $Revision: 1.10 $ $Date: 2006-03-01 09:20:18 $
  */
 public class ToolBar extends javax.swing.JToolBar {
 	// list of Objects to treat by selector
@@ -589,7 +603,7 @@ private javax.swing.JButton getTbbCopy() {
 			ivjTbbCopy.setEnabled(false);
 			// user code begin {1}
 			ivjTbbCopy.setIcon(CommonUserAccess.getIconCopy());
-			ivjTbbCopy.setToolTipText(getResourceString("TbbCopy_toolTipText"));
+			ivjTbbCopy.setToolTipText(CommonUserAccess.getMniEditCopyText());
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -625,7 +639,7 @@ private javax.swing.JButton getTbbCut() {
 			ivjTbbCut.setEnabled(false);
 			// user code begin {1}
 			ivjTbbCut.setIcon(CommonUserAccess.getIconCut());
-			ivjTbbCut.setToolTipText(getResourceString("TbbCut_toolTipText"));
+			ivjTbbCut.setToolTipText(CommonUserAccess.getMniEditCutText());
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -661,7 +675,7 @@ private javax.swing.JButton getTbbDelete() {
 			ivjTbbDelete.setEnabled(false);
 			// user code begin {1}
 			ivjTbbDelete.setIcon(CommonUserAccess.getIconRemove());
-			ivjTbbDelete.setToolTipText(getResourceString("TbbDelete_toolTipText"));
+			ivjTbbDelete.setToolTipText(CommonUserAccess.getMniEditRemoveText());
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -701,7 +715,7 @@ private javax.swing.JButton getTbbFind() {
 			ivjTbbFind.setEnabled(false);
 			// user code begin {1}
 			ivjTbbFind.setIcon(CommonUserAccess.getIconFind());
-			ivjTbbFind.setToolTipText(getResourceString("TbbFind_toolTipText"));
+			ivjTbbFind.setToolTipText(CommonUserAccess.getMniEditFindText());
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -795,7 +809,7 @@ private javax.swing.JButton getTbbNew() {
 			ivjTbbNew.setEnabled(false);
 			// user code begin {1}
 			ivjTbbNew.setIcon(CommonUserAccess.getIconNew());
-			ivjTbbNew.setToolTipText(getResourceString("TbbNew_toolTipText"));
+			ivjTbbNew.setToolTipText(CommonUserAccess.getMniFileNewWindowText());
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -860,7 +874,7 @@ private javax.swing.JButton getTbbOpen() {
 			ivjTbbOpen.setEnabled(false);
 			// user code begin {1}
 			ivjTbbOpen.setIcon(CommonUserAccess.getIconChange());
-			ivjTbbOpen.setToolTipText(getResourceString("TbbOpen_toolTipText"));
+			ivjTbbOpen.setToolTipText(CommonUserAccess.getMniEditChangeWindowText());
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -900,7 +914,7 @@ private javax.swing.JButton getTbbPaste() {
 			ivjTbbPaste.setEnabled(false);
 			// user code begin {1}
 			ivjTbbPaste.setIcon(CommonUserAccess.getIconPaste());
-			ivjTbbPaste.setToolTipText(getResourceString("TbbPaste_toolTipText"));
+			ivjTbbPaste.setToolTipText(CommonUserAccess.getMniEditPasteText());
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -965,7 +979,7 @@ private javax.swing.JButton getTbbPrint() {
 			ivjTbbPrint.setEnabled(false);
 			// user code begin {1}
 			ivjTbbPrint.setIcon(CommonUserAccess.getIconPrint());
-			ivjTbbPrint.setToolTipText(getResourceString("TbbPrint_toolTipText"));
+			ivjTbbPrint.setToolTipText(CommonUserAccess.getMniFilePrintWindowText());
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -1001,7 +1015,7 @@ private javax.swing.JButton getTbbRedo() {
 			ivjTbbRedo.setEnabled(false);
 			// user code begin {1}
 			ivjTbbRedo.setIcon(CommonUserAccess.getIconRedo());
-			ivjTbbRedo.setToolTipText(getResourceString("MniRedo_text"));
+			ivjTbbRedo.setToolTipText(CommonUserAccess.getMniEditRedoText());
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -1037,7 +1051,7 @@ private javax.swing.JButton getTbbSave() {
 			ivjTbbSave.setEnabled(false);
 			// user code begin {1}
 			ivjTbbSave.setIcon(CommonUserAccess.getIconSave());
-			ivjTbbSave.setToolTipText(getResourceString("TbbSave_toolTipText"));
+			ivjTbbSave.setToolTipText(CommonUserAccess.getMniFileSaveText());
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -1073,7 +1087,7 @@ private javax.swing.JButton getTbbUndo() {
 			ivjTbbUndo.setEnabled(false);
 			// user code begin {1}
 			ivjTbbUndo.setIcon(CommonUserAccess.getIconUndo());
-			ivjTbbUndo.setToolTipText(getResourceString("TbbUndo_toolTipText"));
+			ivjTbbUndo.setToolTipText(CommonUserAccess.getMniEditUndoText());
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
