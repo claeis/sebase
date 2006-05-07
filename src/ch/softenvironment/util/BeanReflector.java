@@ -21,7 +21,7 @@ package ch.softenvironment.util;
  *   -> MyObject#getMyProperty()			// the getter-Method
  *
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.9 $ $Date: 2005-06-30 07:26:43 $
+ * @version $Revision: 1.10 $ $Date: 2006-05-07 13:51:10 $
  */
 public class BeanReflector extends java.util.EventObject {
 	private transient String property = null;
@@ -84,10 +84,10 @@ public String getProperty() {
 	return property;
 }
 /**
- * Transform "myProperty" to "MyProperty".
+ * Transform .
  */
 protected String getPropertyUpper() {
-	return property.substring(0, 1).toUpperCase() + property.substring(1, property.length());
+    return StringUtils.firstLetterToUppercase(property);
 }
 /**
  * Return the setter-Method for given Object and Property.
@@ -105,6 +105,8 @@ public java.lang.Class getType() throws NoSuchMethodException {
 /**
  * Return the Source's Property-value
  * by calling the sources getter-Method.
+ * Primitive types (such as boolean, int, etc) will be returned as
+ * their Class Type (such as Boolean, Integer, etc)!
  */
 public Object getValue() throws IllegalAccessException, java.lang.reflect.InvocationTargetException {
 	try {
@@ -153,6 +155,8 @@ public void setField(Object value) {
  * Set the Property by its <b>setter-Method</b> with given value.
  * The Setter-Method must be public.
  * For e.g.: source.setProperty(Object value)
+ * Primitive types (such as boolean, int, etc) will be returned as
+ * their Class Type (such as Boolean, Integer, etc)!
  */
 public void setValue(Object value) throws java.lang.reflect.InvocationTargetException, IllegalAccessException {
 	try {
