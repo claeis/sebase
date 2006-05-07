@@ -25,11 +25,11 @@ import ch.softenvironment.util.Tracer;
 /**
  * Tool for Mouse-Drag withing a JTree.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2005-12-13 17:25:56 $
+ * @version $Revision: 1.5 $ $Date: 2006-05-07 14:02:37 $
  */
 class TreeDragSource implements DragSourceListener, DragGestureListener {
     private DragSource source = null;
-    private DragGestureRecognizer recognizer = null;
+//    private DragGestureRecognizer recognizer = null;
     private AutoScrollingTree sourceTree = null;
     private TransferableTreeNode transferable = null;
 
@@ -37,7 +37,7 @@ class TreeDragSource implements DragSourceListener, DragGestureListener {
         super();
         sourceTree = tree;
       	source = new DragSource();
-      	recognizer = source.createDefaultDragGestureRecognizer(sourceTree, actions, this);
+        /*DragGestureRecognizer recognizer =*/ source.createDefaultDragGestureRecognizer(sourceTree, actions, this);
     }
     /*
      * Only MOVE action supported.

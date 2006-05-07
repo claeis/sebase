@@ -1,4 +1,5 @@
 package ch.softenvironment.view.tree;
+
 /*
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,13 +20,15 @@ import java.awt.dnd.*;
 import java.awt.datatransfer.*;
 import javax.swing.*;
 import javax.swing.tree.*;
+
+import ch.softenvironment.client.ResourceManager;
 import ch.softenvironment.view.BaseDialog;
 import ch.softenvironment.view.BaseFrame;
 
 /**
  * Listener for Mouse-Drop within a JTree.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2005-12-13 17:25:56 $
+ * @version $Revision: 1.5 $ $Date: 2006-05-07 14:02:37 $
  */
 class TreeDropTarget implements DropTargetListener {
 //	private DropTarget target = null;
@@ -80,9 +83,14 @@ class TreeDropTarget implements DropTargetListener {
 		  Object /*DefaultMutableTreeNode*/ sourceNode = /*(DefaultMutableTreeNode)*/ p.getLastPathComponent();
 		  String msg = targetTree.getUtility().isAddable(sourceNode, target);
 		  if (msg == null) {
-		    dtde.acceptDrop(dtde.getDropAction());
-		  	dtde.dropComplete(true);
-            targetTree.getUtility().relocateElement(sourceNode, target); //model.insertNodeInto(node, parent, 0);
+//TODO prevent strange Move-Effect ((select node, release Mouse, go over a '+' to open package, the sometimes drag is triggered) by an additional Confirm 
+            if (BaseDialog.showConfirm(targetTree, ResourceManager.getResource(TreeDropTarget.class, "CTMoveConfirm"), ResourceManager.getResource(TreeDropTarget.class, "CIMoveConfirm"))) {
+		      dtde.acceptDrop(dtde.getDropAction());
+		  	  dtde.dropComplete(true);
+              targetTree.getUtility().relocateElement(sourceNode, target); //model.insertNodeInto(node, parent, 0);
+            } else {
+                dtde.rejectDrop();
+            }
 		  } else {
 		  	dtde.rejectDrop();
 		  	BaseDialog.showWarning(targetTree, null, msg); // part of view mechanism => Dialog is ok here
