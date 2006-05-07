@@ -7,7 +7,7 @@ import ch.softenvironment.util.NlsUtils;
 
 /**
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2005-08-26 10:16:19 $
+ * @version $Revision: 1.2 $ $Date: 2006-05-07 14:53:51 $
  */
 public class NlsUtilsTestCase extends junit.framework.TestCase {
 /**
@@ -22,7 +22,7 @@ public NlsUtilsTestCase(String name) {
  */
 public void testDate() {
     GregorianCalendar cal = new java.util.GregorianCalendar(2003, java.util.Calendar.JANUARY, 25);
-    String date = java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT).format(cal.getTime());
+    String date = java.text.DateFormat.getDateInstance(/*java.text.DateFormat.SHORT*/).format(cal.getTime());
 	assertTrue("NlsUtils", date.equals(NlsUtils.formatDate(cal)));
 }
 /**

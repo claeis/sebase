@@ -30,7 +30,7 @@ import junit.framework.TestCase;
  * 
  * TestCase for DOMUtils.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2005-10-28 08:16:33 $
+ * @version $Revision: 1.2 $ $Date: 2006-05-07 14:53:51 $
  * @see ch.softenvironment.util.DOMUtils
  */
 public class DOMUtilsTestCase extends TestCase {
@@ -41,7 +41,10 @@ public class DOMUtilsTestCase extends TestCase {
     
     public void setUp() {
         try {
-            Tracer.start(Tracer.ALL);
+            if (Tracer.getInstance() == null) {
+//TODO use TestSetup()
+                Tracer.start(Tracer.ALL);
+            }
             
             docBuilder = DOMUtils.createDocumentBuilder(false);
         } catch(ParserConfigurationException e) {
@@ -124,7 +127,7 @@ public class DOMUtilsTestCase extends TestCase {
             
             String encoded = DOMUtils.encodeUTF8(text);
             assertFalse(text.equals(encoded));
-            assertFalse(text.equals(new String(encoded)));
+            assertFalse(text.equals(new String(encoded))); // actually unnecessary Test 
             
             String decoded = new String(encoded.getBytes(), "UTF-8");
             assertTrue(text.equals(decoded));

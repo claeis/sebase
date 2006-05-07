@@ -1,18 +1,20 @@
 package ch.softenvironment.util.test;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.Locale;
 import ch.softenvironment.util.BeanReflector;
+import ch.softenvironment.util.DeveloperException;
 
 /**
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2005-08-26 10:16:19 $
+ * @version $Revision: 1.2 $ $Date: 2006-05-07 14:53:51 $
  */
 public class BeanReflectorTestCase extends junit.framework.TestCase {
 	private TestBean bean = null;
 	public String fieldTest = null;
 	// Internal 
-	public class TestBean {
+	public static class TestBean {
 	    public String fieldTest = null;
 	    private String fieldText = null;
 	    private Double dVal = null;
@@ -20,79 +22,57 @@ public class BeanReflectorTestCase extends junit.framework.TestCase {
 	    private Integer iVal = null;
 	    private Boolean bVal = null;
 	    private java.util.Date date = null;
+        private boolean bPrimitive;
+        private int iPrimitive;
 	    
-	    /**
-	     * @return Returns the dVal.
-	     */
 	    public Double getDVal() {
 	        return dVal;
 	    }
-	    /**
-	     * @param val The dVal to set.
-	     */
 	    public void setDVal(Double val) {
 	        dVal = val;
 	    }
-	    /**
-	     * @return Returns the iVal.
-	     */
 	    public Integer getIVal() {
 	        return iVal;
 	    }
-	    /**
-	     * @param val The iVal to set.
-	     */
 	    public void setIVal(Integer val) {
 	        iVal = val;
 	    }
-	    /**
-	     * @return Returns the lVal.
-	     */
 	    public Long getLVal() {
 	        return lVal;
 	    }
-	    /**
-	     * @param val The lVal to set.
-	     */
 	    public void setLVal(Long val) {
 	        lVal = val;
 	    }
-	    /**
-	     * @return Returns the text.
-	     */
 	    public String getText() {
 	        return fieldText;
 	    }
-	    /**
-	     * @param text The text to set.
-	     */
 	    public void setText(String text) {
 	        this.fieldText = text;
 	    }
-	    /**
-	     * @return Returns the date.
-	     */
 	    public java.util.Date getDate() {
 	        return date;
 	    }
-	    /**
-	     * @param date The date to set.
-	     */
 	    public void setDate(java.util.Date date) {
 	        this.date = date;
 	    }
-	    /**
-	     * @return Returns the bVal.
-	     */
 	    public Boolean getBVal() {
 	        return bVal;
 	    }
-	    /**
-	     * @param val The bVal to set.
-	     */
 	    public void setBVal(Boolean val) {
 	        bVal = val;
 	    }
+        public boolean getBPrimitive() {
+            return bPrimitive;
+        }
+        public void setBPrimitive(boolean val) {
+            bPrimitive = val;
+        }
+        public int getIPrimitive() {
+            return iPrimitive;
+        }
+        public void setIPrimitive(int val) {
+            iPrimitive = val;
+        }
 	}
 /**
  * StringUtilsTestCase constructor comment.
@@ -110,8 +90,10 @@ protected void setUp() {
 	bean.setDVal(new Double(3.2));
 	bean.setLVal(new Long(1989));
 	bean.setIVal(new Integer(38));
-	bean.setBVal(new Boolean(true));
+	bean.setBVal(Boolean.TRUE);
 	bean.setDate(new Date());
+    bean.setBPrimitive(true);
+    bean.setIPrimitive(25);
 }
 public void testValue() throws Throwable {
     BeanReflector br = new BeanReflector(bean, "text");
@@ -164,6 +146,41 @@ public void testCloneValue() throws Throwable {
     clonedValue = br.cloneValue();
     assertTrue("BeanReflector->Date-Pointer not equal", bean.getDate() != clonedValue);
 	assertTrue("BeanReflector->Date-Contents is equal", bean.getDate().equals(clonedValue));
+}
+public void testPrimitiveBoolean() {
+    BeanReflector br = new BeanReflector(bean, "bPrimitive");
+    try  {
+        assertTrue("AMAZING: boolean => Boolean", br.getValue().equals(Boolean.TRUE));
+        br.setValue(Boolean.FALSE);
+        assertTrue("AMAZING: int => Integer", br.getValue().equals(Boolean.FALSE));
+        
+        Class type = br.getType();
+        assertTrue("BeanReflector->Boolean-Contents is equal", type == boolean.class);
+        assertTrue(type.getName().equals("boolean"));
+        
+// dummy test: => always true!!!
+assertTrue("BeanReflector->Boolean-Contents is equal", String.class instanceof Object); 
+assertTrue("BeanReflector->Boolean-Contents is equal", type instanceof Object);
+    } catch(Throwable e) {
+        System.out.println(e.getLocalizedMessage());
+        fail(e.getLocalizedMessage());
+    } 
+}
+public void testPrimitiveInt() {
+    BeanReflector br = new BeanReflector(bean, "iPrimitive");
+    try  {
+        assertTrue("AMAZING: int => Integer", br.getValue().equals(new Integer(25)));
+        
+        br.setValue(new Integer(-89));
+        assertTrue("AMAZING: int => Integer", br.getValue().equals(new Integer(-89)));
+        
+        Class type = br.getType();
+        assertTrue("BeanReflector->Integer-Contents is equal", type == int.class);
+        assertTrue(type.getName().equals("int"));
+    } catch(Throwable e) {
+        System.out.println(e.getLocalizedMessage());
+        fail(e.getLocalizedMessage());
+    } 
 }
 }
 

@@ -16,7 +16,7 @@ import junit.framework.TestCase;
 /**
  * Test class DeveloperException.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2006-01-17 19:12:21 $
+ * @version $Revision: 1.2 $ $Date: 2006-05-07 14:53:51 $
  */
 public class DeveloperExceptionTestCase extends TestCase {
     private static final String METHOD = "MyMethod()";
@@ -29,7 +29,7 @@ public class DeveloperExceptionTestCase extends TestCase {
         } catch(DeveloperException e) {
             assertTrue(e.getCause() == null);
             assertTrue(e.getMessage().equals(FAULT_MSG));
-            assertTrue(e.getTitle() ==  null);
+            assertTrue(e.getTitle() !=  null); // "Entwicklungsfehler"
             assertTrue(e.getLocalizedMessage().indexOf(METHOD) >= 0);
             assertTrue(e.getLocalizedMessage().indexOf("DeveloperException") >= 0);
         }

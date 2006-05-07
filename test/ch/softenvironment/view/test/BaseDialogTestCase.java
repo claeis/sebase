@@ -18,7 +18,7 @@ import junit.extensions.jfcunit.finder.NamedComponentFinder;
 /**
  * Test the BaseDialog class by JFCUnit.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2005-08-26 10:16:56 $
+ * @version $Revision: 1.2 $ $Date: 2006-05-07 14:54:17 $
  */
 public class BaseDialogTestCase extends JFCTestCase {
 //	private Container mainFrame = null;
@@ -37,7 +37,7 @@ public class BaseDialogTestCase extends JFCTestCase {
         BaseDialog.showWarning(null, title, msgShort);
         BaseDialog.showWarning(null, title, msgLong);
         
-        title = ResourceManager.getInstance().getResource(BaseDialog.class, "CTQuestion");
+        title = ResourceManager.getResource(BaseDialog.class, "CTQuestion");
         // Confirm
         if (!BaseDialog.showConfirm(null, title, "Please press <Yes>!")) {
             BaseDialog.showWarning(null, "ERROR", "Wrong button pressed");

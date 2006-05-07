@@ -1,13 +1,16 @@
 package ch.softenvironment.view.test;
+import java.awt.BorderLayout;
+
+import ch.softenvironment.util.DeveloperException;
 import ch.softenvironment.util.Tracer;
 import ch.softenvironment.view.BaseFrame;
 
 
 import javax.swing.JButton;
 /**
- * <Description>
+ * Test class BaseFrame.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2005-08-26 10:16:56 $
+ * @version $Revision: 1.2 $ $Date: 2006-05-07 14:54:17 $
  */
 public class BaseFrameTestCase extends BaseFrame {
 
@@ -15,6 +18,7 @@ public class BaseFrameTestCase extends BaseFrame {
 	private JButton btnShowBusy = null;
 	private JButton btnShowBusyTwice = null;
 	private JButton btnShowBusySequential = null;
+    private JButton btnShowDeveloperException = null;
 	/**
 	 * This method initializes jButton	
 	 * 	
@@ -83,6 +87,23 @@ public class BaseFrameTestCase extends BaseFrame {
 		}
 		return btnShowBusySequential;
 	}
+    private JButton getBtnShowDeveloperException() {
+        if (btnShowDeveloperException == null) {
+            btnShowDeveloperException = new JButton();
+            btnShowDeveloperException.setText("throw new DeveloperException");
+            btnShowDeveloperException.addActionListener(new java.awt.event.ActionListener() { 
+                public void actionPerformed(java.awt.event.ActionEvent e) {    
+                    showBusy(new Runnable() {
+                        public void run() {
+                            // WaitDialog#showBusy() will handle it
+                            throw new DeveloperException(this, "getBtnShowDeveloperException()", "dev-msg", null /*title*/, new RuntimeException("other hint"));
+                        }
+                    });
+                }
+            });
+        }
+        return btnShowDeveloperException;
+    }
        public static void main(String[] args) {
          Tracer.start(Tracer.ALL);
          
@@ -116,10 +137,11 @@ public class BaseFrameTestCase extends BaseFrame {
 	private javax.swing.JPanel getJContentPane() {
 		if(jContentPane == null) {
 			jContentPane = new javax.swing.JPanel();
-			jContentPane.setLayout(new java.awt.BorderLayout());
+			jContentPane.setLayout(new BorderLayout());
 			jContentPane.add(getBtnShowBusy(), java.awt.BorderLayout.SOUTH);
 			jContentPane.add(getBtnShowBusyTwice(), java.awt.BorderLayout.NORTH);
 			jContentPane.add(getBtnShowBusySequential(), java.awt.BorderLayout.CENTER);
+            jContentPane.add(getBtnShowDeveloperException(), java.awt.BorderLayout.EAST);
 		}
 		return jContentPane;
 	}

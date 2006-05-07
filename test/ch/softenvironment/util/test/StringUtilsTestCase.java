@@ -2,7 +2,7 @@ package ch.softenvironment.util.test;
 
 /**
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2005-09-07 11:51:39 $
+ * @version $Revision: 1.3 $ $Date: 2006-05-07 14:53:51 $
  */
 public class StringUtilsTestCase extends junit.framework.TestCase {
 /**
@@ -54,5 +54,19 @@ public void testPureFileName() {
 public void testReplace() {
 	assertTrue("StringUtils", "X C".equals(ch.softenvironment.util.StringUtils.replace("X AS C", " AS ", " ")));
 	assertTrue("StringUtils", "X C, Attr1 Dummy".equals(ch.softenvironment.util.StringUtils.replace("X AS C, Attr1 AS Dummy", " AS ", " ")));
+}
+public void testFirstLetterToLowercase() {
+    assertTrue("StringUtils", "myProperty".equals(ch.softenvironment.util.StringUtils.firstLetterToLowercase("myProperty")));
+    assertTrue("StringUtils", "myProperty".equals(ch.softenvironment.util.StringUtils.firstLetterToLowercase("MyProperty")));
+    assertTrue("StringUtils", "123".equals(ch.softenvironment.util.StringUtils.firstLetterToLowercase("123")));
+    assertTrue("StringUtils", "".equals(ch.softenvironment.util.StringUtils.firstLetterToLowercase("")));
+    assertTrue("StringUtils", null == ch.softenvironment.util.StringUtils.firstLetterToLowercase(null));
+}
+public void testFirstLetterToUppercase() {
+    assertTrue("StringUtils", "MyProperty".equals(ch.softenvironment.util.StringUtils.firstLetterToUppercase("myProperty")));
+    assertTrue("StringUtils", "MyProperty".equals(ch.softenvironment.util.StringUtils.firstLetterToUppercase("MyProperty")));
+    assertTrue("StringUtils", "123".equals(ch.softenvironment.util.StringUtils.firstLetterToUppercase("123")));
+    assertTrue("StringUtils", "".equals(ch.softenvironment.util.StringUtils.firstLetterToUppercase("")));
+    assertTrue("StringUtils", null == ch.softenvironment.util.StringUtils.firstLetterToUppercase(null));
 }
 }
