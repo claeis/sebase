@@ -17,7 +17,7 @@ import java.io.File;
 /**
  * Set of reusable String Utilities.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2005-11-20 15:49:20 $
+ * @version $Revision: 1.7 $ $Date: 2006-05-07 13:50:41 $
  */
 public abstract class StringUtils {
 
@@ -132,6 +132,20 @@ public static String tryAppendSuffix(String filename, String suffix) {
         return filename;
     } else {
         return filename + suffix;
+    }
+}
+public static String firstLetterToLowercase(String value) {
+    if ((value != null) && (value.length() > 0)) {
+        return value.substring(0, 1).toLowerCase() + value.substring(1, value.length());
+    } else {
+        return value;
+    }
+}
+public static String firstLetterToUppercase(String value) {
+    if ((value != null) && (value.length() > 0)) {
+        return value.substring(0, 1).toUpperCase() + value.substring(1, value.length());
+    } else {
+        return value;
     }
 }
 }
