@@ -18,8 +18,8 @@ package ch.softenvironment.view;
  * - false
  * - undefined
  *
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2005-01-24 10:04:21 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.5 $ $Date: 2006-05-07 13:52:48 $
  */
 public class TriStatePanel extends BasePanel {
 	private static String ACTION_ALL = "ALL";
@@ -30,7 +30,7 @@ public class TriStatePanel extends BasePanel {
 	private javax.swing.JRadioButton ivjRbtTrue = null;
 	private javax.swing.JRadioButton ivjRbtAll = null;
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
-	private java.lang.Boolean fieldValue = new Boolean(false);
+	private java.lang.Boolean fieldValue = Boolean.FALSE;
 
 class IvjEventHandler implements java.awt.event.ItemListener {
 		public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -142,7 +142,7 @@ private void connEtoC3(java.awt.event.ItemEvent arg1) {
  */
 public java.lang.Boolean getNotValue() {
 	if (fieldValue != null) {
-		return new Boolean(!fieldValue.booleanValue());
+		return Boolean.valueOf(!fieldValue.booleanValue());
 	} else {
 		return null;
 	}
