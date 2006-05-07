@@ -21,7 +21,7 @@ package ch.softenvironment.view.tree;
  * with Tree-Objects.
  * 
  * @author Peter Hirzel <i>soft</i>Environment 
- * @version $Revision: 1.3 $ $Date: 2005-12-13 17:25:56 $
+ * @version $Revision: 1.4 $ $Date: 2006-05-07 13:55:23 $
  */
 public interface TreeNodeUtility {
     /**
@@ -43,10 +43,10 @@ public interface TreeNodeUtility {
     Object findParent(Object node);
     /**
      * Returns the appropriate icon.
-     * @param node (concrete TreeNode type)
+     * @param nodeType (concrete TreeNode type)
      * @param expanded (whether node is expanded or not, for e.g. an opened Package)
      */
-    javax.swing.Icon getIcon(Object node, boolean expanded);
+    javax.swing.Icon getIcon(Class nodeType, boolean expanded);
     /**
      * Returns the string to display for this object.
      */

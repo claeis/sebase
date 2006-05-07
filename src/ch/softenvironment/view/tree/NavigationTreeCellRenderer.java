@@ -21,7 +21,7 @@ import javax.swing.JTree;
  * TreeCellRenderer for a TreeNode.
  * 
  * @author Peter Hirzel <i>soft</i>Environment 
- * @version $Revision: 1.1 $ $Date: 2005-06-15 08:39:21 $
+ * @version $Revision: 1.2 $ $Date: 2006-05-07 13:55:23 $
  */
 public class NavigationTreeCellRenderer	extends javax.swing.tree.DefaultTreeCellRenderer {
 	/**
@@ -48,7 +48,7 @@ public Component getTreeCellRendererComponent(JTree tree,
 
 //	if ((tree instanceof AutoScrollingJTree) && (((AutoScrollingJTree)tree).getUtility() != null)) {
 		TreeNodeUtility utility = ((AutoScrollingTree)tree).getUtility();
-	    javax.swing.Icon icon = utility.getIcon(value, expanded);
+	    javax.swing.Icon icon = utility.getIcon(value.getClass(), expanded);
 	    if (icon != null) {
 	        setIcon(icon);
 	    }
