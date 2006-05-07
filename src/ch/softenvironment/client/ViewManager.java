@@ -15,9 +15,11 @@ import ch.softenvironment.view.ListMenuChoice;
 /**
  * Utility to manage opened GUI's for associated Object's.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2006-02-22 07:21:33 $
+ * @version $Revision: 1.7 $ $Date: 2006-05-07 13:48:26 $
  */
 public class ViewManager {
+    private final static String ALL_CLASSES = "<ALL>";
+    
 	java.util.Map searchViews = new java.util.HashMap();
 	java.util.Map detailViews = new java.util.HashMap();
     java.util.Map userActionRights = new java.util.HashMap();
@@ -176,26 +178,38 @@ private java.awt.Window getView(Object object) {
 	return null;
 }
 /**
- * Return specified rights for a model class represented by different views.
- * By default all rights are allowed, unless otherwise registered
- * by {@link #setRights(Class, UserActionRights) }
+ * Return specified rights for a given model class (represented by different views) in the following hierarchy:
+ * 1) if specific rights are set for class return those rights
+ * 2) if default rights are set for ALL model-classes return those default rights
+ * 3) otherwise all rights are allowed
  * @param model (Model class to be checked for manipulating rights)
  * @return
+ * @see #setRights()
  * @see ListMenuChoice#adaptUserAction(java.util.EventObject, Object)
  */
 public UserActionRights getRights(Class model) {
     if (userActionRights.containsKey(model)) {
         return (UserActionRights)userActionRights.get(model);
+    } else if (userActionRights.containsKey(ALL_CLASSES)) {
+        return (UserActionRights)userActionRights.get(ALL_CLASSES);
     } else {
         return new UserActionRights(UserActionRights.ALL);
     }
 }
 /**
- * Register rights for a model-class.
+ * Register default rights for all model-classes.
+ * @param rights
+ */
+public void setRights(UserActionRights rights) {
+    userActionRights.put(ALL_CLASSES, rights);
+}
+/**
+ * Register rights for a specific model-class,
+ * which overwrites default rights for given model-class.
  * @param model
  * @param rights
  */
-public void setRights(Class model, UserActionRights rights) {
+public void setRights(UserActionRights rights, Class model) {
     userActionRights.put(model, rights);
 }
 }
