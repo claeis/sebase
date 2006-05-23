@@ -2,7 +2,7 @@ package ch.softenvironment.util.test;
 
 /**
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2006-05-07 14:53:51 $
+ * @version $Revision: 1.4 $ $Date: 2006-05-23 19:23:52 $
  */
 public class StringUtilsTestCase extends junit.framework.TestCase {
 /**
@@ -54,12 +54,21 @@ public void testPureFileName() {
 public void testReplace() {
 	assertTrue("StringUtils", "X C".equals(ch.softenvironment.util.StringUtils.replace("X AS C", " AS ", " ")));
 	assertTrue("StringUtils", "X C, Attr1 Dummy".equals(ch.softenvironment.util.StringUtils.replace("X AS C, Attr1 AS Dummy", " AS ", " ")));
+    
+    // long replacement could cause StackOverflow by recursive algorithm
+    StringBuffer buf = new StringBuffer("Begin");
+    for (int i=0; i<10000; i++) {
+        buf.append(" ");
+    }
+    buf.append("End");
+    assertTrue("StringUtils", "BeginEnd".equals(ch.softenvironment.util.StringUtils.replace(buf.toString(), " ", "")));
 }
 public void testFirstLetterToLowercase() {
     assertTrue("StringUtils", "myProperty".equals(ch.softenvironment.util.StringUtils.firstLetterToLowercase("myProperty")));
     assertTrue("StringUtils", "myProperty".equals(ch.softenvironment.util.StringUtils.firstLetterToLowercase("MyProperty")));
     assertTrue("StringUtils", "123".equals(ch.softenvironment.util.StringUtils.firstLetterToLowercase("123")));
     assertTrue("StringUtils", "".equals(ch.softenvironment.util.StringUtils.firstLetterToLowercase("")));
+    assertTrue("StringUtils", "  ".equals(ch.softenvironment.util.StringUtils.firstLetterToLowercase("  ")));
     assertTrue("StringUtils", null == ch.softenvironment.util.StringUtils.firstLetterToLowercase(null));
 }
 public void testFirstLetterToUppercase() {
@@ -67,6 +76,7 @@ public void testFirstLetterToUppercase() {
     assertTrue("StringUtils", "MyProperty".equals(ch.softenvironment.util.StringUtils.firstLetterToUppercase("MyProperty")));
     assertTrue("StringUtils", "123".equals(ch.softenvironment.util.StringUtils.firstLetterToUppercase("123")));
     assertTrue("StringUtils", "".equals(ch.softenvironment.util.StringUtils.firstLetterToUppercase("")));
+    assertTrue("StringUtils", "  ".equals(ch.softenvironment.util.StringUtils.firstLetterToUppercase("  ")));
     assertTrue("StringUtils", null == ch.softenvironment.util.StringUtils.firstLetterToUppercase(null));
 }
 }

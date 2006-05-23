@@ -17,7 +17,7 @@ import java.io.File;
 /**
  * Set of reusable String Utilities.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2006-05-07 13:50:41 $
+ * @version $Revision: 1.8 $ $Date: 2006-05-23 19:23:52 $
  */
 public abstract class StringUtils {
 
@@ -90,21 +90,21 @@ public static boolean isNullOrEmpty(String value) {
 	return ((value == null) || (value.trim().length() == 0));
 }
 /**
- * Replace all occurences of searchTerm by replacement in source.
+ * Replace all occurences of searchTerm by replacement in source,
+ * for e.g. StringUtils.replace("X AS C, Attr1 AS Dummy", " AS ", " ") => "X C, Attr1 Dummy"
  * @return String
  */
 public static String replace(String source, String searchTerm, String replacement) {
-	// test: StringUtils.replace("X AS C, Attr1 AS Dummy", " AS ", " ");
 	if (source == null) {
 		return null;
 	}
-	String result = source;
-	int index = source.indexOf(searchTerm);
-	if (index > -1) {
-		result = result.substring(0, index)	+ replacement + result.substring(index + searchTerm.length(), result.length());
-		return replace(result, searchTerm, replacement);
-	}
-	return result;
+    StringBuffer buffer = new StringBuffer(source);
+    int index = -1;
+    while ((index = buffer.indexOf(searchTerm)) > -1) {
+        buffer.delete(index, index + searchTerm.length());
+        buffer.insert(index, replacement);
+    }
+	return buffer.toString();
 }
 
 /**
@@ -135,17 +135,21 @@ public static String tryAppendSuffix(String filename, String suffix) {
     }
 }
 public static String firstLetterToLowercase(String value) {
-    if ((value != null) && (value.length() > 0)) {
-        return value.substring(0, 1).toLowerCase() + value.substring(1, value.length());
-    } else {
+    if (isNullOrEmpty(value)) {
         return value;
+    } else {
+        StringBuffer buffer = new StringBuffer(value);
+        buffer.replace(0, 1, buffer.substring(0, 1).toLowerCase());
+        return buffer.toString();
     }
 }
 public static String firstLetterToUppercase(String value) {
-    if ((value != null) && (value.length() > 0)) {
-        return value.substring(0, 1).toUpperCase() + value.substring(1, value.length());
-    } else {
+    if (isNullOrEmpty(value)) {
         return value;
+    } else {
+        StringBuffer buffer = new StringBuffer(value);
+        buffer.replace(0, 1, buffer.substring(0, 1).toUpperCase());
+        return buffer.toString();
     }
 }
 }
