@@ -24,9 +24,9 @@ package ch.softenvironment.util;
  *
  * Design Pattern: Singleton
  *
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.9 $ $Date: 2005-05-06 12:40:56 $
- * @deprecated (will soon be replaced by other Logger)
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.10 $ $Date: 2006-05-23 10:57:44 $
+ * @deprecated (will be replaced by another Logger)
  */
 public class Tracer {
 	// Mode's
@@ -36,7 +36,7 @@ public class Tracer {
 	public final static int TRACE_BACKEND = 4;	// show specific Backend-Target-logs
 	public final static int ALL = 5;			// show all Trace-logs
 	
-	private static Tracer instance = null;
+	private static Tracer instance = null;     // default instance
 	private java.io.PrintStream outStream = null;
 	private int mode = SILENT;
 /**
@@ -106,9 +106,13 @@ public static Tracer getInstance() {
  * Print given Log-Message with leading Timestamp.
  */
 private void log(String logMessage) {
-	if (mode != SILENT) {
-		outStream.println(NlsUtils.formatDateTime(new java.util.Date()) + ">" + logMessage);
-	}
+    try {
+    	if (mode != SILENT) {
+    		outStream.println(NlsUtils.formatDateTime(new java.util.Date()) + ">" + logMessage);
+    	}
+    } catch(Throwable e) {
+        System.err.println("Tracer#log(String): " + e.getLocalizedMessage());
+    }
 }
 /**
  * Print Log-Infos in a well formatted way.
@@ -170,12 +174,12 @@ public void runtimeWarning(Object source, String methodName, String warning) {
 }
 /**
  * Start Tracer and use Console-Error.
- * @param args Command line arguments ("-all, -silent", "-trace", "traceSQL" or "-debug")
+ * @param args Command line arguments ("-all", "-silent", "-trace", "traceSQL" or "-debug")
  */
 public static java.lang.String[] start(java.lang.String[] args) {
 	int mode = SILENT;	// default
 	if (args != null) {
-	    java.util.ArrayList ret=new java.util.ArrayList(java.util.Arrays.asList(args));
+	    java.util.ArrayList ret = new java.util.ArrayList(java.util.Arrays.asList(args));
 		java.util.Iterator it=ret.iterator();
 		while (it.hasNext()) {
 			String option = (String)it.next();
@@ -216,7 +220,10 @@ public static void start(int mode) {
  * @param stream Outstream for logging
  * @param traceOn (whether silent or not) 
  */
-public static void start(java.io.PrintStream stream, int mode) {
+public static synchronized void start(java.io.PrintStream stream, int mode) {
+    if (instance != null) {
+        throw new DeveloperException(Tracer.class, "start(PrintStream, int)", "Default Tracer-instance alreade initialized!");
+    }
 	instance = new Tracer();
 	instance.outStream = stream;
 	instance.mode = mode;
@@ -230,14 +237,15 @@ public static void start(java.io.PrintStream stream, int mode) {
 /**
  * Stop Tracer.
  */
-public void stop() {
-//	try {
+public synchronized void stop() {
+	try {
 		outStream.close();
-		instance = null;
-/*	} catch(java.io.IOException e) {
-		e.printStackTrace(System.out);
-	}
-*/
+    } catch(Throwable e) {
+//TODO Bad practice to write static variable
+        instance = null;  
+        
+        System.err.println("Tracer#stop(): " + e.getLocalizedMessage());
+    }
 }
 /**
  * Use this message to trace non-visually handled exceptions which
@@ -245,7 +253,11 @@ public void stop() {
  * application behaviour might be possible.
  */
 public void uncaughtException(Object source, String methodName, Throwable exception) {
-	exception.printStackTrace(outStream);
-	log("Uncaught Exception:", source, methodName, exception.toString());
+    try {
+    	exception.printStackTrace(outStream);
+    	log("Uncaught Exception:", source, methodName, exception.toString());
+    } catch(Throwable e) {
+        System.err.println("Tracer#uncaughtException(): " + e.getLocalizedMessage());
+    }
 }
 }
