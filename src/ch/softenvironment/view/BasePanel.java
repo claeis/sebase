@@ -16,7 +16,7 @@ import java.awt.Image;
 /**
  * Basic javax.swing.JPanel.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2005-11-20 15:49:48 $
+ * @version $Revision: 1.8 $ $Date: 2006-05-25 15:21:12 $
  */
 public class BasePanel extends javax.swing.JPanel {
     private Image image = null;
@@ -111,8 +111,8 @@ public void paintComponent(Graphics g) {
         int y = (h - imageHeight)/2;
 */
 	    g.drawImage(image,
-	    		new Double(g.getClipBounds().getCenterX() - (image.getWidth(this) / 2)).intValue(),
-	    		new Double(g.getClipBounds().getCenterY() - (image.getHeight(this) / 2)).intValue(),
+	    		(int)(g.getClipBounds().getCenterX() - (image.getWidth(this) / 2.0)),
+	    		(int)(g.getClipBounds().getCenterY() - (image.getHeight(this) / 2.0)),
 	    		this);
     }
 }
