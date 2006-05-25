@@ -24,7 +24,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * TemplateFrame defining minimal functionality.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.26 $ $Date: 2005-11-20 15:49:48 $
+ * @version $Revision: 1.27 $ $Date: 2006-05-25 15:19:39 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -113,7 +113,7 @@ public void dispose() {
 /**
  * Overwrite the #dispose() method for <b>Launcher's containing a #main()</b> 
  * of any Application extending this BaseFrame.
- *
+ * This call will shutdown Application and Java virtual machine by a System#exit().
  * // Overwrites
  * public void dispose() {
  *  // super.dispose(); => WILL BE CALLED BY #disposeApplication()
@@ -177,13 +177,12 @@ protected final String exportTableData(final JTable table) {
 	return null;
 }
 /**
- * Critical Error. Application must be shut down.
+ * Extremely critical Error.
  * @param title Dialogtitle
  * @see #stopWaitDialog()
  */
 public final void fatalError(JFrame frame, String title, String message, Throwable exception) {
 	ch.softenvironment.view.BaseDialog.showError(frame, title, message + "\n" + getResourceString(BaseFrame.class, "CEFatalError"), exception);
-	System.exit(-1);
 }
 /**
  * Display a popup menu.
