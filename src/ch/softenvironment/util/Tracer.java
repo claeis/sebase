@@ -25,8 +25,7 @@ package ch.softenvironment.util;
  * Design Pattern: Singleton
  *
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.10 $ $Date: 2006-05-23 10:57:44 $
- * @deprecated (will be replaced by another Logger)
+ * @version $Revision: 1.11 $ $Date: 2006-06-28 06:18:02 $
  */
 public class Tracer {
 	// Mode's
@@ -59,7 +58,7 @@ public void debug(Object source, String methodName, String comment) {
 }
 /**
  * Log a debug message.
- * @deprecated
+ * @deprecated (should not remain in productive versions)
  */
 public void debug(String comment) {
 	if ((mode == DEBUG) || (mode == ALL)) {
@@ -108,7 +107,7 @@ public static Tracer getInstance() {
 private void log(String logMessage) {
     try {
     	if (mode != SILENT) {
-    		outStream.println(NlsUtils.formatDateTime(new java.util.Date()) + ">" + logMessage);
+    		outStream.println(/*NlsUtils.formatDateTime(new java.util.Date()) + ">" +*/ logMessage);
     	}
     } catch(Throwable e) {
         System.err.println("Tracer#log(String): " + e.getLocalizedMessage());
@@ -139,16 +138,6 @@ private void log(String errorType, Object source, String methodName, String comm
  */
 public void logBackendCommand(Object source, String methodName, String command) {
 	log("Backend: " + command);
-}
-/**
- * Keep <b>Not Yet Implemented</b> code references.
- * Developer note, to keep reference where something has to be realized soon.
- * @deprecated (a //TODO remark should be preferred)
- */
-public void nyi(Object source, String methodName, String comment) {
-	if ((mode == DEBUG) || (mode == ALL)) {
-		log("NYI:", source, methodName, comment);
-	}
 }
 /**
  * Log Errors during runtime, by means a serious error happened, which might corrupt
