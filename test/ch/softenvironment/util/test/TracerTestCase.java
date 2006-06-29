@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 /**
  * <Description>
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2005-09-07 11:51:39 $
+ * @version $Revision: 1.3 $ $Date: 2006-06-29 22:31:57 $
  */
 public class TracerTestCase extends TestCase {
     public void testLogFile() {
@@ -20,7 +20,7 @@ public class TracerTestCase extends TestCase {
 	//      PrintWriter printer = new PrintWriter(new OutputStreamWriter(stream, "UTF-8"); 
 	                
 	        Tracer.start(new PrintStream(stream), Tracer.ALL);
-	        Tracer.getInstance().developerError(this, "testLogFile()", "do you see a developerError entry?");
+	        Tracer.getInstance().developerError("do you see a developerError entry?");
 	        Tracer.getInstance().stop();
         } catch(FileNotFoundException e) {
             fail("testLogFile: " + e.getLocalizedMessage());

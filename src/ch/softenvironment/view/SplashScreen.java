@@ -17,7 +17,7 @@ import javax.swing.*;
 /**
  * Splash screen for Application startup.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2004-10-26 19:16:42 $
+ * @version $Revision: 1.6 $ $Date: 2006-06-29 22:28:47 $
  */
 public class SplashScreen extends JWindow {
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
@@ -124,7 +124,7 @@ private javax.swing.JLabel getLblImage() {
  * @param exception java.lang.Throwable
  */
 private void handleException(java.lang.Throwable exception) {
-	ch.softenvironment.util.Tracer.getInstance().uncaughtException(this, "handleException(..)", exception);
+	ch.softenvironment.util.Tracer.getInstance().uncaughtException(exception);
 }
 /**
  * Initializes connections
@@ -162,7 +162,7 @@ private void initialize() {
 public void setImage(String image) {
 	ImageIcon icon = new javax.swing.ImageIcon(SplashScreen.class.getResource(image));
 	if (icon == null) {
-		ch.softenvironment.util.Tracer.getInstance().runtimeWarning(this, "setImage(String)", "given iconFile not found <" + image + ">!");
+		ch.softenvironment.util.Tracer.getInstance().runtimeWarning("given iconFile not found <" + image + ">!");
 	} else {
 		setImage(icon);
 	}
@@ -173,7 +173,7 @@ public void setImage(String image) {
  */
 public void setImage(ImageIcon icon) {
 	if (icon == null) {
-		ch.softenvironment.util.Tracer.getInstance().runtimeWarning(this, "setImage(ImageIcon)", "given icon is null!");
+		ch.softenvironment.util.Tracer.getInstance().runtimeWarning("given icon is null!");
 	}
 	getLblImage().setIcon(icon);
 }

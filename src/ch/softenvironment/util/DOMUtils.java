@@ -38,7 +38,7 @@ import org.xml.sax.SAXParseException;
  * Utility for DOM-handling.
  * Based on JAXP.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2005-10-28 08:15:54 $
+ * @version $Revision: 1.2 $ $Date: 2006-06-29 22:26:46 $
  */
 public class DOMUtils {
     /**
@@ -54,13 +54,13 @@ public class DOMUtils {
                     (error.getCause() == null ? "" : "\n cause=" + error.getCause());
         }
         public void warning(SAXParseException error) {
-            Tracer.getInstance().runtimeWarning(DOMUtils.DefaultErrorHandler.class, "warning()", getDetailedMessage(error));
+            Tracer.getInstance().runtimeWarning(getDetailedMessage(error));
         }
         public void error(SAXParseException error) {
-            Tracer.getInstance().runtimeError(DOMUtils.DefaultErrorHandler.class, "error()", getDetailedMessage(error));
+            Tracer.getInstance().runtimeError(getDetailedMessage(error), error);
         }
         public void fatalError(SAXParseException error) {
-            Tracer.getInstance().developerError(DOMUtils.DefaultErrorHandler.class, "fatalError()", getDetailedMessage(error));
+            Tracer.getInstance().developerError(getDetailedMessage(error));
         }
     }
     /**
@@ -141,7 +141,7 @@ Tracer.getInstance().debug("DocumentBuilder=" + builder);
             StreamResult result = new StreamResult(writer);
             transformer.transform(xmlSrc, result);
         } else {
-            throw new DeveloperException(DOMUtils.class, "transform()", "one or both filenames not readable");
+            throw new DeveloperException("one or both filenames not readable");
         }
     }
     /**
@@ -167,17 +167,17 @@ Tracer.getInstance().debug("DocumentBuilder=" + builder);
                 org.w3c.dom.Document document = tmp.parse(file);
                 return document;
             } catch (SAXParseException pe) {
-                Tracer.getInstance().runtimeError(DOMUtils.class, "readDOM()", filename + " Parse-Error (row=" + pe.getLineNumber() + "): " + pe.getLocalizedMessage());
+                Tracer.getInstance().runtimeError(filename + " Parse-Error (row=" + pe.getLineNumber() + ")", pe);
                 throw pe;
             } catch(IOException ioe) {
-                Tracer.getInstance().runtimeError(DOMUtils.class, "readDOM()", filename + " IOException: " + ioe.getLocalizedMessage());
+                Tracer.getInstance().runtimeError(filename + " IOException", ioe);
                 throw ioe;
             } catch(SAXException saxe) {
-                Tracer.getInstance().runtimeError(DOMUtils.class, "readDOM()", filename + " SAXException: " + saxe.getLocalizedMessage());
+                Tracer.getInstance().runtimeError(filename + " SAXException", saxe);
                 throw saxe;
             }
         } else {
-            Tracer.getInstance().runtimeWarning(DOMUtils.class, "readDOM()", filename + " not existing or readable!");
+            Tracer.getInstance().runtimeWarning(filename + " not existing or readable!");
         }
         
         return null;

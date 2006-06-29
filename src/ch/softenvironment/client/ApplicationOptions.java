@@ -28,7 +28,7 @@ import ch.softenvironment.util.Tracer;
  * Manage the Application Settings by Properties file.
  *
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2005-11-20 15:47:52 $
+ * @version $Revision: 1.5 $ $Date: 2006-06-29 22:24:57 $
  */
 public class ApplicationOptions extends java.util.Properties implements UserSettings {
 	// values for Key-Values
@@ -101,9 +101,9 @@ protected ApplicationOptions(String filename, java.util.Properties defaults) {
 		FileInputStream inputStream = new FileInputStream(filename);
 		/*tmp=*/ super.load(inputStream);
 	} catch(FileNotFoundException fe) {
-		Tracer.getInstance().runtimeWarning(ApplicationOptions.class, "ApplicationOptions(String, Properties)", "File not found: " + fe.getLocalizedMessage());
+		Tracer.getInstance().runtimeWarning("File not found: " + fe.getLocalizedMessage());
 	} catch(IOException ioe) {
-	    Tracer.getInstance().runtimeWarning(ApplicationOptions.class, "ApplicationOptions(String, Properties)", "IO failure: " + ioe.getLocalizedMessage());
+	    Tracer.getInstance().runtimeWarning("IO failure: " + ioe.getLocalizedMessage());
 	}
 }
 /**
@@ -277,7 +277,7 @@ public final void save() {
 	    FileOutputStream outputStream = new FileOutputStream(filename);
  	   super.store(outputStream, "User Properties <" + filename + ">");
 	} catch(Throwable e) {
-		Tracer.getInstance().runtimeWarning(this, "save()", "IGNORE: Failed for User Properties <" + filename + ">");
+		Tracer.getInstance().runtimeWarning("IGNORE: Failed for User Properties <" + filename + ">");
 	}
 }
 /**

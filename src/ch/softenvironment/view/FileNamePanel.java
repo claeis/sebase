@@ -21,11 +21,12 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * TextField representing a File-Name and Chooser-Button.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2005-06-05 09:04:42 $
+ * @version $Revision: 1.6 $ $Date: 2006-06-29 22:28:47 $
  */
 public class FileNamePanel extends javax.swing.JPanel {
+    private List filters = null;
+    private String currentPath = null;
 	private javax.swing.JButton ivjBtnChooseFile = null;
-	private List filters = null;
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
 	private javax.swing.JTextField ivjTxtFileName = null;
 	protected transient ch.softenvironment.view.FileNamePanelListener fieldFileNamePanelListenerEventMulticaster = null;
@@ -80,14 +81,12 @@ public void addFileNamePanelListener(ch.softenvironment.view.FileNamePanelListen
 	return;
 }
 /**
- * Comment
+ * Open File Chooser Dialog.
  */
 private void chooseFile() {
 	try {
-		String fileName = null;
-
-		FileChooser dialog =  new FileChooser(/*LauncherView.getSettings().getWorkingDirectory()*/);
-		dialog.setDialogTitle(ResourceManager.getInstance().getResource(FileNamePanel.class, "CT_ChooseFile"));//$NON-NLS-1$
+		FileChooser dialog =  new FileChooser(currentPath);
+		dialog.setDialogTitle(ResourceManager.getResource(FileNamePanel.class, "CT_ChooseFile"));//$NON-NLS-1$
 //		dialog.setSelectedFile(new File(fileName));
 		if (filters != null) {
 		    Iterator it = filters.iterator();
@@ -106,11 +105,11 @@ private void chooseFile() {
 			ch.ehi.basics.view.BrowserControl.displayURL("file://" + dialog.getSelectedFile().getAbsolutePath());
 */
 			getTxtFileName().setText(dialog.getSelectedFile().getAbsolutePath());
+//TODO update currentPath
 			fireTextKeyReleased(new java.util.EventObject(this));
 		}
 //	} catch(FileNotFoundException fne) {
 //		new ch.softenvironment.view.ErrorDialog(this, "Dateifehler", "???", fne);
-
 	} catch(Throwable e) {
 		handleException(e);
 	}
@@ -158,7 +157,7 @@ private void connEtoC2(java.awt.event.KeyEvent arg1) {
 protected void fireTextKeyReleased(java.util.EventObject newEvent) {
 	if (fieldFileNamePanelListenerEventMulticaster == null) {
 		return;
-	};
+	}
 	fieldFileNamePanelListenerEventMulticaster.textKeyReleased(newEvent);
 }
 /**
@@ -174,7 +173,7 @@ private javax.swing.JButton getBtnChooseFile() {
 			ivjBtnChooseFile.setToolTipText("Datei wählen");
 			ivjBtnChooseFile.setText("...");
 			// user code begin {1}
-			ivjBtnChooseFile.setToolTipText(ResourceManager.getInstance().getResource(FileNamePanel.class, "CT_ChooseFile"));
+			ivjBtnChooseFile.setToolTipText(ResourceManager.getResource(FileNamePanel.class, "CT_ChooseFile"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -287,5 +286,8 @@ public void add(GenericFileFilter filter) {
         filters = new ArrayList();
     }
     filters.add(filter);
+}
+public void setCurrentPath(String path) {
+    currentPath = path;
 }
 }

@@ -19,7 +19,7 @@ import ch.softenvironment.util.Tracer;
 /**
  * Template-Dialog defining minimal functionality.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.12 $ $Date: 2005-11-20 15:49:48 $
+ * @version $Revision: 1.13 $ $Date: 2006-06-29 22:28:47 $
  */
 public abstract class BaseDialog extends javax.swing.JDialog {
 	private javax.swing.JPanel ivjJDialogContentPane = null;
@@ -255,7 +255,7 @@ private void setCenterLocation(Dimension outerSize) {
  * @param exception java.lang.Throwable
  */
 protected void traceOnly(java.lang.Throwable exception) {
-	Tracer.getInstance().uncaughtException(this, "traceOnly(..)", exception);//$NON-NLS-1$
+	Tracer.getInstance().uncaughtException(exception);//$NON-NLS-1$
 }
 /**
  * Overwrite this method for other Undo-Reasons.
@@ -385,7 +385,7 @@ private static int showOptionPane(java.awt.Component owner, String title, Object
             ch.ehi.basics.i18n.ResourceBundle.getImageIcon(BaseDialog.class, iconFile),
             options, options[0]);
 	} catch(Throwable e) {
-Tracer.getInstance().developerError(BaseDialog.class, "showOptionPane()", e.getLocalizedMessage());
+Tracer.getInstance().developerError(e.getLocalizedMessage());
 		return -1;
 	}
 }

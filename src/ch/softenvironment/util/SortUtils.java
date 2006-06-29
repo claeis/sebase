@@ -14,7 +14,7 @@ package ch.softenvironment.util;
 /**
  * Some useful sort-Tools.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2005-11-20 15:49:20 $
+ * @version $Revision: 1.6 $ $Date: 2006-06-29 22:26:47 $
  */
 public class SortUtils {
 	private static class GenericComparator implements java.util.Comparator {
@@ -45,10 +45,10 @@ public class SortUtils {
     				return ((Double)(method).invoke(o1, params)).compareTo((Double)(method).invoke(o2, params));
     			} else {
 //TODO NYI Returntype generic sort
-                    throw new DeveloperException(SortUtils.GenericComparator.class, "compare(..)", "Cannot sort generically: PropertyToSort <" + propertyToSort + "> with Returntype <" + returnType + ">");
+                    throw new DeveloperException("SortUtils.GenericComparator#compare(..)=>Cannot sort generically: PropertyToSort <" + propertyToSort + "> with Returntype <" + returnType + ">");
     			}
     		} catch(Throwable e) {
-    			ch.softenvironment.util.Tracer.getInstance().developerError(SortUtils.GenericComparator.class, "compare(..)", "PropertToSort <" + propertyToSort + "> missing or failed: " + e.getLocalizedMessage());
+    			ch.softenvironment.util.Tracer.getInstance().developerError("SortUtils.GenericComparator#compare(..)=>PropertToSort <" + propertyToSort + "> missing or failed: " + e.getLocalizedMessage());
     		}
     		// do not sort
     		return 0;

@@ -20,7 +20,7 @@ import ch.softenvironment.view.ListMenuChoice;
  * The defined rights match with User-Actions defined by
  * ListMenuChoice interface.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2006-02-22 07:21:33 $
+ * @version $Revision: 1.2 $ $Date: 2006-06-29 22:24:57 $
  * @see ListMenuChoice#adaptUserAction(java.util.EventObject, Object)
  */
 public class UserActionRights {
@@ -43,7 +43,7 @@ public class UserActionRights {
         } else if (rights == READONLY) {
             changeObjectAllowed = true;  
         } else if (rights != NONE) {
-            throw new DeveloperException(this, "UserActionRights(int)", "Unknown rights");
+            throw new DeveloperException("Unknown rights");
         }
     }
     /**

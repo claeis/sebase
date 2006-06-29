@@ -18,7 +18,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * Provide a simple editor Area with minimal functionality.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2006-01-09 13:56:27 $
+ * @version $Revision: 1.8 $ $Date: 2006-06-29 22:28:47 $
  */
 public class SimpleEditorPanel extends javax.swing.JPanel {
 	private boolean hasContentsChanged = false;
@@ -646,7 +646,7 @@ public boolean getTxaEditorEditable() {
  * @param exception java.lang.Throwable
  */
 private void handleException(java.lang.Throwable exception) {
-	Tracer.getInstance().uncaughtException(this, "handleException(..)", exception);//$NON-NLS-1$
+	Tracer.getInstance().uncaughtException(exception);//$NON-NLS-1$
 }
 /**
  * Check whether contents has changed.

@@ -10,7 +10,7 @@ import javax.swing.JButton;
 /**
  * Test class BaseFrame.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2006-05-07 14:54:17 $
+ * @version $Revision: 1.3 $ $Date: 2006-06-29 22:32:21 $
  */
 public class BaseFrameTestCase extends BaseFrame {
 
@@ -96,7 +96,7 @@ public class BaseFrameTestCase extends BaseFrame {
                     showBusy(new Runnable() {
                         public void run() {
                             // WaitDialog#showBusy() will handle it
-                            throw new DeveloperException(this, "getBtnShowDeveloperException()", "dev-msg", null /*title*/, new RuntimeException("other hint"));
+                            throw new DeveloperException("dev-msg", this + "#getBtnShowDeveloperException()", new RuntimeException("other hint"));
                         }
                     });
                 }
@@ -157,15 +157,15 @@ public class BaseFrameTestCase extends BaseFrame {
 	        if (--recursionLevel > 0) {
 	            doLongAction(recursionLevel);
 	        }
-	        Tracer.getInstance().runtimeInfo(this, "doLongAction()", "level=" + recursionLevel + " going to sleep 1s");
+	        Tracer.getInstance().debug("level=" + recursionLevel + " going to sleep 1s");
 	        showProgress(20, "level=" + recursionLevel + " going to sleep 1s");
 	    	Thread.sleep(1000);
-	    	Tracer.getInstance().runtimeInfo(this, "doLongAction()", "level=" + recursionLevel + " going to sleep 3s");
+	    	Tracer.getInstance().debug("level=" + recursionLevel + " going to sleep 3s");
 	    	showProgress(50, "level=" + recursionLevel + " going to sleep 3s");
 	    	Thread.sleep(3000);
 	    	showProgress(95, "level=" + recursionLevel + " done");
 	    } catch(Throwable e) {
-	        Tracer.getInstance().runtimeError(this, "doLongAction()", "sleep failed: " + e.getLocalizedMessage());
+	        Tracer.getInstance().runtimeError("sleep failed", e);
 	    }
 	}
 }

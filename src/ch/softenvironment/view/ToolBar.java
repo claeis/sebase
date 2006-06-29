@@ -20,7 +20,7 @@ import ch.softenvironment.client.UserActionRights;
 /**
  * StandardToolbar.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.10 $ $Date: 2006-03-01 09:20:18 $
+ * @version $Revision: 1.11 $ $Date: 2006-06-29 22:28:47 $
  */
 public class ToolBar extends javax.swing.JToolBar {
 	// list of Objects to treat by selector
@@ -1110,7 +1110,7 @@ public boolean getTbbUndoEnabled() {
  */
 private void handleException(java.lang.Throwable exception) {
 	BaseDialog.showError(this, null, exception.toString(), exception);
-	ch.softenvironment.util.Tracer.getInstance().uncaughtException(this, "handleException(..)", exception);//$NON-NLS-1$
+	ch.softenvironment.util.Tracer.getInstance().uncaughtException(exception);//$NON-NLS-1$
 }
 /**
  * Initializes connections

@@ -15,7 +15,7 @@ package ch.softenvironment.view;
 /**
  * Display a String with Cardinality's upper-Range > 1.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2005-09-16 09:38:40 $
+ * @version $Revision: 1.4 $ $Date: 2006-06-29 22:28:47 $
  */
 public class MultiStringPanel extends javax.swing.JPanel {
 	private javax.swing.JComboBox ivjCbxCount = null;
@@ -164,7 +164,7 @@ private void initialize() {
  */
 public void setList(java.util.List list) {
 	if (list == null) {
-		throw new ch.softenvironment.util.DeveloperException(this, "setList(List)", "<null> is not Allowed");
+		throw new IllegalArgumentException("null is not valid");
 	}
 	
 //	java.util.List oldValue = fieldList;

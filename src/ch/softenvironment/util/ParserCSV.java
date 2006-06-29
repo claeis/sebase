@@ -19,7 +19,7 @@ import javax.swing.JTable;
 /**
  * Parser-Tool to parse comma separated files (*.CSV).
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.9 $ $Date: 2005-09-22 18:27:14 $
+ * @version $Revision: 1.10 $ $Date: 2006-06-29 22:26:47 $
  */
 public class ParserCSV {
     public static final String DEFAULT_SEPARATOR = ";";
@@ -123,7 +123,7 @@ public static String maskSeparator(Object object, String sep) {
 //TODO mask other separators
 		return text.replace(';', replacement);
 	} else {
-	    Tracer.getInstance().developerWarning(ParserCSV.class, "maskSeparator()", "non-default CSV-Separator <" + sep + "> not yet masked");
+	    Tracer.getInstance().developerWarning("non-default CSV-Separator <" + sep + "> not yet masked");
 	    return text;
 	}
 }
@@ -181,7 +181,7 @@ public static java.util.List readFile(InputStream stream, String separator) {
 */
 		inFile.close();
 	} catch(IOException e) {
-		Tracer.getInstance().runtimeWarning(ParserCSV.class, "readFile(..)", "Could not read from Stream: " + e.toString());
+		Tracer.getInstance().runtimeWarning("Could not read from Stream: " + e.toString());
 	}
 	return arrayList;
 }
@@ -195,7 +195,7 @@ public void skip(int nrOfFields) {
 		if (to > -1) {
 			lastIndex = to;
 		} else {
-			Tracer.getInstance().runtimeWarning(this, "skip(int)", "no more separators after: " + i + "/" + nrOfFields);
+			Tracer.getInstance().runtimeWarning("no more separators after: " + i + "/" + nrOfFields);
 			break;
 		}
 	}

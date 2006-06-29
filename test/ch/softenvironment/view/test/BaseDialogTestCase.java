@@ -18,7 +18,7 @@ import junit.extensions.jfcunit.finder.NamedComponentFinder;
 /**
  * Test the BaseDialog class by JFCUnit.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2006-05-07 14:54:17 $
+ * @version $Revision: 1.3 $ $Date: 2006-06-29 22:32:21 $
  */
 public class BaseDialogTestCase extends JFCTestCase {
 //	private Container mainFrame = null;
@@ -78,8 +78,8 @@ public class BaseDialogTestCase extends JFCTestCase {
         BaseDialog.showError(null, null, "should show default 'Error' title", null);
         BaseDialog.showError(null, "show default error-msg", null, null);
         
-        BaseDialog.showError(null, "My Error", "eror with 'null'-exception", null);
-        BaseDialog.showError(null, "My Error", "eror with 'UserException'-exception", new UserException(BaseDialogTestCase.class, "main()", "not a stacktrace"));
+        BaseDialog.showError(null, "My Error", "error with 'null'-exception", null);
+        BaseDialog.showError(null, "My Error", "error with 'UserException'-exception", new UserException("not a stacktrace", "TestCase"));
         BaseDialog.showConfirmExit(null);
     }
     

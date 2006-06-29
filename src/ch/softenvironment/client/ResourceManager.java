@@ -27,7 +27,7 @@ import ch.softenvironment.util.Tracer;
  * the mapped *.properties files are cached during runtime.
  * 
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2005-06-21 14:47:09 $
+ * @version $Revision: 1.7 $ $Date: 2006-06-29 22:24:57 $
  */
 public class ResourceManager {
 	private static ResourceManager manager = null;
@@ -56,8 +56,11 @@ public class ResourceManager {
 	 * @see #getResource(java.lang.Class, Locale, String, ClassLoader)
 	 */
 	public static String getResource(java.lang.Class owner, String propertyName) {
-		return getInstance().getResource(owner, Locale.getDefault(), propertyName, null);
+		return getResource(owner, propertyName, Locale.getDefault());
 	}
+    public static String getResource(java.lang.Class owner, String propertyName, Locale locale) {
+        return getInstance().getResource(owner, locale, propertyName, null);
+    }
 	/**
 	 * Return NLS-String for a certain Property.
 	 * @param holder A <holder-Class>[_<language>].properties file must exist
@@ -70,7 +73,7 @@ public class ResourceManager {
 	public String getResource(java.lang.Class holder, Locale locale, String propertyName, ClassLoader loader) throws MissingResourceException {
 	    java.util.ResourceBundle bundle = getBundle(holder, locale, loader);
 	    if (bundle == null) {
-	        throw new DeveloperException(this, "getResource(Class, Locale, ClassLoader)", "no bundle for holder=" + holder.getName());
+	        throw new DeveloperException("no bundle for holder=" + holder.getName());
 	    }
 		return bundle.getString(propertyName);
 	}

@@ -21,7 +21,7 @@ package ch.softenvironment.util;
  *   -> MyObject#getMyProperty()			// the getter-Method
  *
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.10 $ $Date: 2006-05-07 13:51:10 $
+ * @version $Revision: 1.11 $ $Date: 2006-06-29 22:26:47 $
  */
 public class BeanReflector extends java.util.EventObject {
 	private transient String property = null;
@@ -67,7 +67,7 @@ public java.lang.reflect.Field getField() {
 	try {
 		return getSource().getClass().getField("field" + getPropertyUpper());
 	} catch(NoSuchFieldException e) {
-		throw new DeveloperException(this, "getField()", "<" + getSource().getClass().getName() + "> must implement <" + "public field" + getPropertyUpper() + ">");
+		throw new DeveloperException("<" + getSource().getClass().getName() + "> must implement <" + "public field" + getPropertyUpper() + ">", null, e);
 	}
 }
 /**
@@ -113,7 +113,7 @@ public Object getValue() throws IllegalAccessException, java.lang.reflect.Invoca
 		Object parameters[] = {};
  		return getGetterMethod().invoke(getSource(), parameters);
  	} catch(NoSuchMethodException e) {
-		throw new DeveloperException(this, "getValue()", "<" + getSource().getClass().getName() + "> must implement <" + "get" + getPropertyUpper() + "()");
+		throw new DeveloperException("<" + getSource().getClass().getName() + "> must implement <" + "get" + getPropertyUpper() + "()", null, e);
 	}
 }
 /**
@@ -148,7 +148,7 @@ public void setField(Object value) {
 	try {
 		getField().set(getSource(), value);
 	} catch(IllegalAccessException e) {
-		throw new DeveloperException(this, "setField(Object)", "<" + getSource().getClass().getName() + "#field" + getPropertyUpper() + ">  must be PUBLIC!");
+		throw new DeveloperException("<" + getSource().getClass().getName() + "#field" + getPropertyUpper() + ">  must be PUBLIC!", null, e);
 	}
 }
 /**
@@ -163,7 +163,7 @@ public void setValue(Object value) throws java.lang.reflect.InvocationTargetExce
 		Object args[] = { value };
 		getSetterMethod().invoke(getSource(), args);
 	} catch(NoSuchMethodException e) {
-		throw new DeveloperException(this, "setValue()", "<" + getSource().getClass().getName() + "> must implement <" + "set" + getPropertyUpper() + "(<type>)");
+		throw new DeveloperException("<" + getSource().getClass().getName() + "> must implement <" + "set" + getPropertyUpper() + "(<type>)", null, e);
 	}
 }
 
@@ -179,9 +179,9 @@ public static java.lang.Object createInstance(java.lang.Class target) throws Ins
 		java.lang.reflect.Constructor constructor = target.getConstructor(types);
 		return constructor.newInstance(args);
 	} catch(NoSuchMethodException e) {
-		throw new DeveloperException(BeanReflector.class, "creatInstance(Class)", "Class <" + target + "> must implement: Constructor()!");
+		throw new DeveloperException("Class <" + target + "> must implement: Constructor()!", null, e);
 	} catch(IllegalAccessException e) {
-		throw new DeveloperException(BeanReflector.class, "creatInstance(Class)", "Class <" + target + ".Constructor()> must be: PUBLIC!");
+		throw new DeveloperException("Class <" + target + ".Constructor()> must be: PUBLIC!", null, e);
 	}
 }
 

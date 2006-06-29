@@ -16,8 +16,8 @@ import java.util.*;
 import java.text.*;
 /**
  * Set of reusable String Utilities.
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2005-03-12 17:47:28 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.8 $ $Date: 2006-06-29 22:26:47 $
  */
 public abstract class NlsUtils {
 	public final static String TIME_24HOURS_PATTERN = "HH:mm:ss";	// 24 hours
@@ -26,7 +26,6 @@ public abstract class NlsUtils {
  * For e.g. Pattern = "This are a {0} {1}"; tokens={new Integer(17),  "messages"}
  */
 public static String formatMessage(String pattern, Object[] tokens) {
-	MessageFormat msgFormatter = new MessageFormat(pattern);
 	return MessageFormat.format(pattern, tokens);
 }
 /**
@@ -70,7 +69,7 @@ public static boolean changeLocale(Locale locale) {
 		}
 */
 		Locale.setDefault(locale);
-Tracer.getInstance().runtimeInfo(NlsUtils.class, "changeLocale()", "Locale changed to: " + Locale.getDefault());
+Tracer.getInstance().runtimeInfo("Locale changed to: " + Locale.getDefault());
 		return true;
 	}
 

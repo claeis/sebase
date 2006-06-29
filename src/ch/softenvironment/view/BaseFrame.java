@@ -24,7 +24,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * TemplateFrame defining minimal functionality.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.27 $ $Date: 2006-05-25 15:19:39 $
+ * @version $Revision: 1.28 $ $Date: 2006-06-29 22:28:47 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -373,7 +373,7 @@ protected final void showBusy(final Runnable block) {
 public final static void showException(Component owner, java.lang.Throwable exception) {
 	try {
 		// update log
-		Tracer.getInstance().runtimeWarning(owner, "showException(..) -> stackTrace follows...", exception.getLocalizedMessage());//$NON-NLS-1$
+		Tracer.getInstance().runtimeWarning("In: " + owner + " -> stackTrace follows..." + exception.getLocalizedMessage());//$NON-NLS-1$
 		exception.printStackTrace(System.out);
 
 		// inform user
@@ -381,8 +381,8 @@ public final static void showException(Component owner, java.lang.Throwable exce
 		String message = getResourceString(BaseFrame.class, "CWTopLevelHandler"); //$NON-NLS-1$
 		if (exception instanceof NumberFormatException) {
 			if ((exception.getMessage().length() == 0) || exception.getMessage().equals("empty String") || (exception.getMessage().equals("-"))) {//$NON-NLS-2$//$NON-NLS-1$
-Tracer.getInstance().developerWarning(BaseFrame.class, "showException(..)", "exception message might change -> use another recognition");//$NON-NLS-2$//$NON-NLS-1$
-				Tracer.getInstance().runtimeWarning(BaseFrame.class, "showException(.)", "NumberFormatException ignored: " + exception.toString());
+Tracer.getInstance().developerWarning("exception message might change -> use another recognition");//$NON-NLS-2$//$NON-NLS-1$
+				Tracer.getInstance().runtimeWarning("NumberFormatException ignored: " + exception.toString());
 				return;
 			}
 
@@ -392,7 +392,7 @@ Tracer.getInstance().developerWarning(BaseFrame.class, "showException(..)", "exc
 			title = ((DeveloperException)exception).getTitle();
 			message = exception.getMessage();
 		} else if (exception instanceof MissingResourceException) {
-			Tracer.getInstance().developerError(BaseFrame.class, "showException(..)", "MissingResourceException ignored: " + exception.getLocalizedMessage());
+			Tracer.getInstance().developerError("MissingResourceException ignored: " + exception.getLocalizedMessage());
 			return;
 		} /* else if (exception instanceof java.sql.SQLException) {
 			@see DbBaseFrame#handleException(..)
@@ -400,7 +400,7 @@ Tracer.getInstance().developerWarning(BaseFrame.class, "showException(..)", "exc
 		
 		BaseDialog.showError(owner, title , message, exception);
 	} catch(Throwable e) {
-		Tracer.getInstance().developerError(BaseFrame.class, "showException(..)", "should not have been reached => " + e.getLocalizedMessage());
+		Tracer.getInstance().developerError("should not have been reached => " + e.getLocalizedMessage());
 	} finally {
 		// this method must not throw an Exception under any circumstances
 	}
@@ -425,7 +425,7 @@ protected final static void showSplashScreen(Dimension preferredWindowSize, Stri
 
 		window.dispose();
 	} catch (Throwable e) {
-		Tracer.getInstance().runtimeWarning(BaseFrame.class, "showSplashScreen(<image=" + image + ">)", e.toString());//$NON-NLS-2$//$NON-NLS-1$
+		Tracer.getInstance().runtimeWarning("<image=" + image + "> " + e.getLocalizedMessage());//$NON-NLS-2$//$NON-NLS-1$
 	}
 }
 /**
@@ -453,7 +453,7 @@ protected final static void showSplashScreen(Dimension preferredWindowSize, Imag
 
 		window.dispose();
 	} catch (Throwable e) {
-		Tracer.getInstance().runtimeWarning(BaseFrame.class, "showSplashScreen(<image=" + image + ">)", e.toString());//$NON-NLS-2$//$NON-NLS-1$
+		Tracer.getInstance().runtimeWarning("<image=" + image + ">)" + e.getLocalizedMessage());
 	}
 }
 /**

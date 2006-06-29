@@ -25,7 +25,7 @@ import ch.softenvironment.util.Tracer;
 /**
  * Tool for Mouse-Drag withing a JTree.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2006-05-07 14:02:37 $
+ * @version $Revision: 1.6 $ $Date: 2006-06-29 22:30:07 $
  */
 class TreeDragSource implements DragSourceListener, DragGestureListener {
     private DragSource source = null;
@@ -91,11 +91,11 @@ class TreeDragSource implements DragSourceListener, DragGestureListener {
 	       	if (msg == null) {
 	       	    return true;
 	       	} else {
-Tracer.getInstance().debug(this, "isDropAcceptable()->false", msg);
+Tracer.getInstance().debug("isDropAcceptable()->false: " + msg);
 	       	    return false;
 	       	}
         } catch(Throwable e) {
-            Tracer.getInstance().developerWarning(this, "isDropAcceptable()", e.getLocalizedMessage());
+            Tracer.getInstance().developerWarning(e.getLocalizedMessage());
             return false;
         }
     }

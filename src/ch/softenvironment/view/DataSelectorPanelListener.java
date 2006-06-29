@@ -14,8 +14,8 @@ package ch.softenvironment.view;
  
 /**
  * Listener for DataSelectorPanel.
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:32:59 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.3 $ $Date: 2006-06-29 22:28:47 $
  */
 public interface DataSelectorPanelListener {
 /**

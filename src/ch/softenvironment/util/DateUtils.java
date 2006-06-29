@@ -15,7 +15,7 @@ package ch.softenvironment.util;
 /**
  * Utilities for Date calculations.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2004-11-03 07:23:02 $
+ * @version $Revision: 1.6 $ $Date: 2006-06-29 22:26:47 $
  */
 public class DateUtils {
 /**
@@ -24,10 +24,10 @@ public class DateUtils {
  */
 public static String calcTimeDifference(java.util.Date start, java.util.Date end) {
 	if ((start == null) || (end == null)) {
-		throw new DeveloperException(DateUtils.class, "calcTimeDifference(..)", "start nor end must be null!");
+		throw new DeveloperException("start nor end must be null!");
 	}
 	if (end.getTime() < start.getTime()) {
-		throw new DeveloperException(DateUtils.class, "calcTimeDifference(..)", "start must be earlier end!");
+		throw new DeveloperException("start must be earlier end!");
 	}
 	
 	long seconds = (end.getTime() - start.getTime()) / 1000;
@@ -107,10 +107,10 @@ public static java.util.Date getFirstOfYear() {
  */
 public static Double calcHours(java.util.Date start, java.util.Date end, int precision) {
 	if ((start == null) || (end == null)) {
-		throw new DeveloperException(DateUtils.class, "calcTimeDifference(..)", "start nor end must be null!");
+		throw new DeveloperException("start nor end must be null!");
 	}
 	if (end.getTime() < start.getTime()) {
-		throw new DeveloperException(DateUtils.class, "calcTimeDifference(..)", "start must be earlier end!");
+		throw new DeveloperException("start must be earlier end!");
 	}
 	
 	double milliSeconds = (end.getTime() - start.getTime()) / 1000.0 / 3600.0;
