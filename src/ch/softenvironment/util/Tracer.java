@@ -29,7 +29,7 @@ import ch.ehi.basics.logging.StdLogEvent;
  * @see ch.ehi.basics.logging.* (underlying logger)
  *
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.13 $ $Date: 2006-06-28 12:21:54 $
+ * @version $Revision: 1.14 $ $Date: 2006-06-29 22:22:27 $
  */
 public class Tracer implements LogListener {
 	// Mode's
@@ -74,17 +74,9 @@ private Tracer() {
  * any debug-logs should be removed after testing or within productional releases.
  * @deprecated (should not remain in productive versions)
  */
-public void debug(Object source, String methodName, String comment) {
-	//log(EhiLogger.kindToString(LogEvent.DEBUG_TRACE), source, methodName, comment);
-    debug(comment);
-}
-/**
- * Log a debug message.
- * @deprecated (should not remain in productive versions)
- */
 public void debug(String message) {
     //EhiLogger.debug(message);
-    EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.DEBUG_TRACE, message, null, getOrigin()));
+    EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.DEBUG_TRACE, message, null, getOrigin(0)));
 }
 /**
  * @deprecated
@@ -104,7 +96,7 @@ public void developerError(Object source, String methodName, String error) {
  */
 public void developerError(String error) {
     //EhiLogger.logError(error, SE_DEVELOPER_ERROR);
-    EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.ERROR, error, null, getOrigin(), SE_DEVELOPER_ERROR));
+    EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.ERROR, error, null, getOrigin(0), SE_DEVELOPER_ERROR));
 }
 /**
  * @deprecated
@@ -124,7 +116,7 @@ public void developerWarning(Object source, String methodName, String warning) {
  */
 public void developerWarning(String warning) {
 //  EhiLogger.traceUnusualState(warning, SE_DEVELOPER_WARNING);
-    EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.UNUSUAL_STATE_TRACE, warning, null, getOrigin(), SE_DEVELOPER_WARNING));
+    EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.UNUSUAL_STATE_TRACE, warning, null, getOrigin(0), SE_DEVELOPER_WARNING));
 }
 /**
  * @return console-error Stream
@@ -140,29 +132,9 @@ public static Tracer getInstance() {
 	if (instance == null) {
         // do not influence EhiLogger defaults
         instance = new Tracer();
-		start(NORMAL);
+		instance.setMode(NORMAL);
 	}
 	return instance;
-}
-/**
- * Print Log-Infos in a well formatted way.
- * @param source Instance where Trace-Event happened
- * @param methodName source-code method where Trace-Event happened.
- * @see #log(String, String, String)
- * @deprecated
- */
-private void log(String kind, Object source, String methodName, String message) {
-	String sender = null;
-	if (source == null) {
-		sender = "<???>";
-	} else if (source.getClass().equals(java.lang.Class.class)) {
-		// class was the sender
-		sender = ((java.lang.Class)source).getName();
-	} else {
-		// instance was the sender
-		sender = source.getClass().getName();
-	}
-	log(kind, message, sender + "#" + methodName);
 }
 private void log(String kind, String message, String origin) {
     try {
@@ -170,12 +142,6 @@ private void log(String kind, String message, String origin) {
     } catch(Throwable e) {
         System.err.println("Tracer#log(): " + kind + ": " + message + "=>" + e.getLocalizedMessage());
     }
-}
-/**
- * @deprecated
- */
-public void logBackendCommand(Object source, String methodName, String command) {
-	logBackendCommand(command);
 }
 /**
  * Log a command executed on a backend Target (for e.g. a DBMS or any other Server-System).
@@ -186,25 +152,19 @@ public void logBackendCommand(String command) {
     EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.BACKEND_CMD, command, null, null));
 }
 /**
- * @deprecated
+ * @see #runtimeError(String, Throwable)
  */
-public void runtimeError(Object source, String methodName, String error) {
-	//log(EhiLogger.kindToString(LogEvent.ERROR), source, methodName, error);
-    runtimeError(error);
+public void runtimeError(String error) {
+    runtimeError(error, null);
 }
 /**
  * Log Errors during runtime, by means a serious error happened, which might corrupt
  * application behaviour sooner or later.
  */
-public void runtimeError(String error) {
+public void runtimeError(String error, Throwable exception) {
     //EhiLogger.logError(error);
-    EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.ERROR, error, null, getOrigin()));
-}
-/**
- * @deprecated
- */
-public void runtimeInfo(Object source, String methodName, String info) {
-	runtimeInfo(info);
+//TODO NLS
+    EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.ERROR, error == null ? "Unexpected error" : error, exception, getOrigin(0)));
 }
 /**
  * Log informations during runtime, by means this may represent a valuable
@@ -213,7 +173,7 @@ public void runtimeInfo(Object source, String methodName, String info) {
 public void runtimeInfo(String info) {
     //log("Info:", source, methodName, info);
     //EhiLogger.logState(info);
-    EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.STATE, info, null, getOrigin()));
+    EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.STATE, info, null, getOrigin(0)));
 }
 /**
  * @deprecated
@@ -230,7 +190,7 @@ public void runtimeWarning(Object source, String methodName, String warning) {
 public void runtimeWarning(String warning) {
     //log("Runtime Warning:", source, methodName, warning);
     //EhiLogger.logAdaption(warning);
-    EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.ADAPTION, warning, null, getOrigin()));
+    EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.ADAPTION, warning, null, getOrigin(0)));
 }
 /**
  * Start Tracer and use Console-Error.
@@ -289,7 +249,7 @@ public static void start(int mode) {
  */
 public static synchronized void start(java.io.PrintStream stream, int mode) {
     if (instance != null) {
-        throw new DeveloperException(Tracer.class, "start(PrintStream, int)", "Default Tracer-instance alreade initialized!");
+        throw new DeveloperException("Default Tracer-instance already initialized!");
     }
 	instance = new Tracer();
 	instance.outStream = stream;
@@ -329,12 +289,6 @@ public synchronized void stop() {
     }
 }
 /**
- * @deprecated
- */
-public void uncaughtException(Object source, String methodName, Throwable exception) {
-    uncaughtException(exception);
-}
-/**
  * Use this message to trace non-visually handled exceptions which
  * might be ignored during application run. Serious malfunctioning
  * application behaviour might be possible.
@@ -343,7 +297,7 @@ public void uncaughtException(Throwable exception) {
    try {
     //exception.printStackTrace(outStream);
     //log("Uncaught Exception:", source, methodName, exception.toString());
-       EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.ERROR, "Uncaught exception", exception, getOrigin()));
+       EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.ERROR, "Uncaught exception", exception, getOrigin(0)));
    } catch(Throwable e) {
        System.err.println("Tracer#uncaughtException(): " + e.getLocalizedMessage());
    }
@@ -353,13 +307,13 @@ public void uncaughtException(Throwable exception) {
  * in EhiLogger convenience methods.
  * @return
  */
-private static StackTraceElement getOrigin() {
+protected static StackTraceElement getOrigin(int offset) {
     StackTraceElement stack[] = (new Throwable()).getStackTrace();
-    // stack[0]: getOrigin()
-    // stack[1]: logError()
-    // stack[2]: user code
-    if (2 < stack.length){
-        StackTraceElement st = stack[2]; 
+    // stack[0]: #getOrigin()
+    // stack[1]: for e.g. #logError()
+    // stack[2]: #myUserTracePoint()
+    if ((2 + offset) < stack.length){
+        StackTraceElement st = stack[2 + offset]; 
         return st;
     }
     return null;
@@ -404,24 +358,35 @@ public void logEvent(LogEvent event) {
             break;
         }
     }
+    
+    log(kind, event.getEventMsg(), formatOrigin(event.getOrigin()));
+    if (event.getException() != null) {
+        // @see ch.ehi.basics.logging.AbstractStdListener#logThrowable()
+        event.getException().printStackTrace(outStream);
+    }
+}
+/**
+ * Format the source triggering method.
+ * @param st
+ * @return "MyFile.java#myMethod():line"
+ */
+protected static String formatOrigin(StackTraceElement st) {
     StringBuffer origin = new StringBuffer();
-    if (event.getOrigin() != null) {
-        StackTraceElement st = event.getOrigin();
+    if (st != null) {
         if (st.getFileName() != null){
             origin.append(st.getFileName());
         } else {
             origin.append(st.getClassName());
         }
-        origin.append("#" + st.getMethodName() + "()");
+        origin.append("#");
+        origin.append(st.getMethodName());
+        origin.append("()");
         int line = st.getLineNumber();
         if (line >= 0) {
-            origin.append(":" + line);
+            origin.append(":");
+            origin.append(line);
         }
     }
-    log(kind, event.getEventMsg(), origin.toString());
-    if (event.getException() != null) {
-        // @see ch.ehi.basics.logging.AbstractStdListener#logThrowable()
-        event.getException().printStackTrace(outStream);
-    }
+    return origin.toString();
 }
 }

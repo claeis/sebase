@@ -11,60 +11,26 @@ package ch.softenvironment.util;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  */
- 
+import ch.softenvironment.client.ResourceManager; 
 /**
  * Show failures within Application a User must know.
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2004-05-28 19:52:43 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2006-06-29 22:22:27 $
  */
 public class UserException extends DeveloperException {
-/**
- * Construct a DeveloperException.
- */
-public UserException(Class aClass, String method, String message) {
-	this(aClass, method, message, null);
-}
-/**
- * Construct a DeveloperException.
- * @param aClass (Class where error happened)
- * @param method (producing the error)
- * @param title (Title for ErrorDialog)
- * @param message (Message for ErrorDialog)
- */
-public UserException(Class aClass, String method, String message, String title) {
-	this(aClass, method, message, title, null);
-}
-/**
- * Construct a DeveloperException.
- * @param aClass Class where error happened
- * @param method producing the error
- * @param title Title for ErrorDialog
- * @param message Message for ErrorDialog
- * @param e Original Exception happened
- */
-public UserException(Class aClass, String method, String message, String title, Throwable e) {
-	super(aClass, method, message, (title==null? "Anwendungsfehler": title), e);
-}
-/**
- * Construct a DeveloperException.
- */
-public UserException(Object object, String method, String message) {
-	this(object, method, message, null);
-}
-/**
- * Construct a DeveloperException.
- * @param title (Title for ErrorDialog)
- * @param message (Message for ErrorDialog)
- */
-public UserException(Object errorObject, String errorMethod, String message, String title) {
-	this(errorObject, errorMethod, message, title, null);
-}
-/**
- * Construct a DeveloperException.
- * @param title (Title for ErrorDialog)
- * @param message (Message for ErrorDialog)
- */
-public UserException(Object errorObject, String errorMethod, String message, String title, Throwable e) {
-	this(errorObject.getClass(), errorMethod, message, title, e);
-}
+    /**
+     * Create a new User relevant exception.
+     * @param message Detailed description of failure
+     * @param title Short title of failure
+     * @param e Orginal exception
+     */
+    public UserException(String message, String title, Throwable e) {
+        super(message, (title==null ? ResourceManager.getResource(UserException.class, "CTApplicationError") : title), e, 0 /*this constructor & super*/);
+    }
+    /**
+     * @see #UserException(String, String, Throwable)
+     */
+    public UserException(String message, String title) {
+        super(message, (title==null ? ResourceManager.getResource(UserException.class, "CTApplicationError") : title), null, 0 /*this constructor & super*/);
+    }
 }
