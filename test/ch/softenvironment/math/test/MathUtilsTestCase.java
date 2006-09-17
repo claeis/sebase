@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 /**
  * TestCase for MathUtils.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2006-05-07 14:52:36 $
+ * @version $Revision: 1.2 $ $Date: 2006-09-17 11:15:57 $
  */
 public class MathUtilsTestCase extends TestCase {
     /**
@@ -34,9 +34,20 @@ public class MathUtilsTestCase extends TestCase {
 	    assertTrue(log2 == 3.0);
 	}
     public void testFix() {
+        assertTrue(MathUtils.fix(0.0, 0) == 0.0);
+        assertTrue(MathUtils.fix(0.0, 2) == 0.0);
         assertTrue(MathUtils.fix(12.896, 2) == 12.89);
         assertTrue(MathUtils.fix(-76.89667, 4) == -76.8966);
         assertTrue(MathUtils.fix(30.989, 1) == 30.9);
         assertTrue(MathUtils.fix(-76.89667, 0) == -76.0);
+    }
+    public void testRound() {
+        assertTrue(MathUtils.round(0.0, 0) == 0.0);
+        assertTrue(MathUtils.round(0.0, 2) == 0.0);
+        assertTrue(MathUtils.round(12.876, 2) == 12.88);
+        assertTrue(MathUtils.round(-76.89667, 4) == -76.8967);
+        assertTrue(MathUtils.round(30.989, 1) == 31.0);
+        assertTrue(MathUtils.round(-76.89667, 0) == -77.0);
+        assertTrue(MathUtils.round(303.33333333333333333, 2) == 303.33);
     }
 }

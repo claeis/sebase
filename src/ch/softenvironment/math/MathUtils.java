@@ -62,7 +62,7 @@ public class MathUtils {
     }
     /**
      * Cut the fraction part to accuracy length, for e.g.
-     * fix(12.896, 2) => 12.89
+     * fix(12.876, 2) => 12.87
      * @param value
      * @param accuracy
      * @return
@@ -77,5 +77,31 @@ public class MathUtils {
         }
         double factor = Math.pow(10, accuracy);
         return (double)(((long)(value * factor)) / factor);
+    }
+    /**
+     * Round the fraction part to accuracy length, for e.g.
+     * round(12.876, 2) => 12.88
+     * @param value
+     * @param accuracy
+     * @return
+     * @see java.util.Math#round()
+     */
+    public final static double round(double value, int accuracy) {
+        if (accuracy < 0) {
+            throw new IllegalArgumentException("accuracy must be >=0");
+        }
+        if (accuracy == 0) {
+            return Math.round(value);
+        } else {
+            double val = value;
+            for (int i=0; i<accuracy; i++) {
+                val = val * 10;
+            }
+            val = (long)Math.floor(val + 0.5d);
+            for (int i=0; i<accuracy; i++) {
+                val = val / 10;
+            }
+            return fix(val, accuracy); // remove any division inaccuracies
+        }
     }
 }
