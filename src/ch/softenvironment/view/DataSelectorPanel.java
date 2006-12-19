@@ -17,10 +17,11 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * Browser to walk through a List of Objects.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.8 $ $Date: 2006-06-29 22:28:47 $
+ * @version $Revision: 1.9 $ $Date: 2006-12-19 10:00:22 $
  */
 public class DataSelectorPanel extends BasePanel {
 	private DataSelectorPanelListener listener = null;
+//TODO replace objects by DataBrowser
 	private java.util.List objects = null;
 	private int currentIndex = -1;
 	private javax.swing.JButton ivjTbbFirst = null;
@@ -279,7 +280,7 @@ private javax.swing.JButton getTbbDelete() {
 			ivjTbbDelete.setMinimumSize(new java.awt.Dimension(23, 23));
 			// user code begin {1}
 			ivjTbbDelete.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(DataSelectorPanel.class, "delete.gif"));
-			ivjTbbDelete.setToolTipText(ResourceManager.getResource(DataSelectorPanel.class, "TbbDelete_toolTipText"));
+			ivjTbbDelete.setToolTipText(CommonUserAccess.getMniEditRemoveText());
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -375,7 +376,7 @@ private javax.swing.JButton getTbbNew() {
 			ivjTbbNew.setMinimumSize(new java.awt.Dimension(23, 23));
 			// user code begin {1}
 			ivjTbbNew.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(DataSelectorPanel.class, "new.gif"));
-			ivjTbbNew.setToolTipText(ResourceManager.getResource(DataSelectorPanel.class, "TbbNew_toolTipText"));
+			ivjTbbNew.setToolTipText(CommonUserAccess.getMniFileNewText());
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -606,7 +607,7 @@ public void setObjects(java.util.List objects) {
  */
 private void treatNextPreviousButtons() {
 	boolean prev = currentIndex > 0;
-	getTbbFirst().setEnabled(prev);
+	//getTbbFirst().setEnabled(prev);
 	getTbbPrevious().setEnabled(prev);
 
 	if ((objects != null) && (objects.size() > 0)) {

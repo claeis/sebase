@@ -15,16 +15,21 @@ package ch.softenvironment.view;
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+import java.util.ArrayList;
 import ch.softenvironment.client.ResourceManager;
 import ch.softenvironment.client.UserActionRights;
+import ch.softenvironment.controller.DataBrowser;
+import ch.softenvironment.controller.DataBrowserListener;
 /**
- * StandardToolbar.
+ * Standard JToolbar extended by:
+ * - default object functions (new, save, remove, etc)
+ * - manage a multi Object-List to browse
+ * - Inconsistency-list of current object
+ * 
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.11 $ $Date: 2006-06-29 22:28:47 $
+ * @version $Revision: 1.12 $ $Date: 2006-12-19 10:00:21 $
  */
-public class ToolBar extends javax.swing.JToolBar {
-	// list of Objects to treat by selector
-	private int currentIndex = -1;
+public class ToolBar extends javax.swing.JToolBar implements DataBrowserListener {
 	private javax.swing.JButton ivjTbbCopy = null;
 	private javax.swing.JButton ivjTbbCut = null;
 	private javax.swing.JButton ivjTbbOpen = null;
@@ -38,14 +43,14 @@ public class ToolBar extends javax.swing.JToolBar {
 	private javax.swing.JButton ivjTbbDelete = null;
 	private javax.swing.JButton ivjTbbPrint = null;
 	private javax.swing.JComboBox ivjCbxItems = null;
-	private java.lang.Object fieldCurrentObject = null;
+    private java.lang.Object fieldCurrentObject = null;
 	private javax.swing.JButton ivjTbbNext = null;
 	private javax.swing.JButton ivjTbbPrevious = null;
 	private javax.swing.JButton ivjTbbNew = null;
 	private javax.swing.JButton ivjTbbFirst = null;
 	private javax.swing.JButton ivjTbbLast = null;
 	private javax.swing.JLabel ivjLblSelector = null;
-	private java.util.List fieldObjects = null;
+    private DataBrowser browser = new DataBrowser();
 
 class IvjEventHandler implements java.awt.event.ActionListener {
 		public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -89,8 +94,8 @@ public ToolBar() {
 	initialize();
 }
 /**
- * 
  * @param newListener ch.softenvironment.view.ToolBarListener
+ * @deprecated (use DataBrowserListener instead)
  */
 public void addToolBarListener(ch.softenvironment.view.ToolBarListener newListener) {
 	fieldToolBarListenerEventMulticaster = ch.softenvironment.view.ToolBarListenerEventMulticaster.add(fieldToolBarListenerEventMulticaster, newListener);
@@ -373,13 +378,20 @@ private void connEtoC9(java.awt.event.ActionEvent arg1) {
 	}
 }
 /**
+ * Overwrites.
+ */
+public void removeNotify() {
+    browser.removeListener(this);
+    super.removeNotify();
+}
+/**
  * Method to support listener events.
  * @param newEvent java.util.EventObject
  */
 protected void fireTbbCopyAction_actionPerformed(java.util.EventObject newEvent) {
 	if (fieldToolBarListenerEventMulticaster == null) {
 		return;
-	};
+	}
 	fieldToolBarListenerEventMulticaster.tbbCopyAction_actionPerformed(newEvent);
 }
 /**
@@ -389,7 +401,7 @@ protected void fireTbbCopyAction_actionPerformed(java.util.EventObject newEvent)
 protected void fireTbbCutAction_actionPerformed(java.util.EventObject newEvent) {
 	if (fieldToolBarListenerEventMulticaster == null) {
 		return;
-	};
+	}
 	fieldToolBarListenerEventMulticaster.tbbCutAction_actionPerformed(newEvent);
 }
 /**
@@ -399,7 +411,7 @@ protected void fireTbbCutAction_actionPerformed(java.util.EventObject newEvent) 
 protected void fireTbbDeleteAction_actionPerformed(java.util.EventObject newEvent) {
 	if (fieldToolBarListenerEventMulticaster == null) {
 		return;
-	};
+	}
 	fieldToolBarListenerEventMulticaster.tbbDeleteAction_actionPerformed(newEvent);
 }
 /**
@@ -409,7 +421,7 @@ protected void fireTbbDeleteAction_actionPerformed(java.util.EventObject newEven
 protected void fireTbbFindAction_actionPerformed(java.util.EventObject newEvent) {
 	if (fieldToolBarListenerEventMulticaster == null) {
 		return;
-	};
+	}
 	fieldToolBarListenerEventMulticaster.tbbFindAction_actionPerformed(newEvent);
 }
 /**
@@ -419,7 +431,7 @@ protected void fireTbbFindAction_actionPerformed(java.util.EventObject newEvent)
 protected void fireTbbNewAction_actionPerformed(java.util.EventObject newEvent) {
 	if (fieldToolBarListenerEventMulticaster == null) {
 		return;
-	};
+	}
 	fieldToolBarListenerEventMulticaster.tbbNewAction_actionPerformed(newEvent);
 }
 /**
@@ -429,7 +441,7 @@ protected void fireTbbNewAction_actionPerformed(java.util.EventObject newEvent) 
 protected void fireTbbOpenAction_actionPerformed(java.util.EventObject newEvent) {
 	if (fieldToolBarListenerEventMulticaster == null) {
 		return;
-	};
+	}
 	fieldToolBarListenerEventMulticaster.tbbOpenAction_actionPerformed(newEvent);
 }
 /**
@@ -439,7 +451,7 @@ protected void fireTbbOpenAction_actionPerformed(java.util.EventObject newEvent)
 protected void fireTbbPasteAction_actionPerformed(java.util.EventObject newEvent) {
 	if (fieldToolBarListenerEventMulticaster == null) {
 		return;
-	};
+	}
 	fieldToolBarListenerEventMulticaster.tbbPasteAction_actionPerformed(newEvent);
 }
 /**
@@ -449,7 +461,7 @@ protected void fireTbbPasteAction_actionPerformed(java.util.EventObject newEvent
 protected void fireTbbPrintAction_actionPerformed(java.util.EventObject newEvent) {
 	if (fieldToolBarListenerEventMulticaster == null) {
 		return;
-	};
+	}
 	fieldToolBarListenerEventMulticaster.tbbPrintAction_actionPerformed(newEvent);
 }
 /**
@@ -459,7 +471,7 @@ protected void fireTbbPrintAction_actionPerformed(java.util.EventObject newEvent
 protected void fireTbbRedoAction_actionPerformed(java.util.EventObject newEvent) {
 	if (fieldToolBarListenerEventMulticaster == null) {
 		return;
-	};
+	}
 	fieldToolBarListenerEventMulticaster.tbbRedoAction_actionPerformed(newEvent);
 }
 /**
@@ -469,7 +481,7 @@ protected void fireTbbRedoAction_actionPerformed(java.util.EventObject newEvent)
 protected void fireTbbSaveAction_actionPerformed(java.util.EventObject newEvent) {
 	if (fieldToolBarListenerEventMulticaster == null) {
 		return;
-	};
+	}
 	fieldToolBarListenerEventMulticaster.tbbSaveAction_actionPerformed(newEvent);
 }
 /**
@@ -479,7 +491,7 @@ protected void fireTbbSaveAction_actionPerformed(java.util.EventObject newEvent)
 protected void fireTbbUndoAction_actionPerformed(java.util.EventObject newEvent) {
 	if (fieldToolBarListenerEventMulticaster == null) {
 		return;
-	};
+	}
 	fieldToolBarListenerEventMulticaster.tbbUndoAction_actionPerformed(newEvent);
 }
 /**
@@ -497,7 +509,9 @@ private javax.swing.JComboBox getCbxItems() {
 			ivjCbxItems.setMaximumSize(new java.awt.Dimension(300, 23));
 			ivjCbxItems.setForeground(java.awt.Color.red);
 			// user code begin {1}
-			ivjCbxItems.setToolTipText(getResourceString("CbxItems_toolTipText"));
+            getCbxItems().setVisible(false);
+            ivjCbxItems.setMaximumSize(new java.awt.Dimension(500, 23));
+			ivjCbxItems.setToolTipText(ResourceManager.getResource(ToolBar.class, "CbxItems_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -510,31 +524,31 @@ private javax.swing.JComboBox getCbxItems() {
 /**
  * Gets the currentObject property (java.lang.Object) value.
  * @return The currentObject property value.
- * @see #setCurrentObject
+ * @see #setCurrentObject(Object)
  */
 public java.lang.Object getCurrentObject() {
-	return fieldCurrentObject;
+    return browser.getCurrentObject(); //return fieldCurrentObject;
 }
 /**
  * Return the first of all objects.
  */
 public Object getFirst() {
-	if (currentIndex > 0) {
-		currentIndex = 0;
-		setCurrentObject(fieldObjects.get(currentIndex));
-	}
-	treatNextPreviousButtons();
+    if (browser.isScrollFirstAllowed()) {
+        browser.getFirst();
+    } else {
+        throw new IndexOutOfBoundsException("no first object!");
+    }
 	return getCurrentObject();
 }
 /**
  * Return the last of all Objects.
  */
 public Object getLast() {
-	if ((fieldObjects != null) && (currentIndex + 1 < fieldObjects.size())) {
-		currentIndex = fieldObjects.size() - 1;
-		setCurrentObject(fieldObjects.get(currentIndex));
-	}
-	treatNextPreviousButtons();
+    if (browser.isScrollLastAllowed()) {
+        browser.getLast();
+    } else {
+        throw new IndexOutOfBoundsException("no last object!");
+    }
 	return getCurrentObject();
 }
 /**
@@ -562,27 +576,23 @@ private javax.swing.JLabel getLblSelector() {
  * Set next Object as currentObject.
  */
 public Object getNext() {
-	if ((fieldObjects != null) && (fieldObjects.size() > 0) && (currentIndex + 1 < fieldObjects.size())) {
-		setCurrentObject(fieldObjects.get(++currentIndex));
-	}
-	treatNextPreviousButtons();
+    if (browser.isScrollNextAllowed()) {
+        browser.getNext();
+    } else {
+        throw new IndexOutOfBoundsException("no next object!");
+    }
 	return getCurrentObject();
 }
 /**
  * Set previous Object as currentObject.
  */
 public Object getPrevious() {
-	if (currentIndex > 0) {
-		setCurrentObject(fieldObjects.get(--currentIndex));
-	}
-	treatNextPreviousButtons();
+    if (browser.isScrollPreviousAllowed()) {
+        browser.getPrevious();
+    } else {
+        throw new IndexOutOfBoundsException("no previous object!");
+    }
 	return getCurrentObject();
-}
-/**
- * @see BaseFrame#getResourceString(String)
- */
-protected String getResourceString(String propertyName) {
-	return ResourceManager.getInstance().getResource(this.getClass(), propertyName);
 }
 /**
  * Return the TbbCopy property value.
@@ -751,7 +761,7 @@ private javax.swing.JButton getTbbFirst() {
 			ivjTbbFirst.setEnabled(false);
 			// user code begin {1}
 			ivjTbbFirst.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(ToolBar.class, "first_arrow.gif"));
-			ivjTbbFirst.setToolTipText(getResourceString("TbbFirst_toolTipText"));
+			ivjTbbFirst.setToolTipText(ResourceManager.getResource(DataSelectorPanel.class, "TbbFirst_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -780,7 +790,7 @@ private javax.swing.JButton getTbbLast() {
 			ivjTbbLast.setEnabled(false);
 			// user code begin {1}
 			ivjTbbLast.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(ToolBar.class, "last_arrow.gif"));
-			ivjTbbLast.setToolTipText(getResourceString("TbbLast_toolTipText"));
+			ivjTbbLast.setToolTipText(ResourceManager.getResource(DataSelectorPanel.class, "TbbLast_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -845,7 +855,7 @@ private javax.swing.JButton getTbbNext() {
 			ivjTbbNext.setEnabled(false);
 			// user code begin {1}
 			ivjTbbNext.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(ToolBar.class, "right_arrow.gif"));
-			ivjTbbNext.setToolTipText(getResourceString("TbbNext_toolTipText"));
+			ivjTbbNext.setToolTipText(ResourceManager.getResource(DataSelectorPanel.class, "TbbNext_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -950,7 +960,7 @@ private javax.swing.JButton getTbbPrevious() {
 			ivjTbbPrevious.setEnabled(false);
 			// user code begin {1}
 			ivjTbbPrevious.setIcon(ch.ehi.basics.i18n.ResourceBundle.getImageIcon(ToolBar.class, "left_arrow.gif"));
-			ivjTbbPrevious.setToolTipText(getResourceString("TbbPrevious_toolTipText"));
+			ivjTbbPrevious.setToolTipText(ResourceManager.getResource(DataSelectorPanel.class, "TbbPrevious_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -1143,15 +1153,8 @@ private void initConnections() throws java.lang.Exception {
 private void initialize() {
 	try {
 		// user code begin {1}
-		if (fieldObjects == null) {
-			// do not show CurrentObject relevant Widgets
-			getCbxItems().setVisible(false);
-			getTbbFirst().setVisible(false);
-			getTbbPrevious().setVisible(false);
-			getTbbNext().setVisible(false);
-			getTbbLast().setVisible(false);
-			getLblSelector().setVisible(false);
-		}
+        browser.addListener(this);
+        setObjects(new ArrayList());
 		// user code end
 		setName("ToolBar");
 		setFloatable(false);
@@ -1178,37 +1181,35 @@ private void initialize() {
 		handleException(ivjExc);
 	}
 	// user code begin {2}
+    treatNextPreviousButtons();
 	// user code end
 }
 /**
  * 
- * @param newListener ch.softenvironment.view.ToolBarListener
+ * @param Listener ch.softenvironment.view.ToolBarListener
+ * @deprecated (use DataBrowserListener instead)
  */
 public void removeToolBarListener(ch.softenvironment.view.ToolBarListener newListener) {
 	fieldToolBarListenerEventMulticaster = ch.softenvironment.view.ToolBarListenerEventMulticaster.remove(fieldToolBarListenerEventMulticaster, newListener);
 	return;
 }
 /**
- * Sets the currentObject property (java.lang.Object) value.
- * @param currentObject The new value for the property.
- * @see #getCurrentObject
+ * @see DataBrowserListener#setCurrentObject(Object)
  */
-private void setCurrentObject(final java.lang.Object currentObject) {
+public void setCurrentObject(final java.lang.Object currentObject) {
     WaitDialog.showBusy(this, new Runnable() {
         public void run() {
+            treatNextPreviousButtons();
+            
 			Object oldValue = fieldCurrentObject;
 			fieldCurrentObject = currentObject;
 			firePropertyChange("currentObject", oldValue, currentObject);//$NON-NLS-1$
-
-			// show CurrentObject relevant Widgets
-			boolean show = fieldObjects.size() > 1;
-			getTbbPrevious().setVisible(show);
-			getTbbNext().setVisible(show);
         }
     });
 }
 /**
- * Show a list of items in the ComboBox.
+ * Show a list of inconsistencies in a ComboBox,
+ * which is suppressed if everything is allright..
  * @param items java.util.Vector
  * @see ConsistencyController.getInconsistencies();
  */
@@ -1217,32 +1218,25 @@ public void setItems(java.util.Vector items) {
 	getCbxItems().setModel(new javax.swing.DefaultComboBoxModel(items));
 }
 /**
- * Sets the objects property (java.util.List) value.
+ * Set the list of Objects to handle (scroll) by Toolbar.
  * @param objects The new value for the property.
  */
 public void setObjects(java.util.List objects) {
-/*
-	List oldValue = fieldObjects;
-	fieldObjects = objects;
-	firePropertyChange("objects", oldValue, objects);
-*/
-	fieldObjects = objects;
-	
-	if ((objects != null) && (objects.size() > 1)) {
-		getTbbFirst().setVisible(true);
-		getTbbNext().setVisible(true);
-		getTbbPrevious().setVisible(true);
-		getTbbLast().setVisible(true);
-		getLblSelector().setVisible(true);
-	} else {
-		getTbbFirst().setVisible(false);
-		getTbbNext().setVisible(false);
-		getTbbPrevious().setVisible(false);
-		getTbbLast().setVisible(false);
-		getLblSelector().setVisible(false);
-	}
-	
-	getNext();
+    browser.setObjects(objects);
+    if ((objects == null) || (objects.size() <= 1)) {
+        // suppress browsing completely
+        getTbbFirst().setVisible(false);
+        getTbbPrevious().setVisible(false);
+        getTbbNext().setVisible(false);
+        getTbbLast().setVisible(false);
+        getLblSelector().setVisible(false);
+    } else {
+        getTbbFirst().setVisible(true);
+        getTbbPrevious().setVisible(true);
+        getTbbNext().setVisible(true);
+        getTbbLast().setVisible(true);
+        getLblSelector().setVisible(true);
+    }
 }
 /**
  * Method generated to support the promotion of the tbbCopyEnabled attribute.
@@ -1339,10 +1333,10 @@ public void setTbbUndoEnabled(boolean arg1) {
 }
 /**
  * Comment
- */
+
 public void tbbNew_ActionPerformed(java.awt.event.ActionEvent actionEvent) {
 	return;
-}
+} */
 /**
  * Hide or show the Toolbar.
  */
@@ -1353,20 +1347,11 @@ public void toggleVisbility() {
  *  Treat Next/Previous Buttons.
  */
 private void treatNextPreviousButtons() {
-	boolean prev = currentIndex > 0;
-	getTbbFirst().setEnabled(prev);
-	getTbbPrevious().setEnabled(prev);
-
-	if (fieldObjects != null) {
-		boolean next = currentIndex + 1 < fieldObjects.size();
-		getTbbNext().setEnabled(next);
-		getTbbLast().setEnabled(next);
-		getLblSelector().setText(" " + (currentIndex + 1) + "/" + fieldObjects.size() + " ");//$NON-NLS-3$//$NON-NLS-2$//$NON-NLS-1$
-	} else {
-		getTbbNext().setEnabled(false);
-		getTbbLast().setEnabled(false);
-		getLblSelector().setText(" 0/0 ");//$NON-NLS-1$
-	}
+    getTbbFirst().setEnabled(browser.isScrollFirstAllowed());
+    getTbbPrevious().setEnabled(browser.isScrollPreviousAllowed());
+    getTbbNext().setEnabled(browser.isScrollNextAllowed());
+    getTbbLast().setEnabled(browser.isScrollLastAllowed());
+    getLblSelector().setText(" " + browser.getScrollIndexString() + " ");
 }
 /**
  * Adapt Toolbar according to given rights for the allowed user actions.
@@ -1390,5 +1375,17 @@ public void adaptRights(UserActionRights rights) {
             remove(getTbbRedo());
         }
     }
+}
+/**
+ * @see DataBrowserListener
+ */
+public boolean removeObject(Object object) {
+    return false;
+}
+/**
+ * @see DataBrowserListener
+ */
+public Object saveChanges(Object object) {
+    return object;
 }
 }
