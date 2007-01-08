@@ -19,7 +19,7 @@ package ch.softenvironment.view;
  * - undefined
  *
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2006-05-07 13:52:48 $
+ * @version $Revision: 1.6 $ $Date: 2007-01-08 17:39:06 $
  */
 public class TriStatePanel extends BasePanel {
 	private static String ACTION_ALL = "ALL";
@@ -291,5 +291,14 @@ public void setValue(java.lang.Boolean value) {
 				}
 			}
 	}
+}
+/**
+ * Overwrites.
+ */
+public void setEnabled(boolean enabled) {
+    super.setEnabled(enabled);
+    getRbtAll().setEnabled(enabled);
+    getRbtTrue().setEnabled(enabled);
+    getRbtFalse().setEnabled(enabled);
 }
 }
