@@ -29,7 +29,7 @@ import ch.ehi.basics.logging.StdLogEvent;
  * @see ch.ehi.basics.logging.* (underlying logger)
  *
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.14 $ $Date: 2006-06-29 22:22:27 $
+ * @version $Revision: 1.15 $ $Date: 2007-02-20 12:56:15 $
  */
 public class Tracer implements LogListener {
 	// Mode's
@@ -79,17 +79,6 @@ public void debug(String message) {
     EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.DEBUG_TRACE, message, null, getOrigin(0)));
 }
 /**
- * @deprecated
- */
-public void developerError(Object source, String methodName, String error) {
-/*
-    if ((mode == DEBUG) || (mode == ALL)) {
-		log("Developer Error: ", source, methodName, error);
-	}
-*/
-    developerError(error);
-}
-/**
  * Log Developer Errors, for e.g. when a developer missunderstood the
  * concept of a called method/mechanism. If this happens, the developer is urged
  * to change this part of code immediately.
@@ -97,17 +86,6 @@ public void developerError(Object source, String methodName, String error) {
 public void developerError(String error) {
     //EhiLogger.logError(error, SE_DEVELOPER_ERROR);
     EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.ERROR, error, null, getOrigin(0), SE_DEVELOPER_ERROR));
-}
-/**
- * @deprecated
- */
-public void developerWarning(Object source, String methodName, String warning) {
-/* 
- 	if ((mode == DEBUG) || (mode == ALL)) {
-		log("Developer Warning: ", source, methodName, warning);
-	}
-*/
-    developerWarning(warning);
 }
 /**
  * Log developer Warnings, for e.g. if something was wrongly used by Developer,
@@ -163,8 +141,19 @@ public void runtimeError(String error) {
  */
 public void runtimeError(String error, Throwable exception) {
     //EhiLogger.logError(error);
-//TODO NLS
-    EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.ERROR, error == null ? "Unexpected error" : error, exception, getOrigin(0)));
+    //EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.ERROR, error == null ? "Unexpected error" : error, exception, getOrigin(0)));
+    runtimeError(error, exception, 1);
+}
+/**
+ * Log Errors during runtime, by means a serious error happened, which might corrupt
+ * application behaviour sooner or later.
+ * 
+ * Useful for intermediate Trace-layers.
+ * @param offsetToStackTrace (0 for calling method; 1 for one method earlier)
+ */
+public void runtimeError(String error, Throwable exception, int offsetToStackTrace) {
+    //EhiLogger.logError(error);
+    EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.ERROR, error == null ? "Unexpected error" : error, exception, getOrigin(offsetToStackTrace)));
 }
 /**
  * Log informations during runtime, by means this may represent a valuable
@@ -174,13 +163,6 @@ public void runtimeInfo(String info) {
     //log("Info:", source, methodName, info);
     //EhiLogger.logState(info);
     EhiLogger.getInstance().logEvent(new StdLogEvent(LogEvent.STATE, info, null, getOrigin(0)));
-}
-/**
- * @deprecated
- */
-public void runtimeWarning(Object source, String methodName, String warning) {
-	//log("Runtime Warning:", source, methodName, warning);
-    runtimeWarning(warning);
 }
 /**
  * Log Warnings during runtime, by means errors might have been happened
@@ -279,14 +261,15 @@ public void setMode(final int mode) {
  */
 public synchronized void stop() {
 	try {
-		outStream.close();
+        if (outStream != null) {
+		  outStream.close();
+        }
         EhiLogger.getInstance().removeListener(this);
-    } catch(Throwable e) {
-//TODO Bad practice to write static variable
-        instance = null;  
-        
+    } catch(Throwable e) {        
         System.err.println("Tracer#stop(): " + e.getLocalizedMessage());
     }
+    //Bad practice to write static variable
+    instance = null; 
 }
 /**
  * Use this message to trace non-visually handled exceptions which
@@ -329,7 +312,7 @@ public void logEvent(LogEvent event) {
         } else if ((event.getEventKind() == LogEvent.DEBUG_TRACE) ||
                     (event.getEventKind() == LogEvent.STATE_TRACE) ||
                     (event.getEventKind() == LogEvent.UNUSUAL_STATE_TRACE) ||
-                    (event.getCustomLevel() == SE_DEVELOPER_ERROR) |
+                    (event.getCustomLevel() == SE_DEVELOPER_ERROR) ||
                     (event.getCustomLevel() == SE_DEVELOPER_WARNING)) {
             if (mode != DEBUG) {
                 return;
