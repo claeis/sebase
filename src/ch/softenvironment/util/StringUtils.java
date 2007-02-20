@@ -2,6 +2,8 @@ package ch.softenvironment.util;
 
 import java.io.File;
 
+import ch.softenvironment.client.ResourceManager;
+
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,7 +19,7 @@ import java.io.File;
 /**
  * Set of reusable String Utilities.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.8 $ $Date: 2006-05-23 19:23:52 $
+ * @version $Revision: 1.9 $ $Date: 2007-02-20 12:54:12 $
  */
 public abstract class StringUtils {
 
@@ -73,14 +75,57 @@ public static String getPureClassName(Object object) {
  * @return String
  */
 public static String getString(Object value) {
-	return value == null ? "" : value.toString();
+	if (value == null) {
+        return "";
+    } else if (value instanceof Boolean) {
+        if (((Boolean)value).booleanValue()) {
+            return ResourceManager.getResource(StringUtils.class, "CI_Yes_text");
+        } else {
+            return ResourceManager.getResource(StringUtils.class, "CI_No_text");
+        }
+    } else {
+        return value.toString();
+    }
 }
 /**
- * Return either String or empty String if nothing contained.
- * @return String
+ * Cut off value if longer than given length
+ * for e.g. getStringLimited("abcdefgh", 5) => "abcd.."
+ * @param value
+ * @param length
+ * @return
  */
-public static String getString(String value) {
-	return value == null ? "" : value;
+public static String getStringLimited(String value, int length) {
+    if (!isNullOrEmpty(value) && (value.length() > length)) {
+        // replace last character by elipsis
+        return value.substring(0, length - 1) + ((char)1461) /*elipsis=".."*/;
+    }
+    return value;
+}
+/**
+ * Return next extraxted textual word in value String.
+ * @param value
+ * @param startAt
+ * @return "" if no next word
+ */
+public static String getNextWord(String value, int startAt) {
+    if (!isNullOrEmpty(value)) {
+        if (value.length() > startAt) {
+            String temp = value.substring(startAt, value.length()).trim();
+            int index = temp.indexOf(" ");
+//TODO check other word separators such as .,;!?:
+            if (index > 0) {
+                return temp.substring(0, index);
+            }
+            if (temp.length() > 0) {
+                char last = temp.charAt(temp.length() - 1);
+                if ((last == '.') || (last == '!') || (last == ',') || (last == ';') || (last == ':') || (last == '?')) {
+                    temp = temp.substring(0, temp.length() - 1);
+                }
+                return temp;
+            }
+        }
+    }
+    return "";
 }
 /**
  * Return whether String is null or contains nothing.
@@ -90,23 +135,32 @@ public static boolean isNullOrEmpty(String value) {
 	return ((value == null) || (value.trim().length() == 0));
 }
 /**
- * Replace all occurences of searchTerm by replacement in source,
+ * @see #replace(StringBuffer, String, String)
+ */
+public static String replace(String source, String searchTerm, String replacement) {
+    if (source == null) {
+        return null;
+    } else {
+        return replace(new StringBuffer(source), searchTerm, replacement);
+    }
+}
+/**
+ * Replace all occurences of searchTerm by replacement in buffer,
  * for e.g. StringUtils.replace("X AS C, Attr1 AS Dummy", " AS ", " ") => "X C, Attr1 Dummy"
  * @return String
  */
-public static String replace(String source, String searchTerm, String replacement) {
-	if (source == null) {
-		return null;
-	}
-    StringBuffer buffer = new StringBuffer(source);
-    int index = -1;
-    while ((index = buffer.indexOf(searchTerm)) > -1) {
-        buffer.delete(index, index + searchTerm.length());
-        buffer.insert(index, replacement);
+public static String replace(StringBuffer buffer, String searchTerm, String replacement) {
+    if (buffer == null) {
+        return null;
+    } else {
+        int index = -1;
+        while ((index = buffer.indexOf(searchTerm)) > -1) {
+            buffer.delete(index, index + searchTerm.length());
+            buffer.insert(index, replacement);
+        }
+    	return buffer.toString();
     }
-	return buffer.toString();
 }
-
 /**
  * Return a String representation of a boolean.
  * @return X => true; <emptyString> => false

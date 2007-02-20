@@ -1,8 +1,11 @@
 package ch.softenvironment.util.test;
 
+import ch.softenvironment.client.ResourceManager;
+import ch.softenvironment.util.StringUtils;
+
 /**
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2006-05-23 19:23:52 $
+ * @version $Revision: 1.5 $ $Date: 2007-02-20 12:54:13 $
  */
 public class StringUtilsTestCase extends junit.framework.TestCase {
 /**
@@ -25,7 +28,13 @@ public void testGetString() {
 	assertTrue("StringUtils.getString(null)", "".equals(ch.softenvironment.util.StringUtils.getString((Object)null)));
 	assertTrue("StringUtils.getString(17)", "17".equals(ch.softenvironment.util.StringUtils.getString(new Integer(17))));
 	assertTrue("StringUtils.getString(-23.45)", "-23.45".equals(ch.softenvironment.util.StringUtils.getString(new Double(-23.45))));
-
+    assertTrue("StringUtils.getString(Boolean.TRUE)", ResourceManager.getResource(StringUtils.class, "CI_Yes_text").equals(ch.softenvironment.util.StringUtils.getString(Boolean.TRUE)));
+    assertTrue("StringUtils.getString(Boolean.FALSE)", ResourceManager.getResource(StringUtils.class, "CI_No_text").equals(ch.softenvironment.util.StringUtils.getString(Boolean.FALSE)));
+}
+public void testGetNextWord() {
+    assertTrue("StringUtils.getNextWord(null)", "".equals(ch.softenvironment.util.StringUtils.getNextWord(null, 8)));
+    assertTrue("StringUtils.getNextWord(Hello world)", "Hello".equals(ch.softenvironment.util.StringUtils.getNextWord("Hello world", 0)));
+    assertTrue("StringUtils.getNextWord(Hello world)", "world".equals(ch.softenvironment.util.StringUtils.getNextWord("Hello world", 5)));
 }
 /**
  * 
@@ -47,6 +56,22 @@ public void testPureFileName() {
 	assertTrue("DOS-Path", "MyFile.xml".equals(ch.softenvironment.util.StringUtils.getPureFileName("C:\\tmp\\dummy\\MyFile.xml")));
 	assertTrue("Unix-Path", "MyFile.xml".equals(ch.softenvironment.util.StringUtils.getPureFileName("/usr/local/MyFile.xml")));
 	assertTrue("System-Property", "MyFile.xml".equals(ch.softenvironment.util.StringUtils.getPureFileName(System.getProperty("java.io.tmpdir") + "MyFile.xml")));
+}
+public void testLimited() {
+    char elipsis = (char)0x5B5;
+    
+    assertTrue("StringUtils.getStringLimited()", StringUtils.getStringLimited(null, 4) == null);
+    assertTrue("StringUtils.getStringLimited()", StringUtils.getStringLimited("", 1).equals(""));
+    
+    assertTrue("StringUtils.getStringLimited()", StringUtils.getStringLimited("abcdefg", 1).equals("" + elipsis));
+    assertTrue("StringUtils.getStringLimited()", StringUtils.getStringLimited("abcdefg", 2).equals("a" + elipsis));
+    assertTrue("StringUtils.getStringLimited()", StringUtils.getStringLimited("abcdefg", 3).equals("ab" + elipsis));
+    assertTrue("StringUtils.getStringLimited()", StringUtils.getStringLimited("abcdefg", 4).equals("abc" + elipsis));
+    
+    assertTrue("StringUtils.getStringLimited()", StringUtils.getStringLimited("ab", 6).equals("ab"));
+    assertTrue("StringUtils.getStringLimited()", StringUtils.getStringLimited("abcdef", 6).equals("abcdef"));
+    assertTrue("StringUtils.getStringLimited()", StringUtils.getStringLimited("abcdef", 5).equals("abcd" + elipsis));
+    assertTrue("StringUtils.getStringLimited()", StringUtils.getStringLimited("abcdef", 7).equals("abcdef"));
 }
 /**
  * 
