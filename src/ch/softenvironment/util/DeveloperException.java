@@ -14,7 +14,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * Show Developer failures.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.10 $ $Date: 2006-06-29 22:22:27 $
+ * @version $Revision: 1.11 $ $Date: 2007-02-20 12:56:41 $
  */
 public class DeveloperException extends RuntimeException {
 	private String title = null;
@@ -59,33 +59,6 @@ protected DeveloperException(String message, String title, Throwable cause, int 
     } else {
         this.title = title;
     }
-}
-/**
- * @deprecated
- */
-public DeveloperException(Object object, String method, String message /*,String title, Throwable cause*/) {
-    super(message); //super(message, cause);
-    
-/*  String msg = "";
-    if (cause != null) {
-        msg = "[" + ResourceManager.getResource(DeveloperException.class, "CIOriginalException") + ": " + cause.getMessage() + "]";
-    }
-*/    
-    Class type = (object == null ? null : object.getClass());
-    Tracer.getInstance().developerError(message + " " /*+ msg*/ + "in <" + type + "#" + method + ">");
-    
-    if (type != null) {
-       origin = type.getName();
-    } else {
-       origin = "<???>";
-    }
-    origin = origin + "#" + method;
-//  if (title == null) {
-        this.title = ResourceManager.getResource(DeveloperException.class, "CTDevelopmentError");
-/*  } else {
-        this.title = title;
-    }
-*/
 }
 /**
  * Return the original title of error,
