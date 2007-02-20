@@ -28,7 +28,7 @@ import ch.softenvironment.util.Tracer;
  * Manage the Application Settings by Properties file.
  *
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2006-06-29 22:24:57 $
+ * @version $Revision: 1.6 $ $Date: 2007-02-20 12:37:38 $
  */
 public class ApplicationOptions extends java.util.Properties implements UserSettings {
 	// values for Key-Values
@@ -267,7 +267,12 @@ public java.lang.Integer getWindowY() {
  * @see #setWorkingDirectory
  */
 public java.lang.String getWorkingDirectory() {
-	return getProperty(WORKING_DIRECTORY);
+	String tmp = getProperty(WORKING_DIRECTORY);
+    if (tmp == null) {
+        return System.getProperty("user.home");
+    } else {
+        return tmp;
+    }
 }
 /**
  * Save the UserSettings.
