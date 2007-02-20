@@ -51,14 +51,23 @@ public class MathUtils {
 	}
     /**
      * Negate a given value.
+     * This method prevents "0.0 * (-1.0) => -0.0" 
+     * "-0.0" is produced when a floating-point operation results in a negative floating-point 
+     * number so close to 0 that cannot be represented normally.
+     * Be aware that "-0.0" is numerically identical to "0.0". However, some operations 
+     * involving "-0.0" are different than the same operation with "0.0".
      * @param value
      * @return
      */
     public final static Double negate(Double value) {
         if (value == null) {
             return null;
+        } else if (value.doubleValue() == 0.0) {
+            // prevent "-0.0" 
+            return value;
+        } else {
+            return new Double(value.doubleValue() * ((double)-1.0));
         }
-        return new Double(value.doubleValue() * (-1));
     }
     /**
      * Cut the fraction part to accuracy length, for e.g.
@@ -102,6 +111,31 @@ public class MathUtils {
                 val = val / 10;
             }
             return fix(val, accuracy); // remove any division inaccuracies
+        }
+    }
+    /**
+     * This operation compares two floating point values for equality. 
+     * Because floating point calculations may involve rounding, 
+     * calculated float and double values may not be accurate. 
+     * For values that must be precise, such as monetary values, consider using 
+     * a fixed-precision type such as BigDecimal. For values that need not be 
+     * precise, consider comparing for equality within some range, for example: 
+     *   if ( Math.abs(x - y) < .0000001 )
+     * 
+     * See the Java Language Specification, section 4.2.4.
+     * See Findbugs: Test for floating point equality
+     * 
+     * @param value1
+     * @param value2
+     * @return integer according to java.util.Comparator definitions
+     */
+    public final static int compare(double value1, double value2) {
+        if (Math.abs(value1 - value2) < 0.0000001) {
+            return 0;
+        } else if (value1 < value2) {
+            return -1;
+        } else {
+            return 1;
         }
     }
 }
