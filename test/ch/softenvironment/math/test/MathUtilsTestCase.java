@@ -1,13 +1,12 @@
 package ch.softenvironment.math.test;
 
 import ch.softenvironment.math.MathUtils;
-
 import junit.framework.TestCase;
 
 /**
  * TestCase for MathUtils.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2006-09-17 11:15:57 $
+ * @version $Revision: 1.3 $ $Date: 2007-02-20 12:57:45 $
  */
 public class MathUtilsTestCase extends TestCase {
     /**
@@ -49,5 +48,42 @@ public class MathUtilsTestCase extends TestCase {
         assertTrue(MathUtils.round(30.989, 1) == 31.0);
         assertTrue(MathUtils.round(-76.89667, 0) == -77.0);
         assertTrue(MathUtils.round(303.33333333333333333, 2) == 303.33);
+        assertTrue("round(double)", MathUtils.round(12345.5698, 2) == 12345.57);
+        assertTrue("round(double)", MathUtils.round(12345.403, 2) == 12345.40);
+        assertTrue("round(double)", MathUtils.round(12345.9, 2) == 12345.9);
+        assertTrue("round(double)", MathUtils.round(0.0, 2) == 0.0);
+    }
+    public void testCompare() {
+        double left = 0.0;
+        double right = 0.0;
+        assertTrue(MathUtils.compare(left, right) == 0);
+        left = 0.0;
+        right = -0.0;
+        assertTrue("0.0 == -0.0", MathUtils.compare(left, right) == 0);
+        
+        left =  0.00239000000001;
+        right = 0.00239000000002;
+        assertTrue(MathUtils.compare(left, right) == 0);
+        left =  0.002394;
+        right = 0.002395;
+        assertTrue(MathUtils.compare(left, right) == -1);
+        assertTrue(MathUtils.compare(right, left) == 1);
+    }
+    public void testNegate() {
+        Double number =  new Double(0.0023);
+        Double res = MathUtils.negate(number);
+        assertTrue(res.equals(new Double(-0.0023)));
+        assertTrue(res.doubleValue() == -0.0023);
+        
+        number =  new Double(-0.0023);
+        res = MathUtils.negate(number);
+        assertTrue(res.equals(new Double(0.0023)));
+        assertTrue(res.doubleValue() == 0.0023);
+        
+        number =  new Double(0.0);
+        res = MathUtils.negate(number);
+        assertTrue(res.equals(new Double(0.0)));
+        assertTrue(res.doubleValue() == 0.0);
+        assertTrue(res.doubleValue() >= 0.0);
     }
 }

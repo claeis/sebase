@@ -1,4 +1,6 @@
 package ch.softenvironment.util;
+
+import ch.softenvironment.math.MathUtils;
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -13,19 +15,21 @@ package ch.softenvironment.util;
  
 /**
  * Format a number to look like a financial value.
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2005-06-30 07:26:42 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.8 $ $Date: 2007-02-20 12:57:45 $
  */
 public class AmountFormat /*extends java.text.NumberFormat*/ {
+    private static int FRACTION_DIGITS = 2;
 
 /**
  * 
  */
 public static java.text.NumberFormat getAmountInstance() {
+//TODO evtl. cache formatter for performance reasons
 	java.text.NumberFormat formatter = java.text.NumberFormat.getNumberInstance();
 	//		                           java.text.NumberFormat.getCurrencyInstance();
-	formatter.setMinimumFractionDigits(2);
-	formatter.setMaximumFractionDigits(2);
+	formatter.setMinimumFractionDigits(FRACTION_DIGITS);
+	formatter.setMaximumFractionDigits(FRACTION_DIGITS);
 //	formatter.setGroupingSize(3);			// separate thousand's
 	formatter.setGroupingUsed(true);
 //	formatter.setDecimalSeparatorAlwaysShown(true);
@@ -33,16 +37,10 @@ public static java.text.NumberFormat getAmountInstance() {
 	return formatter;
 }
 /**
- * @deprecated
+ * @see #toString(Number)
  */
 public static String toString(double amount) {
 	return toString(new Double(amount));
-}
-/**
- * @deprecated
- */
-public static String toString(long amount) {
-	return toString(new Long(amount));
 }
 /**
  * Convert given amount into formatted String.
@@ -56,16 +54,13 @@ public static String toString(Number amount) {
 	}
 }
 /**
- * Round to 2nd decimal value.
+ * Round to FRACTION_DIGITS decimal value.
  * @param amount
  * @return rounded amount
+ * @deprecated
  */
 public static double round(/*String iso4217Code,*/ double amount) {
-    if (amount == 0.0) {
-        return amount;
-    } else {
-        return ((double)(Math.round(amount * 100.0))) / 100.0;
-    }
+    return MathUtils.round(amount, FRACTION_DIGITS);
 /*    try {
 	    if (StringUtils.isNullOrEmpty(iso4217Code)) {
 	        NumberFormat format = getAmountInstance();
