@@ -17,7 +17,7 @@ import java.text.*;
 /**
  * Set of reusable String Utilities.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.8 $ $Date: 2006-06-29 22:26:47 $
+ * @version $Revision: 1.9 $ $Date: 2007-02-20 12:50:52 $
  */
 public abstract class NlsUtils {
 	public final static String TIME_24HOURS_PATTERN = "HH:mm:ss";	// 24 hours
@@ -54,7 +54,7 @@ public static String formatMessage(String pattern, String arg0) {
  */
 public static boolean changeLocale(Locale locale) {
 	if (Locale.getDefault().getLanguage().equals(locale.getLanguage())) {
-		if ((!StringUtils.isNullOrEmpty(locale.getCountry())) && (!Locale.getDefault().getCountry().equals(locale.getCountry()))) {
+		if ((!StringUtils.isNullOrEmpty(locale.getCountry())) && (!locale.getCountry().equals(Locale.getDefault().getCountry()))) {
 //TODO NYI: country not considered yet
 		}
 	} else {
