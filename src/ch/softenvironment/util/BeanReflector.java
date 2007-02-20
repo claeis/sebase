@@ -21,7 +21,7 @@ package ch.softenvironment.util;
  *   -> MyObject#getMyProperty()			// the getter-Method
  *
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.11 $ $Date: 2006-06-29 22:26:47 $
+ * @version $Revision: 1.12 $ $Date: 2007-02-20 12:59:06 $
  */
 public class BeanReflector extends java.util.EventObject {
 	private transient String property = null;
@@ -194,7 +194,7 @@ public Object cloneValue() throws IllegalAccessException, java.lang.reflect.Invo
 	if (value == null) {
 		return null;
 	} else if (value instanceof String) {
-		return new String(value.toString());
+		return value.toString();
 	} else if (value instanceof Long) {
 		return new Long(value.toString());
 	} else if (value instanceof Double) {
