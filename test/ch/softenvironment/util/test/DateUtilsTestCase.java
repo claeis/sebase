@@ -1,10 +1,13 @@
 package ch.softenvironment.util.test;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
 import ch.softenvironment.util.DateUtils;
 
 /**
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2005-08-26 10:16:19 $
+ * @version $Revision: 1.2 $ $Date: 2007-02-20 12:47:15 $
  */
 public class DateUtilsTestCase extends junit.framework.TestCase {
     java.util.Date currentDate = null;
@@ -40,5 +43,40 @@ public void testGetDayInMonth() {
 }
 public void testCalcHours() {
     assertTrue("DateUtils#calcHours", 2.0 == DateUtils.calcHours(currentDate, new java.util.Date(currentDate.getTime() + (2 * 60 * 60 * 1000)), 1).doubleValue());
+}
+public void testBeginningOfWeek() {
+    GregorianCalendar now = new GregorianCalendar();
+    java.util.Date monday = DateUtils.getBeginingOfWeek();
+    assertTrue(monday.getDay() + 1 == Calendar.MONDAY);
+    assertTrue(monday.getYear() + 1900 == now.get(Calendar.YEAR));
+    
+    // the deprecated way
+    java.util.Date nowOld = new java.util.Date();
+    int day = nowOld.getDay() + 1;
+    long lastMondayDiff = day - java.util.Calendar.MONDAY;
+    assertTrue((new java.util.Date(now.getTimeInMillis() - lastMondayDiff * 24 * 60 * 60 * 1000)).getTime() == monday.getTime());
+}
+public void testEndOfMonth() {
+    // use deprecated way here
+    java.util.Date now = new java.util.Date();
+    java.util.Date firstNextMonth = new java.util.Date(now.getYear(), now.getMonth() + 1, 1);
+    java.util.Date last = new java.util.Date(firstNextMonth.getTime() - 24 * 60 * 60 * 1000);
+    
+    assertTrue(last.getTime() == DateUtils.getEndOfMonth().getTime());
+}
+public void testEndOfYear() {
+    // use deprecated form to test
+    java.util.Date now = new java.util.Date();
+    assertTrue((new java.util.Date(now.getYear(), java.util.Calendar.DECEMBER, 31)).getTime() == DateUtils.getEndOfYear().getTime());
+}
+public void testFirstOfMonth() {
+    // use deprecated form to test
+    java.util.Date now = new java.util.Date();
+    assertTrue((new java.util.Date(now.getYear(), now.getMonth(), 1)).getTime() == DateUtils.getFirstOfMonth().getTime());
+}
+public void testFirstOfYear() {
+    // use deprecated form to test
+    java.util.Date now = new java.util.Date();
+    assertTrue((new java.util.Date(now.getYear(), java.util.Calendar.JANUARY, 1)).getTime() == DateUtils.getFirstOfYear().getTime());
 }
 }

@@ -1,5 +1,7 @@
 package ch.softenvironment.util;
 
+import java.util.Calendar;
+
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -14,8 +16,8 @@ package ch.softenvironment.util;
  
 /**
  * Utilities for Date calculations.
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2006-06-29 22:26:47 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.7 $ $Date: 2007-02-20 12:47:12 $
  */
 public class DateUtils {
 /**
@@ -24,10 +26,10 @@ public class DateUtils {
  */
 public static String calcTimeDifference(java.util.Date start, java.util.Date end) {
 	if ((start == null) || (end == null)) {
-		throw new DeveloperException("start nor end must be null!");
+		throw new DeveloperException("<start> nor <end> must be null!");
 	}
 	if (end.getTime() < start.getTime()) {
-		throw new DeveloperException("start must be earlier end!");
+		throw new DeveloperException("<start> must be earlier than <end>!");
 	}
 	
 	long seconds = (end.getTime() - start.getTime()) / 1000;
@@ -50,20 +52,27 @@ public static String calcTimeDifference(java.util.Date start, java.util.Date end
  * Return the last Monday.
  * @return java.util.Date
  */
-public static java.util.Date getBeginingOfWeek() {
-	java.util.Date now = new java.util.Date();
-	int day = now.getDay(); // 1 for Monday
-	int lastMondayDiff = day + 1 - java.util.Calendar.MONDAY;
-	return new java.util.Date(now.getTime() - lastMondayDiff * 24 * 60 * 60 * 1000);
+public static java.util.Date getBeginingOfWeek() {    
+	//java.util.Date now = new java.util.Date();
+	//int day = now.getDay() + 1; // 1 for Monday
+    java.util.GregorianCalendar now = new java.util.GregorianCalendar();
+    int day = now.get(java.util.Calendar.DAY_OF_WEEK);
+    
+	long lastMondayDiff = day - java.util.Calendar.MONDAY;
+	return new java.util.Date(now.getTimeInMillis() - lastMondayDiff * 24 * 60 * 60 * 1000);
 }
 /**
- * Return the first day of current month.
+ * Return the last day of current month.
  * @return java.util.Date
  */
 public static java.util.Date getEndOfMonth() {
-	java.util.Date now = new java.util.Date();
-	java.util.Date firstNextMonth = new java.util.Date(now.getYear(), now.getMonth() + 1, 1);
-	return new java.util.Date(firstNextMonth.getTime() - 24 * 60 * 60 * 1000);
+	//java.util.Date now = new java.util.Date();
+	//java.util.Date firstNextMonth = new java.util.Date(now.getYear(), now.getMonth() + 1, 1);
+    
+    java.util.GregorianCalendar now = new java.util.GregorianCalendar();
+    java.util.GregorianCalendar firstNextMonth = new java.util.GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, 1);
+    
+	return new java.util.Date(firstNextMonth.getTimeInMillis() - 24 * 60 * 60 * 1000);
 }
 /**
  * Return the next Sunday.
@@ -78,8 +87,10 @@ public static java.util.Date getEndOfWeek() {
  * @return java.util.Date
  */
 public static java.util.Date getFirstOfMonth() {
-	java.util.Date now = new java.util.Date();
-	return new java.util.Date(now.getYear(), now.getMonth(), 1);
+	//java.util.Date now = new java.util.Date();
+	//return (new java.util.GregorianCalendar(now.getYear(), now.getMonth(), 1)).getTime();
+    java.util.GregorianCalendar now = new java.util.GregorianCalendar();
+    return (new java.util.GregorianCalendar(now.get(Calendar.YEAR), now.get(Calendar.MONTH), 1)).getTime();
 }
 
 /**
@@ -87,8 +98,10 @@ public static java.util.Date getFirstOfMonth() {
  * @return java.util.Date
  */
 public static java.util.Date getEndOfYear() {
-	java.util.Date now = new java.util.Date();
-	return new java.util.Date(now.getYear(), java.util.Calendar.DECEMBER, 31);
+	//java.util.Date now = new java.util.Date();
+	//return new java.util.Date(now.getYear(), java.util.Calendar.DECEMBER, 31);
+    java.util.GregorianCalendar now = new java.util.GregorianCalendar();
+    return (new java.util.GregorianCalendar(now.get(Calendar.YEAR), java.util.Calendar.DECEMBER, 31)).getTime();
 }
 
 /**
@@ -96,8 +109,10 @@ public static java.util.Date getEndOfYear() {
  * @return java.util.Date
  */
 public static java.util.Date getFirstOfYear() {
-	java.util.Date now = new java.util.Date();
-	return new java.util.Date(now.getYear(), java.util.Calendar.JANUARY, 1);
+	//java.util.Date now = new java.util.Date();
+	//return new java.util.Date(now.getYear(), java.util.Calendar.JANUARY, 1);
+    java.util.GregorianCalendar now = new java.util.GregorianCalendar();
+    return (new java.util.GregorianCalendar(now.get(Calendar.YEAR), java.util.Calendar.JANUARY, 1)).getTime();
 }
 
 /**
