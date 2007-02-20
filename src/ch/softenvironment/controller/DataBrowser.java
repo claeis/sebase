@@ -21,7 +21,7 @@ import ch.softenvironment.util.UserException;
  * Browser to walk through a List of Objects by '<<' '<' '>' '>>'.
  * Step of walksize might be configured.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2006-12-19 09:58:04 $
+ * @version $Revision: 1.2 $ $Date: 2007-02-20 12:16:59 $
  * 
  * @see ch.softenvironment.view.DataSelectorPanel for NLS-properties
  */
@@ -58,7 +58,7 @@ public class DataBrowser {
         }
     }
     /**
-     * Return the first of all objects.     * 
+     * Return the first of all objects. 
      */
     public synchronized Object getFirst() {
         if (getObjects().size() > 0) {
@@ -102,8 +102,12 @@ public class DataBrowser {
             int slices = objects.size() / getStep();
             int index = getStep() * slices;
             if (getStep() % 2 != 0) {
-                // correct uneven
+                // correct uneven Step
                 index--;
+            }
+            if (index >= objects.size()) {
+                // for e.g. 20 objects with step 10 index==0; getLast() positions on 20th instead of 19th
+                index = objects.size() - 1;
             }
             setCurrentIndex(index);
         }
@@ -117,7 +121,7 @@ public class DataBrowser {
      * and setCurrentObject to the firts object in list.
      * @param objects A list of Object's
      */
-    public final void setObjects(java.util.List objects) {
+    public synchronized final void setObjects(java.util.List objects) {
         if (objects == null) {
             throw new IllegalArgumentException("objects must not be empty");
         }
@@ -151,7 +155,7 @@ public class DataBrowser {
      * Add a new Object to list at the very end
      * and move setCurrentIndex() to it.
      */
-    public void addObject(Object object) {        
+    public synchronized void addObject(Object object) {        
         objects.add(object);
         getLast();
     }
@@ -232,10 +236,16 @@ public class DataBrowser {
      * @return
      */
     public final String getScrollIndexString() {
-        if (objects.size() > 0) {
-            return (getCurrentIndex() + 1) + "/" + objects.size();
-        } else {
-            return "0/0";
+        try {
+            if (objects.size() > 0) {
+                return (getCurrentIndex() + 1) + "/" + objects.size();
+            } else {
+                return "0/0";
+            }
+        } catch(Throwable e) {
+            // should not happen
+            Tracer.getInstance().developerWarning(e.getLocalizedMessage());
+            return " ";
         }
     }
     /**
@@ -251,9 +261,9 @@ public class DataBrowser {
      * (Independet of step-size!)
      * @param index
      */
-    public void setCurrentIndex(int index) {
+    public synchronized void setCurrentIndex(int index) {
         if ((index < 0) || (index > objects.size() - 1)) {
-            throw new IndexOutOfBoundsException();
+            throw new IndexOutOfBoundsException("desired index=" + index + " of max. " + objects.size());
         }
         if (currentIndex != index) {
             saveChanges();
@@ -268,7 +278,7 @@ public class DataBrowser {
      * Default is 1.
      * @param step >=1
      */
-    public void setStep(int step) {
+    public synchronized void setStep(int step) {
         if (step < 1) {
             Tracer.getInstance().runtimeWarning("Auto-correction: step must be >= 1!");
             this.step = 1;

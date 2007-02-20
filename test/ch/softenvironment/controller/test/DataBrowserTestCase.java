@@ -19,7 +19,7 @@ import junit.framework.TestCase;
 /**
  * TestCase for DataBrowser.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2006-12-19 09:58:04 $
+ * @version $Revision: 1.2 $ $Date: 2007-02-20 12:17:01 $
  */
 public class DataBrowserTestCase extends TestCase {
     private DataBrowser browser = null;
@@ -134,12 +134,44 @@ public class DataBrowserTestCase extends TestCase {
         assertTrue(browser.isScrollLastAllowed());
         assertTrue(browser.isScrollFirstAllowed());
     }
-    public void testStep10() {
+    public void testStepEven() {
         browser.setStep(10);
         assertTrue(browser.getCurrentIndex() == -1);
         assertTrue(browser.getCurrentObject() == null);
         
-        java.util.List objects = new java.util.ArrayList();
+        List objects = new java.util.ArrayList(20);
+        for (int i=0; i<20; i++) {
+            objects.add(new Integer(i));
+        }
+        browser.setObjects(objects);
+        browser.setCurrentIndex(0);
+        browser.getLast();
+        assertTrue("step is one behind last => correction", browser.getCurrentIndex() == 19);
+        browser.getPrevious();
+        assertTrue(browser.getCurrentIndex() == 9);
+        browser.getPrevious();
+        assertTrue("no previous", browser.getCurrentIndex() == 0);
+        browser.getFirst();
+        assertTrue(browser.getCurrentIndex() == 0);
+        
+        for (int i=20; i<40; i++) {
+            // add another 20 objects
+            objects.add(new Integer(i));
+        }
+        browser.getFirst();
+        assertTrue(browser.getCurrentIndex() == 0);
+        browser.getNext();
+        assertTrue(browser.getCurrentIndex() == 10);
+        browser.getNext();
+        assertTrue(browser.getCurrentIndex() == 20);
+        browser.getNext();
+        assertTrue(browser.getCurrentIndex() == 30);
+        browser.getNext();
+        assertTrue("no next step possible", browser.getCurrentIndex() == 30);
+        browser.getLast();
+        assertTrue("step is one behind last => correction", browser.getCurrentIndex() == 39);
+        
+        objects = new java.util.ArrayList();
         for (int i=1; i<106; i++) {
             objects.add(new Integer(i));
         }
@@ -184,7 +216,37 @@ public class DataBrowserTestCase extends TestCase {
         assertTrue("first block", browser.getFirst().equals(new Integer(1)));
         assertTrue(browser.getCurrentIndex() == 0);
     }
-    public void testStep3() {
+    public void testStepOdd5() {
+        browser.setStep(5);
+        assertTrue(browser.getCurrentIndex() == -1);
+        assertTrue(browser.getCurrentObject() == null);
+        
+        List objects = new java.util.ArrayList(10);
+        for (int i=0; i<10; i++) {
+            objects.add(new Integer(i));
+        }
+        browser.setObjects(objects);
+        browser.setCurrentIndex(0);
+        browser.getLast();
+        assertTrue("step is one behind last => correction", browser.getCurrentIndex() == 9);
+        for (int i=10; i<20; i++) {
+            // add another 10 objects
+            objects.add(new Integer(i));
+        }
+        browser.getFirst();
+        assertTrue(browser.getCurrentIndex() == 0);
+        browser.getNext();
+        assertTrue(browser.getCurrentIndex() == 5);
+        browser.getNext();
+        assertTrue(browser.getCurrentIndex() == 10);
+        browser.getNext();
+        assertTrue(browser.getCurrentIndex() == 15);
+        browser.getNext();
+        assertTrue("no next step possible", browser.getCurrentIndex() == 15);
+        browser.getLast();
+        assertTrue("step is one behind last => correction", browser.getCurrentIndex() == 19);
+    }
+    public void testStepOdd3() {
         browser.setStep(3);
         assertTrue(browser.getCurrentIndex() == -1);
         assertTrue(browser.getCurrentObject() == null);
@@ -232,7 +294,7 @@ public class DataBrowserTestCase extends TestCase {
         assertFalse("no next block", browser.isScrollLastAllowed());
         
         assertTrue("first block", browser.getFirst().equals(new Integer(1)));
-        assertTrue(browser.getCurrentIndex() == 0);
+        assertTrue(browser.getCurrentIndex() == 0);                      
     }
     public void testSetCurrentIndex() {
         browser.setStep(10);
@@ -244,7 +306,7 @@ public class DataBrowserTestCase extends TestCase {
             objects.add(new Integer(i));
         }
         browser.setObjects(objects);
-        
+                
         browser.setCurrentIndex(89);
         assertTrue(browser.getCurrentObject().equals(new Integer(90)));
         
