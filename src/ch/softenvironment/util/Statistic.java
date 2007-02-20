@@ -16,7 +16,7 @@ import java.util.*;
  * Statistical utility to evaluate performance for named Use-Cases
  * within an application (for e.g. DBMS Transaction times).
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2005-09-07 11:45:43 $
+ * @version $Revision: 1.4 $ $Date: 2007-02-20 12:52:54 $
  */
 public final class Statistic {
 	private volatile transient long count;
@@ -107,7 +107,7 @@ public void clear() {
  * Reset all values for all Statistic-instances,
  * where given UseCases remain in List.
  */
-public final static void clear_all() {
+public final static void clearAll() {
     Iterator iterator = statisticMap.values().iterator();
     while (iterator.hasNext()) {
         ((Statistic)iterator.next()).clear();
