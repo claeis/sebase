@@ -19,7 +19,7 @@ import javax.swing.JTable;
 /**
  * Parser-Tool to parse comma separated files (*.CSV).
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.10 $ $Date: 2006-06-29 22:26:47 $
+ * @version $Revision: 1.11 $ $Date: 2007-02-20 12:52:10 $
  */
 public class ParserCSV {
     public static final String DEFAULT_SEPARATOR = ";";
@@ -34,6 +34,12 @@ public class ParserCSV {
  */
 public ParserCSV(String line, String separator) {
 	super();
+    if (line == null) {
+        throw new IllegalArgumentException("<line> must not be null");
+    }
+    if (separator == null) {
+        throw new IllegalArgumentException("<separator> must not be null");
+    }
 	this.line = line;
 	this.separator = separator;
 }
@@ -56,6 +62,7 @@ public static String arrayToString(java.util.List items, String separator) {
 }
 /**
  * Return next Integer between to Separators.
+ * @return null if no next
  */
 public Integer getNextInteger() throws NumberFormatException {
 	String s = getNextString();
@@ -76,14 +83,14 @@ public String getNextString() {
 	if (to > -1) {
 		result = line.substring(lastIndex + 1, to);
 		lastIndex = to;
-
-	} else if (lastIndex < line.length()) {
+	} else if ((lastIndex < line.length()) && (lastIndex + 1 < line.length())) {
 		// treat end of line as Separator
-		result = line.substring(lastIndex + 1, line.length());
-		lastIndex = line.length();
+        result = line.substring(lastIndex + 1, line.length());
+    	lastIndex = line.length();
+        Tracer.getInstance().developerWarning("Parser-content not terminated by expected separator");
 	} else {
 		// end of line reached
-		return result;
+		return null;
 	}
 /*
 	// eliminate "double-quotes" around String => quotes
@@ -186,7 +193,7 @@ public static java.util.List readFile(InputStream stream, String separator) {
 	return arrayList;
 }
 /**
- * Skip over Separators.
+ * Skip over Separator.
  * @param nrOfFields to be overread
  */
 public void skip(int nrOfFields) {
@@ -206,7 +213,7 @@ public void skip(int nrOfFields) {
  * @return java.util.List
  */
 public static java.util.List stringToArray(String serializedList, String separator) {
-	if (serializedList == null) {
+	if (StringUtils.isNullOrEmpty(serializedList)) {
 		return new java.util.ArrayList();
 	} else {
 		ParserCSV parser = new ParserCSV(serializedList, separator);
