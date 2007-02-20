@@ -18,13 +18,14 @@ package ch.softenvironment.math.test;
 
 
 import ch.softenvironment.math.FinancialUtils;
+import ch.softenvironment.math.MathUtils;
 
 import junit.framework.TestCase;
 
 /**
  * TestCase for FinancialUtils.
  * @author Peter Hirzel <i>soft</i>Environment 
- * @version $Revision: 1.1 $ $Date: 2006-05-07 14:52:36 $
+ * @version $Revision: 1.2 $ $Date: 2007-02-20 12:59:54 $
  */
 public class FinancialUtilsTestCase extends TestCase {
     /**
@@ -63,6 +64,6 @@ public class FinancialUtilsTestCase extends TestCase {
     public void testCalcInterest() {
         double amount = 100.0;
         double interest = 5;
-        assertTrue("Degressive Begin", FinancialUtils.calcInterest(amount, 5) == amount/100.0*interest);
+        assertTrue("Degressive Begin", MathUtils.compare(FinancialUtils.calcInterest(amount, 5), amount/100.0*interest) == 0);
     }
 }

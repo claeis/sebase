@@ -10,7 +10,7 @@ import javax.swing.JButton;
 /**
  * Test class BaseFrame.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2006-06-29 22:32:21 $
+ * @version $Revision: 1.4 $ $Date: 2007-02-20 12:59:55 $
  */
 public class BaseFrameTestCase extends BaseFrame {
 
@@ -148,9 +148,7 @@ public class BaseFrameTestCase extends BaseFrame {
     /* (non-Javadoc)
      * @see ch.softenvironment.view.BaseFrame#initializeView()
      */
-    protected void initializeView() throws Throwable {
-        // TODO Auto-generated method stub
-        
+    protected void initializeView() throws Throwable {        
     }
 	private void doLongAction(int recursionLevel) {
 	    try {

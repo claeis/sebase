@@ -18,7 +18,7 @@ import junit.extensions.jfcunit.finder.NamedComponentFinder;
 /**
  * Test the BaseDialog class by JFCUnit.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2006-06-29 22:32:21 $
+ * @version $Revision: 1.4 $ $Date: 2007-02-20 12:59:55 $
  */
 public class BaseDialogTestCase extends JFCTestCase {
 //	private Container mainFrame = null;
@@ -48,11 +48,11 @@ public class BaseDialogTestCase extends JFCTestCase {
 
         // ConfirmCancel
         Boolean result = BaseDialog.showConfirmCancel(null, title, "Please press <Yes>!");
-        if ((result == null) || (result != Boolean.TRUE)) {
+        if ((result == null) || (!result.equals(Boolean.TRUE))) {
             BaseDialog.showWarning(null, "Press-Info", "Error <Yes> NOT PRESSED");
         }
         result = BaseDialog.showConfirmCancel(null, title, "Please press <No>!");
-        if ((result == null) || (result != Boolean.FALSE)) {
+        if ((result == null) || (!result.equals(Boolean.FALSE))) {
             BaseDialog.showWarning(null, "ERROR", "Wrong button pressed");
         }
         result = BaseDialog.showConfirmCancel(null, title, "Please press <Cancel>!");
@@ -118,7 +118,7 @@ public class BaseDialogTestCase extends JFCTestCase {
 	    getHelper().disposeWindow( dialog, this );
 */
 //		JButton button = (JButton)JFCTestHelper.findNamedComponent(ResourceManager.getInstance().getResource(BaseDialog.class, "BtnCancel_text"), 0);
-		NamedComponentFinder finder = new NamedComponentFinder(JButton.class, ResourceManager.getInstance().getResource(BaseDialog.class, "BtnCancel_text"));
+		NamedComponentFinder finder = new NamedComponentFinder(JButton.class, ResourceManager.getResource(BaseDialog.class, "BtnCancel_text"));
 	    JButton button = (JButton)finder.find();
 		assertNotNull("Cancel-Button exists?", button);
 /*		JTextField inputTextField = (JTextField) JFCTestHelper.findNamedComponent("input", 0);

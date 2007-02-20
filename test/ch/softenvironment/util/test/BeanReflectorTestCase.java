@@ -1,14 +1,12 @@
 package ch.softenvironment.util.test;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.Locale;
 import ch.softenvironment.util.BeanReflector;
-import ch.softenvironment.util.DeveloperException;
 
 /**
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2006-05-07 14:53:51 $
+ * @version $Revision: 1.3 $ $Date: 2007-02-20 12:59:54 $
  */
 public class BeanReflectorTestCase extends junit.framework.TestCase {
 	private TestBean bean = null;

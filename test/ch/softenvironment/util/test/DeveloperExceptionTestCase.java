@@ -11,16 +11,14 @@ package ch.softenvironment.util.test;
  * Lesser General Public License for more details.
  */
 import ch.softenvironment.util.DeveloperException;
-import ch.softenvironment.util.Tracer;
-
 import junit.framework.TestCase;
 /**
  * Test class DeveloperException.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2006-06-29 22:31:57 $
+ * @version $Revision: 1.4 $ $Date: 2007-02-20 12:59:54 $
  */
 public class DeveloperExceptionTestCase extends TestCase {
-    private static final String METHOD = "MyMethod()";
+//  private static final String METHOD = "MyMethod()";
     private static final String FAULT_TITLE = "My Title";
     private static final String FAULT_MSG = "My fault!";
     
