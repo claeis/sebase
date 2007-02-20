@@ -24,7 +24,7 @@ import junit.framework.TestCase;
 /**
  * TestCase for ResourceManager.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2006-05-07 14:53:51 $
+ * @version $Revision: 1.3 $ $Date: 2007-02-20 12:27:24 $
  */
 public class ResourceManagerTestCase extends TestCase {
 	public void testGetRessourceAsIs() {
@@ -39,19 +39,19 @@ public class ResourceManagerTestCase extends TestCase {
 	public void testGetResourceLabel() {
 	    Locale.setDefault(Locale.US);
 	    // as is
-	    assertTrue("en Translation", "My Label:".equals(ResourceManager.getResource(ResourceManagerTestCase.class, "LblTest_text", true)));
-	    assertTrue("en Translation", "My Panel".equals(ResourceManager.getResource(ResourceManagerTestCase.class, "PnlTest_text", false)));
+	    assertTrue("en Translation", "My Label:".equals(ResourceManager.getResourceAsLabel(ResourceManagerTestCase.class, "LblTest_text")));
+	    assertTrue("en Translation", "My Panel".equals(ResourceManager.getResourceAsNonLabeled(ResourceManagerTestCase.class, "PnlTest_text")));
 	    // should deal with ending
-	    assertTrue("en Translation", "My Label".equals(ResourceManager.getResource(ResourceManagerTestCase.class, "LblTest_text", false)));
-	    assertTrue("en Translation", "My Panel:".equals(ResourceManager.getResource(ResourceManagerTestCase.class, "PnlTest_text", true)));
+	    assertTrue("en Translation", "My Label".equals(ResourceManager.getResourceAsNonLabeled(ResourceManagerTestCase.class, "LblTest_text")));
+	    assertTrue("en Translation", "My Panel:".equals(ResourceManager.getResourceAsLabel(ResourceManagerTestCase.class, "PnlTest_text")));
 	    
 	    Locale.setDefault(Locale.GERMAN);
 	    // as is
-	    assertTrue("de Translation", "Mein Label:".equals(ResourceManager.getResource(ResourceManagerTestCase.class, "LblTest_text", true)));
-	    assertTrue("de Translation", "Mein Panel".equals(ResourceManager.getResource(ResourceManagerTestCase.class, "PnlTest_text", false)));
+	    assertTrue("de Translation", "Mein Label:".equals(ResourceManager.getResourceAsLabel(ResourceManagerTestCase.class, "LblTest_text")));
+	    assertTrue("de Translation", "Mein Panel".equals(ResourceManager.getResourceAsNonLabeled(ResourceManagerTestCase.class, "PnlTest_text")));
 	    // should deal with ending
-	    assertTrue("de Translation", "Mein Label".equals(ResourceManager.getResource(ResourceManagerTestCase.class, "LblTest_text", false)));
-	    assertTrue("de Translation", "Mein Panel:".equals(ResourceManager.getResource(ResourceManagerTestCase.class, "PnlTest_text", true)));
+	    assertTrue("de Translation", "Mein Label".equals(ResourceManager.getResourceAsNonLabeled(ResourceManagerTestCase.class, "LblTest_text")));
+	    assertTrue("de Translation", "Mein Panel:".equals(ResourceManager.getResourceAsLabel(ResourceManagerTestCase.class, "PnlTest_text")));
 	}
 	public void testGetResourceMatch() {
 	    Locale.setDefault(Locale.US);
@@ -59,4 +59,11 @@ public class ResourceManagerTestCase extends TestCase {
 	    assertTrue("en Translation", "Xy-Text (en):".equals(ResourceManager.getResourceMatch(ResourceManagerTestCase.class, "Lbl[a-zA-Z0-9]*Xy_text", true)));
 	    assertTrue("en Translation", "Xy-Text (en)".equals(ResourceManager.getResourceMatch(ResourceManagerTestCase.class, "Lbl[a-zA-Z0-9]*y_text", false)));
 	}
+    public void testMultiLanguage() {
+        assertTrue("en Translation", ResourceManager.getResource(ResourceManagerTestCase.class, "LblTest_text", Locale.ENGLISH).startsWith("My Label"));
+        assertTrue("de Translation", ResourceManager.getResource(ResourceManagerTestCase.class, "LblTest_text", Locale.GERMAN).startsWith("Mein Label"));
+        // and again
+        assertTrue("en Translation", ResourceManager.getResource(ResourceManagerTestCase.class, "LblTest_text", Locale.ENGLISH).startsWith("My Label"));
+        assertTrue("de Translation", ResourceManager.getResource(ResourceManagerTestCase.class, "LblTest_text", Locale.GERMAN).startsWith("Mein Label"));
+    }
 }

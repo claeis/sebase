@@ -17,7 +17,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ch.softenvironment.util.DeveloperException;
-import ch.softenvironment.util.Tracer;
 
 /**
  * Manage a Map of Resources, resp *.properties for different Classes 
@@ -27,9 +26,10 @@ import ch.softenvironment.util.Tracer;
  * the mapped *.properties files are cached during runtime.
  * 
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2006-06-29 22:24:57 $
+ * @version $Revision: 1.8 $ $Date: 2007-02-20 12:27:22 $
  */
 public class ResourceManager {
+    private static final String ELIPSIS = "...";
 	private static ResourceManager manager = null;
 	private Map resources = new HashMap();
 	private Locale currentLocale = null;
@@ -38,26 +38,33 @@ public class ResourceManager {
 	 * Design Pattern: Singleton.
 	 * @return ResourceManager
 	 */
-	public static ResourceManager getInstance() {
+	private static ResourceManager getInstance() {
 		if (manager == null) {
 			manager = new ResourceManager();
 		}
 		return manager;
 	}
 	/**
-	 * Convenience Method.
+	 * Return the resource as is in *.properties file for the given Locale (NLS translation)
+     * using a specific ClassLoader (useful for reflection frameworks such as JPF).
 	 * @see #getResource(java.lang.Class, Locale, String, ClassLoader)
 	 */
 	public static String getResource(java.lang.Class owner, String propertyName, ClassLoader loader) {
 	    return getInstance().getResource(owner, Locale.getDefault(), propertyName, loader);
 	}
 	/**
-	 * Convenience Method.
-	 * @see #getResource(java.lang.Class, Locale, String, ClassLoader)
+	 * @see #getResource(Class, String, Locale)
 	 */
 	public static String getResource(java.lang.Class owner, String propertyName) {
 		return getResource(owner, propertyName, Locale.getDefault());
 	}
+    /**
+     * Return the resource as is in *.properties file for the given Locale (NLS translation).
+     * @param owner
+     * @param propertyName
+     * @param locale
+     * @return
+     */
     public static String getResource(java.lang.Class owner, String propertyName, Locale locale) {
         return getInstance().getResource(owner, locale, propertyName, null);
     }
@@ -70,7 +77,7 @@ public class ResourceManager {
 	 * @return String NLS-String
 	 * @see ch.ehi.basics.i18n.ResourceBundle
 	 */
-	public String getResource(java.lang.Class holder, Locale locale, String propertyName, ClassLoader loader) throws MissingResourceException {
+	private String getResource(java.lang.Class holder, Locale locale, String propertyName, ClassLoader loader) throws MissingResourceException {
 	    java.util.ResourceBundle bundle = getBundle(holder, locale, loader);
 	    if (bundle == null) {
 	        throw new DeveloperException("no bundle for holder=" + holder.getName());
@@ -85,13 +92,22 @@ public class ResourceManager {
 	 * @return
 	 */
 	private java.util.ResourceBundle getBundle(Class holder, Locale locale, ClassLoader loader) {
+/*        
 		if (!locale.equals(currentLocale)) {
 			// reset cached resources
 			resources = new HashMap();
 			currentLocale = locale;
 		}
-		if (resources.containsKey(holder)) {
-			return ((java.util.ResourceBundle)resources.get(holder));
+*/        
+        java.util.Map languages = null;
+        if (resources.containsKey(locale.getLanguage())) {
+            languages = (java.util.Map)resources.get(locale.getLanguage());
+        } else {
+            languages = new HashMap();
+            resources.put(locale.getLanguage(), languages);
+        }
+		if (languages.containsKey(holder)) {
+			return ((java.util.ResourceBundle)languages.get(holder));
 		} else {
 			java.util.ResourceBundle bundle = null;
 			if (loader == null) {
@@ -99,26 +115,55 @@ public class ResourceManager {
 			} else {
 			    bundle = ch.ehi.basics.i18n.ResourceBundle.getBundle(holder, locale, loader);
 			}
-			resources.put(holder, bundle);
+            languages.put(holder, bundle);
 			return bundle;
 		}
 	}
 /**
- * Convenience Method.
- * Often a property ressource ends with ":" in case of a label or without ":"
- * in case of a Window-Title, Table-Column etc.
- * Therefore it might be better to add or cut off this character than providing
- * different Translations for likely the same word.
- * @param asLabel true->show ":" at end of String; false->suppress ":" at end of String
- * @see #getResource(java.lang.Class, Locale, String)
+ * @see #getResourceAsLabel(Class, String)
+ * @deprecated
  */
 public static String getResource(java.lang.Class owner, String propertyName, boolean asLabel) {
+//TODO make private    
 	try {
 		String resource = getInstance().getResource(owner, Locale.getDefault(), propertyName, null).trim();
 		return convertLabel(resource, asLabel);
 	} catch(NullPointerException e) {
 		return null;
 	}
+}
+/**
+ * Return an NLS-resource for a class.
+ * Labels end according to GUI-Standards with ":", therefore this
+ * method makes sure, the colon is set, though the resource
+ * might be defined otherwise.
+ * @see #getResource(java.lang.Class, Locale, String)
+ */
+public static String getResourceAsLabel(java.lang.Class owner, String propertyName) {
+    return getResource(owner, propertyName, true);
+}
+/**
+ * Return NLS-Translation with "...", which is common for
+ * labels in menu's showing up a sub-window.
+ * @see #getResourceAsNonLabeled(Class, String)
+ */
+public static String getResourceAsContinued(java.lang.Class owner, String propertyName) {
+    String resource = getResourceAsNonLabeled(owner, propertyName);
+    if ((resource != null) && (!resource.endsWith(ELIPSIS))) {
+        return resource + ELIPSIS;
+    } else {
+        return resource;
+    }
+}
+/**
+ * Make sure the ":" is extracted from NLS-Translation
+ * if provided in *.properties file.
+ * @param owner
+ * @param propertyName
+ * @return
+ */
+public static String getResourceAsNonLabeled(java.lang.Class owner, String propertyName) {
+    return getResource(owner, propertyName, false);
 }
 /**
  * Return the first translation found for key matching given pattern.
