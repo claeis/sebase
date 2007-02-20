@@ -18,10 +18,10 @@ import ch.softenvironment.client.ResourceManager;
  * to trigger <b>propertyChange</b>-Event from this Component towards the Model.
  *
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2006-01-17 15:19:08 $
+ * @version $Revision: 1.5 $ $Date: 2007-02-20 12:44:31 $
  */
 public class NumberTextField extends javax.swing.JTextField implements java.awt.event.InputMethodListener {
-	private java.text.DecimalFormat decFormat = null;
+//	private java.text.DecimalFormat decFormat = null;
 /**
  * Constructor.
  * By Default align Numbers on the right in the TextField.
@@ -95,18 +95,13 @@ public void inputMethodTextChanged(java.awt.event.InputMethodEvent event) {
 			String title = ResourceManager.getResource(NumberTextField.class, "CTInvalidInput"); //$NON-NLS-1$
 			String message = ResourceManager.getResource(NumberTextField.class, "CICorrectInput"); //$NON-NLS-1$
 			// reset wrong value
-			if (parent instanceof java.awt.Dialog) {
-				ch.softenvironment.view.BaseDialog.showWarning((java.awt.Component)parent, title, message);
-			} else {
-				ch.softenvironment.view.BaseDialog.showWarning((java.awt.Component)parent, title, message);
-			}
+			ch.softenvironment.view.BaseDialog.showWarning((java.awt.Component)parent, title, message);
 		}
 
 		// ignore last Char Input
 		event.consume();
 	}
 }
-
 /**
  * Overwrites.
  */
@@ -142,6 +137,7 @@ public void setText(String t) {
 		}
 	}
 */
+//TODO large numbers (<Mio.) show value in exponential way
 			super.setText(t);
 		}
 	}

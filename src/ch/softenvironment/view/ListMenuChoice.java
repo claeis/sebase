@@ -14,16 +14,16 @@ import java.util.EventObject;
 /**
  * Method-Set for typical List-Actions for e.g. in a JTable's PopupMenu.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2005-11-05 20:00:24 $
+ * @version $Revision: 1.3 $ $Date: 2007-02-20 12:43:38 $
  */
 public interface ListMenuChoice {
     /**
      * Enable/disable any user relevant Controls (for e.g. MenuItems in a
      * PopupMenu) depending on triggering event.
      * @param event
-     * @param control
+     * @param control (Usually selected rows in a JTable, such as java.awt.Component)
      */
-    public void adaptUserAction(EventObject event, /*java.awt.Component*/Object control);
+    void adaptUserAction(EventObject event, Object control);
     /**
      * Change the selected Objects (for e.g. in a DetailView).
      * This might also be triggered as double-click action by
@@ -32,18 +32,18 @@ public interface ListMenuChoice {
      * @see BaseFrame#genericPopupDisplay(java.awt.event.MouseEvent, javax.swing.JPopupMenu) 
      * @see BaseDialog#genericPopupDisplay(java.awt.event.MouseEvent, javax.swing.JPopupMenu) 
      */
-    public void changeObjects(Object source);
+    void changeObjects(Object source);
     /**
      * Create a new Object as a "copy" of a selected one (and open 
      * it for e.g. in a DetailView).
      * @param source (triggering control for e.g. a Popup-MenuItem)
      */
-    public void copyObject(Object source);
+    void copyObject(Object source);
     /**
      * Create a new Object (and open it for e.g. in a DetailView).
      * @param source (triggering control for e.g. a Popup-MenuItem)
      */
-    public void newObject(Object source);
+    void newObject(Object source);
     /**
      * Remove the selected Object's (for e.g from a JTable).
      * @param source (triggering control for e.g. a Popup-MenuItem)

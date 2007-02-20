@@ -1,21 +1,7 @@
 package ch.softenvironment.view;
 
-/* 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- */
- 
 /**
  * The bean information class for ch.softenvironment.view.TriStatePanel.
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2005-01-24 10:04:21 $
  */
 public class TriStatePanelBeanInfo extends java.beans.SimpleBeanInfo {
 /**
@@ -32,7 +18,7 @@ public java.beans.PropertyDescriptor componentOrientationPropertyDescriptor() {
 				/* Attempt to find the method using getMethod with parameter types. */
 				java.lang.Class aGetMethodParameterTypes[] = {};
 				aGetMethod = getBeanClass().getMethod("getComponentOrientation", aGetMethodParameterTypes);
-			} catch (Throwable exception) {
+			} catch (java.lang.Throwable exception) {
 				/* Since getMethod failed, call findMethod. */
 				handleException(exception);
 				aGetMethod = findMethod(getBeanClass(), "getComponentOrientation", 0);
@@ -44,14 +30,14 @@ public java.beans.PropertyDescriptor componentOrientationPropertyDescriptor() {
 					java.awt.ComponentOrientation.class
 				};
 				aSetMethod = getBeanClass().getMethod("setComponentOrientation", aSetMethodParameterTypes);
-			} catch (Throwable exception) {
+			} catch (java.lang.Throwable exception) {
 				/* Since getMethod failed, call findMethod. */
 				handleException(exception);
 				aSetMethod = findMethod(getBeanClass(), "setComponentOrientation", 1);
 			};
 			aDescriptor = new java.beans.PropertyDescriptor("componentOrientation"
 			, aGetMethod, aSetMethod);
-		} catch (Throwable exception) {
+		} catch (java.lang.Throwable exception) {
 			/* Since we failed using methods, try creating a default property descriptor. */
 			handleException(exception);
 			aDescriptor = new java.beans.PropertyDescriptor("componentOrientation"
@@ -63,14 +49,66 @@ public java.beans.PropertyDescriptor componentOrientationPropertyDescriptor() {
 		/* aDescriptor.setShortDescription("componentOrientation"); */
 		/* aDescriptor.setExpert(false); */
 		/* aDescriptor.setHidden(false); */
-		/* aDescriptor.setValue("preferred", new Boolean(false)); */
-		/* aDescriptor.setValue("ivjDesignTimeProperty", new Boolean(true)); */
-		aDescriptor.setValue("enumerationValues", new Object[] {
+		/* aDescriptor.setValue("preferred", new java.lang.Boolean(false)); */
+		/* aDescriptor.setValue("ivjDesignTimeProperty", new java.lang.Boolean(true)); */
+		aDescriptor.setValue("enumerationValues", new java.lang.Object[] {
 				"UNKNOWN",java.awt.ComponentOrientation.UNKNOWN,"java.awt.ComponentOrientation.UNKNOWN",
 				"LEFT_TO_RIGHT",java.awt.ComponentOrientation.LEFT_TO_RIGHT,"java.awt.ComponentOrientation.LEFT_TO_RIGHT",
 				"RIGHT_TO_LEFT",java.awt.ComponentOrientation.RIGHT_TO_LEFT,"java.awt.ComponentOrientation.RIGHT_TO_LEFT",
 		});
-	} catch (Throwable exception) {
+	} catch (java.lang.Throwable exception) {
+		handleException(exception);
+	};
+	return aDescriptor;
+}
+/**
+ * Gets the enabled property descriptor.
+ * @return java.beans.PropertyDescriptor
+ */
+public java.beans.PropertyDescriptor enabledPropertyDescriptor() {
+	java.beans.PropertyDescriptor aDescriptor = null;
+	try {
+		try {
+			/* Using methods via getMethod is the faster way to create the enabled property descriptor. */
+			java.lang.reflect.Method aGetMethod = null;
+			try {
+				/* Attempt to find the method using getMethod with parameter types. */
+				java.lang.Class aGetMethodParameterTypes[] = {};
+				aGetMethod = getBeanClass().getMethod("isEnabled", aGetMethodParameterTypes);
+			} catch (java.lang.Throwable exception) {
+				/* Since getMethod failed, call findMethod. */
+				handleException(exception);
+				aGetMethod = findMethod(getBeanClass(), "isEnabled", 0);
+			};
+			java.lang.reflect.Method aSetMethod = null;
+			try {
+				/* Attempt to find the method using getMethod with parameter types. */
+				java.lang.Class aSetMethodParameterTypes[] = {
+					boolean.class
+				};
+				aSetMethod = getBeanClass().getMethod("setEnabled", aSetMethodParameterTypes);
+			} catch (java.lang.Throwable exception) {
+				/* Since getMethod failed, call findMethod. */
+				handleException(exception);
+				aSetMethod = findMethod(getBeanClass(), "setEnabled", 1);
+			};
+			aDescriptor = new java.beans.PropertyDescriptor("enabled"
+			, aGetMethod, aSetMethod);
+		} catch (java.lang.Throwable exception) {
+			/* Since we failed using methods, try creating a default property descriptor. */
+			handleException(exception);
+			aDescriptor = new java.beans.PropertyDescriptor("enabled"
+			, getBeanClass());
+		};
+		aDescriptor.setBound(true);
+		/* aDescriptor.setConstrained(false); */
+		/* aDescriptor.setDisplayName("enabled"); */
+		aDescriptor.setShortDescription("Disable or enable the component");
+		/* aDescriptor.setExpert(false); */
+		/* aDescriptor.setHidden(false); */
+		aDescriptor.setValue("preferred", new java.lang.Boolean(true));
+		/* aDescriptor.setValue("ivjDesignTimeProperty", new java.lang.Boolean(true)); */
+	} catch (java.lang.Throwable exception) {
 		handleException(exception);
 	};
 	return aDescriptor;
@@ -157,7 +195,7 @@ public java.beans.EventSetDescriptor[] getEventSetDescriptors() {
 	try {
 		java.beans.EventSetDescriptor aDescriptorList[] = {};
 		return aDescriptorList;
-	} catch (Throwable exception) {
+	} catch (java.lang.Throwable exception) {
 		handleException(exception);
 	};
 	return null;
@@ -168,12 +206,53 @@ public java.beans.EventSetDescriptor[] getEventSetDescriptors() {
  */
 public java.beans.MethodDescriptor[] getMethodDescriptors() {
 	try {
-		java.beans.MethodDescriptor aDescriptorList[] = {};
+		java.beans.MethodDescriptor aDescriptorList[] = {
+			getNotValueMethodDescriptor()
+			,getValueMethodDescriptor()
+			,setValue_javalangBooleanMethodDescriptor()
+		};
 		return aDescriptorList;
-	} catch (Throwable exception) {
+	} catch (java.lang.Throwable exception) {
 		handleException(exception);
 	};
 	return null;
+}
+/**
+ * Gets the getNotValue() method descriptor.
+ * @return java.beans.MethodDescriptor
+ */
+public java.beans.MethodDescriptor getNotValueMethodDescriptor() {
+	java.beans.MethodDescriptor aDescriptor = null;
+	try {
+		/* Create and return the getNotValue() method descriptor. */
+		java.lang.reflect.Method aMethod = null;
+		try {
+			/* Attempt to find the method using getMethod with parameter types. */
+			java.lang.Class aParameterTypes[] = {};
+			aMethod = getBeanClass().getMethod("getNotValue", aParameterTypes);
+		} catch (java.lang.Throwable exception) {
+			/* Since getMethod failed, call findMethod. */
+			handleException(exception);
+			aMethod = findMethod(getBeanClass(), "getNotValue", 0);
+		};
+		try {
+			/* Try creating the method descriptor with parameter descriptors. */
+			java.beans.ParameterDescriptor aParameterDescriptors[] = {};
+			aDescriptor = new java.beans.MethodDescriptor(aMethod, aParameterDescriptors);
+		} catch (java.lang.Throwable exception) {
+			/* Try creating the method descriptor without parameter descriptors. */
+			handleException(exception);
+			aDescriptor = new java.beans.MethodDescriptor(aMethod);
+		};
+		/* aDescriptor.setDisplayName("getNotValue()"); */
+		/* aDescriptor.setShortDescription("getNotValue()"); */
+		/* aDescriptor.setExpert(false); */
+		/* aDescriptor.setHidden(false); */
+		/* aDescriptor.setValue("preferred", new java.lang.Boolean(false)); */
+	} catch (java.lang.Throwable exception) {
+		handleException(exception);
+	};
+	return aDescriptor;
 }
 /**
  * Return the property descriptors for this bean.
@@ -183,13 +262,52 @@ public java.beans.PropertyDescriptor[] getPropertyDescriptors() {
 	try {
 		java.beans.PropertyDescriptor aDescriptorList[] = {
 			componentOrientationPropertyDescriptor()
+			,enabledPropertyDescriptor()
+			,notValuePropertyDescriptor()
 			,valuePropertyDescriptor()
 		};
 		return aDescriptorList;
-	} catch (Throwable exception) {
+	} catch (java.lang.Throwable exception) {
 		handleException(exception);
 	};
 	return null;
+}
+/**
+ * Gets the getValue() method descriptor.
+ * @return java.beans.MethodDescriptor
+ */
+public java.beans.MethodDescriptor getValueMethodDescriptor() {
+	java.beans.MethodDescriptor aDescriptor = null;
+	try {
+		/* Create and return the getValue() method descriptor. */
+		java.lang.reflect.Method aMethod = null;
+		try {
+			/* Attempt to find the method using getMethod with parameter types. */
+			java.lang.Class aParameterTypes[] = {};
+			aMethod = getBeanClass().getMethod("getValue", aParameterTypes);
+		} catch (java.lang.Throwable exception) {
+			/* Since getMethod failed, call findMethod. */
+			handleException(exception);
+			aMethod = findMethod(getBeanClass(), "getValue", 0);
+		};
+		try {
+			/* Try creating the method descriptor with parameter descriptors. */
+			java.beans.ParameterDescriptor aParameterDescriptors[] = {};
+			aDescriptor = new java.beans.MethodDescriptor(aMethod, aParameterDescriptors);
+		} catch (java.lang.Throwable exception) {
+			/* Try creating the method descriptor without parameter descriptors. */
+			handleException(exception);
+			aDescriptor = new java.beans.MethodDescriptor(aMethod);
+		};
+		/* aDescriptor.setDisplayName("getValue()"); */
+		/* aDescriptor.setShortDescription("getValue()"); */
+		/* aDescriptor.setExpert(false); */
+		/* aDescriptor.setHidden(false); */
+		/* aDescriptor.setValue("preferred", new java.lang.Boolean(false)); */
+	} catch (java.lang.Throwable exception) {
+		handleException(exception);
+	};
+	return aDescriptor;
 }
 /**
  * Called whenever the bean information class throws an exception.
@@ -202,30 +320,71 @@ private void handleException(java.lang.Throwable exception) {
 	// exception.printStackTrace(System.out);
 }
 /**
- * Gets the main(java.lang.String[]) method descriptor.
+ * Gets the notValue property descriptor.
+ * @return java.beans.PropertyDescriptor
+ */
+public java.beans.PropertyDescriptor notValuePropertyDescriptor() {
+	java.beans.PropertyDescriptor aDescriptor = null;
+	try {
+		try {
+			/* Using methods via getMethod is the faster way to create the notValue property descriptor. */
+			java.lang.reflect.Method aGetMethod = null;
+			try {
+				/* Attempt to find the method using getMethod with parameter types. */
+				java.lang.Class aGetMethodParameterTypes[] = {};
+				aGetMethod = getBeanClass().getMethod("getNotValue", aGetMethodParameterTypes);
+			} catch (java.lang.Throwable exception) {
+				/* Since getMethod failed, call findMethod. */
+				handleException(exception);
+				aGetMethod = findMethod(getBeanClass(), "getNotValue", 0);
+			};
+			java.lang.reflect.Method aSetMethod = null;
+			aDescriptor = new java.beans.PropertyDescriptor("notValue"
+			, aGetMethod, aSetMethod);
+		} catch (java.lang.Throwable exception) {
+			/* Since we failed using methods, try creating a default property descriptor. */
+			handleException(exception);
+			aDescriptor = new java.beans.PropertyDescriptor("notValue"
+			, getBeanClass());
+		};
+		aDescriptor.setBound(true);
+		/* aDescriptor.setConstrained(false); */
+		/* aDescriptor.setDisplayName("notValue"); */
+		/* aDescriptor.setShortDescription("notValue"); */
+		/* aDescriptor.setExpert(false); */
+		/* aDescriptor.setHidden(false); */
+		/* aDescriptor.setValue("preferred", new java.lang.Boolean(false)); */
+		/* aDescriptor.setValue("ivjDesignTimeProperty", new java.lang.Boolean(true)); */
+	} catch (java.lang.Throwable exception) {
+		handleException(exception);
+	};
+	return aDescriptor;
+}
+/**
+ * Gets the setValue(java.lang.Boolean) method descriptor.
  * @return java.beans.MethodDescriptor
  */
-public java.beans.MethodDescriptor main_javalangString__MethodDescriptor() {
+public java.beans.MethodDescriptor setValue_javalangBooleanMethodDescriptor() {
 	java.beans.MethodDescriptor aDescriptor = null;
 	try {
-		/* Create and return the main(java.lang.String[]) method descriptor. */
+		/* Create and return the setValue(java.lang.Boolean) method descriptor. */
 		java.lang.reflect.Method aMethod = null;
 		try {
 			/* Attempt to find the method using getMethod with parameter types. */
 			java.lang.Class aParameterTypes[] = {
-				java.lang.String[].class
+				java.lang.Boolean.class
 			};
-			aMethod = getBeanClass().getMethod("main", aParameterTypes);
+			aMethod = getBeanClass().getMethod("setValue", aParameterTypes);
 		} catch (java.lang.Throwable exception) {
 			/* Since getMethod failed, call findMethod. */
 			handleException(exception);
-			aMethod = findMethod(getBeanClass(), "main", 1);
+			aMethod = findMethod(getBeanClass(), "setValue", 1);
 		};
 		try {
 			/* Try creating the method descriptor with parameter descriptors. */
 			java.beans.ParameterDescriptor aParameterDescriptor1 = new java.beans.ParameterDescriptor();
 			aParameterDescriptor1.setName("arg1");
-			aParameterDescriptor1.setDisplayName("args");
+			aParameterDescriptor1.setDisplayName("value");
 			java.beans.ParameterDescriptor aParameterDescriptors[] = {
 				aParameterDescriptor1
 			};
@@ -235,8 +394,8 @@ public java.beans.MethodDescriptor main_javalangString__MethodDescriptor() {
 			handleException(exception);
 			aDescriptor = new java.beans.MethodDescriptor(aMethod);
 		};
-		/* aDescriptor.setDisplayName("main(java.lang.String[])"); */
-		/* aDescriptor.setShortDescription("main(java.lang.String[])"); */
+		/* aDescriptor.setDisplayName("setValue(java.lang.Boolean)"); */
+		/* aDescriptor.setShortDescription("setValue(java.lang.Boolean)"); */
 		/* aDescriptor.setExpert(false); */
 		/* aDescriptor.setHidden(false); */
 		/* aDescriptor.setValue("preferred", new java.lang.Boolean(false)); */
@@ -259,7 +418,7 @@ public java.beans.PropertyDescriptor valuePropertyDescriptor() {
 				/* Attempt to find the method using getMethod with parameter types. */
 				java.lang.Class aGetMethodParameterTypes[] = {};
 				aGetMethod = getBeanClass().getMethod("getValue", aGetMethodParameterTypes);
-			} catch (Throwable exception) {
+			} catch (java.lang.Throwable exception) {
 				/* Since getMethod failed, call findMethod. */
 				handleException(exception);
 				aGetMethod = findMethod(getBeanClass(), "getValue", 0);
@@ -271,14 +430,14 @@ public java.beans.PropertyDescriptor valuePropertyDescriptor() {
 					java.lang.Boolean.class
 				};
 				aSetMethod = getBeanClass().getMethod("setValue", aSetMethodParameterTypes);
-			} catch (Throwable exception) {
+			} catch (java.lang.Throwable exception) {
 				/* Since getMethod failed, call findMethod. */
 				handleException(exception);
 				aSetMethod = findMethod(getBeanClass(), "setValue", 1);
 			};
 			aDescriptor = new java.beans.PropertyDescriptor("value"
 			, aGetMethod, aSetMethod);
-		} catch (Throwable exception) {
+		} catch (java.lang.Throwable exception) {
 			/* Since we failed using methods, try creating a default property descriptor. */
 			handleException(exception);
 			aDescriptor = new java.beans.PropertyDescriptor("value"
@@ -290,9 +449,9 @@ public java.beans.PropertyDescriptor valuePropertyDescriptor() {
 		/* aDescriptor.setShortDescription("value"); */
 		/* aDescriptor.setExpert(false); */
 		/* aDescriptor.setHidden(false); */
-		/* aDescriptor.setValue("preferred", new Boolean(false)); */
-		/* aDescriptor.setValue("ivjDesignTimeProperty", new Boolean(true)); */
-	} catch (Throwable exception) {
+		/* aDescriptor.setValue("preferred", new java.lang.Boolean(false)); */
+		/* aDescriptor.setValue("ivjDesignTimeProperty", new java.lang.Boolean(true)); */
+	} catch (java.lang.Throwable exception) {
 		handleException(exception);
 	};
 	return aDescriptor;

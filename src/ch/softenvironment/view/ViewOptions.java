@@ -13,12 +13,12 @@ package ch.softenvironment.view;
  */
 
 /**
- * Manage a Set of GUI-Options.
+ * Manage a Set of GUI-Options which are valid for all Views in a (Client)-Application.
  * An instance of the ViewOptions should be initalized as Singleton
  * by an Appplication-Launcher and passed to any View opened from there.
  *
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2004-09-14 17:01:47 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.4 $ $Date: 2007-02-20 12:43:37 $
  * @see DetailView(..)
  * @see SearchView(..)
  */
@@ -64,15 +64,19 @@ public void setCloseOnSave(boolean closeOnSave) {
 	this.closeOnSave = closeOnSave;
 }
 /**
- * Set a certain Option.
+ * @see #setOption(String, boolean)
  */
 public void setOption(String name) {
 	setOption(name, true);
 }
 /**
  * Set a certain Option.
+ * For e.g. if a UserFunction shall be suppressed (setOption("MyFunction", false) and
+ * the appropriate view may react according to defined options.
+ * @param name
+ * @param allow
  */
 public void setOption(String name, boolean allow) {
-	options.put(name, new Boolean(allow));
+	options.put(name, Boolean.valueOf(allow));
 }
 }

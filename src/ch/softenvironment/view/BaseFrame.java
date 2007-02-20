@@ -24,7 +24,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * TemplateFrame defining minimal functionality.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.28 $ $Date: 2006-06-29 22:28:47 $
+ * @version $Revision: 1.29 $ $Date: 2007-02-20 12:43:39 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -137,6 +137,12 @@ public static String exceptionToString(Throwable exception) {
     return stringWriter.toString();
 }
 /**
+ * @deprecated (use {@link #exportTableData(JTable, String)} instead)
+ */
+protected final String exportTableData(final JTable table) {
+    return exportTableData(table, ParserCSV.DEFAULT_SEPARATOR);
+}
+/**
  * Convienience method to Export table-data into a file,
  * where a Filechooser allows selecting File before.
  * The table data is exported in a generic manner,
@@ -146,7 +152,7 @@ public static String exceptionToString(Throwable exception) {
  * @return Path of file saved
  * @see ParserCSV#writeFile()
  */
-protected final String exportTableData(final JTable table) {
+protected final String exportTableData(final JTable table, final String separator) {
 	final FileChooser saveDialog =  new FileChooser(/*getSettings().getWorkingDirectory()*/);
 	saveDialog.setDialogTitle(CommonUserAccess.getMniFileSaveAsText());//$NON-NLS-1$
 	saveDialog.addChoosableFileFilter(ch.ehi.basics.view.GenericFileFilter.createCsvFilter());
@@ -158,7 +164,7 @@ protected final String exportTableData(final JTable table) {
 				try {
 				 	FileOutputStream outStream = new FileOutputStream(saveDialog.getSelectedFile());
 				  	stream = new PrintStream(outStream);
-				  	ParserCSV.writeFile(stream, table, ";");
+				  	ParserCSV.writeFile(stream, table, separator);
 					outStream.flush();
 				  	outStream.close();
 				} catch(Throwable e) {
@@ -182,7 +188,7 @@ protected final String exportTableData(final JTable table) {
  * @see #stopWaitDialog()
  */
 public final void fatalError(JFrame frame, String title, String message, Throwable exception) {
-	ch.softenvironment.view.BaseDialog.showError(frame, title, message + "\n" + getResourceString(BaseFrame.class, "CEFatalError"), exception);
+	ch.softenvironment.view.BaseDialog.showError(frame, title, message + "\n" + ResourceManager.getResource(BaseFrame.class, "CEFatalError"), exception);
 }
 /**
  * Display a popup menu.
@@ -224,12 +230,6 @@ protected final java.util.List getObjects() {
 	return objects;
 }
 /**
- * @deprecated
- */
-protected static String getResourceString(java.lang.Class owner, String propertyName) {
-	return ResourceManager.getResource(owner, propertyName);
-}
-/**
  * Convenience Method.
  */
 protected final String getResourceString(String propertyName) {
@@ -268,7 +268,7 @@ protected abstract void initializeView() throws Throwable;
  * @param title Dialogtitle
  */
 public final void nyi(String title) {
-	nyi(title, getResourceString(BaseFrame.class, "CWNotYetImplemented")); //$NON-NLS-1$
+	nyi(title, ResourceManager.getResource(BaseFrame.class, "CWNotYetImplemented")); //$NON-NLS-1$
 }
 /**
  * Developer utility.
@@ -323,7 +323,7 @@ protected void setLookAndFeel(String style) {
 		}
 		SwingUtilities.updateComponentTreeUI(this);
 	} catch (Throwable e) {
-		BaseDialog.showWarning(this, getResourceString(BaseFrame.class, "CTlookAndFeel"), NlsUtils.formatMessage(getResourceString(BaseFrame.class, "CWManagerNotAvailable"), style) + "\n" + getResourceString(BaseFrame.class, "CWSuppressManager")); //$NON-NLS-4$//$NON-NLS-3$ //$NON-NLS-2$ //$NON-NLS-1$
+		BaseDialog.showWarning(this, ResourceManager.getResource(BaseFrame.class, "CTlookAndFeel"), NlsUtils.formatMessage(ResourceManager.getResource(BaseFrame.class, "CWManagerNotAvailable"), style) + "\n" + ResourceManager.getResource(BaseFrame.class, "CWSuppressManager")); //$NON-NLS-4$//$NON-NLS-3$ //$NON-NLS-2$ //$NON-NLS-1$
 	}
 }
 /**
@@ -378,7 +378,7 @@ public final static void showException(Component owner, java.lang.Throwable exce
 
 		// inform user
 		String title = null; //$NON-NLS-1$
-		String message = getResourceString(BaseFrame.class, "CWTopLevelHandler"); //$NON-NLS-1$
+		String message = ResourceManager.getResource(BaseFrame.class, "CWTopLevelHandler"); //$NON-NLS-1$
 		if (exception instanceof NumberFormatException) {
 			if ((exception.getMessage().length() == 0) || exception.getMessage().equals("empty String") || (exception.getMessage().equals("-"))) {//$NON-NLS-2$//$NON-NLS-1$
 Tracer.getInstance().developerWarning("exception message might change -> use another recognition");//$NON-NLS-2$//$NON-NLS-1$
@@ -386,8 +386,8 @@ Tracer.getInstance().developerWarning("exception message might change -> use ano
 				return;
 			}
 
-			title = getResourceString(BaseFrame.class, "CTInputError"); //$NON-NLS-1$
-			message = getResourceString(BaseFrame.class, "CENumberFormat") + "\n  => " + exception.getLocalizedMessage();//$NON-NLS-2$ //$NON-NLS-1$
+			title = ResourceManager.getResource(BaseFrame.class, "CTInputError"); //$NON-NLS-1$
+			message = ResourceManager.getResource(BaseFrame.class, "CENumberFormat") + "\n  => " + exception.getLocalizedMessage();//$NON-NLS-2$ //$NON-NLS-1$
 		} else if (exception instanceof DeveloperException) {
 			title = ((DeveloperException)exception).getTitle();
 			message = exception.getMessage();
@@ -513,7 +513,7 @@ private void updateStringProperty(java.lang.Class resource, Component component,
 				if (resource == null) {
 					nls = getResourceString(component.getName() + "_" + property);
 				} else {
-					nls = getResourceString(resource, component.getName() + "_" + property);
+					nls = ResourceManager.getResource(resource, component.getName() + "_" + property);
 				}
 				bean.setValue(nls);
 			} catch(Throwable e) {
@@ -523,7 +523,7 @@ private void updateStringProperty(java.lang.Class resource, Component component,
 						(component instanceof javax.swing.JMenuItem)) {
 					// try CommonUserAccess.properties
 					try {
-						String nls = getResourceString(CommonUserAccess.class, component.getName() + "_" + property);
+						String nls = ResourceManager.getResource(CommonUserAccess.class, component.getName() + "_" + property);
 						bean.setValue(nls);
 					} catch(Throwable cua) {
 //						Tracer.getInstance().debug(this, "updateStringProperty()", "Resource missing: " + e.getLocalizedMessage());

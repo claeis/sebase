@@ -19,7 +19,7 @@ import ch.softenvironment.util.Tracer;
 /**
  * Template-Dialog defining minimal functionality.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.13 $ $Date: 2006-06-29 22:28:47 $
+ * @version $Revision: 1.14 $ $Date: 2007-02-20 12:43:38 $
  */
 public abstract class BaseDialog extends javax.swing.JDialog {
 	private javax.swing.JPanel ivjJDialogContentPane = null;
@@ -86,19 +86,19 @@ protected final ViewOptions getViewOptions() {
  * Return Apply-Button Label-String.
  */
 protected static String getApplyString() {
-	return getResourceString(BaseDialog.class, "BtnApply_text");
+	return ResourceManager.getResource(BaseDialog.class, "BtnApply_text");
 }
 /**
  * Return Button Label-String.
  */
 protected static String getAssignString() {
-	return getResourceString(BaseDialog.class, "BtnAssign_text");
+	return ResourceManager.getResource(BaseDialog.class, "BtnAssign_text");
 }
 /**
  * Return Cancel-Button Label-String.
  */
 protected static String getCancelString() {
-	return getResourceString(BaseDialog.class, "BtnCancel_text");
+	return ResourceManager.getResource(BaseDialog.class, "BtnCancel_text");
 }
 /**
  * @deprecated
@@ -110,13 +110,13 @@ protected String getChangeWindowString() {
  * Return Description Label-String.
  */
 protected String getDescriptionString() {
-	return getResourceString(BaseDialog.class, "CIDescription");
+	return ResourceManager.getResource(BaseDialog.class, "CIDescription");
 }
 /**
  * Return Detail-String.
  */
 protected String getDetailString() {
-	return getResourceString(BaseDialog.class, "CIDetail");
+	return ResourceManager.getResource(BaseDialog.class, "CIDetail");
 }
 /**
  * Return the JDialogContentPane property value.
@@ -149,19 +149,13 @@ protected String getNewString() {
  * Return OK-Button Label-String.
  */
 protected static String getOKString() {
-	return getResourceString(BaseDialog.class, "BtnOK_text");
+	return ResourceManager.getResource(BaseDialog.class, "BtnOK_text");
 }
 /**
  * Return Remove-Button Label-String.
  */
 protected String getRemoveString() {
-	return getResourceString(BaseDialog.class, "BtnRemove_text");
-}
-/**
- * @deprecated
- */
-protected static String getResourceString(java.lang.Class resourceClass, String propertyName) {
-	return ResourceManager.getResource(resourceClass, propertyName);
+	return ResourceManager.getResource(BaseDialog.class, "BtnRemove_text");
 }
 /**
  * Convenience method.
@@ -273,7 +267,7 @@ protected void undo() {
  * @deprecated
  */
 public BaseDialog(java.awt.Component owner, String title, boolean modal) {
-	super((javax.swing.JFrame)null, title, modal);
+	super(owner instanceof javax.swing.JFrame ? (javax.swing.JFrame)owner : (javax.swing.JFrame)null /*forget about owner*/, title, modal);
 //	this(owner, title, modal); -> does not relocate
 	setRelativeLocation(owner);
 	initialize();
@@ -300,9 +294,9 @@ protected void setRelativeLocation(java.awt.Component parent) {
  * @return true->YES was pressed; false->NO was pressed
  */
 public static boolean showConfirm(java.awt.Component owner, String title, Object message) {
-	Object[] options = { getResourceString(BaseDialog.class, "BtnYes_text"), getResourceString(BaseDialog.class, "BtnNo_text") };
+	Object[] options = { ResourceManager.getResource(BaseDialog.class, "BtnYes_text"), ResourceManager.getResource(BaseDialog.class, "BtnNo_text") };
 	return (showOptionPane(owner,
-		        (title == null ? getResourceString(BaseDialog.class, "CTQuestion") : title),
+		        (title == null ? ResourceManager.getResource(BaseDialog.class, "CTQuestion") : title),
 		        message,
 		        options,
 		        "question-icon.gif") == 0);
@@ -315,9 +309,9 @@ public static boolean showConfirm(java.awt.Component owner, String title, Object
  * @return Boolen.TRUE->YES was pressed; Boolean.FALSE->NO was pressed; null->CANCEL was pressed
  */
 public static Boolean showConfirmCancel(java.awt.Component owner, String title, Object message) {
-	Object[] options = { getResourceString(BaseDialog.class, "BtnYes_text"), getResourceString(BaseDialog.class, "BtnNo_text"), getCancelString() };
+	Object[] options = { ResourceManager.getResource(BaseDialog.class, "BtnYes_text"), ResourceManager.getResource(BaseDialog.class, "BtnNo_text"), getCancelString() };
 	int answer = showOptionPane(owner,
-	        (title == null ? getResourceString(BaseDialog.class, "CTQuestion") : title),
+	        (title == null ? ResourceManager.getResource(BaseDialog.class, "CTQuestion") : title),
 	        message,
 	        options,
 	        "question-icon.gif");
@@ -337,7 +331,7 @@ public static Boolean showConfirmCancel(java.awt.Component owner, String title, 
  * @see #showConfirmDeletion(Component, Object, String)
  */
 public static boolean showConfirmDeletion(java.awt.Component owner) {
-	return showConfirmDeletion(owner, getResourceString(BaseDialog.class, "CTDeletion"), getResourceString(BaseDialog.class, "CIQueryForDeletion"));
+	return showConfirmDeletion(owner, ResourceManager.getResource(BaseDialog.class, "CTDeletion"), ResourceManager.getResource(BaseDialog.class, "CIQueryForDeletion"));
 }
 
 /**
@@ -346,9 +340,9 @@ public static boolean showConfirmDeletion(java.awt.Component owner) {
  * @return true->Deletion may proceed; false->otherwise
  */
 public static boolean showConfirmDeletion(java.awt.Component owner, String title, Object message) {
-	Object[] options = { getResourceString(BaseDialog.class, "BtnYes_text"), getResourceString(BaseDialog.class, "BtnNo_text") };
+	Object[] options = { ResourceManager.getResource(BaseDialog.class, "BtnYes_text"), ResourceManager.getResource(BaseDialog.class, "BtnNo_text") };
 	return (showOptionPane(owner,
-	        	(title == null ? getResourceString(BaseDialog.class, "CTDeletion") : title),
+	        	(title == null ? ResourceManager.getResource(BaseDialog.class, "CTDeletion") : title),
 	        	message,
 	        	options,
 	        	"dustbin.png") == 0);
@@ -399,7 +393,7 @@ Tracer.getInstance().developerError(e.getLocalizedMessage());
 public static void showWarning(java.awt.Component owner, String title, Object message) {
 	Object[] options = { getCancelString() };
 	showOptionPane(owner, 
-	        		(title == null ? getResourceString(BaseDialog.class, "CTWarning") : title), 
+	        		(title == null ? ResourceManager.getResource(BaseDialog.class, "CTWarning") : title), 
 	        		message,
 	        		options,
 	        		"warning-icon.gif");

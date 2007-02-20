@@ -15,8 +15,8 @@ package ch.softenvironment.view;
 /**
  * Method-Set for a DetailView
  * @see BaseFrame (as a Parent-Class)
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2004-08-18 09:27:25 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.6 $ $Date: 2007-02-20 12:43:36 $
  */
 public interface DetailView {
 	/**
@@ -30,9 +30,13 @@ public interface DetailView {
 	void saveObject();
 	/**
 	 * Make the View represent the given Object.
-	 * @param currentObject
+     * 
+     * Any Listeners added to the object should be
+     * removed, of course (for e.g. by #dispose()).
+     * 
+	 * @param object
 	 *
-	 * Example Code:
+	 * <example>
 		 	try {
 				if ((object != null) && object.equals(getObject())) {
 					return;
@@ -46,6 +50,7 @@ public interface DetailView {
 			} catch(Throwable e) {
 				handleException(e);
 			}
+        </example>
 	 */
 	void setCurrentObject(Object object);
 	/**

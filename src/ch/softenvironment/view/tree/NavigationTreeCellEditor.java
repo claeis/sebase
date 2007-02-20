@@ -23,7 +23,7 @@ import javax.swing.JTree;
  * TreeCellEditor for a navigation tree node.
  * 
  * @author Peter Hirzel <i>soft</i>Environment 
- * @version $Revision: 1.1 $ $Date: 2005-06-15 08:39:21 $
+ * @version $Revision: 1.2 $ $Date: 2007-02-20 12:45:07 $
  */
 public class NavigationTreeCellEditor extends javax.swing.tree.DefaultTreeCellEditor {
     public NavigationTreeCellEditor(AutoScrollingTree tree, NavigationTreeCellRenderer renderer) {
@@ -33,8 +33,11 @@ public class NavigationTreeCellEditor extends javax.swing.tree.DefaultTreeCellEd
      * Overwrites.
      */
     public Component getTreeCellEditorComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row) {
-        return super.getTreeCellEditorComponent(tree,
+        if (tree instanceof AutoScrollingTree) {
+            return super.getTreeCellEditorComponent(tree,
                 ((AutoScrollingTree)tree).getUtility().getName(value), 
                 selected, expanded, leaf, row);
+        }
+        throw new IllegalArgumentException("tree must be an AutoScrollingTree!");
     }
 }

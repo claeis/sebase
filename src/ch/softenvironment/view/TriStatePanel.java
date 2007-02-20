@@ -19,18 +19,19 @@ package ch.softenvironment.view;
  * - undefined
  *
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2007-01-08 17:39:06 $
+ * @version $Revision: 1.7 $ $Date: 2007-02-20 12:43:39 $
  */
 public class TriStatePanel extends BasePanel {
 	private static String ACTION_ALL = "ALL";
 	private static String ACTION_YES = "YES";
 	private static String ACTION_NO = "NO";
+    private boolean changing = false;
 	private javax.swing.ButtonGroup group = new javax.swing.ButtonGroup();
 	private javax.swing.JRadioButton ivjRbtFalse = null;
 	private javax.swing.JRadioButton ivjRbtTrue = null;
 	private javax.swing.JRadioButton ivjRbtAll = null;
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
-	private java.lang.Boolean fieldValue = Boolean.FALSE;
+	private java.lang.Boolean fieldValue; // @see initialize
 
 class IvjEventHandler implements java.awt.event.ItemListener {
 		public void itemStateChanged(java.awt.event.ItemEvent e) {
@@ -72,16 +73,19 @@ public TriStatePanel(boolean isDoubleBuffered) {
 	super(isDoubleBuffered);
 }
 /**
- * Trigger event at Selection-Change.
+ * Trigger event at User Selection-Change.
+ * @see #setValue(Boolean)
  */
 private void changed(java.awt.event.ItemEvent itemEvent) {
-	if (group.getSelection().getActionCommand().equals(ACTION_NO)) {
-		setValue(Boolean.FALSE);
-	} else if (group.getSelection().getActionCommand().equals(ACTION_YES)) {
-		setValue(Boolean.TRUE);
-	} else {
-		setValue(null);
-	}
+    if (!changing) {
+    	if (group.getSelection().getActionCommand().equals(ACTION_NO)) {
+    		setValue(Boolean.FALSE);
+    	} else if (group.getSelection().getActionCommand().equals(ACTION_YES)) {
+    		setValue(Boolean.TRUE);
+    	} else {
+    		setValue(null);
+    	}
+    }
 }
 /**
  * connEtoC1:  (RbtAll.item.itemStateChanged(java.awt.event.ItemEvent) --> TriStatePanel.changed(Ljava.awt.event.ItemEvent;)V)
@@ -267,29 +271,42 @@ private void initialize() {
 	group.add(getRbtAll());
 	group.add(getRbtTrue());
 	group.add(getRbtFalse());
-	getRbtAll().setSelected(true);
+    
+    // set a matching couple
+	setValue(null);
+    getRbtAll().setSelected(true);
 	// user code end
 }
 /**
- * Sets the value property (java.lang.Boolean) value.
- * @param value The new value for the property.
+ * Sets the value by model change.
+ * @param value Tristate
+ * @see #initialize()
+ * @see #changed(java.awt.event.ItemEvent)
  * @see #getValue
  */
-public void setValue(java.lang.Boolean value) {
-	if (((value == null) && (fieldValue != null)) ||
-		((value != null) && (!value.equals(fieldValue)))) {
-			// prevent pinging around
-			Boolean oldValue = fieldValue;
-			fieldValue = value;
-			firePropertyChange("value", oldValue, value);
-		
-			if (value != null) {
-				if (value.booleanValue()) {
-					getRbtTrue().setSelected(true);
-				} else {
-					getRbtFalse().setSelected(true);
-				}
-			}
+public void setValue(java.lang.Boolean value) {  
+    if ((value == null) && (fieldValue != null)) {
+        changing = true; // prevent pinging around
+        Boolean oldValue = fieldValue;
+        fieldValue = value;
+        firePropertyChange("value", oldValue, value);        
+        getRbtAll().setSelected(true);
+        changing = false;
+        return;
+    }
+    
+	if ((value != null) && (!value.equals(fieldValue))) {			
+        changing = true; // prevent pinging around
+		Boolean oldValue = fieldValue;
+		fieldValue = value;
+		firePropertyChange("value", oldValue, value);
+	            
+		if (value.booleanValue()) {
+			getRbtTrue().setSelected(true);
+		} else {
+			getRbtFalse().setSelected(true);
+		}
+        changing = false;
 	}
 }
 /**

@@ -17,11 +17,13 @@ package ch.softenvironment.view.tree;
 import java.awt.Component;
 
 import javax.swing.JTree;
+
+import ch.softenvironment.util.Tracer;
 /**
  * TreeCellRenderer for a TreeNode.
  * 
  * @author Peter Hirzel <i>soft</i>Environment 
- * @version $Revision: 1.2 $ $Date: 2006-05-07 13:55:23 $
+ * @version $Revision: 1.3 $ $Date: 2007-02-20 12:45:06 $
  */
 public class NavigationTreeCellRenderer	extends javax.swing.tree.DefaultTreeCellRenderer {
 	/**
@@ -46,7 +48,7 @@ public Component getTreeCellRendererComponent(JTree tree,
 			boolean hasFocus) {
 	super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
-//	if ((tree instanceof AutoScrollingJTree) && (((AutoScrollingJTree)tree).getUtility() != null)) {
+	if ((tree instanceof AutoScrollingTree) && (((AutoScrollingTree)tree).getUtility() != null)) {
 		TreeNodeUtility utility = ((AutoScrollingTree)tree).getUtility();
 	    javax.swing.Icon icon = utility.getIcon(value.getClass(), expanded);
 	    if (icon != null) {
@@ -58,7 +60,9 @@ public Component getTreeCellRendererComponent(JTree tree,
 		if (value != null) {
 			setToolTipText(utility.getToolTip(value));
 		}
-//	}
+	} else {
+        Tracer.getInstance().developerWarning("tree expected as instanceof AutoScrollingTree with a non-null #getUtility()");   
+    }
 
 	return this;
 }

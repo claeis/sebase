@@ -14,8 +14,8 @@ package ch.softenvironment.view.swingext;
 /**
  * Extended JTextField to show a Time (resp. a java.util.Date).
  *
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2005-02-23 15:15:54 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.2 $ $Date: 2007-02-20 12:44:31 $
  * @see DateTextField
  */
 public class TimeTextField extends DateTextField {

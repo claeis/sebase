@@ -21,8 +21,8 @@ import ch.softenvironment.util.StringUtils;
 
 /**
  * Generic FileMenu to provide a list of recently used files. 
- * @author: Peter Hirzel <i>soft</i> Environment
- * @version $Revision: 1.2 $ $Date: 2004-09-14 16:56:57 $
+ * @author Peter Hirzel <i>soft</i> Environment
+ * @version $Revision: 1.3 $ $Date: 2007-02-20 12:43:38 $
  */
 public class FileHistoryMenu extends javax.swing.JMenu {
 	private FileHistoryListener listener = null;
@@ -44,8 +44,8 @@ public class FileHistoryMenu extends javax.swing.JMenu {
 		this.listener = listener;
 		this.numberOfEntries = maxNumberOfEntries;
 
-		setText(ResourceManager.getInstance().getResource(FileHistoryMenu.class, "MnuFileHistory_text"));
-		setToolTipText(ResourceManager.getInstance().getResource(FileHistoryMenu.class, "MnuFileHistory_toolTipText"));
+		setText(ResourceManager.getResource(FileHistoryMenu.class, "MnuFileHistory_text"));
+		setToolTipText(ResourceManager.getResource(FileHistoryMenu.class, "MnuFileHistory_toolTipText"));
 
 		for (int i = 0; (i < currentEntries.size()) && (i < maxNumberOfEntries); i++) {
 			String filename = (String)currentEntries.get(i);

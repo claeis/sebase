@@ -15,7 +15,7 @@ package ch.softenvironment.view;
 /**
  * The bean information class for ch.softenvironment.view.SimpleEditorPanel.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:33:00 $
+ * @version $Revision: 1.3 $ $Date: 2007-02-20 12:43:40 $
  */
 public class SimpleEditorPanelBeanInfo extends java.beans.SimpleBeanInfo {
 /**
@@ -207,7 +207,7 @@ public java.beans.PropertyDescriptor enabledPropertyDescriptor() {
 		aDescriptor.setShortDescription("Disable or enable the component");
 		/* aDescriptor.setExpert(false); */
 		/* aDescriptor.setHidden(false); */
-		aDescriptor.setValue("preferred", new Boolean(true));
+		aDescriptor.setValue("preferred", Boolean.valueOf(true));
 		/* aDescriptor.setValue("ivjDesignTimeProperty", new Boolean(true)); */
 	} catch (Throwable exception) {
 		handleException(exception);

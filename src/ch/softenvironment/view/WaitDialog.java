@@ -18,8 +18,8 @@ import ch.softenvironment.util.Tracer;
 /**
  * Wait-Dialog for busy actions.
  * Design Pattern: Singleton
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.9 $ $Date: 2006-06-29 22:28:47 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.10 $ $Date: 2007-02-20 12:43:39 $
  * @see BaseFrame#showBusy()
  */
 public class WaitDialog extends BaseDialog {
@@ -338,7 +338,7 @@ public static void updateProgress(final int percentage, final String currentActi
 				    waitDialog.getLblText().setText(currentActivity);
 				}
 waitDialog.paint(waitDialog.getGraphics()); // force refresh
-				waitDialog.toFront();
+				//waitDialog.toFront();
 			} catch(Throwable e) {
 			    // waitDialog could be closed before Update is made
 				Tracer.getInstance().developerWarning("Ignoring: " + e.getLocalizedMessage());
@@ -369,7 +369,7 @@ public static void updateProgressThread(final int percentage, final String curre
 				    waitDialogThread.getLblText().setText(currentActivity);
 				}
 //waitDialog.paint(waitDialog.getGraphics()); // force refresh
-				waitDialogThread.toFront();
+				//waitDialogThread.toFront();
 			} catch(Throwable e) {
 			    // waitDialogThread could be closed before Update is made
 				Tracer.getInstance().developerWarning("updateProgressThread(..)->Ignoring: " + e.getLocalizedMessage());

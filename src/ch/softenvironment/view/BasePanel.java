@@ -15,8 +15,8 @@ import java.awt.Image;
 
 /**
  * Basic javax.swing.JPanel.
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.8 $ $Date: 2006-05-25 15:21:12 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.9 $ $Date: 2007-02-20 12:43:37 $
  */
 public class BasePanel extends javax.swing.JPanel {
     private Image image = null;
@@ -56,6 +56,7 @@ protected void genericPopupDisplay(java.awt.event.MouseEvent event, javax.swing.
 }
 /**
  * Convenience method.
+ * @deprecated
  */
 protected static String getResourceString(java.lang.Class resource, String propertyName) {
 	return ch.softenvironment.client.ResourceManager.getResource(resource, propertyName);

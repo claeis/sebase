@@ -14,8 +14,8 @@ package ch.softenvironment.view;
 import ch.softenvironment.client.ResourceManager;
 /**
  * Panel for structured Phone Number representation.
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2005-09-16 09:38:40 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.8 $ $Date: 2007-02-20 12:43:36 $
  */
 public class PhoneNumberPanel extends javax.swing.JPanel {
 	private String separator = "/";//$NON-NLS-1$
@@ -217,7 +217,7 @@ private javax.swing.JTextField getTxtCountryPrefix() {
 			ivjTxtCountryPrefix.setBounds(0, 1, 45, 20);
 			ivjTxtCountryPrefix.setNextFocusableComponent(getTxtSitePrefix());
 			// user code begin {1}
-			ivjTxtCountryPrefix.setToolTipText(ResourceManager.getInstance().getResource(PhoneNumberPanel.class, "TxtCountryPrefix_toolTipText"));
+			ivjTxtCountryPrefix.setToolTipText(ResourceManager.getResource(PhoneNumberPanel.class, "TxtCountryPrefix_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -243,7 +243,7 @@ private javax.swing.JTextField getTxtNumber() {
 			ivjTxtNumber.setBounds(95, 1, 129, 20);
 			ivjTxtNumber.setColumns(6);
 			// user code begin {1}
-			ivjTxtNumber.setToolTipText(ResourceManager.getInstance().getResource(PhoneNumberPanel.class, "TxtNumber_toolTipText"));
+			ivjTxtNumber.setToolTipText(ResourceManager.getResource(PhoneNumberPanel.class, "TxtNumber_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -270,7 +270,7 @@ private javax.swing.JTextField getTxtSitePrefix() {
 			ivjTxtSitePrefix.setBounds(48, 1, 43, 20);
 			ivjTxtSitePrefix.setNextFocusableComponent(getTxtNumber());
 			// user code begin {1}
-			ivjTxtSitePrefix.setToolTipText(ResourceManager.getInstance().getResource(PhoneNumberPanel.class, "TxtSitePrefix_toolTipText"));
+			ivjTxtSitePrefix.setToolTipText(ResourceManager.getResource(PhoneNumberPanel.class, "TxtSitePrefix_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
