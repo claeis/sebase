@@ -5,7 +5,7 @@ import ch.softenvironment.util.StringUtils;
 
 /**
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.5 $ $Date: 2007-02-20 12:54:13 $
+ * @version $Revision: 1.6 $ $Date: 2007-05-06 21:42:18 $
  */
 public class StringUtilsTestCase extends junit.framework.TestCase {
 /**
@@ -77,8 +77,13 @@ public void testLimited() {
  * 
  */
 public void testReplace() {
+    assertTrue("StringUtils", null == ch.softenvironment.util.StringUtils.replace((String)null, "", ""));
+    assertTrue("StringUtils", null == ch.softenvironment.util.StringUtils.replace((StringBuffer)null, "", ""));
+    assertTrue("StringUtils", "".equals(ch.softenvironment.util.StringUtils.replace("", "", "")));
 	assertTrue("StringUtils", "X C".equals(ch.softenvironment.util.StringUtils.replace("X AS C", " AS ", " ")));
 	assertTrue("StringUtils", "X C, Attr1 Dummy".equals(ch.softenvironment.util.StringUtils.replace("X AS C, Attr1 AS Dummy", " AS ", " ")));
+    
+    assertTrue("StringUtils", "\'as\'escape".equals(ch.softenvironment.util.StringUtils.replace("'as'escape", "'", "\'")));
     
     // long replacement could cause StackOverflow by recursive algorithm
     StringBuffer buf = new StringBuffer("Begin");

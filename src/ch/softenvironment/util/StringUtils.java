@@ -19,7 +19,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * Set of reusable String Utilities.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.9 $ $Date: 2007-02-20 12:54:12 $
+ * @version $Revision: 1.10 $ $Date: 2007-05-06 21:42:18 $
  */
 public abstract class StringUtils {
 
@@ -152,14 +152,15 @@ public static String replace(String source, String searchTerm, String replacemen
 public static String replace(StringBuffer buffer, String searchTerm, String replacement) {
     if (buffer == null) {
         return null;
-    } else {
+    }
+    if (!isNullOrEmpty(buffer.toString())) {
         int index = -1;
-        while ((index = buffer.indexOf(searchTerm)) > -1) {
+        while ((index = buffer.indexOf(searchTerm, (index == -1 ? index : index + replacement.length()))) > -1) {
             buffer.delete(index, index + searchTerm.length());
             buffer.insert(index, replacement);
-        }
-    	return buffer.toString();
+        }    	
     }
+    return buffer.toString();
 }
 /**
  * Return a String representation of a boolean.
