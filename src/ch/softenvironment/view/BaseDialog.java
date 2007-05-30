@@ -13,13 +13,12 @@ package ch.softenvironment.view;
 
 import java.awt.*;
 
-import javax.swing.JFrame;
 import ch.softenvironment.client.ResourceManager;
 import ch.softenvironment.util.Tracer;
 /**
  * Template-Dialog defining minimal functionality.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.14 $ $Date: 2007-02-20 12:43:38 $
+ * @version $Revision: 1.15 $ $Date: 2007-05-30 09:05:31 $
  */
 public abstract class BaseDialog extends javax.swing.JDialog {
 	private javax.swing.JPanel ivjJDialogContentPane = null;
@@ -40,10 +39,33 @@ public BaseDialog(Component owner, boolean modal) {
  * @param viewOptions
  */
 public BaseDialog(Component owner, boolean modal, ViewOptions viewOptions) {
-	super((JFrame)null, modal);
+	super(getOwner(owner), modal);
 	this.viewOptions = viewOptions;
 	setRelativeLocation(owner);
 	initialize();
+}
+/**
+ * Dialogs in Win32 do not generally have icons. Changed so that non-resizable dialogs never have icons, 
+ * and resizable <b>dialogs inherit icons from their owner frame or dialog</b>
+ * .
+ * Calling #setIconImage() on a Frame will propagate the icon to all it's resizable dialogs 
+ * (and in turn their Dialog's if in 1.2 where Dialogs can own other Dialogs). This works 
+ * even if the Dialog is already created and visible.
+ *
+ * Windows apps, and almost none do this (since by default dialogs don't have icons).
+ * @param owner
+ * @return
+ */
+protected static javax.swing.JFrame getOwner(Component owner) {
+    if (owner instanceof javax.swing.JFrame) {
+        return (javax.swing.JFrame)owner;
+    } else {        
+        if (owner != null) {
+            // in case of owning Dialog its Icon gets lost!
+            Tracer.getInstance().developerWarning("Dialog-owner ignored");
+        }
+        return /*(javax.swing.JFrame)*/ null;
+    }
 }
 /**
  * Typical Apply-Action.
@@ -267,7 +289,7 @@ protected void undo() {
  * @deprecated
  */
 public BaseDialog(java.awt.Component owner, String title, boolean modal) {
-	super(owner instanceof javax.swing.JFrame ? (javax.swing.JFrame)owner : (javax.swing.JFrame)null /*forget about owner*/, title, modal);
+	super(getOwner(owner), title, modal);
 //	this(owner, title, modal); -> does not relocate
 	setRelativeLocation(owner);
 	initialize();
