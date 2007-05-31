@@ -26,7 +26,7 @@ import ch.softenvironment.util.DeveloperException;
  * the mapped *.properties files are cached during runtime.
  * 
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.8 $ $Date: 2007-02-20 12:27:22 $
+ * @version $Revision: 1.9 $ $Date: 2007-05-31 14:00:01 $
  */
 public class ResourceManager {
     private static final String ELIPSIS = "...";
@@ -121,10 +121,8 @@ public class ResourceManager {
 	}
 /**
  * @see #getResourceAsLabel(Class, String)
- * @deprecated
  */
-public static String getResource(java.lang.Class owner, String propertyName, boolean asLabel) {
-//TODO make private    
+private static String getResource(java.lang.Class owner, String propertyName, boolean asLabel) {  
 	try {
 		String resource = getInstance().getResource(owner, Locale.getDefault(), propertyName, null).trim();
 		return convertLabel(resource, asLabel);
