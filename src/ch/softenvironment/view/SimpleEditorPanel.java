@@ -18,7 +18,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * Provide a simple editor Area with minimal functionality.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.8 $ $Date: 2006-06-29 22:28:47 $
+ * @version $Revision: 1.9 $ $Date: 2007-06-16 13:56:27 $
  */
 public class SimpleEditorPanel extends javax.swing.JPanel {
 	private boolean hasContentsChanged = false;
@@ -338,12 +338,13 @@ protected void fireTxaEditorKey_keyReleased(java.util.EventObject newEvent) {
  * @deprecated (TODO: inherit this Panel from BasePanel and implement ListMenuChoice)
  */
 private void genericPopupDisplay(java.awt.event.MouseEvent event, javax.swing.JPopupMenu popupMenu) {
-	if (event.isPopupTrigger() && getTxaEditorEditable())  {
+    boolean isEnabled = getTxaEditor().isEnabled();
+	if (event.isPopupTrigger() && isEnabled)  {
 		// enable/disable buttons
 		boolean isEditable = getTxaEditor().isEditable();
 		boolean isSelected = getTxaEditor().getSelectedText() != null;
 		getMniCopy().setEnabled(isSelected);
-		getMniCut().setEnabled(isSelected);
+		getMniCut().setEnabled(isEditable && isSelected);
 		getMniDelete().setEnabled(isEditable && isSelected);
 		getMniSelectAll().setEnabled(getTxaEditor().getText().length() > 0);
 		java.awt.datatransfer.Clipboard clipboard = getToolkit().getSystemClipboard();
