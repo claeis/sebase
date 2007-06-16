@@ -28,7 +28,7 @@ import ch.softenvironment.util.Tracer;
  * Manage the Application Settings by Properties file.
  *
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2007-02-20 12:37:38 $
+ * @version $Revision: 1.7 $ $Date: 2007-06-16 14:10:52 $
  */
 public class ApplicationOptions extends java.util.Properties implements UserSettings {
 	// values for Key-Values
@@ -61,7 +61,9 @@ public class ApplicationOptions extends java.util.Properties implements UserSett
  */
 protected ApplicationOptions() {
 	super();
-
+    
+    setPlattformLocale(Locale.getDefault());   
+    
 	// create Default
 	setLookAndFeel(javax.swing.UIManager.getSystemLookAndFeelClassName());
 	setBackgroundColor(java.awt.Color.white);
@@ -84,16 +86,18 @@ protected ApplicationOptions() {
 /**
  * Load given Settings by filename.
  */
-public ApplicationOptions(String filename) {
+public ApplicationOptions(final String filename) {
 	this(filename, new ApplicationOptions());
 }
 /**
  * Load given Settings by filename.
  */
-protected ApplicationOptions(String filename, java.util.Properties defaults) {
+protected ApplicationOptions(final String filename, java.util.Properties defaults) {
 	// create Default
 	super(defaults);
-
+    
+    setPlattformLocale(Locale.getDefault());
+    
 	try {
 		// load the persistent Properties -> overwrite keys
 		this.filename = filename;
@@ -426,5 +430,28 @@ public void setWorkingDirectory(java.lang.String workingDirectory) {
  */
 public synchronized Object setProperty(String key, String value) {
     return super.setProperty(key, value == null ? "" : value);
+}
+private transient Locale plattformLocale = null;
+/**
+ * Cache OS locale before a reset of default Locale 
+ * might happen by these settings.
+ * @see UserSettings#setPlattformLocale(Locale)
+ */
+protected final void setPlattformLocale(Locale locale) {
+    plattformLocale = locale;
+    Tracer.getInstance().debug("Plattform Locale: " + (locale == null ? "null" : locale.toString()));
+}
+/**
+ * In multi-language applications the change of the default locale because of the
+ * language only might also influence other plattform settings badly (such as NumberFormat for e.g.).
+ * 
+ * This field allows temporary keeping the operating systems default region
+ * for reuse in any number-formats.
+ * 
+ * @see ch.softenvironment.util.NlsUtils#changeLocale(Locale)
+ * @param locale
+ */
+public final Locale getPlattformLocale() {
+    return (plattformLocale == null ? Locale.getDefault() : plattformLocale);
 }
 }
