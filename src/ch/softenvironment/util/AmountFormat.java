@@ -1,6 +1,5 @@
 package ch.softenvironment.util;
 
-import ch.softenvironment.math.MathUtils;
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -12,32 +11,44 @@ import ch.softenvironment.math.MathUtils;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  */
+import java.util.Locale;
+
+import ch.softenvironment.math.MathUtils;
  
 /**
- * Format a number to look like a financial value.
+ * Format a number to look like a financial value 
+ * but without the currency itself.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.8 $ $Date: 2007-02-20 12:57:45 $
+ * @version $Revision: 1.9 $ $Date: 2007-06-16 14:03:10 $
  */
-public class AmountFormat /*extends java.text.NumberFormat*/ {
+public class AmountFormat extends java.text.DecimalFormat {
     private static int FRACTION_DIGITS = 2;
-
-/**
- * 
- */
-public static java.text.NumberFormat getAmountInstance() {
-//TODO evtl. cache formatter for performance reasons
-	java.text.NumberFormat formatter = java.text.NumberFormat.getNumberInstance();
-	//		                           java.text.NumberFormat.getCurrencyInstance();
-	formatter.setMinimumFractionDigits(FRACTION_DIGITS);
-	formatter.setMaximumFractionDigits(FRACTION_DIGITS);
-//	formatter.setGroupingSize(3);			// separate thousand's
-	formatter.setGroupingUsed(true);
-//	formatter.setDecimalSeparatorAlwaysShown(true);
-
-	return formatter;
-}
+    /**
+     * @see #getAmountInstance(Locale)
+     * @deprecated (nasty)
+     */
+    public static java.text.NumberFormat getAmountInstance() {
+        return getAmountInstance(Locale.getDefault());
+    }
+    /**
+     * Create a DecimalFormat for a given locale.
+     */
+    public static java.text.NumberFormat getAmountInstance(Locale locale) {
+        java.text.NumberFormat formatter = java.text.NumberFormat.getNumberInstance(locale);
+    	//		                           java.text.NumberFormat.getCurrencyInstance();
+        
+        // @see DecimalFormat#formatter.adjustForCurrencyDefaultFractionDigits()
+    	formatter.setMinimumFractionDigits(FRACTION_DIGITS);
+    	formatter.setMaximumFractionDigits(FRACTION_DIGITS);
+    //	formatter.setGroupingSize(3);			// separate thousand's
+    	formatter.setGroupingUsed(true);
+    //	formatter.setDecimalSeparatorAlwaysShown(true);
+        
+    	return formatter;
+    }
 /**
  * @see #toString(Number)
+ * @deprecated (use #getAmountInstance(Locale).format(double) instead)
  */
 public static String toString(double amount) {
 	return toString(new Double(amount));
@@ -45,9 +56,11 @@ public static String toString(double amount) {
 /**
  * Convert given amount into formatted String.
  * This is a convenience Method.
+ * @deprecated
  */
 public static String toString(Number amount) {
 	if (amount == null) {
+        // Format#format(null) => Exception
 		return "";
 	} else {
 		return getAmountInstance().format(amount);
@@ -57,7 +70,6 @@ public static String toString(Number amount) {
  * Round to FRACTION_DIGITS decimal value.
  * @param amount
  * @return rounded amount
- * @deprecated
  */
 public static double round(/*String iso4217Code,*/ double amount) {
     return MathUtils.round(amount, FRACTION_DIGITS);
@@ -80,3 +92,4 @@ public static double round(/*String iso4217Code,*/ double amount) {
 */
 }
 }
+
