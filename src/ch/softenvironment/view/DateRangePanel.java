@@ -14,8 +14,8 @@ package ch.softenvironment.view;
 import ch.softenvironment.util.DateUtils;
 /**
  * Define a Date-Range especially for SearchView's.
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2005-02-23 16:19:18 $
+ * @author Peter Hirzel <i>soft</i>Environment
+ * @version $Revision: 1.4 $ $Date: 2007-08-29 15:36:05 $
  */
 public class DateRangePanel extends javax.swing.JPanel {
 	private javax.swing.JLabel ivjLblBilled32 = null;
@@ -36,6 +36,15 @@ class IvjEventHandler implements java.awt.event.ItemListener {
 public DateRangePanel() {
 	super();
 	initialize();
+}
+/**
+ * Overwrites.
+ */
+public void setEnabled(boolean enabled) {
+    super.setEnabled(enabled);
+    getTxtDateFrom().setEnabled(enabled);
+    getTxtDateTo().setEnabled(enabled);
+    getCbxPeriod().setEnabled(enabled);
 }
 /**
  * Set Date-Period according to ComboBox choice.
