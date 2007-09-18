@@ -19,7 +19,7 @@ package ch.softenvironment.view;
  * - undefined
  *
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2007-02-20 12:43:39 $
+ * @version $Revision: 1.8 $ $Date: 2007-09-18 12:36:15 $
  */
 public class TriStatePanel extends BasePanel {
 	private static String ACTION_ALL = "ALL";
@@ -230,6 +230,19 @@ private javax.swing.JRadioButton getRbtTrue() {
  */
 public java.lang.Boolean getValue() {
 	return fieldValue;
+}
+/**
+ * Return speaking value of {@link #getValue()}
+ * @return
+ */
+public String getValueString() {
+    if (getRbtTrue().isSelected()) {
+        return getRbtTrue().getText();
+    } else if (getRbtFalse().isSelected()) {
+        return getRbtFalse().getText();
+    } else {
+        return getRbtAll().getText();
+    }
 }
 /**
  * Overwrites.
