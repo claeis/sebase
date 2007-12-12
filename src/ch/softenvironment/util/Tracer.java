@@ -29,7 +29,7 @@ import ch.ehi.basics.logging.StdLogEvent;
  * @see ch.ehi.basics.logging.* (underlying logger)
  *
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.15 $ $Date: 2007-02-20 12:56:15 $
+ * @version $Revision: 1.16 $ $Date: 2007-12-12 10:46:36 $
  */
 public class Tracer implements LogListener {
 	// Mode's
@@ -254,7 +254,7 @@ public static synchronized void start(java.io.PrintStream stream, int mode) {
  */
 public void setMode(final int mode) {
     this.mode = mode;
-    EhiLogger.getInstance().setTraceFiler((mode == SILENT) || (mode == NORMAL));
+    EhiLogger.getInstance().setTraceFilter((mode == SILENT) || (mode == NORMAL));
 }
 /**
  * Stop Tracer.
