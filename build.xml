@@ -24,7 +24,7 @@
   <target depends="init" name="compile">
     <!-- Compile the java code from ${src} into ${build}/classes -->
     <mkdir dir="${build}/classes"/>
-    <javac destdir="${build}/classes" includes="**/*.java" excludes="**/test/*.java">
+    <javac destdir="${build}/classes" includes="**/*.java" excludes="**/test/*.java"  debug="on"  source="1.4" target="1.4">
       <classpath>
         <pathelement location="lib/ehibasics.jar"/>
       </classpath>
@@ -77,9 +77,7 @@
   </target>
   
   <target name="clean">
-    <!-- Delete the ${build} and ${dist} directory trees -->
     <delete dir="${build}"/>
-    <delete dir="${dist}"/>
   </target>
 
 </project>
