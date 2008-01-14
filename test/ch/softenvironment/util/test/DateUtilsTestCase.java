@@ -7,7 +7,7 @@ import ch.softenvironment.util.DateUtils;
 
 /**
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2007-02-20 12:47:15 $
+ * @version $Revision: 1.3 $ $Date: 2008-01-14 21:54:14 $
  */
 public class DateUtilsTestCase extends junit.framework.TestCase {
     java.util.Date currentDate = null;
@@ -78,5 +78,16 @@ public void testFirstOfYear() {
     // use deprecated form to test
     java.util.Date now = new java.util.Date();
     assertTrue((new java.util.Date(now.getYear(), java.util.Calendar.JANUARY, 1)).getTime() == DateUtils.getFirstOfYear().getTime());
+}
+public void testInRange() {
+    java.util.Date date = new java.util.Date(2007, 3, 15);
+    assertTrue("no range", DateUtils.inRange(date, null, null));
+    assertTrue("greater", DateUtils.inRange(date, new java.util.Date(2007, 2, 15), null));
+    assertTrue("lesser", DateUtils.inRange(date, null, new java.util.Date(2007, 4, 15)));
+    assertTrue("in range", DateUtils.inRange(date, new java.util.Date(2007, 2, 15), new java.util.Date(2007, 4, 15)));
+    assertFalse("later", DateUtils.inRange(date, new java.util.Date(2007, 5, 15), new java.util.Date(2007, 6, 15)));
+    assertFalse("sooner", DateUtils.inRange(date, new java.util.Date(2007, 1, 15), new java.util.Date(2007, 2, 15)));
+    assertFalse("later", DateUtils.inRange(date, null, new java.util.Date(2007, 2, 15)));
+    assertFalse("sooner", DateUtils.inRange(date, new java.util.Date(2007, 4, 15), null));
 }
 }

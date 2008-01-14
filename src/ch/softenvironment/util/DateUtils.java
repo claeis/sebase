@@ -17,7 +17,7 @@ import java.util.Calendar;
 /**
  * Utilities for Date calculations.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2007-02-20 12:47:12 $
+ * @version $Revision: 1.8 $ $Date: 2008-01-14 21:54:14 $
  */
 public class DateUtils {
 /**
@@ -164,5 +164,29 @@ public static Integer getYear(java.util.Date date) {
 		cal.setTime(date);
 		return new Integer(cal.get(java.util.Calendar.YEAR));
 	}
+}
+/**
+ * Return whether given date is between from..to range.
+ * @param date
+ * @param from
+ * @param to
+ * @return
+ */
+public static boolean inRange(java.util.Date date, java.util.Date from, java.util.Date to) {    
+    if (date == null) {
+        throw new IllegalArgumentException("date must no be null");
+    }
+    
+    if (from != null) {
+        if (date.getTime() < from.getTime()) {
+            return false;
+        }
+    }
+    if (to != null) {
+        if (date.getTime() > to.getTime()) {
+            return false;
+        }
+    }
+    return true;
 }
 }
