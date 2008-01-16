@@ -22,7 +22,7 @@ import junit.framework.TestCase;
 /**
  * TestCase for  ViewManager
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2006-05-07 14:00:03 $
+ * @version $Revision: 1.2 $ $Date: 2008-01-16 17:19:36 $
  */
 public class ViewManagerTestCase extends TestCase {
     private ViewManager mgr = null;
@@ -31,14 +31,14 @@ public class ViewManagerTestCase extends TestCase {
     }
     public void testRights() {
         UserActionRights rights = mgr.getRights(ViewManager.class /*not a real model-class*/);
-        assertTrue("no rights defined at all => all rights expected!", rights.isChangeObjectAllowed() && rights.isNewObjectAllowed() && rights.isRemoveObjectsAllowed() && rights.isSaveObjectAllowed());
+        assertTrue("no rights defined at all => all rights expected!", rights.isReadObjectAllowed() && rights.isNewObjectAllowed() && rights.isRemoveObjectsAllowed() && rights.isSaveObjectAllowed());
         
         mgr.setRights(new UserActionRights(UserActionRights.READONLY));
         rights = mgr.getRights(ViewManager.class /*not a real model-class*/);
-        assertTrue("default RO", rights.isChangeObjectAllowed() && !rights.isNewObjectAllowed() && !rights.isRemoveObjectsAllowed() && !rights.isSaveObjectAllowed());
+        assertTrue("default RO", rights.isReadObjectAllowed() && !rights.isNewObjectAllowed() && !rights.isRemoveObjectsAllowed() && !rights.isSaveObjectAllowed());
         
         mgr.setRights(new UserActionRights(UserActionRights.NONE), ViewManager.class);
         rights = mgr.getRights(ViewManager.class /*not a real model-class*/);
-        assertTrue("overwirtes RO for specific model-class", !rights.isChangeObjectAllowed() && !rights.isNewObjectAllowed() && !rights.isRemoveObjectsAllowed() && !rights.isSaveObjectAllowed());
+        assertTrue("overwirtes RO for specific model-class", !rights.isReadObjectAllowed() && !rights.isNewObjectAllowed() && !rights.isRemoveObjectsAllowed() && !rights.isSaveObjectAllowed());
     }
 }

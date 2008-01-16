@@ -27,7 +27,7 @@ import ch.softenvironment.controller.DataBrowserListener;
  * - Inconsistency-list of current object
  * 
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.12 $ $Date: 2006-12-19 10:00:21 $
+ * @version $Revision: 1.13 $ $Date: 2008-01-16 17:18:51 $
  */
 public class ToolBar extends javax.swing.JToolBar implements DataBrowserListener {
 	private javax.swing.JButton ivjTbbCopy = null;
@@ -1362,7 +1362,7 @@ public void adaptRights(UserActionRights rights) {
         if (!rights.isNewObjectAllowed()) {
             remove(getTbbNew());
         }
-        if (!rights.isChangeObjectAllowed()) {
+        if (!rights.isReadObjectAllowed()) {
             remove(getTbbOpen());
             remove(getTbbFind());
         }
