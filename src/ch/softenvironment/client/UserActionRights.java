@@ -20,16 +20,17 @@ import ch.softenvironment.view.ListMenuChoice;
  * The defined rights match with User-Actions defined by
  * ListMenuChoice interface.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2006-06-29 22:24:57 $
+ * @version $Revision: 1.3 $ $Date: 2008-01-16 17:17:41 $
  * @see ListMenuChoice#adaptUserAction(java.util.EventObject, Object)
  */
 public class UserActionRights {
     public final static int NONE = 99;      // no rights at all
     public final static int ALL = 100;      // all rights
-    public final static int READONLY = 101; // changeable but not saveable
+    public final static int READONLY = 101; // visible but not saveable
+    public final static int CHANGE = 102;   // changeable and saveable
     
     private boolean newObjectAllowed = false;
-    private boolean changeObjectAllowed = false;
+    private boolean readObjectAllowed = false;
     private boolean removeObjectsAllowed = false;
     private boolean saveObjectAllowed = false;
     
@@ -37,11 +38,14 @@ public class UserActionRights {
         super();
         if (rights == ALL) {
             newObjectAllowed = true;
-            changeObjectAllowed = true;
+            readObjectAllowed = true;
             removeObjectsAllowed = true;
             saveObjectAllowed = true;
         } else if (rights == READONLY) {
-            changeObjectAllowed = true;  
+            readObjectAllowed = true; 
+        } else if (rights == CHANGE) {
+            readObjectAllowed = true;
+            saveObjectAllowed = true;
         } else if (rights != NONE) {
             throw new DeveloperException("Unknown rights");
         }
@@ -54,11 +58,11 @@ public class UserActionRights {
         return newObjectAllowed;
     }
     /**
-     * Allow reading of existings Model objects.
+     * Allow reading of existing Model objects.
      * @return
      */
-    public boolean isChangeObjectAllowed() {
-        return changeObjectAllowed;
+    public boolean isReadObjectAllowed() {
+        return readObjectAllowed;
     }
     /**
      * Allow removing of existing Model objects.
