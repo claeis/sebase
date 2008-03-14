@@ -19,27 +19,23 @@ import javax.swing.JTable;
 /**
  * Parser-Tool to parse comma separated files (*.CSV).
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.11 $ $Date: 2007-02-20 12:52:10 $
+ * @version $Revision: 1.12 $ $Date: 2008-03-14 20:10:44 $
  */
 public class ParserCSV {
-    public static final String DEFAULT_SEPARATOR = ";";
-    
-	private String line = null;
-	private String separator = null;
+    public static final char DEFAULT_SEPARATOR = ';'; // @see CsvSerializer#CELL_SEPARATOR
+    private char separator = DEFAULT_SEPARATOR;
+	private String line = null;	
 	private int lastIndex = -1;
 /**
  * ParserCSV constructor comment.
  * @param line (for e.g. "field1;field2;...")
  * @param separator (for e.g. ";")
  */
-public ParserCSV(String line, String separator) {
+public ParserCSV(String line, char separator) {
 	super();
     if (line == null) {
         throw new IllegalArgumentException("<line> must not be null");
-    }
-    if (separator == null) {
-        throw new IllegalArgumentException("<separator> must not be null");
-    }
+    } 
 	this.line = line;
 	this.separator = separator;
 }
@@ -48,7 +44,7 @@ public ParserCSV(String line, String separator) {
  * @param items
  * @return String
  */
-public static String arrayToString(java.util.List items, String separator) {
+public static String arrayToString(java.util.List items, char separator) {
 	String serializedList = "";
 	if (items == null) {
 		return serializedList;
@@ -113,7 +109,7 @@ public String getNextString() {
  * Replace separator in text (by means '\n' and ';' will be replaced by ',').
  * @deprecated (see CsvSerializer#encodeString() instead)
  */
-public static String maskSeparator(Object object, String sep) {
+public static String maskSeparator(Object object, char sep) {
 	if (object == null) {
 		return "";
 	}
@@ -125,10 +121,11 @@ public static String maskSeparator(Object object, String sep) {
 	} else {
 		text = object.toString();
 	}
+//TODO NewLine tested for Windows only!
 	text = text.replace('\n', replacement);
-	if (sep.equals(DEFAULT_SEPARATOR)) {
+	if (sep == DEFAULT_SEPARATOR) {
 //TODO mask other separators
-		return text.replace(';', replacement);
+		return text.replace(DEFAULT_SEPARATOR, replacement);
 	} else {
 	    Tracer.getInstance().developerWarning("non-default CSV-Separator <" + sep + "> not yet masked");
 	    return text;
@@ -212,7 +209,7 @@ public void skip(int nrOfFields) {
  * @param serializedList
  * @return java.util.List
  */
-public static java.util.List stringToArray(String serializedList, String separator) {
+public static java.util.List stringToArray(String serializedList, char separator) {
 	if (StringUtils.isNullOrEmpty(serializedList)) {
 		return new java.util.ArrayList();
 	} else {
@@ -238,7 +235,7 @@ public static java.util.List stringToArray(String serializedList, String separat
  * @param table
  * @param separator
  */
-public static void writeFile(PrintStream stream, final JTable table, final String separator) {
+public static void writeFile(PrintStream stream, final JTable table, final char separator) {
   	// header
 	int columnCount = table.getModel().getColumnCount();
 	for (int col=0; col<columnCount; col++) {

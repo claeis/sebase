@@ -24,7 +24,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * TemplateFrame defining minimal functionality.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.29 $ $Date: 2007-02-20 12:43:39 $
+ * @version $Revision: 1.30 $ $Date: 2008-03-14 20:10:44 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -137,22 +137,19 @@ public static String exceptionToString(Throwable exception) {
     return stringWriter.toString();
 }
 /**
- * @deprecated (use {@link #exportTableData(JTable, String)} instead)
- */
-protected final String exportTableData(final JTable table) {
-    return exportTableData(table, ParserCSV.DEFAULT_SEPARATOR);
-}
-/**
- * Convienience method to Export table-data into a file,
+ * Convienience method to Export table-data into a file *.csv,
  * where a Filechooser allows selecting File before.
  * The table data is exported in a generic manner,
- * say given table is exported 1:1 to CSV including
+ * say given table is exported 1:1 including
  * Header-Data.
+ * After saving the file will be opened by Excel or
+ * alternate spreadsheet application registered for
+ * *.csv ending.
  * @param table
  * @return Path of file saved
  * @see ParserCSV#writeFile()
  */
-protected final String exportTableData(final JTable table, final String separator) {
+protected final String exportTableData(final JTable table, final char separator) {
 	final FileChooser saveDialog =  new FileChooser(/*getSettings().getWorkingDirectory()*/);
 	saveDialog.setDialogTitle(CommonUserAccess.getMniFileSaveAsText());//$NON-NLS-1$
 	saveDialog.addChoosableFileFilter(ch.ehi.basics.view.GenericFileFilter.createCsvFilter());
@@ -177,6 +174,11 @@ protected final String exportTableData(final JTable table, final String separato
 			}
 		});
 		if ((saveDialog != null) && (saveDialog.getSelectedFile() != null)) {
+			try {
+				BrowserControl.displayURL(saveDialog.getSelectedFile().getAbsolutePath());
+			} catch(Throwable ex) {
+				Tracer.getInstance().runtimeWarning("could not open CSV by platform spreadshet application: " + ex.getLocalizedMessage());
+			}
 			return saveDialog.getSelectedFile().getAbsolutePath();
 		}
 	}

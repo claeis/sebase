@@ -7,10 +7,10 @@ import ch.softenvironment.util.ParserCSV;
 
 /**
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2007-02-20 12:52:07 $
+ * @version $Revision: 1.3 $ $Date: 2008-03-14 20:11:09 $
  */
 public class ParserCSVTestCase extends junit.framework.TestCase {
-    private static String sep = ";";
+    private static char sep = ';';
     /**
      * StringUtilsTestCase constructor comment.
      * @param name java.lang.String
@@ -80,20 +80,20 @@ public class ParserCSVTestCase extends junit.framework.TestCase {
         assertTrue("empty String", null == parser.getNextInteger());
     }
     public void testNextStringAndInteger() {
-        ParserCSV parser = new ParserCSV("Hello;12;World;13", ";");
+        ParserCSV parser = new ParserCSV("Hello;12;World;13", sep);
         assertTrue("Hello".equals(parser.getNextString()));
         assertTrue(12 == parser.getNextInteger().intValue());
         assertTrue("World".equals(parser.getNextString()));
         assertTrue(13 == parser.getNextInteger().intValue());
         
-        parser = new ParserCSV("Hello;12;World;13;", ";");
+        parser = new ParserCSV("Hello;12;World;13;", sep);
         assertTrue("Hello".equals(parser.getNextString()));
         assertTrue(12 == parser.getNextInteger().intValue());
         assertTrue("World".equals(parser.getNextString()));
         assertTrue(13 == parser.getNextInteger().intValue());
     }
     public void testSkip() {
-        ParserCSV parser = new ParserCSV("Hello;12;World;13", ";");
+        ParserCSV parser = new ParserCSV("Hello;12;World;13", sep);
         parser.skip(2);
         assertTrue("World".equals(parser.getNextString()));
         assertTrue(13 == parser.getNextInteger().intValue());
