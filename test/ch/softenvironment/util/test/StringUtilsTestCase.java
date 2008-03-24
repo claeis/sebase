@@ -5,7 +5,7 @@ import ch.softenvironment.util.StringUtils;
 
 /**
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2007-05-06 21:42:18 $
+ * @version $Revision: 1.7 $ $Date: 2008-03-24 16:51:55 $
  */
 public class StringUtilsTestCase extends junit.framework.TestCase {
 /**
@@ -108,5 +108,8 @@ public void testFirstLetterToUppercase() {
     assertTrue("StringUtils", "".equals(ch.softenvironment.util.StringUtils.firstLetterToUppercase("")));
     assertTrue("StringUtils", "  ".equals(ch.softenvironment.util.StringUtils.firstLetterToUppercase("  ")));
     assertTrue("StringUtils", null == ch.softenvironment.util.StringUtils.firstLetterToUppercase(null));
+}
+public void testConvertFileName() {
+	assertTrue("StringUtils", "m_y_F_le.txt".equals(ch.softenvironment.util.StringUtils.convertFileName("m:y/F\\le.txt", "_")));
 }
 }

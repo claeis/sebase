@@ -19,7 +19,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * Set of reusable String Utilities.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.10 $ $Date: 2007-05-06 21:42:18 $
+ * @version $Revision: 1.11 $ $Date: 2008-03-24 16:51:55 $
  */
 public abstract class StringUtils {
 
@@ -51,7 +51,8 @@ public static String getPureClassName(java.lang.Class type) {
 	return className.substring(index + 1, className.length());
 }
 /**
- * Return ClassName of given class without package path.
+ * Return only the Filename (by means strip off its path).
+ * For e.g. "C:\Temp\myFile.txt" => "myFile.txt"
  */
 public static String getPureFileName(String absolutePath) {
 	int index = absolutePath.lastIndexOf(File.separator);
@@ -206,5 +207,20 @@ public static String firstLetterToUppercase(String value) {
         buffer.replace(0, 1, buffer.substring(0, 1).toUpperCase());
         return buffer.toString();
     }
+}
+/**
+ * Make the given filename a real creatable filename
+ * in OS filesystem.
+ * (Some characters are not welcome, such as: ':', '/' etc)
+ * @param filename
+ * @param replacmenetSeparator
+ * @return
+ */
+public static String convertFileName(String filename, String replacmenetSeparator) {
+	// remove any kind of File-separator
+	String fn = StringUtils.replace(filename, ":", replacmenetSeparator);	
+	fn = StringUtils.replace(fn, "\\", replacmenetSeparator);
+	fn = StringUtils.replace(fn, "/", replacmenetSeparator);
+    return StringUtils.replace(fn, File.pathSeparator, replacmenetSeparator);	
 }
 }
