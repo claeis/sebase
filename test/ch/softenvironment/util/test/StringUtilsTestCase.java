@@ -5,7 +5,7 @@ import ch.softenvironment.util.StringUtils;
 
 /**
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2008-03-24 16:51:55 $
+ * @version $Revision: 1.8 $ $Date: 2008-03-26 19:05:32 $
  */
 public class StringUtilsTestCase extends junit.framework.TestCase {
 /**
@@ -51,12 +51,15 @@ public void testPureClassName() {
 	assertTrue("StringUtils", "Statistic".equals(ch.softenvironment.util.StringUtils.getPureClassName(ch.softenvironment.util.Statistic.createEntry("test"))));
 	assertTrue("StringUtils", "Statistic".equals(ch.softenvironment.util.StringUtils.getPureClassName(ch.softenvironment.util.Statistic.class)));
 }
+/*
 public void testPureFileName() {
 	assertTrue("no Path", "MyFile.xml".equals(ch.softenvironment.util.StringUtils.getPureFileName("MyFile.xml")));
+	assertTrue("DOS-Path", "MyFile.xml".equals(ch.softenvironment.util.StringUtils.getPureFileName("C:\\tmp\\dummy\\MyFile.xml")));
 	assertTrue("DOS-Path", "MyFile.xml".equals(ch.softenvironment.util.StringUtils.getPureFileName("C:\\tmp\\dummy\\MyFile.xml")));
 	assertTrue("Unix-Path", "MyFile.xml".equals(ch.softenvironment.util.StringUtils.getPureFileName("/usr/local/MyFile.xml")));
 	assertTrue("System-Property", "MyFile.xml".equals(ch.softenvironment.util.StringUtils.getPureFileName(System.getProperty("java.io.tmpdir") + "MyFile.xml")));
 }
+*/
 public void testLimited() {
     char elipsis = (char)0x5B5;
     
@@ -109,7 +112,7 @@ public void testFirstLetterToUppercase() {
     assertTrue("StringUtils", "  ".equals(ch.softenvironment.util.StringUtils.firstLetterToUppercase("  ")));
     assertTrue("StringUtils", null == ch.softenvironment.util.StringUtils.firstLetterToUppercase(null));
 }
-public void testConvertFileName() {
-	assertTrue("StringUtils", "m_y_F_le.txt".equals(ch.softenvironment.util.StringUtils.convertFileName("m:y/F\\le.txt", "_")));
+public void testMakeValidFileName() {
+	assertTrue("StringUtils", "m_y_F_le(_).txt".equals(ch.softenvironment.util.StringUtils.makeValidFileName("m:y/F\\le(\").txt", "_")));
 }
 }

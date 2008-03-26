@@ -19,7 +19,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * Set of reusable String Utilities.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.11 $ $Date: 2008-03-24 16:51:55 $
+ * @version $Revision: 1.12 $ $Date: 2008-03-26 19:05:31 $
  */
 public abstract class StringUtils {
 
@@ -49,21 +49,6 @@ public static String getPureClassName(java.lang.Class type) {
 	String className = type.getName();
 	int index = className.lastIndexOf('.');
 	return className.substring(index + 1, className.length());
-}
-/**
- * Return only the Filename (by means strip off its path).
- * For e.g. "C:\Temp\myFile.txt" => "myFile.txt"
- */
-public static String getPureFileName(String absolutePath) {
-	int index = absolutePath.lastIndexOf(File.separator);
-	// 1) strip expected Path-separator
-	String tmp = absolutePath.substring(index + 1, absolutePath.length());
-	// 2) strip evtl. hardcoded DOS-separator on Unix-Plattforms
-	index = tmp.lastIndexOf("\\");
-	tmp = tmp.substring(index + 1, tmp.length());
-	// 3) strip evtl. hardcoded Unix-separator on DOS-Plattforms
-	index = tmp.lastIndexOf("/");
-	return tmp.substring(index + 1, tmp.length());
 }
 /**
  * Return ClassName of an Instance without package path.
@@ -216,9 +201,10 @@ public static String firstLetterToUppercase(String value) {
  * @param replacmenetSeparator
  * @return
  */
-public static String convertFileName(String filename, String replacmenetSeparator) {
-	// remove any kind of File-separator
+public static String makeValidFileName(String filename, String replacmenetSeparator) {
+	// remove any kind of File-separator that would spoil the meant structure
 	String fn = StringUtils.replace(filename, ":", replacmenetSeparator);	
+	fn = StringUtils.replace(fn, "\"", replacmenetSeparator); 
 	fn = StringUtils.replace(fn, "\\", replacmenetSeparator);
 	fn = StringUtils.replace(fn, "/", replacmenetSeparator);
     return StringUtils.replace(fn, File.pathSeparator, replacmenetSeparator);	
