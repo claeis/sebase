@@ -15,7 +15,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * Product Info Dialog.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2007-02-20 12:35:58 $
+ * @version $Revision: 1.7 $ $Date: 2008-04-08 10:01:44 $
  */
 public class AboutDialog extends BaseDialog {
 	private javax.swing.JPanel ivjBaseDialogContentPane = null;
@@ -31,16 +31,6 @@ public class AboutDialog extends BaseDialog {
 	private javax.swing.JPanel ivjPnlProduct = null;
 	private javax.swing.JTabbedPane ivjTbpMain = null;
 	private javax.swing.JTextArea ivjTxaOSS = null;
-/**
- * Constructor
- * @param owner Symbol
- * @param modal Symbol
- */
-/* WARNING: THIS METHOD WILL BE REGENERATED. */
-public AboutDialog(java.awt.Component owner, boolean modal) {
-	super(owner, modal);
-	initialize();
-}
 /**
  * AboutDialog constructor comment.
  * @param owner java.awt.Frame
@@ -60,16 +50,6 @@ public AboutDialog(java.awt.Frame owner, String application, String version, Str
     getTxaOSS().setText("- http://sourceforge.net/projects/umleditor" + "\n" +
             "- http://sourceforge.net/projects/jomm");
 	show();
-}
-/**
- * Constructor
- * @param owner Symbol
- * @param modal Symbol
- */
-/* WARNING: THIS METHOD WILL BE REGENERATED. */
-public AboutDialog(java.awt.Frame owner, boolean modal) {
-	super(owner, modal);
-	initialize();
 }
 /**
  * Return the BaseDialogContentPane property value.

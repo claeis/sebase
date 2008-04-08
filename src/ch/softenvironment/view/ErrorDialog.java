@@ -15,7 +15,7 @@ package ch.softenvironment.view;
 /**
  * Output Dialog for application failures.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2005-06-10 16:13:16 $
+ * @version $Revision: 1.8 $ $Date: 2008-04-08 10:01:44 $
  * @deprecated
  */
 class ErrorDialog extends BaseDialog {
@@ -46,7 +46,11 @@ class IvjEventHandler implements java.awt.event.ActionListener {
 /**
  * Create and open ErrorDialog modally.
  */
-protected ErrorDialog(java.awt.Component owner, String title, String message, Throwable original) {
+protected ErrorDialog(java.awt.Dialog owner, String title, String message, Throwable original) {
+	super(owner, true);
+	setUp(owner, title, message, original);
+}
+protected ErrorDialog(java.awt.Frame owner, String title, String message, Throwable original) {
 	super(owner, true);
 	setUp(owner, title, message, original);
 }

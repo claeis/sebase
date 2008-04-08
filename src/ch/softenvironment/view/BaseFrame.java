@@ -24,7 +24,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * TemplateFrame defining minimal functionality.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.30 $ $Date: 2008-03-14 20:10:44 $
+ * @version $Revision: 1.31 $ $Date: 2008-04-08 10:01:44 $
  */
 public abstract class BaseFrame extends javax.swing.JFrame {
 	// Relative Offset to Child Window
@@ -364,7 +364,7 @@ public void setVisible(boolean visible) {
 /**
  * @see WaitDialog#showBusy()
  */
-protected final void showBusy(final Runnable block) {
+public final void showBusy(final Runnable block) {
 	WaitDialog.showBusy(this, block);
 }
 /**
@@ -457,12 +457,6 @@ protected final static void showSplashScreen(Dimension preferredWindowSize, Imag
 	} catch (Throwable e) {
 		Tracer.getInstance().runtimeWarning("<image=" + image + ">)" + e.getLocalizedMessage());
 	}
-}
-/**
- * @see WaitDialog#updateProgress()
- */
-protected final void showProgress(final int percentage, final String currentActivity) {
-	WaitDialog.updateProgress(percentage, currentActivity);
 }
 /**
  * Reset GUI-Components NLS-Strings, such as Component-text 

@@ -19,7 +19,7 @@ import ch.softenvironment.util.Tracer;
  * Wait-Dialog for busy actions.
  * Design Pattern: Singleton
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.10 $ $Date: 2007-02-20 12:43:39 $
+ * @version $Revision: 1.11 $ $Date: 2008-04-08 10:01:44 $
  * @see BaseFrame#showBusy()
  */
 public class WaitDialog extends BaseDialog {
@@ -41,7 +41,7 @@ public class WaitDialog extends BaseDialog {
  * @param owner java.awt.Frame
  * @param modal boolean
  */
-private WaitDialog(java.awt.Component owner, String title) {
+private WaitDialog(java.awt.Frame owner, String title) {
 	super(owner,
 //	        title,
 			false /* otherwise will not terminate */);
@@ -197,7 +197,10 @@ private void initialize() {
  * @param block	executable Block that might take a while
  * @see #updateProgress(..)
  */
-public static void showBusy(final java.awt.Component owner, final Runnable block) {
+public static void showBusy(final java.awt.Frame owner, final Runnable block) {
+	if (owner == null) {
+		Tracer.getInstance().developerWarning("WaitDialog suppressed because owner unknown!");
+	}
     if (++waitCounter == 1) {
 	    		// show ONE WaitDialog only
 	    		try {
@@ -262,7 +265,7 @@ waitDialog.paint(waitDialog.getGraphics());
  * @param block	executable Block to fork that might take a while
  * @see #updateProgressThread(..)
  */
-public static void showBusyThread(final java.awt.Component owner, final Runnable block) {
+public static void showBusyThread(final java.awt.Frame owner, final Runnable block) {
     if (++waitCounterThread == 1) {
 		// show ONE WaitDialog only
 		try {
@@ -326,7 +329,7 @@ public static void updateProgress(final int percentage, final String currentActi
 //TODO Tune!!!
 //	javax.swing.SwingUtilities.invokeLater(new Runnable() {
 //		public void run() {
-			try {
+			try {				
 				waitDialog.getPrgBar().setVisible(true);
 				if (percentage > 0) {
 				    waitDialog.getPrgBar().setValue(percentage);
@@ -339,9 +342,12 @@ public static void updateProgress(final int percentage, final String currentActi
 				}
 waitDialog.paint(waitDialog.getGraphics()); // force refresh
 				//waitDialog.toFront();
-			} catch(Throwable e) {
+			} catch(NullPointerException ex) {
+				// no waitDialog probably
+				Tracer.getInstance().developerWarning("IGNORE: use #showBusy() first: %=" + percentage + " activity: " + currentActivity);
+			} catch(Throwable e) {			
 			    // waitDialog could be closed before Update is made
-				Tracer.getInstance().developerWarning("Ignoring: " + e.getLocalizedMessage());
+				Tracer.getInstance().developerWarning("IGNORE: " + e.getLocalizedMessage());
 			}
 //		}
 //	});

@@ -27,7 +27,7 @@ import ch.softenvironment.controller.DataBrowserListener;
  * - Inconsistency-list of current object
  * 
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.13 $ $Date: 2008-01-16 17:18:51 $
+ * @version $Revision: 1.14 $ $Date: 2008-04-08 10:01:44 $
  */
 public class ToolBar extends javax.swing.JToolBar implements DataBrowserListener {
 	private javax.swing.JButton ivjTbbCopy = null;
@@ -1197,7 +1197,7 @@ public void removeToolBarListener(ch.softenvironment.view.ToolBarListener newLis
  * @see DataBrowserListener#setCurrentObject(Object)
  */
 public void setCurrentObject(final java.lang.Object currentObject) {
-    WaitDialog.showBusy(this, new Runnable() {
+    WaitDialog.showBusy(BaseDialog.getFrameOwner(getParent()), new Runnable() {
         public void run() {
             treatNextPreviousButtons();
             
