@@ -15,7 +15,7 @@ package ch.softenvironment.view;
 /**
  * Output Dialog for application failures.
  * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.8 $ $Date: 2008-04-08 10:01:44 $
+ * @version $Revision: 1.9 $ $Date: 2008-04-18 18:40:22 $
  * @deprecated
  */
 class ErrorDialog extends BaseDialog {
@@ -418,6 +418,7 @@ private void initialize() {
 		handleException(ivjExc);
 	}
 	// user code begin {2}
+	setSize(600, 250);
 	getPnlErrorText().setEditable(false);
 	getPnlException().setEditable(false);
 	// user code end
