@@ -6,7 +6,7 @@ import junit.framework.TestCase;
 /**
  * TestCase for MathUtils.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2007-02-20 12:57:45 $
+ * @version $Revision: 1.4 $ $Date: 2008-04-18 18:45:44 $
  */
 public class MathUtilsTestCase extends TestCase {
     /**
@@ -52,6 +52,10 @@ public class MathUtilsTestCase extends TestCase {
         assertTrue("round(double)", MathUtils.round(12345.403, 2) == 12345.40);
         assertTrue("round(double)", MathUtils.round(12345.9, 2) == 12345.9);
         assertTrue("round(double)", MathUtils.round(0.0, 2) == 0.0);
+        assertTrue("round(double)", MathUtils.round(1.23, 2) == 1.23);
+        assertTrue("round(double)", MathUtils.round(1.24, 2) == 1.24);
+        assertTrue("round(double)", MathUtils.round(1.25, 2) == 1.25);
+        assertTrue("round(double)", MathUtils.round(1.26, 2) == 1.26);        
     }
     public void testCompare() {
         double left = 0.0;

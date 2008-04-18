@@ -19,13 +19,12 @@ import ch.softenvironment.math.MathUtils;
  * Format a number to look like a financial value 
  * but without the currency itself.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.9 $ $Date: 2007-06-16 14:03:10 $
+ * @version $Revision: 1.10 $ $Date: 2008-04-18 18:43:59 $
  */
 public class AmountFormat extends java.text.DecimalFormat {
     private static int FRACTION_DIGITS = 2;
     /**
      * @see #getAmountInstance(Locale)
-     * @deprecated (nasty)
      */
     public static java.text.NumberFormat getAmountInstance() {
         return getAmountInstance(Locale.getDefault());

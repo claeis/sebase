@@ -19,7 +19,7 @@ package ch.softenvironment.view;
  * - undefined
  *
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.8 $ $Date: 2007-09-18 12:36:15 $
+ * @version $Revision: 1.9 $ $Date: 2008-04-18 18:43:59 $
  */
 public class TriStatePanel extends BasePanel {
 	private static String ACTION_ALL = "ALL";
@@ -330,5 +330,13 @@ public void setEnabled(boolean enabled) {
     getRbtAll().setEnabled(enabled);
     getRbtTrue().setEnabled(enabled);
     getRbtFalse().setEnabled(enabled);
+}
+/**
+ * Show whether "All" option is available or not.
+ * Default is true => show All button.
+ * @param triState
+ */
+public void showTriState(boolean triState) {
+	getRbtAll().setVisible(triState);
 }
 }

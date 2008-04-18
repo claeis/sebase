@@ -70,6 +70,18 @@ public class MathUtils {
         }
     }
     /**
+     * @see java.lang.Math#abs(double)
+     * @param value
+     * @return
+     */
+    public final static Double abs(Double value) {
+        if (value == null) {
+             return null;
+        } else {
+            return new Double(java.lang.Math.abs(value.doubleValue()));
+        }
+    }
+    /**
      * Cut the fraction part to accuracy length, for e.g.
      * fix(12.876, 2) => 12.87
      * @param value

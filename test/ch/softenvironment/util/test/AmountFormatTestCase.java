@@ -16,7 +16,7 @@ import java.util.Locale;
 import ch.softenvironment.util.AmountFormat;
 /**
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2007-06-16 14:00:18 $
+ * @version $Revision: 1.4 $ $Date: 2008-04-18 18:45:44 $
  */
 public class AmountFormatTestCase extends junit.framework.TestCase {
 /**
@@ -36,6 +36,8 @@ public void testFormat() {
     assertTrue("toString(Double)", af.format(new Double(1343492.3422)).equals("1'343'492.34"));
     assertTrue("toString(long)", af.format((long)1343492).equals("1'343'492.00"));
     assertTrue("toString(Long)", af.format(new Long(1343492)).equals("1'343'492.00"));
+    assertTrue("toString(Double)", af.format(new Double(1343492.3472)).equals("1'343'492.35"));
+    assertTrue("toString(Double)", af.format(new Double(1343492.367822)).equals("1'343'492.37"));
 
     af = AmountFormat.getAmountInstance(new Locale("de", "CH"));
 //  assertTrue("format(null) => Exception", af.format(null).equals(""));

@@ -4,13 +4,14 @@ import java.awt.BorderLayout;
 import ch.softenvironment.util.DeveloperException;
 import ch.softenvironment.util.Tracer;
 import ch.softenvironment.view.BaseFrame;
+import ch.softenvironment.view.WaitDialog;
 
 
 import javax.swing.JButton;
 /**
  * Test class BaseFrame.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2007-02-20 12:59:55 $
+ * @version $Revision: 1.5 $ $Date: 2008-04-18 18:45:44 $
  */
 public class BaseFrameTestCase extends BaseFrame {
 
@@ -156,12 +157,12 @@ public class BaseFrameTestCase extends BaseFrame {
 	            doLongAction(recursionLevel);
 	        }
 	        Tracer.getInstance().debug("level=" + recursionLevel + " going to sleep 1s");
-	        showProgress(20, "level=" + recursionLevel + " going to sleep 1s");
+	        WaitDialog.updateProgress(20, "level=" + recursionLevel + " going to sleep 1s");
 	    	Thread.sleep(1000);
 	    	Tracer.getInstance().debug("level=" + recursionLevel + " going to sleep 3s");
-	    	showProgress(50, "level=" + recursionLevel + " going to sleep 3s");
+	    	WaitDialog.updateProgress(50, "level=" + recursionLevel + " going to sleep 3s");
 	    	Thread.sleep(3000);
-	    	showProgress(95, "level=" + recursionLevel + " done");
+	    	WaitDialog.updateProgress(95, "level=" + recursionLevel + " done");
 	    } catch(Throwable e) {
 	        Tracer.getInstance().runtimeError("sleep failed", e);
 	    }
