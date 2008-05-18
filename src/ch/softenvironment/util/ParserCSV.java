@@ -19,7 +19,7 @@ import javax.swing.JTable;
 /**
  * Parser-Tool to parse comma separated files (*.CSV).
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.12 $ $Date: 2008-03-14 20:10:44 $
+ * @version $Revision: 1.13 $ $Date: 2008-05-18 11:08:28 $
  */
 public class ParserCSV {
     public static final char DEFAULT_SEPARATOR = ';'; // @see CsvSerializer#CELL_SEPARATOR
@@ -106,6 +106,22 @@ public String getNextString() {
 	return result.trim();
 }
 /**
+ * Return next Boolean value.
+ * @return
+ */
+public Boolean getNextBoolean() {
+	String value = getNextString();
+	if (!StringUtils.isNullOrEmpty(value)) {
+		value = value.trim().toUpperCase();
+		if (value.equals("TRUE") || value.equals("YES") || value.equals("Y") || value.equals("1")) {
+			return Boolean.TRUE;
+		} else if (value.equals("FALSE") || value.equals("NO") || value.equals("N") || value.equals("0")) {
+			return Boolean.FALSE;
+		}
+	}
+	return null;
+}
+/**
  * Replace separator in text (by means '\n' and ';' will be replaced by ',').
  * @deprecated (see CsvSerializer#encodeString() instead)
  */
@@ -139,7 +155,7 @@ public static String maskSeparator(Object object, char sep) {
  * @param separator
  * @return list of lines
  */
-public static java.util.List readFile(InputStream stream, String separator) {
+public static java.util.List readFile(InputStream stream, char separator) {
 	java.util.List arrayList = new java.util.ArrayList();
 	BufferedReader inFile = new BufferedReader(new InputStreamReader(stream));
 

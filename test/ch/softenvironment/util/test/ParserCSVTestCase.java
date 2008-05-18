@@ -7,7 +7,7 @@ import ch.softenvironment.util.ParserCSV;
 
 /**
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2008-03-14 20:11:09 $
+ * @version $Revision: 1.4 $ $Date: 2008-05-18 11:08:23 $
  */
 public class ParserCSVTestCase extends junit.framework.TestCase {
     private static char sep = ';';
@@ -91,6 +91,22 @@ public class ParserCSVTestCase extends junit.framework.TestCase {
         assertTrue(12 == parser.getNextInteger().intValue());
         assertTrue("World".equals(parser.getNextString()));
         assertTrue(13 == parser.getNextInteger().intValue());
+    }
+    public void testNextBoolean() {
+        ParserCSV parser = new ParserCSV("", sep);
+        assertTrue("empty String", null == parser.getNextBoolean());
+        parser = new ParserCSV("true;", sep);
+        assertTrue(Boolean.TRUE == parser.getNextBoolean());
+        parser = new ParserCSV("Yes;", sep);
+        assertTrue(Boolean.TRUE == parser.getNextBoolean());
+        parser = new ParserCSV("Y;", sep);
+        assertTrue(Boolean.TRUE == parser.getNextBoolean());
+        parser = new ParserCSV("false;", sep);
+        assertTrue(Boolean.FALSE == parser.getNextBoolean());
+        parser = new ParserCSV("No;", sep);
+        assertTrue(Boolean.FALSE == parser.getNextBoolean());
+        parser = new ParserCSV("N;", sep);
+        assertTrue(Boolean.FALSE == parser.getNextBoolean());
     }
     public void testSkip() {
         ParserCSV parser = new ParserCSV("Hello;12;World;13", sep);
