@@ -19,10 +19,13 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * Set of reusable String Utilities.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.12 $ $Date: 2008-03-26 19:05:31 $
+ * @version $Revision: 1.13 $ $Date: 2008-05-18 11:11:52 $
  */
 public abstract class StringUtils {
-
+	// @see java.nio.charset.Charset
+	public static final String CHARSET_UTF8 = "UTF-8";
+	public static final String CHARSET_ISO_8859_1 = "ISO-8859-1";
+	
 /**
  * Return PackageName of given class.
  */

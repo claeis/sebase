@@ -12,11 +12,14 @@ package ch.softenvironment.client;
  * Lesser General Public License for more details.
  */
 
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ch.softenvironment.util.DeveloperException;
+import ch.softenvironment.util.StringUtils;
+import ch.softenvironment.util.Tracer;
 
 /**
  * Manage a Map of Resources, resp *.properties for different Classes 
@@ -26,13 +29,13 @@ import ch.softenvironment.util.DeveloperException;
  * the mapped *.properties files are cached during runtime.
  * 
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.9 $ $Date: 2007-05-31 14:00:01 $
+ * @version $Revision: 1.10 $ $Date: 2008-05-18 11:11:53 $
  */
 public class ResourceManager {
     private static final String ELIPSIS = "...";
 	private static ResourceManager manager = null;
 	private Map resources = new HashMap();
-	private Locale currentLocale = null;
+	private String encoding = null;
 	/**
 	 * Return an application wide ResourceManager.
 	 * Design Pattern: Singleton.
@@ -82,7 +85,29 @@ public class ResourceManager {
 	    if (bundle == null) {
 	        throw new DeveloperException("no bundle for holder=" + holder.getName());
 	    }
-		return bundle.getString(propertyName);
+		String valueRaw = bundle.getString(propertyName);
+		if (encoding != null) {
+			try {				
+				return new String(valueRaw.getBytes(StringUtils.CHARSET_ISO_8859_1), encoding);
+			} catch(UnsupportedEncodingException ex) {
+				Tracer.getInstance().runtimeWarning("encoding failed: " + ex.getLocalizedMessage());			
+			}
+		}
+		return valueRaw;
+	}
+	/**
+	 * Set the *.properties resource files encoding.
+	 * java.util.PropertyResourceBundle of JDK support ISO-8859-1 only!
+	 * 
+	 * Windows default: CP-1252
+	 * Unix/Linux default: ISO-8859-1
+	 * eclipse default: ISO-8859-1 (configurable)
+	 * 
+	 * @param encoding for e.g. "UTF-8"
+	 * @see #getResource(Class, Locale, String, ClassLoader)
+	 */
+	public static void setCharacterSet(final String encoding) {
+		getInstance().encoding = encoding;
 	}
 	/**
 	 * Return cached bundle or instantiate it otherwise.
@@ -91,14 +116,7 @@ public class ResourceManager {
 	 * @param loader
 	 * @return
 	 */
-	private java.util.ResourceBundle getBundle(Class holder, Locale locale, ClassLoader loader) {
-/*        
-		if (!locale.equals(currentLocale)) {
-			// reset cached resources
-			resources = new HashMap();
-			currentLocale = locale;
-		}
-*/        
+	private java.util.ResourceBundle getBundle(Class holder, Locale locale, ClassLoader loader) {       
         java.util.Map languages = null;
         if (resources.containsKey(locale.getLanguage())) {
             languages = (java.util.Map)resources.get(locale.getLanguage());
