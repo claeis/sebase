@@ -28,11 +28,11 @@ import ch.softenvironment.util.Tracer;
  * Manage the Application Settings by Properties file.
  *
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2007-06-16 14:10:52 $
+ * @version $Revision: 1.8 $ $Date: 2008-05-18 11:14:21 $
  */
 public class ApplicationOptions extends java.util.Properties implements UserSettings {
 	// values for Key-Values
-	private final static String SEPARATOR = ";";
+	private final static char SEPARATOR = ';'; // @see CsvSerializer#CELL_SEPARATOR
 	protected final static String HOME_DIRECTORY = "user.home";
 
 	// Property Keys (non-NLS)
@@ -438,12 +438,15 @@ private transient Locale plattformLocale = null;
  * @see UserSettings#setPlattformLocale(Locale)
  */
 protected final void setPlattformLocale(Locale locale) {
-    plattformLocale = locale;
-    Tracer.getInstance().debug("Plattform Locale: " + (locale == null ? "null" : locale.toString()));
+	if (locale == null) {
+		throw new IllegalArgumentException("locale must not be null!");
+	}
+	plattformLocale = locale;
+    Tracer.getInstance().debug("Platform Locale: " + (locale == null ? "null" : locale.toString()));
 }
 /**
  * In multi-language applications the change of the default locale because of the
- * language only might also influence other plattform settings badly (such as NumberFormat for e.g.).
+ * language only might also influence other platform settings badly (such as NumberFormat for e.g.).
  * 
  * This field allows temporary keeping the operating systems default region
  * for reuse in any number-formats.
