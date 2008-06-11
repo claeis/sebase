@@ -31,7 +31,7 @@ import ch.softenvironment.util.Tracer;
  *
  * Windows apps, and almost none do this (since by default dialogs don't have icons).
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.16 $ $Date: 2008-04-08 10:01:44 $
+ * @version $Revision: 1.17 $ $Date: 2008-06-11 05:30:19 $
  */
 public abstract class BaseDialog extends javax.swing.JDialog {
 	private javax.swing.JPanel ivjJDialogContentPane = null;
@@ -55,7 +55,7 @@ public abstract class BaseDialog extends javax.swing.JDialog {
 	 */
 	private BaseDialog(Component owner, boolean modal, ViewOptions viewOptions) {
 		super(getFrameOwner(owner) /* instanceof Frame ? (Frame)getOwner(owner) : (Dialog)getOwner(owner)*/, modal);
-		setup(owner, viewOptions);
+		setup(getFrameOwner(owner), viewOptions);
 	}
 	public BaseDialog(Frame owner, boolean modal, ViewOptions viewOptions) {
 		super(owner, modal);
