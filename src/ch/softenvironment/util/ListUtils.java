@@ -13,13 +13,15 @@ package ch.softenvironment.util;
  */
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Set;
 
 /**
  * Provides some often used features in using java.util.List.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2007-03-06 13:00:27 $
+ * @version $Revision: 1.5 $ $Date: 2008-06-11 08:21:46 $
  */
 public abstract class ListUtils {
     /**
@@ -135,6 +137,24 @@ public static java.util.List sort(java.util.List items, Evaluator evaluator, fin
     // sort list
     java.util.Collections.sort(list, new ObjectPropertyComparator(evaluator, property));
     return list;
+}
+/**
+ * Remove duplicate elements in given list according to equal property value of list-elements.
+ * @param list
+ * @param property
+ */
+public static void eliminateDuplicates(java.util.List list, final String property) throws Throwable {
+	Set set = new HashSet();
+	Iterator it = list.iterator();
+	while (it.hasNext()) {
+		Object obj = it.next();
+		Object value = (new BeanReflector(obj, property)).getValue();
+		if (set.contains(value)) {
+			it.remove();
+		} else {
+			set.add(value);
+		}
+	}
 }
 /**
  * Convert elements of the list to a String expression by given method,

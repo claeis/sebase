@@ -20,10 +20,14 @@ import junit.framework.TestCase;
 /**
  * TestCase for ListUtils.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2007-02-20 12:49:15 $
+ * @version $Revision: 1.2 $ $Date: 2008-06-11 08:21:46 $
  */
 public class ListUtilsTestCase extends TestCase {
     public static class ListObject {
+    	protected Long id;
+    	public Long getId() {
+    		return id;
+    	}
         public String getMyToString() {
             return "sample";
         }
@@ -69,5 +73,30 @@ public class ListUtilsTestCase extends TestCase {
         set1.add("45");
         result = ListUtils.createIntersection(set0, set1);
         assertTrue("different types", result.size() == 0);
+    }
+    public void testEliminateDuplicates() {   
+    	try {
+	    	java.util.List list = new java.util.ArrayList();
+	    	ListUtils.eliminateDuplicates(list, "Id");
+	    	assertTrue("empty", list.size() == 0);
+	    	
+	    	ListObject lo = new ListObject();
+	    	lo.id = new Long(12);
+	    	list.add(lo);
+	    	ListUtils.eliminateDuplicates(list, "Id");
+	    	assertTrue("no elimination", list.size() == 1);
+	    	
+	    	lo = new ListObject();
+	    	lo.id = new Long(13);
+	    	list.add(lo);
+	    	ListUtils.eliminateDuplicates(list, "Id");
+	    	assertTrue("no elimination", list.size() == 2);
+	    	
+	    	list.add(lo);
+	    	ListUtils.eliminateDuplicates(list, "Id");
+	    	assertTrue("real elimination", list.size() == 2);
+    	} catch(Throwable ex) {
+    		fail(ex.getLocalizedMessage());
+    	}
     }
 }
