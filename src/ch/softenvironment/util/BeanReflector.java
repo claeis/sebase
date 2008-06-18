@@ -21,9 +21,10 @@ package ch.softenvironment.util;
  *   -> MyObject#getMyProperty()			// the getter-Method
  *
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.12 $ $Date: 2007-02-20 12:59:06 $
+ * @version $Revision: 1.13 $ $Date: 2008-06-18 06:16:15 $
  */
-public class BeanReflector extends java.util.EventObject {
+public class BeanReflector {
+	private transient Object source = null;
 	private transient String property = null;
 
 	public static final int NONE = 0;
@@ -57,8 +58,23 @@ public class BeanReflector extends java.util.EventObject {
  *  }
  */
 public BeanReflector(Object source, String property) {
-	super(source);
+	this.source = source;
 	this.property = convertPropertyName(property);
+}
+public Object getSource() {
+	return source;
+}
+/**
+ * Return the Property-Name.
+ */
+public String getProperty() {
+	return property;
+}
+/**
+ * Transform .
+ */
+protected String getPropertyUpper() {
+    return StringUtils.firstLetterToUppercase(property);
 }
 /**
  * Return the Field for given Property-Name.
@@ -76,18 +92,6 @@ public java.lang.reflect.Field getField() {
 private java.lang.reflect.Method getGetterMethod() throws NoSuchMethodException {
 	Class parameterTypes[] = {};
  	return getSource().getClass().getMethod("get" + getPropertyUpper(), parameterTypes);
-}
-/**
- * Return the Property-Name.
- */
-public String getProperty() {
-	return property;
-}
-/**
- * Transform .
- */
-protected String getPropertyUpper() {
-    return StringUtils.firstLetterToUppercase(property);
 }
 /**
  * Return the setter-Method for given Object and Property.
