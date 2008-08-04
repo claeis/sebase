@@ -19,12 +19,12 @@ package ch.softenvironment.math;
  * Utility to calculate financial matters
  * 
  * @author Peter Hirzel <i>soft</i>Environment 
- * @version $Revision: 1.1 $ $Date: 2006-05-07 14:48:35 $
+ * @version $Revision: 1.2 $ $Date: 2008-08-04 20:32:11 $
  */
 public class FinancialUtils {
     /**
      * Calc interest for given Capital according to the following formula:
-     *  Interest-Amount = (Capital * InterestRate * Time) / 100  [where: Time=1 Year]
+     * Interest-Amount = (Capital * InterestRate * Time) / 100  [where: Time=1 Year]
      * @param capital
      * @return interest of capital for a year
      */
@@ -47,14 +47,16 @@ public class FinancialUtils {
      * und Schrottwert abgeschrieben.
      * Der Abschreibungswert wird mit der folgenden Formel berechnet: 
      *     Konstanter Abschreibungswert = Anschaffungswert / Nutzungsdauer
+     * @param duration (de: Nutzungdauer)
+     * @param timeOfInterest (same UNIT as duration, for e.g. month or year)
      * @param capital
-     * @return Buchwert resp. Restwert im Jahr(yearOfInterest)
+     * @return (de: Buchwert resp. Restwert im Jahr(timeOfInterest))
      */
-    public static double calcDepreciationLinear(double capital, int durationYears, int yearOfInterest) {
-        double r = capital / ((double)durationYears); // Abschreibungsbetrag
-        double value = capital - yearOfInterest * r;  // Wert nach Abschreibung
+    public static double calcDepreciationLinear(double capital, int duration, int timeOfInterest) {
+        double r = capital / ((double)duration); // Abschreibungsbetrag
+        double value = capital - timeOfInterest * r;  // Wert nach Abschreibung
         if (value < 0.0) {
-            return 0.0;
+            return 0.0; 	//TODO evtl. 1.0 ???
         } else {
             return value;
         }

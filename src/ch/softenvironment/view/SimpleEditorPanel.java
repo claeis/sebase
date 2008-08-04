@@ -18,7 +18,7 @@ import ch.softenvironment.client.ResourceManager;
 /**
  * Provide a simple editor Area with minimal functionality.
  * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.9 $ $Date: 2007-06-16 13:56:27 $
+ * @version $Revision: 1.10 $ $Date: 2008-08-04 20:32:34 $
  */
 public class SimpleEditorPanel extends javax.swing.JPanel {
 	private boolean hasContentsChanged = false;
@@ -406,7 +406,7 @@ private javax.swing.JMenuItem getMniCopy() {
 			ivjMniCopy.setText("Kopieren");
 			ivjMniCopy.setEnabled(false);
 			// user code begin {1}
-			ivjMniCopy.setText(ResourceManager.getResource(SimpleEditorPanel.class, "MniCopy_text"));
+			ivjMniCopy.setText(ResourceManager.getResource(CommonUserAccess.class, "MniEditCopy_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -429,7 +429,7 @@ private javax.swing.JMenuItem getMniCut() {
 			ivjMniCut.setText("Ausschneiden");
 			ivjMniCut.setEnabled(false);
 			// user code begin {1}
-			ivjMniCut.setText(ResourceManager.getResource(SimpleEditorPanel.class, "MniCut_text"));
+			ivjMniCut.setText(ResourceManager.getResource(CommonUserAccess.class, "MniEditCut_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -452,7 +452,7 @@ private javax.swing.JMenuItem getMniDelete() {
 			ivjMniDelete.setText("Löschen");
 			ivjMniDelete.setEnabled(false);
 			// user code begin {1}
-			ivjMniDelete.setText(ResourceManager.getResource(SimpleEditorPanel.class, "MniDelete_text"));
+			ivjMniDelete.setText(ResourceManager.getResource(CommonUserAccess.class, "MniEditRemove_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -475,7 +475,7 @@ private javax.swing.JMenuItem getMniPaste() {
 			ivjMniPaste.setText("Einfügen");
 			ivjMniPaste.setEnabled(false);
 			// user code begin {1}
-			ivjMniPaste.setText(ResourceManager.getResource(SimpleEditorPanel.class, "MniPaste_text"));
+			ivjMniPaste.setText(ResourceManager.getResource(CommonUserAccess.class, "MniEditPaste_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -498,7 +498,7 @@ private javax.swing.JMenuItem getMniRedo() {
 			ivjMniRedo.setText("Wiederherstellen");
 			ivjMniRedo.setEnabled(false);
 			// user code begin {1}
-			ivjMniRedo.setText(ResourceManager.getResource(SimpleEditorPanel.class, "MniRedo_text"));
+			ivjMniRedo.setText(ResourceManager.getResource(CommonUserAccess.class, "MniEditRedo_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -521,7 +521,7 @@ private javax.swing.JMenuItem getMniSelectAll() {
 			ivjMniSelectAll.setText("Alles markieren");
 			ivjMniSelectAll.setEnabled(false);
 			// user code begin {1}
-			ivjMniSelectAll.setText(ResourceManager.getResource(SimpleEditorPanel.class, "MniSelectAll_text"));
+			ivjMniSelectAll.setText(ResourceManager.getResource(CommonUserAccess.class, "MniEditSelectAll_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -544,7 +544,7 @@ private javax.swing.JMenuItem getMniUndo() {
 			ivjMniUndo.setText("Rückgängig");
 			ivjMniUndo.setEnabled(false);
 			// user code begin {1}
-			ivjMniUndo.setText(ResourceManager.getResource(SimpleEditorPanel.class, "MniUndo_text"));
+			ivjMniUndo.setText(ResourceManager.getResource(CommonUserAccess.class, "MniEditUndo_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}

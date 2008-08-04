@@ -25,7 +25,7 @@ import junit.framework.TestCase;
 /**
  * TestCase for FinancialUtils.
  * @author Peter Hirzel <i>soft</i>Environment 
- * @version $Revision: 1.2 $ $Date: 2007-02-20 12:59:54 $
+ * @version $Revision: 1.3 $ $Date: 2008-08-04 20:32:52 $
  */
 public class FinancialUtilsTestCase extends TestCase {
     /**
@@ -43,7 +43,22 @@ public class FinancialUtilsTestCase extends TestCase {
         assertTrue("Linear 4.Year", FinancialUtils.calcDepreciationLinear(value, usageDuration, 4) == 2000.0);
         assertTrue("Linear 5.Year", FinancialUtils.calcDepreciationLinear(value, usageDuration, 5) == 0.0);
         assertTrue("Linear after depreciation", FinancialUtils.calcDepreciationLinear(value, usageDuration, 6) == 0.0);
+        
+        // same in months
+        usageDuration = 5*12; // years
+        
+        assertTrue("Linear Begin", FinancialUtils.calcDepreciationLinear(value, usageDuration, 0*12) == value);
+        assertTrue("Linear 1.Year", FinancialUtils.calcDepreciationLinear(value, usageDuration, 1*12) == 8000.0);
+        assertTrue("Linear 2.Year", FinancialUtils.calcDepreciationLinear(value, usageDuration, 2*12) == 6000.0);
+        assertTrue("Linear 3.Year", FinancialUtils.calcDepreciationLinear(value, usageDuration, 3*12) == 4000.0);
+        assertTrue("Linear 4.Year", FinancialUtils.calcDepreciationLinear(value, usageDuration, 4*12) == 2000.0);
+        assertTrue("Linear 5.Year", FinancialUtils.calcDepreciationLinear(value, usageDuration, 5*12) == 0.0);
+        assertTrue("Linear after depreciation", FinancialUtils.calcDepreciationLinear(value, usageDuration, 6*12) == 0.0);
     }
+    /**
+     * Check with sample:
+     * http://www.harri-deutsch.de/verlag/titel/pfeifer/k01_1736.pdf
+     */
     public void testCalcDepreciationGeometricDegressive() {
         double value = 10000; // Buchwert des Wirtschaftsgutes zu Beginn
         double p = 20; // %-Satz der jährlich vom Buchwert abgeschrieben werden soll
