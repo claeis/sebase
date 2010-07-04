@@ -150,4 +150,18 @@ public class MathUtils {
             return 1;
         }
     }
+    /**
+     * Sum the given values.
+     * @param value1
+     * @param value2
+     * @return null if both are null
+     */
+    public final static Double sum(Double value1, Double value2) {
+	    if (value1 == null) {    	
+	    	return value2;
+	    } else if (value2 == null) {
+	    	return value1;
+	    }
+	    return new Double(value1.doubleValue() + value2.doubleValue());
+    }
 }
