@@ -83,9 +83,9 @@ public abstract class ListUtils {
                             return collator.compare(s1, s2);
                         } else {
                             if ((v1 instanceof Long) && (v2 instanceof Long)) {
-                                return ((Long)o1).compareTo((Long)o2);
+                                return ((Long)v1).compareTo((Long)v2);
                             } if ((v1 instanceof Integer) && (v2 instanceof Integer)) {
-                                return ((Integer)o1).compareTo((Integer)o2);
+                                return ((Integer)v1).compareTo((Integer)v2);
                             } else if ((v1 instanceof Double) && (v2 instanceof Double)) {
                                 return ((Double)v1).compareTo((Double)v2);
                             } else {
