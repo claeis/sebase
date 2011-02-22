@@ -166,6 +166,19 @@ public static Integer getYear(java.util.Date date) {
 	}
 }
 /**
+ * Return a date in a formatted string, like "2010-11-29"
+ * @param date
+ * @return
+ */
+public static String getSortingDateString(java.util.Date date) {
+	if (date == null) {
+		return "";
+	} else {
+		java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+		return sf.format(date);
+	}
+}
+/**
  * Return whether given date is between from..to range.
  * @param date
  * @param from
