@@ -24,7 +24,7 @@ import junit.framework.TestCase;
 
 /**
  * TestCase for ApplicationOptions.
- * @author Peter Hirzel <i>soft</i>Environment
+ * @author Peter Hirzel <i>soft</i>Environment GmbH
  * @version $Revision: 1.2 $ $Date: 2006-05-07 14:53:51 $
  */
 public class ApplicationOptionsTestCase extends TestCase {

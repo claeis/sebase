@@ -18,8 +18,7 @@ import ch.softenvironment.controller.DataBrowser;
 import junit.framework.TestCase;
 /**
  * TestCase for DataBrowser.
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2007-02-20 12:17:01 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
 public class DataBrowserTestCase extends TestCase {
     private DataBrowser browser = null;
@@ -43,7 +42,7 @@ public class DataBrowserTestCase extends TestCase {
         assertTrue(browser.getFirst() == null);
         assertTrue(browser.getLast() == null);
         
-        browser.setObjects(new ArrayList());
+        browser.setObjects(new ArrayList<Object>());
         assertFalse(browser.isScrollNextAllowed());
         assertFalse(browser.isScrollPreviousAllowed());
         assertFalse(browser.isScrollLastAllowed());
@@ -57,7 +56,7 @@ public class DataBrowserTestCase extends TestCase {
         assertTrue(browser.getLast() == null);
     }
     public void testSingleBrowsing() {      
-        List list = new ArrayList();
+        List<String> list = new ArrayList<String>();
         list.add("Hello");
         browser.setObjects(list);
         assertFalse(browser.isScrollNextAllowed());
@@ -76,7 +75,7 @@ public class DataBrowserTestCase extends TestCase {
         assertTrue(browser.getLast().equals("Hello"));
     }
     public void testMultiBrowsing() {      
-        List list = new ArrayList();
+        List<String> list = new ArrayList<String>();
         list.add("Hello");
         list.add("World");
         list.add("today");
@@ -139,7 +138,7 @@ public class DataBrowserTestCase extends TestCase {
         assertTrue(browser.getCurrentIndex() == -1);
         assertTrue(browser.getCurrentObject() == null);
         
-        List objects = new java.util.ArrayList(20);
+        List<Integer> objects = new java.util.ArrayList<Integer>(20);
         for (int i=0; i<20; i++) {
             objects.add(new Integer(i));
         }
@@ -171,7 +170,7 @@ public class DataBrowserTestCase extends TestCase {
         browser.getLast();
         assertTrue("step is one behind last => correction", browser.getCurrentIndex() == 39);
         
-        objects = new java.util.ArrayList();
+        objects = new java.util.ArrayList<Integer>();
         for (int i=1; i<106; i++) {
             objects.add(new Integer(i));
         }
@@ -221,7 +220,7 @@ public class DataBrowserTestCase extends TestCase {
         assertTrue(browser.getCurrentIndex() == -1);
         assertTrue(browser.getCurrentObject() == null);
         
-        List objects = new java.util.ArrayList(10);
+        List<Integer> objects = new java.util.ArrayList<Integer>(10);
         for (int i=0; i<10; i++) {
             objects.add(new Integer(i));
         }
@@ -251,7 +250,7 @@ public class DataBrowserTestCase extends TestCase {
         assertTrue(browser.getCurrentIndex() == -1);
         assertTrue(browser.getCurrentObject() == null);
         
-        java.util.List objects = new java.util.ArrayList();
+        java.util.List<Integer> objects = new java.util.ArrayList<Integer>();
         for (int i=1; i<101; i++) {
             objects.add(new Integer(i));
         }
@@ -301,7 +300,7 @@ public class DataBrowserTestCase extends TestCase {
         assertTrue(browser.getCurrentIndex() == -1);
         assertTrue(browser.getCurrentObject() == null);
         
-        java.util.List objects = new java.util.ArrayList(100);
+        java.util.List<Integer> objects = new java.util.ArrayList<Integer>(100);
         for (int i=1; i<106; i++) {
             objects.add(new Integer(i));
         }

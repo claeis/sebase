@@ -61,7 +61,7 @@ public class FinancialUtilsTestCase extends TestCase {
      */
     public void testCalcDepreciationGeometricDegressive() {
         double value = 10000; // Buchwert des Wirtschaftsgutes zu Beginn
-        double p = 20; // %-Satz der jährlich vom Buchwert abgeschrieben werden soll
+        double p = 20; // %-Satz der jaehrlich vom Buchwert abgeschrieben werden soll
         
         assertTrue("Degressive Begin", FinancialUtils.calcDepreciationGeometricDegressive(value, p, 0) == value);
         assertTrue("Degressive 1.Year", (long)FinancialUtils.calcDepreciationGeometricDegressive(value, p, 1) == 8000);

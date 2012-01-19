@@ -5,15 +5,15 @@ import java.util.Locale;
 import ch.softenvironment.util.BeanReflector;
 
 /**
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2007-02-20 12:59:54 $
+ * Test BeanReflector
+ * @author Peter Hirzel, softEnvironment GmbH
  */
 public class BeanReflectorTestCase extends junit.framework.TestCase {
     private TestBean bean = null;
     public String fieldTest = null;
 
-    // Internal
-    public static class TestBean {
+    // test object for reflection manipulations
+    public /*for reflection access*/ static class TestBean {
 	public String fieldTest = null;
 	private String fieldText = null;
 	private Double dVal = null;
@@ -114,7 +114,7 @@ public class BeanReflectorTestCase extends junit.framework.TestCase {
 	bean.setIPrimitive(25);
     }
 
-    public void testValue() throws Throwable {
+    public void testGetValue() throws Throwable {
 	BeanReflector br = new BeanReflector(bean, "text");
 	String value = "Bye";
 	br.setValue(value);
