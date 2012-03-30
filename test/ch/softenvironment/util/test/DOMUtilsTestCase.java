@@ -10,10 +10,11 @@ package ch.softenvironment.util.test;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  */
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -58,7 +59,8 @@ public class DOMUtilsTestCase extends TestCase {
      * 
         <?xml version="1.0" encoding="UTF-8"?>
         <soap:Envelope 
-            xmlns:soap="http://www.w3.org/2001/12/soap-envelope"    soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
+            xmlns:soap="http://www.w3.org/2001/12/soap-envelope"    
+            soap:encodingStyle="http://www.w3.org/2001/12/soap-encoding">
         <soap:Header><TargetApp soap:mustUnderstand="1"/></soap:Header>
         <soap:Body>
             <!--START Data area-->
@@ -69,14 +71,14 @@ public class DOMUtilsTestCase extends TestCase {
             </soap:Fault>
         </soap:Body>
         </soap:Envelope>
+     * @throws TransformerException 
     */
-    private Document createDomDocument() {
+    private Document createDomDocument() throws TransformerException {
         Document doc = docBuilder.newDocument();
-        
-        Element root = doc.createElement("soap:Envelope");
+
+        Element root = doc.createElement("soap:Envelope");               
+        root.setAttributeNS("http://www.w3.org/2001/12/soap-envelope", "soap:encodingStyle", "http://www.w3.org/2001/12/soap-encoding");
         doc.appendChild(root);
-        root.setAttribute("xmlns:soap", "http://www.w3.org/2001/12/soap-envelope");
-        root.setAttribute("soap:encodingStyle", "http://www.w3.org/2001/12/soap-encoding"); 
             
         Element header = doc.createElement("soap:Header");
         root.appendChild(header);
@@ -118,10 +120,10 @@ public class DOMUtilsTestCase extends TestCase {
     public void testReadWrite() {
         String filename = path + "XmlUtilsTestCase.xml";
         try {
-            FileWriter fw = new FileWriter(filename);
-            DOMUtils.writeXML(createDomDocument(), fw);
-            fw.flush();
-            fw.close();
+        	FileOutputStream out = new FileOutputStream (filename);
+            DOMUtils.writeXML(createDomDocument(), out);
+            out.flush();
+            out.close();
         } catch(Throwable e) {
             fail("writeXML: " + e.getLocalizedMessage());
         }
