@@ -13,7 +13,7 @@ package ch.softenvironment.util;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.OutputStream;
 import java.io.Writer;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -147,19 +147,22 @@ Tracer.getInstance().debug("DocumentBuilder=" + builder);
     /**
      * Write given DOM-Document into writer.
      * @param document
-     * @param writer (for e.g. FileWriter or StringWriter)
+     * @param outStream (for e.g. FileWriter or StringWriter)
      * @throws TransformerConfigurationException
      * @throws TransformerException
      */
-    public static void writeXML(Document document, Writer writer) throws TransformerConfigurationException, TransformerException {
+    public static void writeXML(Document document, OutputStream/*Writer*/ outStream) throws TransformerConfigurationException, TransformerException {
         Transformer trn = TransformerFactory.newInstance().newTransformer();
-        trn.setOutputProperty(OutputKeys.METHOD, "xml");
+        trn.setOutputProperty(OutputKeys.METHOD, "xml");        
         trn.setOutputProperty(OutputKeys.ENCODING, "UTF-8");    // default anyway!
+        trn.setOutputProperty(OutputKeys.INDENT, "yes");
 //      trn.setOutputProperty(OutputKeys.VERSION, "1.0");       // default for output method "xml"
 //      trn.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, "publicId");
 //      trn.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "systemId");
         
-        StreamResult result = new StreamResult(writer);
+        // use a FileOutputStream rather than a FileWriter. The latter applies its own encoding, 
+        // which is almost certainly not UTF-8 (depending on your platform, it's probably Windows-1252 or IS-8859-1).
+        StreamResult result = new StreamResult(outStream);
         trn.transform(new DOMSource(document), result);          
     }
 }
