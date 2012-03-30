@@ -143,9 +143,9 @@ public class BaseDialogTestCase extends JFCTestCase {
 	 * StringEventData(this, inputTextField, "Falsches Wort"));
 	 * helper.enterClickAndLeave(new MouseEventData(this, okButton));
 	 * assertEquals("Die Eingabe " + inputTextField.getText() +
-	 * " fÃ¼hrte zu einem falschen Ergebnis.",
+	 * " führte zu einem falschen Ergebnis.",
 	 * "Falsch geraten, probieren Sie es mit 'Testing'.",
-	 * outputArea.getText()); // Um die Richtigkeit der FunktionalitÃ¤t im
+	 * outputArea.getText()); // Um die Richtigkeit der Funktionalität im
 	 * positiven Fall (richtige Eingabe) zu testen, // wird ein Tastendruck
 	 * simuliert. inputTextField.requestFocus();
 	 * inputTextField.setText("Testing");
@@ -158,7 +158,7 @@ public class BaseDialogTestCase extends JFCTestCase {
 	assertEquals("Dialog closed", 0, dialogs.size());
 
 	// assertEquals("Die Eingabe " + inputTextField.getText() +
-	// " fÃ¼hrte zu einem falschen Ergebnis.", "Testing is cool!",
+	// " führte zu einem falschen Ergebnis.", "Testing is cool!",
 	// outputArea.getText());
     }
 }
