@@ -15,9 +15,9 @@ package ch.softenvironment.view;
 /**
  * Panel with a Percentage-Slider and Percentage-Number.
  *
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2004-10-26 19:11:41 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public class PercentageSliderPanel extends BasePanel {
 	private javax.swing.JLabel ivjJLabel231 = null;
 	private javax.swing.JScrollPane ivjJScrollPane11 = null;
@@ -252,30 +252,5 @@ private void initialize() {
 	}
 	// user code begin {2}
 	// user code end
-}
-/**
- * main entrypoint - starts the part when it is run as an application
- * @param args java.lang.String[]
- */
-public static void main(java.lang.String[] args) {
-	try {
-		javax.swing.JFrame frame = new javax.swing.JFrame();
-		PercentageSliderPanel aPercentageSliderPanel;
-		aPercentageSliderPanel = new PercentageSliderPanel();
-		frame.setContentPane(aPercentageSliderPanel);
-		frame.setSize(aPercentageSliderPanel.getSize());
-		frame.addWindowListener(new java.awt.event.WindowAdapter() {
-			public void windowClosing(java.awt.event.WindowEvent e) {
-				System.exit(0);
-			};
-		});
-		frame.show();
-		java.awt.Insets insets = frame.getInsets();
-		frame.setSize(frame.getWidth() + insets.left + insets.right, frame.getHeight() + insets.top + insets.bottom);
-		frame.setVisible(true);
-	} catch (Throwable exception) {
-		System.err.println("Exception occurred in main() of ch.softenvironment.view.BasePanel");
-		exception.printStackTrace(System.out);
-	}
 }
 }

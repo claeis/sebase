@@ -17,9 +17,9 @@ import ch.softenvironment.client.ResourceManager;
  * a Double-Property of a Model to this Components value-Property. Make sure
  * to trigger <b>propertyChange</b>-Event (for e.g. "keyReleased") from this Component towards the Model.
  *
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2008-04-18 18:43:59 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public class NumberTextField extends javax.swing.JTextField implements java.awt.event.InputMethodListener {
 //	private java.text.DecimalFormat decFormat = null;
 /**

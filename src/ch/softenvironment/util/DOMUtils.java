@@ -37,8 +37,7 @@ import org.xml.sax.SAXParseException;
 /**
  * Utility for DOM-handling.
  * Based on JAXP.
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2006-06-29 22:26:46 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
 public class DOMUtils {
     /**
@@ -62,43 +61,6 @@ public class DOMUtils {
         public void fatalError(SAXParseException error) {
             Tracer.getInstance().developerError(getDetailedMessage(error));
         }
-    }
-    /**
-     * Transform a given String to UTF-8 Charset. This might be useful
-     * for characters above ASCII-value 0x7e '~' to be written as Text-Node into
-     * an XML-Stream which is encoded typically in UTF-8. Otherwise characters like
-     * "הצü" might provoque a MALFORMED exception at reading the very same Stream.
-     * 
-     * Be aware special XML-Characters within a Text-Node are taken care of
-     * by Document#createTextNode("&my 'Text' ") resp. instantiated Writers
-     * which provide the necessary masking (for e.g. "&amp; &apos;Text...").
-     * 
-     * Revers transformation for masked XML-Characters or UTF-Characters is
-     * dealt by Document-Builder instance (while XML-parsing automatically).
-     * 
-     * @param origin
-     * @return
-     * @throws UnsupportedEncodingException
-     * @see java.lang.String#getBytes(String)
-     * @see org.w3c.dom.Document#createTextNode(java.lang.String)
-     */
-    public static String encodeUTF8(String origin) throws /*CharacterCodingException*/ UnsupportedEncodingException {
-/*
-        Charset charset = Charset.forName("UTF-8");
-        CharsetEncoder encoder = charset.newEncoder();
-        CharsetDecoder decoder = charset.newDecoder();
-
-        // Convert "a string" to Target-Charset bytes in a ByteBuffer
-        ByteBuffer bbuf = encoder.encode(CharBuffer.wrap(origin));
-        // Convert Target-Charset bytes in a ByteBuffer to a character ByteBuffer
-        // The new ByteBuffer is ready to be read.
-        CharBuffer cbuf = decoder.decode(bbuf);
-        // and then to a string
-        return cbuf.toString();
-*/
-        return new String(origin.getBytes("UTF-8"));
-        //decode by: 
-        //  new String(encodeUTF8("myString").getBytes(), "UTF-8");
     }
     /**
      * Create a new instance of a DOM-Document builder.

@@ -12,10 +12,10 @@ package ch.softenvironment.util;
  */
 import ch.softenvironment.client.ResourceManager;
 /**
- * Show Developer failures.
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.11 $ $Date: 2007-02-20 12:56:41 $
+ * Signal Developer failures.
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public class DeveloperException extends RuntimeException {
 	private String title = null;
 	private String origin = null;

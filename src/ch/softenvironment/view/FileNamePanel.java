@@ -20,11 +20,11 @@ import ch.ehi.basics.view.*;
 import ch.softenvironment.client.ResourceManager;
 /**
  * TextField representing a File-Name and Chooser-Button.
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2006-06-29 22:28:47 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public class FileNamePanel extends javax.swing.JPanel {
-    private List filters = null;
+    private List<GenericFileFilter> filters = null;
     private String currentPath = null;
 	private javax.swing.JButton ivjBtnChooseFile = null;
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
@@ -89,9 +89,9 @@ private void chooseFile() {
 		dialog.setDialogTitle(ResourceManager.getResource(FileNamePanel.class, "CT_ChooseFile"));//$NON-NLS-1$
 //		dialog.setSelectedFile(new File(fileName));
 		if (filters != null) {
-		    Iterator it = filters.iterator();
+		    Iterator<GenericFileFilter> it = filters.iterator();
 		    while(it.hasNext()) {
-				dialog.addChoosableFileFilter((GenericFileFilter)it.next());
+				dialog.addChoosableFileFilter(it.next());
 		    }
 		}
 
@@ -283,7 +283,7 @@ public void setText(java.lang.String arg1) {
  */
 public void add(GenericFileFilter filter) {
     if (filters == null) {
-        filters = new ArrayList();
+        filters = new ArrayList<GenericFileFilter>();
     }
     filters.add(filter);
 }

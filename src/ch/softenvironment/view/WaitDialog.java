@@ -18,10 +18,11 @@ import ch.softenvironment.util.Tracer;
 /**
  * Wait-Dialog for busy actions.
  * Design Pattern: Singleton
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.12 $ $Date: 2008-06-11 05:30:19 $
+ * 
  * @see BaseFrame#showBusy()
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public class WaitDialog extends BaseDialog {
 	public static final int UNKNOWN_PROGRESS = -1;
 

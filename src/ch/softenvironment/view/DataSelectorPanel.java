@@ -16,9 +16,9 @@ import ch.softenvironment.util.*;
 import ch.softenvironment.client.ResourceManager;
 /**
  * Browser to walk through a List of Objects.
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.9 $ $Date: 2006-12-19 10:00:22 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public class DataSelectorPanel extends BasePanel {
 	private DataSelectorPanelListener listener = null;
 //TODO replace objects by DataBrowser

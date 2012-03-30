@@ -1,4 +1,5 @@
 package ch.softenvironment.view.swingext;
+
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -13,25 +14,28 @@ package ch.softenvironment.view.swingext;
 
 /**
  * Extended JTextField to show a Time (resp. a java.util.Date).
- *
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2007-02-20 12:44:31 $
+ * 
  * @see DateTextField
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public class TimeTextField extends DateTextField {
-/**
- * TimeTextField constructor comment.
- * Default representation is a european 24h and minute String "HH:mm".
- */
-public TimeTextField() {
+    /**
+     * TimeTextField constructor comment. Default representation is a European
+     * 24h and minute String "HH:mm".
+     */
+    public TimeTextField() {
 	this("HH:mm" /* + ":ss" */);
-//	this(ch.softenvironment.util.NlsUtils.TIME_24HOURS_PATTERN);
-}
-/**
- * TimeTextField constructor comment.
- * @param datePattern java.lang.String (for e.g. "HH:mm:ss")
- */
-public TimeTextField(String datePattern) {
+	// this(ch.softenvironment.util.NlsUtils.TIME_24HOURS_PATTERN);
+    }
+
+    /**
+     * TimeTextField constructor comment.
+     * 
+     * @param datePattern
+     *            java.lang.String (for e.g. "HH:mm:ss")
+     */
+    public TimeTextField(String datePattern) {
 	super(datePattern);
-}
+    }
 }

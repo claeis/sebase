@@ -14,12 +14,12 @@ package ch.softenvironment.view;
  
 /**
  * Display a String with Cardinality's upper-Range > 1.
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2006-06-29 22:28:47 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public class MultiStringPanel extends javax.swing.JPanel {
 	private javax.swing.JComboBox ivjCbxCount = null;
-	private java.util.List fieldList = null;
+	private java.util.List<String> fieldList = null;
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
 	private SimpleEditorPanel ivjPnlEditor = null;
 
@@ -80,7 +80,7 @@ private javax.swing.JComboBox getCbxCount() {
  * @return The list property value.
  * @see #setList
  */
-public java.util.List getList() {
+public java.util.List<String> getList() {
 	return fieldList;
 }
 /**
@@ -162,7 +162,7 @@ private void initialize() {
  * @param list The new value for the property.
  * @see #getList
  */
-public void setList(java.util.List list) {
+public void setList(java.util.List<String> list) {
 	if (list == null) {
 		throw new IllegalArgumentException("null is not valid");
 	}
@@ -171,12 +171,12 @@ public void setList(java.util.List list) {
 	fieldList = list;
 //	firePropertyChange("list", oldValue, list);
 
-	java.util.Vector elements = new java.util.Vector(1);
+	java.util.Vector<Integer> elements = new java.util.Vector<Integer>(1);
 	elements.add(new Integer(1));
 	getCbxCount().setModel(new javax.swing.DefaultComboBoxModel(elements));
 //TODO only ONE element is implemented yet
 	if (list.size() >= 1) {
-		getPnlEditor().setText((String)list.get(0));
+		getPnlEditor().setText(list.get(0));
 	}
 }
 /**

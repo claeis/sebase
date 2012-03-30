@@ -14,9 +14,9 @@ package ch.softenvironment.view;
 import ch.softenvironment.client.ResourceManager;
 /**
  * Panel for structured Phone Number representation.
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.8 $ $Date: 2007-02-20 12:43:36 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public class PhoneNumberPanel extends javax.swing.JPanel {
 	private String separator = "/";//$NON-NLS-1$
 	private javax.swing.JTextField ivjTxtCountryPrefix = null;
@@ -24,7 +24,7 @@ public class PhoneNumberPanel extends javax.swing.JPanel {
 	private java.lang.String fieldText = "";
 	private javax.swing.JTextField ivjTxtSitePrefix = null;
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
-	private java.util.List fieldList = null;
+	private java.util.List<String> fieldList = null;
 
 class IvjEventHandler implements java.awt.event.FocusListener, java.awt.event.KeyListener {
 		public void focusGained(java.awt.event.FocusEvent e) {
@@ -190,7 +190,7 @@ private javax.swing.JComboBox getCbxCount() {
  * @return The list property value.
  * @see #setList
  */
-public java.util.List getList() {
+public java.util.List<String> getList() {
 	return fieldList;
 }
 /**
@@ -324,9 +324,7 @@ private void initialize() {
 	// user code begin {2}
 	// user code end
 }
-/**
- * Comment
- */
+
 private void setInternalText(String text) {
 	String oldValue = fieldText;
 	fieldText = text;
@@ -346,17 +344,17 @@ private void setInternalText(String text) {
  * @param list The new value for the property.
  * @see #getList
  */
-public void setList(java.util.List list) {
+public void setList(java.util.List<String> list) {
 //TODO Only ONE entry is supported yet
-	java.util.List oldValue = fieldList;
+	java.util.List<String> oldValue = fieldList;
 	fieldList = list;
 	firePropertyChange("list", oldValue, list);
 
-	java.util.Vector elements = new java.util.Vector(1);
+	java.util.Vector<Integer> elements = new java.util.Vector<Integer>(1);
 	elements.add(new Integer(1));
 	getCbxCount().setModel(new javax.swing.DefaultComboBoxModel(elements));
 	if ((list != null) && (list.size() >= 1)) {
-		setText((String)list.get(0));
+		setText(list.get(0));
 	}
 }
 /**

@@ -14,9 +14,9 @@ package ch.softenvironment.view;
 import ch.softenvironment.client.ResourceManager;
 /**
  * Panel to manage a single URL.
- * @author Peter Hirzel </i>soft</i>Environment
- * @version $Revision: 1.7 $ $Date: 2007-02-20 12:43:38 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public class URLView extends javax.swing.JPanel {
 	private javax.swing.JButton ivjBtnBrowser = null;
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();

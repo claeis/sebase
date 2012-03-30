@@ -13,70 +13,80 @@ package ch.softenvironment.view;
  */
 
 /**
- * Manage a Set of GUI-Options which are valid for all Views in a (Client)-Application.
- * An instance of the ViewOptions should be initalized as Singleton
- * by an Appplication-Launcher and passed to any View opened from there.
- *
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2007-02-20 12:43:37 $
+ * Manage a Set of GUI-Options which are valid for all Views in a
+ * (Client)-Application. An instance of the ViewOptions should be initialized as
+ * Singleton by an Application-Launcher and passed to any View opened from
+ * there.
+ * 
  * @see DetailView(..)
  * @see SearchView(..)
+ * @author Peter Hirzel, softEnvironment GmbH
  */
 public class ViewOptions {
-	private boolean closeOnSave = true;
-	private java.util.Map options = new java.util.HashMap();
-	private ch.softenvironment.client.ViewManager viewManager = new ch.softenvironment.client.ViewManager();
-/**
- * ViewOptions constructor comment.
- */
-public ViewOptions() {
+    private boolean closeOnSave = true;
+    private java.util.Map<String, Boolean> options = new java.util.HashMap<String, Boolean>();
+    private ch.softenvironment.client.ViewManager viewManager = new ch.softenvironment.client.ViewManager();
+
+    /**
+     * ViewOptions constructor comment.
+     */
+    public ViewOptions() {
 	super();
-}
-/**
- * @see #setCloseOnSave()
- */
-public boolean getCloseOnSave() {
+    }
+
+    /**
+     * @see #setCloseOnSave()
+     */
+    public boolean getCloseOnSave() {
 	return closeOnSave;
-}
-/**
- * Design Pattern: Singleton.
- * @return ViewManager
- */
-public ch.softenvironment.client.ViewManager getViewManager() {
+    }
+
+    /**
+     * Design Pattern: Singleton.
+     * 
+     * @return ViewManager
+     */
+    public ch.softenvironment.client.ViewManager getViewManager() {
 	return viewManager;
-}
-/**
- * Return whether Option with given Name is Configured YES or NO.
- * @return boolean Default: false
- */
-public boolean isSet(String name) {
+    }
+
+    /**
+     * Return whether Option with given Name is Configured YES or NO.
+     * 
+     * @return boolean Default: false
+     */
+    public boolean isSet(String name) {
 	if (options.containsKey(name)) {
-		return ((Boolean)options.get(name)).booleanValue();
+	    return options.get(name).booleanValue();
 	}
 
 	return false;
-}
-/**
- * Set whether saveObject() in DetailView's shall close GUI if
- * only one object is represented.
- */
-public void setCloseOnSave(boolean closeOnSave) {
+    }
+
+    /**
+     * Set whether saveObject() in DetailView's shall close GUI if only one
+     * object is represented.
+     */
+    public void setCloseOnSave(boolean closeOnSave) {
 	this.closeOnSave = closeOnSave;
-}
-/**
- * @see #setOption(String, boolean)
- */
-public void setOption(String name) {
+    }
+
+    /**
+     * @see #setOption(String, boolean)
+     */
+    public void setOption(String name) {
 	setOption(name, true);
-}
-/**
- * Set a certain Option.
- * For e.g. if a UserFunction shall be suppressed (setOption("MyFunction", false) and
- * the appropriate view may react according to defined options.
- * @param name
- * @param allow
- */
-public void setOption(String name, boolean allow) {
+    }
+
+    /**
+     * Set a certain Option. For e.g. if a UserFunction shall be suppressed
+     * (setOption("MyFunction", false) and the appropriate view may react
+     * according to defined options.
+     * 
+     * @param name
+     * @param allow
+     */
+    public void setOption(String name, boolean allow) {
 	options.put(name, Boolean.valueOf(allow));
-}
+    }
 }

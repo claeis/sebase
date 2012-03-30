@@ -30,9 +30,9 @@ import ch.softenvironment.util.Tracer;
  * even if the Dialog is already created and visible.
  *
  * Windows apps, and almost none do this (since by default dialogs don't have icons).
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.17 $ $Date: 2008-06-11 05:30:19 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public abstract class BaseDialog extends javax.swing.JDialog {
 	private javax.swing.JPanel ivjJDialogContentPane = null;
 	private boolean saved = false;
@@ -419,7 +419,6 @@ public abstract class BaseDialog extends javax.swing.JDialog {
 	 * @see #showWarning()
 	 */
 	public static void showError(java.awt.Component owner, String title, Object message, Throwable exception) {
-//TODO replace ErrorDialog by JOptionPane
 		Frame frame = getFrameOwner(owner);
 		if (frame != null) {
 			new ErrorDialog(frame, title, message==null ? null : message.toString(), exception);

@@ -17,6 +17,7 @@ import ch.softenvironment.client.ResourceManager;
  * @author Peter Hirzel <i>soft</i>Environment
  * @version $Revision: 1.7 $ $Date: 2008-04-08 10:01:44 $
  */
+@SuppressWarnings("serial")
 public class AboutDialog extends BaseDialog {
 	private javax.swing.JPanel ivjBaseDialogContentPane = null;
 	private javax.swing.JPanel ivjJPanel1 = null;
@@ -49,7 +50,7 @@ public AboutDialog(java.awt.Frame owner, String application, String version, Str
 //TODO make OSS-list more flexible    
     getTxaOSS().setText("- http://sourceforge.net/projects/umleditor" + "\n" +
             "- http://sourceforge.net/projects/jomm");
-	show();
+	setVisible(true);
 }
 /**
  * Return the BaseDialogContentPane property value.

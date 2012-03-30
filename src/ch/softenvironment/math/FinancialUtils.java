@@ -40,7 +40,7 @@ public class FinancialUtils {
      * (Abnutzung, Alterung oder Unfallschaden) dieser Wertverlust herbeigeführt wird.
      * 
      * <b>Lineare Abschreibung:</b>
-     * Die Anschaffungskosten des abzuschreibenden Wirtschaftsgutes (WG) werden gleichmäßig auf die 
+     * Die Anschaffungskosten des abzuschreibenden Wirtschaftsgutes (WG) werden gleichmässig auf die 
      * Jahre der Nutzungsdauer aufgeteilt. Damit wird jedes Jahr der gleiche Betrag abgeschrieben. 
      * Am Ende der Nutzungsdauer ist das WG vollständig abgeschrieben, es sei denn, das WG wird nur 
      * bis auf den Schrottwert abgeschrieben. Dann wird der Differenzbetrag aus Anschaffungskosten 

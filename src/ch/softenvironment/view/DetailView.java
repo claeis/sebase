@@ -11,55 +11,45 @@ package ch.softenvironment.view;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  */
- 
+
 /**
  * Method-Set for a DetailView
+ * 
  * @see BaseFrame (as a Parent-Class)
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2007-02-20 12:43:36 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
 public interface DetailView {
-	/**
-	 * Assign a set of aggregates given in objects.
-	 * @param objects
-	 */
-	void assignObjects(java.util.List objects);
-	/**
-	 * Save an Object represented by DetailView.
-	 */
-	void saveObject();
-	/**
-	 * Make the View represent the given Object.
+    /**
+     * Assign a set of aggregates given in objects.
      * 
-     * Any Listeners added to the object should be
-     * removed, of course (for e.g. by #dispose()).
-     * 
-	 * @param object
-	 *
-	 * <example>
-		 	try {
-				if ((object != null) && object.equals(getObject())) {
-					return;
-				}
-				if (getObject() != null) {
-					getObject().removeChangeListener(getConsistencyController());
-				}
-				((DbObject)object).refresh(true);
-				setObject(object);
-				object.addChangeListener(getconsistencyController());
-			} catch(Throwable e) {
-				handleException(e);
-			}
-        </example>
-	 */
-	void setCurrentObject(Object object);
-	/**
-	 * Undo the changes of an Object represented by this GUI.
-	 */
-	void undoObject();
+     * @param objects
+     */
+    void assignObjects(java.util.List<?> objects);
 
-	/**
-	 * Redo the last undoing changes of an Object represented by this GUI.
-	 */
-	void redoObject();
+    /**
+     * Save an Object represented by DetailView.
+     */
+    void saveObject();
+
+    /**
+     * Make the View represent the given Object.
+     * 
+     * Any Listeners added to the object should be removed, of course (for e.g. by #dispose()).
+     * 
+     * @param object
+     * 
+     *            <example> try { if ((object != null) && object.equals(getObject())) { return; } if (getObject() != null) { getObject().removeChangeListener(getConsistencyController()); } ((DbObject)object).refresh(true); setObject(object);
+     *            object.addChangeListener(getconsistencyController()); } catch(Throwable e) { handleException(e); } </example>
+     */
+    void setCurrentObject(Object object);
+
+    /**
+     * Undo the changes of an Object represented by this GUI.
+     */
+    void undoObject();
+
+    /**
+     * Redo the last undoing changes of an Object represented by this GUI.
+     */
+    void redoObject();
 }

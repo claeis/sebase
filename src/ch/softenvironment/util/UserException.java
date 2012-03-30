@@ -11,26 +11,43 @@ package ch.softenvironment.util;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  */
-import ch.softenvironment.client.ResourceManager; 
+import ch.softenvironment.client.ResourceManager;
+
 /**
  * Show failures within Application a User must know.
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2006-06-29 22:22:27 $
+ * 
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public class UserException extends DeveloperException {
     /**
      * Create a new User relevant exception.
-     * @param message Detailed description of failure
-     * @param title Short title of failure
-     * @param e Orginal exception
+     * 
+     * @param message
+     *            Detailed description of failure
+     * @param title
+     *            Short title of failure
+     * @param e
+     *            Original exception
      */
     public UserException(String message, String title, Throwable e) {
-        super(message, (title==null ? ResourceManager.getResource(UserException.class, "CTApplicationError") : title), e, 0 /*this constructor & super*/);
+	super(message, (title == null ? ResourceManager.getResource(UserException.class, "CTApplicationError") : title), e, 0 /*
+															       * this
+															       * constructor
+															       * &
+															       * super
+															       */);
     }
+
     /**
      * @see #UserException(String, String, Throwable)
      */
     public UserException(String message, String title) {
-        super(message, (title==null ? ResourceManager.getResource(UserException.class, "CTApplicationError") : title), null, 0 /*this constructor & super*/);
+	super(message, (title == null ? ResourceManager.getResource(UserException.class, "CTApplicationError") : title), null, 0 /*
+																  * this
+																  * constructor
+																  * &
+																  * super
+																  */);
     }
 }

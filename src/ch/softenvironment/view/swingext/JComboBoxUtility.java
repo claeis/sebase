@@ -31,8 +31,7 @@ import ch.softenvironment.util.ListUtils;
 /**
  * JComboBox utility to display sorted objects in items by its
  * property determined by evaluator.
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2007-05-30 07:40:17 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
 public class JComboBoxUtility {
     public static final int SORT_KEEP_ORDER = 100;
@@ -58,6 +57,7 @@ public class JComboBoxUtility {
     /**
      * Display the value of a given public property of the represented object.
      */
+    @SuppressWarnings("serial")
     protected static class ObjectComboBoxRenderer extends BasicComboBoxRenderer {
         private Evaluator evaluator = null;
         private String property = null;
@@ -96,9 +96,10 @@ public class JComboBoxUtility {
         }
     }
     /**
-     * Extended DefaultComboBoxModel to sort ascendingly by displayable value of
+     * Extended DefaultComboBoxModel to sort ascending by displayable value of
      * given by an object's property.
      */
+    @SuppressWarnings("serial")
     protected static class SortedComboBoxModel extends DefaultComboBoxModel {
         /**
          * Initialize the list.
@@ -108,14 +109,14 @@ public class JComboBoxUtility {
          * @param property
          * @param sort
          */
-        protected SortedComboBoxModel(java.util.List items, Evaluator evaluator, final String property, boolean addNullElement, final int sort) {
+        protected SortedComboBoxModel(java.util.List<?> items, Evaluator evaluator, final String property, boolean addNullElement, final int sort) {
             super();        
             if (addNullElement) {
                 // insert an empty object as very first element
                 addElement(null);
             }
             
-            java.util.Iterator iterator = null;
+            java.util.Iterator<?> iterator = null;
             if (sort == SORT_ASCENDING) {
                 iterator = ListUtils.sort(items, evaluator, property).iterator();
             } else {
@@ -130,20 +131,20 @@ public class JComboBoxUtility {
     /**
      * @see #initComboBox(JComboBox, java.util.List, String, boolean, Evaluator)
      */
-    public static void initComboBox(JComboBox comboBox, java.util.List items, final String property) {
+    public static void initComboBox(JComboBox comboBox, java.util.List<?> items, final String property) {
         initComboBox(comboBox, items, property, false);    
     }
     /**
      * @see #initComboBox(JComboBox, java.util.List, String, boolean, Evaluator)
      */
-    public static void initComboBox(JComboBox comboBox, java.util.List items, final String property, boolean addNullElement) {
+    public static void initComboBox(JComboBox comboBox, java.util.List<?> items, final String property, boolean addNullElement) {
         initComboBox(comboBox, items, property, addNullElement, new BeanEvaluator());    
     }
     /**
-     * Sort items ascendingly by default.
+     * Sort items ascending by default.
      * @see #initComboBox(JComboBox, java.util.List, String, boolean, Evaluator, boolean)
      */
-    public static void initComboBox(JComboBox comboBox, java.util.List items, final String property, boolean addNullElement, Evaluator evaluator) {
+    public static void initComboBox(JComboBox comboBox, java.util.List<?> items, final String property, boolean addNullElement, Evaluator evaluator) {
         initComboBox(comboBox, items, property, addNullElement, evaluator, SORT_ASCENDING);
     }
     /**
@@ -157,7 +158,7 @@ public class JComboBoxUtility {
      * @param evaluator uses default BeanEvaluator if null
      * @param sort sort text items according to SORT_*
      */
-    public static void initComboBox(JComboBox comboBox, java.util.List items, final String property, boolean addNullElement, Evaluator evaluator, final int sort) {
+    public static void initComboBox(JComboBox comboBox, java.util.List<?> items, final String property, boolean addNullElement, Evaluator evaluator, final int sort) {
         Evaluator eval = evaluator;
         if (eval == null) {
             // set the standard evaluator #get*()

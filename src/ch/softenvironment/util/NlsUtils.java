@@ -14,6 +14,7 @@ package ch.softenvironment.util;
  
 import java.util.*;
 import java.text.*;
+
 /**
  * Set of reusable String Utilities.
  * @author Peter Hirzel <i>soft</i>Environment
@@ -32,7 +33,7 @@ public static String formatMessage(String pattern, Object[] tokens) {
  * Bind a String with appropriate parameters.
  * For e.g. formatMessage("This is number {0}", 1)
  * @param pattern Complete String containing any Variables by {0}..{n}
- * @param arg0 int-value to be replaced in pattern
+ * @param arg0 integer value to be replaced in pattern
  */
 public static String formatMessage(String pattern, int arg0) {
 	Object[] tokens = { new Integer(arg0) };
@@ -49,7 +50,7 @@ public static String formatMessage(String pattern, String arg0) {
 /**
  * Change Default Locale (only if different from current default).
  * Might influence all NLS-Settings, like Number-, Date/Time-, Currency-Formatting, etc.
- * @params locale Local to be switched to
+ * @param locale Local to be switched to
  * @return whether new Locale was different from old one
  */
 public static boolean changeLocale(Locale locale) {
@@ -67,7 +68,7 @@ public static boolean changeLocale(Locale locale) {
 				return true;
 			}
 		}
-*/
+*/		
 		Locale.setDefault(locale);
 Tracer.getInstance().runtimeInfo("Locale changed to: " + Locale.getDefault());
 		return true;

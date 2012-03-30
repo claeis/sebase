@@ -21,15 +21,15 @@ import ch.softenvironment.util.Evaluator;
 import ch.softenvironment.view.swingext.JComboBoxUtility.BeanEvaluator;
 /**
  * Utility for JList.
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2007-05-30 07:43:44 $
+ * 
  * @see JComboBoxUtility
+ * @author Peter Hirzel, softEnvironment GmbH
  */
 public class JListUtility {
     /**
      * @see #initList(JList, java.util.List, String, Evaluator, int)
      */
-    public static void initList(JList list, java.util.List items, final String property, Evaluator evaluator) {
+    public static void initList(JList list, java.util.List<?> items, final String property, Evaluator evaluator) {
         initList(list, items, property, evaluator, JComboBoxUtility.SORT_ASCENDING);
     }    
     /**
@@ -43,7 +43,7 @@ public class JListUtility {
      * @param sort sort text items according to JComboBoxUtility#SORT_*
      * @see JComboBoxUtility
      */
-    public static void initList(JList list, java.util.List items, final String property, Evaluator evaluator, final int sort) {
+    public static void initList(JList list, java.util.List<?> items, final String property, Evaluator evaluator, final int sort) {
         Evaluator eval = evaluator;
         if (eval == null) {
             eval = new BeanEvaluator();

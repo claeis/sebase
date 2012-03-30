@@ -1,5 +1,6 @@
 package ch.softenvironment.view;
 
+import ch.softenvironment.client.ResourceManager;
 import ch.softenvironment.client.UserActionRights;
 
 /* 
@@ -16,10 +17,11 @@ import ch.softenvironment.client.UserActionRights;
  
 /**
  * StatusBar (bottom-Line of a Window).
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2006-02-22 08:06:26 $
+ * 
  * @see ApplicationFrame Subclasses
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public class StatusBar extends BasePanel {
 	private javax.swing.JLabel ivjLblAction = null;
 	private javax.swing.JLabel ivjLblStatus = null;
@@ -251,7 +253,7 @@ public void setRights(UserActionRights rights) {
  */
 public void setStatusAssign() {
 	try {
-		getLblStatus().setText(getResourceString(StatusBar.class, "CIStatusAssign"));
+		getLblStatus().setText(ResourceManager.getResource(StatusBar.class, "CIStatusAssign"));
 	} catch(java.util.MissingResourceException e) {
 		getLblStatus().setText("Assign");
 	}

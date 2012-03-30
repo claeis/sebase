@@ -15,8 +15,7 @@ package ch.softenvironment.view;
 /**
  * Method-Set for a SearchView
  * @see ApplicationFrame (as a Parent-Class)
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2005-11-05 20:00:24 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
 public interface SearchView extends ListMenuChoice {
 /**

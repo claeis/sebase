@@ -1,5 +1,7 @@
 package ch.softenvironment.view;
 
+import ch.softenvironment.client.ResourceManager;
+
 /* 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,9 +20,9 @@ package ch.softenvironment.view;
  * - false
  * - undefined
  *
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.9 $ $Date: 2008-04-18 18:43:59 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public class TriStatePanel extends BasePanel {
 	private static String ACTION_ALL = "ALL";
 	private static String ACTION_YES = "YES";
@@ -189,7 +191,7 @@ private javax.swing.JRadioButton getRbtFalse() {
 			ivjRbtFalse.setBounds(200, 0, 93, 22);
 			// user code begin {1}
 			ivjRbtFalse.setActionCommand(ACTION_NO);
-			ivjRbtFalse.setText(getResourceString(ch.softenvironment.util.StringUtils.class, "CI_No_text"));
+			ivjRbtFalse.setText(ResourceManager.getResource(ch.softenvironment.util.StringUtils.class, "CI_No_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -213,7 +215,7 @@ private javax.swing.JRadioButton getRbtTrue() {
 			ivjRbtTrue.setBounds(100, 0, 93, 21);
 			// user code begin {1}
 			ivjRbtTrue.setActionCommand(ACTION_YES);
-			ivjRbtTrue.setText(getResourceString(ch.softenvironment.util.StringUtils.class, "CI_Yes_text"));
+			ivjRbtTrue.setText(ResourceManager.getResource(ch.softenvironment.util.StringUtils.class, "CI_Yes_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}

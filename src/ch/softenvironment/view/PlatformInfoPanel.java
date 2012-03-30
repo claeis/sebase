@@ -1,27 +1,16 @@
 package ch.softenvironment.view;
 
-/* 
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- */
-import java.util.Locale;
-
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
+import ch.softenvironment.client.ResourceManager;
+
 /**
- * Panel to show some inmportant Info about Operating System and Java.
+ * Panel to show some important Info about Operating System and Java.
  * Use {@link #createDialog(JFrame) } to open Panel within a Dialog.
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2006-04-26 11:43:15 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public class PlatformInfoPanel extends BasePanel {
 	private javax.swing.JLabel ivjLblJavaVersion = null;
 	private javax.swing.JTextField ivjTxtJavaVersion = null;
@@ -79,7 +68,7 @@ private javax.swing.JLabel getLblJavaVersion() {
 			ivjLblJavaVersion.setText("Version:");
 			ivjLblJavaVersion.setBounds(10, 20, 140, 14);
 			// user code begin {1}
-            ivjLblJavaVersion.setText(getResourceString(PlatformInfoPanel.class, "LblJavaVersion_text"));
+            ivjLblJavaVersion.setText(ResourceManager.getResource(PlatformInfoPanel.class, "LblJavaVersion_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -104,8 +93,8 @@ private javax.swing.JLabel getLblJavaVMVersion() {
 			ivjLblJavaVMVersion.setText("VM Version:");
 			ivjLblJavaVMVersion.setBounds(10, 47, 140, 14);
 			// user code begin {1}
-            ivjLblJavaVMVersion.setText(getResourceString(PlatformInfoPanel.class, "LblJavaVMVersion_text"));
-            ivjLblJavaVMVersion.setToolTipText(getResourceString(PlatformInfoPanel.class, "LblJavaVMVersion_toolTipText"));
+            ivjLblJavaVMVersion.setText(ResourceManager.getResource(PlatformInfoPanel.class, "LblJavaVMVersion_text"));
+            ivjLblJavaVMVersion.setToolTipText(ResourceManager.getResource(PlatformInfoPanel.class, "LblJavaVMVersion_toolTipText"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -129,7 +118,7 @@ private javax.swing.JLabel getLblOSArchitecture() {
 			ivjLblOSArchitecture.setText("Architecture:");
 			ivjLblOSArchitecture.setBounds(10, 44, 140, 14);
 			// user code begin {1}
-            ivjLblOSArchitecture.setText(getResourceString(PlatformInfoPanel.class, "LblOSArchitecture_text"));
+            ivjLblOSArchitecture.setText(ResourceManager.getResource(PlatformInfoPanel.class, "LblOSArchitecture_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -153,7 +142,7 @@ private javax.swing.JLabel getLblOSLocale() {
 			ivjLblOSLocale.setText("Locale:");
 			ivjLblOSLocale.setBounds(10, 94, 140, 14);
 			// user code begin {1}
-            ivjLblOSLocale.setText(getResourceString(PlatformInfoPanel.class, "LblOSLocale_text"));
+            ivjLblOSLocale.setText(ResourceManager.getResource(PlatformInfoPanel.class, "LblOSLocale_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -177,7 +166,7 @@ private javax.swing.JLabel getLblOSName() {
 			ivjLblOSName.setText("Name:");
 			ivjLblOSName.setBounds(10, 20, 140, 14);
 			// user code begin {1}
-            ivjLblOSName.setText(getResourceString(PlatformInfoPanel.class, "LblOSName_text"));
+            ivjLblOSName.setText(ResourceManager.getResource(PlatformInfoPanel.class, "LblOSName_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -201,7 +190,7 @@ private javax.swing.JLabel getLblOSVersion() {
 			ivjLblOSVersion.setText("Version:");
 			ivjLblOSVersion.setBounds(10, 70, 140, 14);
 			// user code begin {1}
-            ivjLblOSVersion.setText(getResourceString(PlatformInfoPanel.class, "LblOSVersion_text"));
+            ivjLblOSVersion.setText(ResourceManager.getResource(PlatformInfoPanel.class, "LblOSVersion_text"));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
@@ -263,7 +252,7 @@ private javax.swing.JPanel getPnlOS() {
 			getPnlOS().add(getTxtOSLocale(), getTxtOSLocale().getName());
 			// user code begin {1}
 			getPnlOS().setBorder(javax.swing.BorderFactory.createCompoundBorder(
-                        javax.swing.BorderFactory.createTitledBorder(getResourceString(PlatformInfoPanel.class, "PnlOS_title")),
+                        javax.swing.BorderFactory.createTitledBorder(ResourceManager.getResource(PlatformInfoPanel.class, "PnlOS_title")),
                         javax.swing.BorderFactory.createEmptyBorder(5,5,5,5)));
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
@@ -451,21 +440,10 @@ private void initialize() {
  */
 public static JDialog createDialog(JFrame owner) {
     PlatformInfoPanel panel = new PlatformInfoPanel();
-    JDialog dialog = new JDialog(owner, getResourceString(PlatformInfoPanel.class, "Dialog_title"));
+    JDialog dialog = new JDialog(owner, ResourceManager.getResource(PlatformInfoPanel.class, "Dialog_title"));
     dialog.getContentPane().add(panel);
     dialog.setSize(panel.getWidth() + 10, panel.getHeight() + 30);
     return dialog;
 }
-/**
- * TestCase: Show panel as Dialog.
- */
-public static void main(java.lang.String[] args) {
-    try {
-        Locale.setDefault(Locale.GERMAN);
-        createDialog(null).show();
-    } catch (Throwable exception) {
-        System.err.println("Exception occurred in main() of ch.softenvironment.view.BasePanel");
-        exception.printStackTrace(System.out);
-    }
-}
+
 }

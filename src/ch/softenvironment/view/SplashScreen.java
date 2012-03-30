@@ -16,9 +16,9 @@ import java.awt.*;
 import javax.swing.*;
 /**
  * Splash screen for Application startup.
- * @author: Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.6 $ $Date: 2006-06-29 22:28:47 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public class SplashScreen extends JWindow {
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
 	private JPanel ivjJWindowContentPane = null;
@@ -160,20 +160,15 @@ private void initialize() {
  * @param image from IDE with relative FileSystem or compiled within Jar "/images/myPic.gif"
  */
 public void setImage(String image) {
-	ImageIcon icon = new javax.swing.ImageIcon(SplashScreen.class.getResource(image));
-	if (icon == null) {
-		ch.softenvironment.util.Tracer.getInstance().runtimeWarning("given iconFile not found <" + image + ">!");
-	} else {
-		setImage(icon);
-	}
+    setImage(new javax.swing.ImageIcon(SplashScreen.class.getResource(image)));
 }
 /**
  * Set the wanted image.
- * @parm icon
+ * @param icon
  */
 public void setImage(ImageIcon icon) {
 	if (icon == null) {
-		ch.softenvironment.util.Tracer.getInstance().runtimeWarning("given icon is null!");
+	    ch.softenvironment.util.Tracer.getInstance().runtimeWarning("given icon is null!");
 	}
 	getLblImage().setIcon(icon);
 }

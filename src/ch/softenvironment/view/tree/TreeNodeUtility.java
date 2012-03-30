@@ -20,8 +20,7 @@ package ch.softenvironment.view.tree;
  * implementing the relevant generic functions dealing
  * with Tree-Objects.
  * 
- * @author Peter Hirzel <i>soft</i>Environment 
- * @version $Revision: 1.4 $ $Date: 2006-05-07 13:55:23 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
 public interface TreeNodeUtility {
     /**
@@ -34,7 +33,7 @@ public interface TreeNodeUtility {
     /**
      * Compare two classes for sorting.
      */
-    int compareDefinition(Class o1, Class o2);
+    int compareDefinition(Class<?> o1, Class<?> o2);
     /**
      * Return the parent of the given node.
      * There must always be one except of the root-element.
@@ -46,7 +45,7 @@ public interface TreeNodeUtility {
      * @param nodeType (concrete TreeNode type)
      * @param expanded (whether node is expanded or not, for e.g. an opened Package)
      */
-    javax.swing.Icon getIcon(Class nodeType, boolean expanded);
+    javax.swing.Icon getIcon(Class<?> nodeType, boolean expanded);
     /**
      * Returns the string to display for this object.
      */
@@ -96,10 +95,10 @@ public interface TreeNodeUtility {
     /**
      * Return the iterator of children of given node (Namespace).
      */
-    java.util.Iterator iteratorChildren(Object node);
+    java.util.Iterator<?> iteratorChildren(Object node);
     /**
      * Move an object from its current-namespace to target-namespace.
-     * Evtl. show selection path of given object after relocation in Tree.
+     * Perhaps show selection path of given object after relocation in Tree.
      * @param object ModelElement
      * @param targetNamespace Package
      */

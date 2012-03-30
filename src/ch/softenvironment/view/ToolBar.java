@@ -26,9 +26,9 @@ import ch.softenvironment.controller.DataBrowserListener;
  * - manage a multi Object-List to browse
  * - Inconsistency-list of current object
  * 
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.14 $ $Date: 2008-04-08 10:01:44 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public class ToolBar extends javax.swing.JToolBar implements DataBrowserListener {
 	private javax.swing.JButton ivjTbbCopy = null;
 	private javax.swing.JButton ivjTbbCut = null;
@@ -1209,11 +1209,11 @@ public void setCurrentObject(final java.lang.Object currentObject) {
 }
 /**
  * Show a list of inconsistencies in a ComboBox,
- * which is suppressed if everything is allright..
+ * which is suppressed if everything is alright.
  * @param items java.util.Vector
  * @see ConsistencyController.getInconsistencies();
  */
-public void setItems(java.util.Vector items) {
+public void setItems(java.util.Vector<?> items) {
 	getCbxItems().setVisible((items != null) && (items.size() > 0));
 	getCbxItems().setModel(new javax.swing.DefaultComboBoxModel(items));
 }
@@ -1221,7 +1221,7 @@ public void setItems(java.util.Vector items) {
  * Set the list of Objects to handle (scroll) by Toolbar.
  * @param objects The new value for the property.
  */
-public void setObjects(java.util.List objects) {
+public void setObjects(java.util.List<?> objects) {
     browser.setObjects(objects);
     if ((objects == null) || (objects.size() <= 1)) {
         // suppress browsing completely

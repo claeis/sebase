@@ -19,9 +19,9 @@ package ch.softenvironment.view.swingext;
  * The Model will be updated at focusLost-Event.
  * The expected format is shown as ToolTip.
  *
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.3 $ $Date: 2007-02-20 12:44:31 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public class DateTextField extends javax.swing.JTextField {
 	IvjEventHandler ivjEventHandler = new IvjEventHandler();
 	private java.util.Date fieldDate = null;

@@ -14,19 +14,17 @@ package ch.softenvironment.view.swingext;
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-import java.awt.Color;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.geom.Rectangle2D;
 import javax.swing.JPanel;
 import ch.softenvironment.util.Tracer;
 
 /**
  * Utility to print JPanel contents.
  * 
- * @author Peter Hirzel <i>soft</i>Environment 
- * @version $Revision: 1.1 $ $Date: 2007-05-31 13:58:17 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
 public class JPanelPrintable implements java.awt.print.Printable {
     private JPanel panel = null;

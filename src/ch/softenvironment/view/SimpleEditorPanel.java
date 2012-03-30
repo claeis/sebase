@@ -17,9 +17,9 @@ import ch.softenvironment.util.*;
 import ch.softenvironment.client.ResourceManager;
 /**
  * Provide a simple editor Area with minimal functionality.
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.10 $ $Date: 2008-08-04 20:32:34 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public class SimpleEditorPanel extends javax.swing.JPanel {
 	private boolean hasContentsChanged = false;
 	private javax.swing.JTextArea ivjTxaEditor = null;

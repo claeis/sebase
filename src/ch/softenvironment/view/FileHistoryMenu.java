@@ -20,87 +20,104 @@ import ch.softenvironment.client.ResourceManager;
 import ch.softenvironment.util.StringUtils;
 
 /**
- * Generic FileMenu to provide a list of recently used files. 
- * @author Peter Hirzel <i>soft</i> Environment
- * @version $Revision: 1.3 $ $Date: 2007-02-20 12:43:38 $
+ * Generic FileMenu to provide a list of recently used files.
+ * 
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public class FileHistoryMenu extends javax.swing.JMenu {
-	private FileHistoryListener listener = null;
-	private int numberOfEntries = 0;
-	private java.util.List history = new ArrayList();
-	// use List to keep order (actually SET)
-	/**
-	 * FileHistoryMenu constructor.
-	 * 
-	 * @param listener GUI-Class shwing a FileHistoryMenu
-	 * @param maxNumberOfEntries max files to be historized
-	 * @param currentEntries given history
-	 */
-	public FileHistoryMenu(FileHistoryListener listener,
-							int maxNumberOfEntries,
-							java.util.List currentEntries) {
-		super();
+    private FileHistoryListener listener = null;
+    private int numberOfEntries = 0;
+    private java.util.List<String> history = new ArrayList<String>();
 
-		this.listener = listener;
-		this.numberOfEntries = maxNumberOfEntries;
+    // use List to keep order (actually SET)
+    /**
+     * FileHistoryMenu constructor.
+     * 
+     * @param listener
+     *            GUI-Class showing a FileHistoryMenu
+     * @param maxNumberOfEntries
+     *            max files to be historized
+     * @param currentEntries
+     *            given history
+     */
+    public FileHistoryMenu(FileHistoryListener listener, int maxNumberOfEntries, java.util.List<String> currentEntries) {
+	super();
 
-		setText(ResourceManager.getResource(FileHistoryMenu.class, "MnuFileHistory_text"));
-		setToolTipText(ResourceManager.getResource(FileHistoryMenu.class, "MnuFileHistory_toolTipText"));
+	this.listener = listener;
+	this.numberOfEntries = maxNumberOfEntries;
 
-		for (int i = 0; (i < currentEntries.size()) && (i < maxNumberOfEntries); i++) {
-			String filename = (String)currentEntries.get(i);
-			if (!StringUtils.isNullOrEmpty(filename)) {
-				history.add(filename);
-			}
+	translate();
+
+	for (int i = 0; (i < currentEntries.size()) && (i < maxNumberOfEntries); i++) {
+	    String filename = currentEntries.get(i);
+	    if (!StringUtils.isNullOrEmpty(filename)) {
+		history.add(filename);
+	    }
+	}
+	buildSubmenu();
+    }
+    /**
+     * Translate to current locale.
+     */
+    public void translate() {
+	setText(ResourceManager.getResource(FileHistoryMenu.class, "MnuFileHistory_text"));
+	setToolTipText(ResourceManager.getResource(FileHistoryMenu.class, "MnuFileHistory_toolTipText"));
+    }
+    /**
+     * Add most recently opened file to checkIn at top of History.
+     * 
+     * @param filename
+     *            (incl. absolute path) to be kept in history
+     */
+    public void addRecent(final String filename) {
+	removeRecent(filename); // prevent double entries
+
+	history.add(0, filename); // shuffle last at top
+	if (history.size() > numberOfEntries) {
+	    history.remove(numberOfEntries);
+	}
+	buildSubmenu();
+    }
+
+    /**
+     * Create generic JMenuItem's.
+     */
+    private void buildSubmenu() {
+	removeAll();
+
+	Iterator<String> iterator = history.iterator();
+	while (iterator.hasNext()) {
+	    final String filename = iterator.next();
+	    JMenuItem menuItem = new JMenuItem(filename);
+	    menuItem.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent event) {
+		    listener.openFile(filename);
 		}
-		buildSubmenu();
+	    });
+	    add(menuItem);
 	}
-	/**
-	 * Add most recently opened file to checkIn at top of History.
-	 * @param filename (incl. absolute path) to be kept in history
-	 */
-	public void addRecent(final String filename) {
-		removeRecent(filename); //prevent double entries
+    }
 
-		history.add(0, filename); // shuffle last at top
-		if (history.size() > numberOfEntries) {
-			history.remove(numberOfEntries);
-		}
-		buildSubmenu();
-	}
-	/**
-	 * Create generic JMenuItem's.
-	 */
-	private void buildSubmenu() {
-		removeAll();
+    /**
+     * Return the current history in last used Order.
+     * 
+     * @return java.util.List
+     */
+    public java.util.List<String> getHistory() {
+	return history;
+    }
 
-		Iterator iterator = history.iterator();
-		while (iterator.hasNext()) {
-			final String filename = (String)iterator.next();
-			JMenuItem menuItem = new JMenuItem(filename);
-			menuItem.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent event) {
-					listener.openFile(filename);
-				}
-			});
-			add(menuItem);
-		}
+    /**
+     * Remove a file from History (for e.g. if non existing any more).
+     * 
+     * @param filename
+     *            (incl. absolute path) to be removed from history
+     */
+    public void removeRecent(String filename) {
+	if (history.contains(filename)) {
+	    history.remove(filename);
 	}
-	/**
-	 * Return the current history in last used Order.
-	 * @return java.util.List
-	 */
-	public java.util.List getHistory() {
-		return history;
-	}
-	/**
-	 * Remove a file from History (for e.g. if non existing any more).
-	 * @param filename (incl. absolute path) to be removed from history
-	 */
-	public void removeRecent(String filename) {
-		if (history.contains(filename)) {
-			history.remove(filename);
-		}
-		buildSubmenu();
-	}
+	buildSubmenu();
+    }
 }

@@ -14,9 +14,9 @@ package ch.softenvironment.view;
 import ch.softenvironment.util.DateUtils;
 /**
  * Define a Date-Range especially for SearchView's.
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.4 $ $Date: 2007-08-29 15:36:05 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
+@SuppressWarnings("serial")
 public class DateRangePanel extends javax.swing.JPanel {
 	private javax.swing.JLabel ivjLblBilled32 = null;
 	private ch.softenvironment.view.swingext.DateTextField ivjTxtDateFrom = null;
@@ -236,7 +236,7 @@ private void initConnections() throws java.lang.Exception {
 private void initialize() {
 	try {
 		// user code begin {1}
-		java.util.Vector items = new java.util.Vector(5);
+		java.util.Vector<String> items = new java.util.Vector<String>(5);
 		items.add("");
 		items.add("Heute");
 		items.add("Woche");
