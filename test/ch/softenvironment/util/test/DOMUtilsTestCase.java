@@ -11,7 +11,6 @@ package ch.softenvironment.util.test;
  * Lesser General Public License for more details.
  */
 import java.io.FileWriter;
-import java.io.UnsupportedEncodingException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
@@ -29,12 +28,12 @@ import junit.framework.TestCase;
 /**
  * 
  * TestCase for DOMUtils.
- * @author Peter Hirzel <i>soft</i>Environment
+ * @author Peter Hirzel <i>soft</i>Environment GmbH
  * @version $Revision: 1.2 $ $Date: 2006-05-07 14:53:51 $
  * @see ch.softenvironment.util.DOMUtils
  */
 public class DOMUtilsTestCase extends TestCase {
-    private static String text = "<äöü{}[]ÄÖÜ °§ @ çéèà'$£\" &  \n\r\t>";
+    private static String text = "<äöü{}[]ÄÖÜ çé @ '$\" &  \n\r\t>"; 
     private static String path = System.getProperty("java.io.tmpdir");
 
     private DocumentBuilder docBuilder = null;
@@ -89,18 +88,14 @@ public class DOMUtilsTestCase extends TestCase {
         root.appendChild(body);
         body.appendChild(doc.createComment("START Data area"));
         
-        // chreate children
+        // create children
         child = doc.createElement("HOST");
         body.appendChild(child);
         child.appendChild(doc.createTextNode("Sandflyer")); //XmlUtils.encodeUTF8("Sandflyer")));
 
         child = doc.createElement("DATA");
         body.appendChild(child);
-        try {
-            child.appendChild(doc.createTextNode(DOMUtils.encodeUTF8(text)));
-        } catch(UnsupportedEncodingException e) {
-            fail(e.getLocalizedMessage());
-        }
+        child.appendChild(doc.createTextNode(text));
 
         Element fault = doc.createElement("soap:Fault");
         body.appendChild(fault);
@@ -119,23 +114,7 @@ public class DOMUtilsTestCase extends TestCase {
         return result.getNodeValue();
     }
     
-    public void testEncodeUTF8() {
-        try {    
-            assertTrue("<".equals(DOMUtils.encodeUTF8("<"))); // mask for XML additionally
-            assertFalse("ä".equals(DOMUtils.encodeUTF8("ä")));
-            assertTrue((new String("ä".getBytes("UTF-8")).equals(DOMUtils.encodeUTF8("ä"))));
-            
-            String encoded = DOMUtils.encodeUTF8(text);
-            assertFalse(text.equals(encoded));
-            assertFalse(text.equals(new String(encoded))); // actually unnecessary Test 
-            
-            String decoded = new String(encoded.getBytes(), "UTF-8");
-            assertTrue(text.equals(decoded));
-            assertTrue(decoded.charAt(decoded.length()-1) == '>');
-        } catch(UnsupportedEncodingException e) {
-            fail("text probably contains a non-encodable Character: " + e.getLocalizedMessage());
-        }
-    }
+    
     public void testReadWrite() {
         String filename = path + "XmlUtilsTestCase.xml";
         try {
