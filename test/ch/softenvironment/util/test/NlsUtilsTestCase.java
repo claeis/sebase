@@ -31,7 +31,7 @@ public void testDate() {
 public void testFormatMessage() {
 	assertTrue("NlsUtils#testFormatMessage", "This is 17".equals(NlsUtils.formatMessage("This is {0}", 17)));
 	assertTrue("NlsUtils#testFormatMessage", "The langugage is english".equals(NlsUtils.formatMessage("The langugage is {0}", "english")));
-	Object[] tokens = { new Integer(3), "messages" };
+	Object[] tokens = { Integer.valueOf(3), "messages" };
 	assertTrue("NlsUtils#testFormatMessage", "These are 3 messages".equals(NlsUtils.formatMessage("These are {0} {1}", tokens)));
 }
 public void testGetTime24Hours() {

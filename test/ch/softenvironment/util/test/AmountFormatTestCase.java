@@ -35,7 +35,7 @@ public void testFormat() {
     assertTrue("toString(double)", af.format(1343492.3422).equals("1'343'492.34"));
     assertTrue("toString(Double)", af.format(new Double(1343492.3422)).equals("1'343'492.34"));
     assertTrue("toString(long)", af.format((long)1343492).equals("1'343'492.00"));
-    assertTrue("toString(Long)", af.format(new Long(1343492)).equals("1'343'492.00"));
+    assertTrue("toString(Long)", af.format(Long.valueOf(1343492)).equals("1'343'492.00"));
     assertTrue("toString(Double)", af.format(new Double(1343492.3472)).equals("1'343'492.35"));
     assertTrue("toString(Double)", af.format(new Double(1343492.367822)).equals("1'343'492.37"));
 
@@ -45,7 +45,7 @@ public void testFormat() {
     assertTrue("toString(double)", af.format(1343492.3422).equals("1'343'492.34"));
     assertTrue("toString(Double)", af.format(new Double(1343492.3422)).equals("1'343'492.34"));
     assertTrue("toString(long)", af.format((long)1343492).equals("1'343'492.00"));
-    assertTrue("toString(Long)", af.format(new Long(1343492)).equals("1'343'492.00"));
+    assertTrue("toString(Long)", af.format(Long.valueOf(1343492)).equals("1'343'492.00"));
 
     
     af = AmountFormat.getAmountInstance(new Locale("en", "US"));
@@ -54,7 +54,7 @@ public void testFormat() {
     assertTrue("toString(double)", af.format(1343492.3422).equals("1,343,492.34"));
     assertTrue("toString(Double)", af.format(new Double(1343492.3422)).equals("1,343,492.34"));
     assertTrue("toString(long)", af.format((long)1343492).equals("1,343,492.00"));
-    assertTrue("toString(Long)", af.format(new Long(1343492)).equals("1,343,492.00"));
+    assertTrue("toString(Long)", af.format(Long.valueOf(1343492)).equals("1,343,492.00"));
 
     assertTrue("toString(null)", AmountFormat.toString(null).equals(""));
 //  assertTrue("toString(Double, 3, 5)", AmountFormat.toString(new Double(1343492.3422567), 3, 5).equals("1'343'492.34226"));

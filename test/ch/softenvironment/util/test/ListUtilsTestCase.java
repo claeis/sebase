@@ -14,6 +14,8 @@ package ch.softenvironment.util.test;
 import java.util.HashSet;
 import java.util.Set;
 
+import ch.softenvironment.util.BeanReflector;
+import ch.softenvironment.util.Evaluator;
 import ch.softenvironment.util.ListUtils;
 
 import junit.framework.TestCase;
@@ -24,88 +26,117 @@ import junit.framework.TestCase;
  * @author Peter Hirzel, softEnvironment GmbH
  */
 public class ListUtilsTestCase extends TestCase {
-    public /*for BeanReflector access*/ static class ListObject {
-	protected Long id;
+	private static final String PROPERTY = "Id";
 
-	public Long getId() {
-	    return id;
-	}
-
-	public String getMyToString() {
-	    return "sample";
-	}
-    }
-
-    public void testCreateList() {
-	java.util.List<String> list = ListUtils.createList("hello");
-	assertTrue(list.get(0).equals("hello"));
-    }
-
-    public void testConvertToString() {
-	ListObject obj = new ListObject();
-	java.util.List<ListObject> list = new java.util.ArrayList<ListObject>();
-	list.add(obj);
-	assertTrue("sample;".equals(ListUtils.convertToString(list, "myToString", ';')));
-
-	/*
-	 * list = new java.util.ArrayList(); list.add(new ListUtilsTestCase());
-	 * assertTrue((obj.toString() +
-	 * "?").equals(ListUtils.convertToString(list, null, '?')));
+	/**
+	 * Used for BeanReflector test
 	 */
-    }
+	public static class ListObject {
+		public ListObject(Long id) {
+			this.id = id;
+		}
 
-    public void testCreateIntersection() {
-	Set<Long> set0 = new HashSet<Long>(4);
-	set0.add(new Long(12));
-	set0.add(new Long(15));
-	set0.add(new Long(-101));
-	set0.add(new Long(45));
-	Set<Long> set1 = new HashSet<Long>(4);
-	set1.add(new Long(121));
-	set1.add(new Long(15));
-	set1.add(new Long(-102));
-	set1.add(new Long(45));
-	Set<Long> result = ListUtils.createIntersection(set0, set1);
-	assertTrue("same type of elements", result.size() == 2);
-	assertTrue(result.contains(new Long(15)));
-	assertTrue(result.contains(new Long(45)));
-	assertFalse(result.contains(new Long(12)));
-	assertFalse(result.contains(new Long(-102)));
+		private Long id;
 
-	/*
-	Set<Integer> set2 = new HashSet<Integer>();
-	set2.add(new Integer(121));
-	set2.add(new Integer(15));
-	set2.add(new Integer(-102));
-	set2.add(new Integer(45));
-	result = ListUtils.createIntersection(set0, set2);
-	assertTrue("different types", result.size() == 0);
-	*/
-    }
+		/**
+		 * @see PROPERTY
+		 * @return
+		 */
+		public Long getId() {
+			return id;
+		}
 
-    public void testEliminateDuplicates() {
-	try {
-	    java.util.List<ListObject> list = new java.util.ArrayList<ListObject>();
-	    ListUtils.eliminateDuplicates(list, "Id");
-	    assertTrue("empty", list.size() == 0);
-
-	    ListObject lo = new ListObject();
-	    lo.id = new Long(12);
-	    list.add(lo);
-	    ListUtils.eliminateDuplicates(list, "Id");
-	    assertTrue("no elimination", list.size() == 1);
-
-	    lo = new ListObject();
-	    lo.id = new Long(13);
-	    list.add(lo);
-	    ListUtils.eliminateDuplicates(list, "Id");
-	    assertTrue("no elimination", list.size() == 2);
-
-	    list.add(lo);
-	    ListUtils.eliminateDuplicates(list, "Id");
-	    assertTrue("real elimination", list.size() == 2);
-	} catch (Throwable ex) {
-	    fail(ex.getLocalizedMessage());
+		public String getMyToString() {
+			return "sample";
+		}
 	}
-    }
+
+	public static class ListObjectEvaluator implements Evaluator {
+		@Override
+		public Object evaluate(Object owner, String property) {
+			try {
+				return (new BeanReflector<ListObject>((ListObject)owner, property)).getValue();
+			} catch (Exception ex) {
+				fail(ex.getMessage());
+				return null;
+			}
+		}
+
+	}
+
+	public void testCreateList() {
+		java.util.List<String> list = ListUtils.createList("hello");
+		assertTrue(list.get(0).equals("hello"));
+	}
+
+	public void testConvertToString() {
+		ListObject obj = new ListObject(null);
+		java.util.List<ListObject> list = new java.util.ArrayList<ListObject>();
+		list.add(obj);
+		assertTrue("sample;".equals(ListUtils.convertToString(list, "myToString", ';')));
+	}
+
+	public void testCreateIntersection() {
+		Set<Long> set0 = new HashSet<Long>(4);
+		set0.add(Long.valueOf(12));
+		set0.add(Long.valueOf(15));
+		set0.add(Long.valueOf(-101));
+		set0.add(Long.valueOf(45));
+		Set<Long> set1 = new HashSet<Long>(4);
+		set1.add(Long.valueOf(121));
+		set1.add(Long.valueOf(15));
+		set1.add(Long.valueOf(-102));
+		set1.add(Long.valueOf(45));
+		Set<Long> result = ListUtils.createIntersection(set0, set1);
+		assertTrue("same type of elements", result.size() == 2);
+		assertTrue(result.contains(Long.valueOf(15)));
+		assertTrue(result.contains(Long.valueOf(45)));
+		assertFalse(result.contains(Long.valueOf(12)));
+		assertFalse(result.contains(Long.valueOf(-102)));
+	}
+
+	public void testEliminateDuplicates() {
+		try {
+			java.util.List<ListObject> list = new java.util.ArrayList<ListObject>();
+			ListUtils.eliminateDuplicates(list, PROPERTY);
+			assertTrue("empty", list.size() == 0);
+
+			ListObject lo = new ListObject(Long.valueOf(12));
+			list.add(lo);
+			ListUtils.eliminateDuplicates(list, PROPERTY);
+			assertTrue("no elimination", list.size() == 1);
+
+			lo = new ListObject(Long.valueOf(13));
+			list.add(lo);
+			ListUtils.eliminateDuplicates(list, PROPERTY);
+			assertTrue("no elimination", list.size() == 2);
+
+			list.add(lo);
+			ListUtils.eliminateDuplicates(list, PROPERTY);
+			assertTrue("real elimination", list.size() == 2);
+		} catch (Throwable ex) {
+			fail(ex.getLocalizedMessage());
+		}
+	}
+
+	public void testSort() {
+		java.util.List<ListObject> items = new java.util.ArrayList<ListObject>();
+		Evaluator evaluator = new ListObjectEvaluator();
+		java.util.List<ListObject> sorted = ListUtils.sort(items, evaluator, PROPERTY);
+		assertTrue("nothing to sort", items.size() == sorted.size());
+
+		items.add(new ListObject(Long.valueOf(23)));
+		sorted = ListUtils.sort(items, evaluator, PROPERTY);
+		assertTrue("nothing to sort", items.size() == sorted.size());
+
+		items.add(new ListObject(Long.valueOf(12)));
+		assertTrue(items.get(0).getId().longValue() == 23);
+		assertTrue(items.get(1).getId().longValue() == 12);
+		sorted = ListUtils.sort(items, evaluator, PROPERTY);
+		assertTrue(items.get(0).getId().longValue() == 23);
+		assertTrue(items.get(1).getId().longValue() == 12);
+		assertTrue(sorted.get(0).getId().longValue() == 12);
+		assertTrue(sorted.get(1).getId().longValue() == 23);
+		assertTrue("after sorting", items.size() == sorted.size());
+	}
 }

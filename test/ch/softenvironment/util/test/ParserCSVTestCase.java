@@ -37,7 +37,7 @@ public class ParserCSVTestCase extends junit.framework.TestCase {
 	assertTrue("[abc]", ("abc" + sep).equals(ParserCSV.arrayToString(list, sep)));
 	list.add("xxx");
 	assertTrue("[abc, xxx]", ("abc" + sep + "xxx" + sep).equals(ParserCSV.arrayToString(list, sep)));
-	list.add("4" /*new Integer(4)*/);
+	list.add("4" /*Integer.valueOf(4)*/);
 	assertTrue("[abc, xxx]", ("abc" + sep + "xxx" + sep + "4" + sep).equals(ParserCSV.arrayToString(list, sep)));
     }
 
