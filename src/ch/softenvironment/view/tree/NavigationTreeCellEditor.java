@@ -22,16 +22,13 @@ import javax.swing.JTree;
 /**
  * TreeCellEditor for a navigation tree node.
  * 
- * @author Peter Hirzel <i>soft</i>Environment 
- * @version $Revision: 1.2 $ $Date: 2007-02-20 12:45:07 $
+ * @author Peter Hirzel, softEnvironment GmbH
  */
 public class NavigationTreeCellEditor extends javax.swing.tree.DefaultTreeCellEditor {
     public NavigationTreeCellEditor(AutoScrollingTree tree, NavigationTreeCellRenderer renderer) {
         super(tree, renderer);
     }
-    /**
-     * Overwrites.
-     */
+    @Override
     public Component getTreeCellEditorComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row) {
         if (tree instanceof AutoScrollingTree) {
             return super.getTreeCellEditorComponent(tree,
