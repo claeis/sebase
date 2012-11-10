@@ -351,7 +351,7 @@ public void setList(java.util.List<String> list) {
 	firePropertyChange("list", oldValue, list);
 
 	java.util.Vector<Integer> elements = new java.util.Vector<Integer>(1);
-	elements.add(new Integer(1));
+	elements.add(Integer.valueOf(1));
 	getCbxCount().setModel(new javax.swing.DefaultComboBoxModel(elements));
 	if ((list != null) && (list.size() >= 1)) {
 		setText(list.get(0));
