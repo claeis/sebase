@@ -24,7 +24,7 @@ public abstract class NlsUtils {
 	public final static String TIME_24HOURS_PATTERN = "HH:mm:ss";	// 24 hours
 /**
  * Bind a String with appropriate parameters.
- * For e.g. Pattern = "This are a {0} {1}"; tokens={new Integer(17),  "messages"}
+ * For e.g. Pattern = "This are a {0} {1}"; tokens={Integer.valueOf(17),  "messages"}
  */
 public static String formatMessage(String pattern, Object[] tokens) {
 	return MessageFormat.format(pattern, tokens);
@@ -36,7 +36,7 @@ public static String formatMessage(String pattern, Object[] tokens) {
  * @param arg0 integer value to be replaced in pattern
  */
 public static String formatMessage(String pattern, int arg0) {
-	Object[] tokens = { new Integer(arg0) };
+	Object[] tokens = { Integer.valueOf(arg0) };
 	return formatMessage(pattern, tokens);
 }
 /**
