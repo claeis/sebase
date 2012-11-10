@@ -142,13 +142,13 @@ public static Integer getDayInMonth(java.util.Date date) {
 //	java.text.SimpleDateFormat sf = new java.text.SimpleDateFormat("dd");
 //	sf.getCalendar().get(java.util.Calendar.YEAR);
 //	sf.applyPattern("dd");   // day only
-//	return new Integer(sf.format(date));
+//	return Integer.valueOf(sf.format(date));
 	if (date == null) {
 		return null;
 	} else {
 		java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
 		cal.setTime(date);
-		return new Integer(cal.get(java.util.Calendar.DAY_OF_MONTH));
+		return Integer.valueOf(cal.get(java.util.Calendar.DAY_OF_MONTH));
 	}
 }
 
@@ -162,7 +162,7 @@ public static Integer getYear(java.util.Date date) {
 	} else {
 		java.util.GregorianCalendar cal = new java.util.GregorianCalendar();
 		cal.setTime(date);
-		return new Integer(cal.get(java.util.Calendar.YEAR));
+		return Integer.valueOf(cal.get(java.util.Calendar.YEAR));
 	}
 }
 /**
