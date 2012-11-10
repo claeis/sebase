@@ -18,7 +18,7 @@ import ch.ehi.basics.i18n.ResourceBundle;
  
 /**
  * NLS-Utility for common reusable User Interface expressions (CUA).
- * @author: Peter Hirzel <i>soft</i>Environment
+ * @author Peter Hirzel <i>soft</i>Environment
  * @version $Revision: 1.8 $ $Date: 2005-06-30 07:27:43 $
  */
 public abstract class CommonUserAccess {
