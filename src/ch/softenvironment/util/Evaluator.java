@@ -12,7 +12,7 @@ package ch.softenvironment.util;
  */
  
 /**
- * Interface to specifiy generic evaluation for given object and property.
+ * Interface to specify generic evaluation for given object and property.
  * @author Peter Hirzel <i>soft</i>Environment
  * @version $Revision: 1.1 $ $Date: 2007-02-27 17:38:10 $
  */
@@ -20,7 +20,7 @@ public interface Evaluator {
 	/**
 	 * Visitor-Pattern.
 	 * The value given implicitely by owner's property will be evaluated
-	 * and evtl. preformatted to be rendered later by a displayable component.
+	 * and perhaps preformatted to be rendered later by a displayable component.
 	 * For e.g. to display any value that has to be
 	 * calculated somehow and depends on other current data.
      * @param owner Object having the given property
