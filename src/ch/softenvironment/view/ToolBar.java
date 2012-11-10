@@ -377,9 +377,7 @@ private void connEtoC9(java.awt.event.ActionEvent arg1) {
 		handleException(ivjExc);
 	}
 }
-/**
- * Overwrites.
- */
+@Override
 public void removeNotify() {
     browser.removeListener(this);
     super.removeNotify();
@@ -884,7 +882,7 @@ private javax.swing.JButton getTbbOpen() {
 			ivjTbbOpen.setEnabled(false);
 			// user code begin {1}
 			ivjTbbOpen.setIcon(CommonUserAccess.getIconChange());
-			ivjTbbOpen.setToolTipText(CommonUserAccess.getMniEditChangeWindowText());
+			ivjTbbOpen.setToolTipText(CommonUserAccess.getMniFileOpenWindowText());
 			// user code end
 		} catch (java.lang.Throwable ivjExc) {
 			// user code begin {2}
