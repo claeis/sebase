@@ -15,7 +15,7 @@ package ch.softenvironment.view;
 /**
  * Simple Panel to represent a certain Object which
  * allows changes to be saved.
- * @author: Peter Hirzel <i>soft</i>Environment
+ * @author Peter Hirzel <i>soft</i>Environment
  * @version $Revision: 1.4 $ $Date: 2004-04-27 18:49:45 $
  */
 public interface DataPanel {
