@@ -25,43 +25,39 @@ import ch.softenvironment.math.MathUtils;
  */
 @SuppressWarnings("serial")
 public class NumberTableCellRenderer extends javax.swing.table.DefaultTableCellRenderer {
-    java.text.NumberFormat numberFormat = null;
+	java.text.NumberFormat numberFormat = null;
 
-    public NumberTableCellRenderer(java.text.NumberFormat format) {
-	super();
-	numberFormat = format;
-    }
-
-    public NumberTableCellRenderer(int fractionDigits) {
-	this(java.text.NumberFormat.getNumberInstance());
-
-	numberFormat.setMinimumFractionDigits(fractionDigits);
-	numberFormat.setMaximumFractionDigits(fractionDigits);
-    }
-
-    /**
-     * Overwrites.
-     */
-    public java.awt.Component getTableCellRendererComponent(javax.swing.JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-	setComponentOrientation(java.awt.ComponentOrientation.RIGHT_TO_LEFT);
-	return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-    }
-
-    /**
-     * Overwrites.
-     */
-    protected void setValue(Object value) {
-	try {
-	    if (value == null) {
-		setText("");
-	    } else if (MathUtils.compare(0.0, ((Number)value).doubleValue()) == 0) {
-		// prevent 0.0 is represented as -0.0
-		setText(numberFormat.format(new Double(0.0)));
-	    } else {
-		setText((value == null) ? "" : numberFormat.format((Number)value));
-	    }
-	} catch (ClassCastException e) {
-	    ch.softenvironment.util.Tracer.getInstance().developerError("Number value expected for: " + value);
+	public NumberTableCellRenderer(java.text.NumberFormat format) {
+		super();
+		numberFormat = format;
 	}
-    }
+
+	public NumberTableCellRenderer(int fractionDigits) {
+		this(java.text.NumberFormat.getNumberInstance());
+
+		numberFormat.setMinimumFractionDigits(fractionDigits);
+		numberFormat.setMaximumFractionDigits(fractionDigits);
+	}
+
+	@Override
+	public java.awt.Component getTableCellRendererComponent(javax.swing.JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+		setComponentOrientation(java.awt.ComponentOrientation.RIGHT_TO_LEFT);
+		return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+	}
+
+	@Override
+	protected void setValue(Object value) {
+		try {
+			if (value == null) {
+				setText("");
+			} else if (MathUtils.compare(0.0, ((Number)value).doubleValue()) == 0) {
+				// prevent 0.0 is represented as -0.0
+				setText(numberFormat.format(new Double(0.0)));
+			} else {
+				setText((value == null) ? "" : numberFormat.format((Number)value));
+			}
+		} catch (ClassCastException e) {
+			ch.softenvironment.util.Tracer.getInstance().developerError("Number value expected for: " + value);
+		}
+	}
 }
