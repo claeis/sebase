@@ -124,9 +124,7 @@ public abstract class BaseDialog extends javax.swing.JDialog {
 	protected void genericPopupDisplay(java.awt.event.MouseEvent event, javax.swing.JPopupMenu popupMenu) {
 	    BaseFrame.popupDisplay(this, event, popupMenu);
 	}
-	/**
-	 * Overwrites.
-	 */
+	@Override
 	public void dispose() {
 		if (getViewOptions() != null) {
 		    getViewOptions().getViewManager().checkOut(this);

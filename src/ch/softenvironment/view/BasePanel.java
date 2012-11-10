@@ -23,95 +23,95 @@ import ch.softenvironment.client.ResourceManager;
  */
 @SuppressWarnings("serial")
 public class BasePanel extends javax.swing.JPanel {
-    private Image image = null;
+	private Image image = null;
 
-    /**
-     * BasePanel constructor comment.
-     */
-    public BasePanel() {
-	super();
-    }
-
-    /**
-     * BasePanel constructor comment.
-     * 
-     * @param layout
-     *            java.awt.LayoutManager
-     */
-    public BasePanel(java.awt.LayoutManager layout) {
-	super(layout);
-    }
-
-    /**
-     * BasePanel constructor comment.
-     * 
-     * @param layout
-     *            java.awt.LayoutManager
-     * @param isDoubleBuffered
-     *            boolean
-     */
-    public BasePanel(java.awt.LayoutManager layout, boolean isDoubleBuffered) {
-	super(layout, isDoubleBuffered);
-    }
-
-    /**
-     * BasePanel constructor comment.
-     * 
-     * @param isDoubleBuffered
-     *            boolean
-     */
-    public BasePanel(boolean isDoubleBuffered) {
-	super(isDoubleBuffered);
-    }
-
-    /**
-     * @see BaseFrame#genericPopupDisplay(..)
-     */
-    protected void genericPopupDisplay(java.awt.event.MouseEvent event, javax.swing.JPopupMenu popupMenu) {
-	BaseFrame.popupDisplay(this, event, popupMenu);
-    }
-
-    /**
-     * Convenience method.
-     */
-    protected String getResourceString(String propertyName) {
-	return ResourceManager.getResource(this.getClass(), propertyName);
-    }
-
-    /**
-     * Popup an error Dialog.
-     * 
-     * @param exception
-     *            java.lang.Throwable
-     */
-    protected void handleException(java.lang.Throwable exception) {
-	BaseFrame.showException(null, exception);
-    }
-
-    /**
-     * Display given image as Background-Image on Panel.
-     * 
-     * @param path
-     * @see #paintComponent()
-     */
-    public void setImage(Image image) {
-	// image = Toolkit.getDefaultToolkit().createImage(path);
-	this.image = image;
-    }
-
-    /**
-     * Overwrites.
-     * 
-     * @see #setImage()
-     */
-    public void paintComponent(Graphics g) {
-	super.paintComponent(g);
-	if (image != null) {
-	    /*
-	     * int w = getWidth(); int h = getHeight(); int x = (w -
-	     * imageWidth)/2; int y = (h - imageHeight)/2;
-	     */
-	    g.drawImage(image, (int)(g.getClipBounds().getCenterX() - (image.getWidth(this) / 2.0)), (int)(g.getClipBounds().getCenterY() - (image.getHeight(this) / 2.0)), this);
+	/**
+	 * BasePanel constructor comment.
+	 */
+	public BasePanel() {
+		super();
 	}
-    }
+
+	/**
+	 * BasePanel constructor comment.
+	 * 
+	 * @param layout
+	 *            java.awt.LayoutManager
+	 */
+	public BasePanel(java.awt.LayoutManager layout) {
+		super(layout);
+	}
+
+	/**
+	 * BasePanel constructor comment.
+	 * 
+	 * @param layout
+	 *            java.awt.LayoutManager
+	 * @param isDoubleBuffered
+	 *            boolean
+	 */
+	public BasePanel(java.awt.LayoutManager layout, boolean isDoubleBuffered) {
+		super(layout, isDoubleBuffered);
+	}
+
+	/**
+	 * BasePanel constructor comment.
+	 * 
+	 * @param isDoubleBuffered
+	 *            boolean
+	 */
+	public BasePanel(boolean isDoubleBuffered) {
+		super(isDoubleBuffered);
+	}
+
+	/**
+	 * @see BaseFrame#genericPopupDisplay(..)
+	 */
+	protected void genericPopupDisplay(java.awt.event.MouseEvent event, javax.swing.JPopupMenu popupMenu) {
+		BaseFrame.popupDisplay(this, event, popupMenu);
+	}
+
+	/**
+	 * Convenience method.
+	 */
+	protected String getResourceString(String propertyName) {
+		return ResourceManager.getResource(this.getClass(), propertyName);
+	}
+
+	/**
+	 * Popup an error Dialog.
+	 * 
+	 * @param exception
+	 *            java.lang.Throwable
+	 */
+	protected void handleException(java.lang.Throwable exception) {
+		BaseFrame.showException(null, exception);
+	}
+
+	/**
+	 * Display given image as Background-Image on Panel.
+	 * 
+	 * @param path
+	 * @see #paintComponent()
+	 */
+	public void setImage(Image image) {
+		// image = Toolkit.getDefaultToolkit().createImage(path);
+		this.image = image;
+	}
+
+	/**
+	 * @see #setImage()
+	 */
+	@Override
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		if (image != null) {
+			/*
+			 * int w = getWidth(); int h = getHeight(); int x = (w -
+			 * imageWidth)/2; int y = (h - imageHeight)/2;
+			 */
+			g.drawImage(image, (int)(g.getClipBounds().getCenterX() - (image.getWidth(this) / 2.0)),
+					(int)(g.getClipBounds().getCenterY() - (image.getHeight(this) / 2.0)), this);
+		}
+	}
 }
