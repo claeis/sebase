@@ -156,7 +156,7 @@ public abstract class ListUtils {
 	 * @param list
 	 * @param property
 	 */
-	public static <T> void eliminateDuplicates(java.util.List<T> list, final String property) throws Throwable {
+	public static <T> void eliminateDuplicates(java.util.List<T> list, final String property) throws Exception {
 		Set<Object> set = new HashSet<Object>();
 		Iterator<T> it = list.iterator();
 		while (it.hasNext()) {
