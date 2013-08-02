@@ -11,60 +11,77 @@ package ch.softenvironment.client;
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  */
- 
+
 /**
- * Interface for a minimal UserProfile resp. User-Settings for a specific Application.
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2005-06-05 09:03:20 $
+ * Interface for a minimal UserProfile resp. User-Settings for a specific
+ * Application.
+ * 
+ * @author Peter Hirzel softEnvironment GmbH
  */
 public interface UserSettings {
-/**
- * Return whether the User is allowed to use Application or not.
- * @return boolean 
- */
-public boolean getActive();
-/**
- * Return whether the User is the Administrator himself.
- * @return boolean 
- */
-public boolean getAdmin();
-/**
- * Return the User's Country.
- * @return String (for e.g. "CH", "FR", etc)
- * @see java.util.Locale
- */
-public String getCountry();
-/**
- * Return the User's working language with the Application.
- * @return java.lang.String (for e.g. "de", "fr" etc)
- * @see java.util.Locale
- */
-public String getLanguage();
-/**
- * Gets the 'Look & Feel' property (java.lang.String) value.
- * @return The language property value.
- * @see BaseFrame#setLookAndFeel(String)
- */
-public java.lang.String getLookAndFeel();
-/**
- * Return the e-Mail Provider host to send e-Mails.
- * @return java.lang.String (for e.g. "mail.bluewin.ch")
- */
-public String getProviderSMTP();
-/**
- * Return the User's id, by means the login Id to the current application.
- * @return String (for e.g. "phirzel")
- * @see java.util.Locale
- */
-public String getUserId();
-/**
- * Return the WorkingDirectory of the current application.
- * @return String (for e.g. "C:\\TEMP")
- * @see java.util.Locale
- */
-public String getWorkingDirectory();
-/**
- * Save the UserProfile.
- */
-public void save() throws Throwable;
+	/**
+	 * Return whether the User is allowed to use Application or not.
+	 * 
+	 * @return boolean
+	 */
+	public boolean getActive();
+
+	/**
+	 * Return whether the User is the Administrator himself.
+	 * 
+	 * @return boolean
+	 */
+	public boolean getAdmin();
+
+	/**
+	 * Return the User's Country.
+	 * 
+	 * @return String (for e.g. "CH", "FR", etc)
+	 * @see java.util.Locale
+	 */
+	public String getCountry();
+
+	/**
+	 * Return the User's working language with the Application.
+	 * 
+	 * @return java.lang.String (for e.g. "de", "fr" etc)
+	 * @see java.util.Locale
+	 */
+	public String getLanguage();
+
+	/**
+	 * Gets the 'Look & Feel' property (java.lang.String) value.
+	 * 
+	 * @return The language property value.
+	 * @see BaseFrame#setLookAndFeel(String)
+	 */
+	public java.lang.String getLookAndFeel();
+
+	/**
+	 * Return the e-Mail Provider host to send e-Mails.
+	 * 
+	 * @return java.lang.String (for e.g. "mail.bluewin.ch")
+	 */
+	public String getProviderSMTP();
+
+	/**
+	 * Return the User's id, by means the login Id to the current application.
+	 * 
+	 * @return String (for e.g. "phirzel")
+	 * @see java.util.Locale
+	 */
+	public String getUserId();
+
+	/**
+	 * Return the WorkingDirectory of the current application.
+	 * 
+	 * @return String (for e.g. "C:\\TEMP")
+	 * @see java.util.Locale
+	 */
+	public String getWorkingDirectory();
+
+	/**
+	 * Save the UserProfile.
+	 */
+	public void save() throws Exception;
 }
