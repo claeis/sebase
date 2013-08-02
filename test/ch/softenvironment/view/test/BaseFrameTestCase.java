@@ -162,7 +162,7 @@ public class BaseFrameTestCase extends BaseFrame {
      * 
      * @see ch.softenvironment.view.BaseFrame#initializeView()
      */
-    protected void initializeView() throws Throwable {
+    protected void initializeView() throws Exception {
     }
 
     private void doLongAction(int recursionLevel) {
