@@ -112,7 +112,7 @@ public class BeanReflectorTestCase extends junit.framework.TestCase {
 		bean.setIPrimitive(25);
 	}
 
-	public void testGetValue() throws Throwable {
+	public void testGetValue() throws Exception {
 		BeanReflector<TestBean> br = new BeanReflector<TestBean>(bean, "text");
 		String value = "Bye";
 		br.setValue(value);
@@ -120,7 +120,7 @@ public class BeanReflectorTestCase extends junit.framework.TestCase {
 		assertTrue("BeanReflector.getValue(String)", br.getValue() == value);
 	}
 
-	public void testSetPublicField() throws Throwable {
+	public void testSetPublicField() throws Exception {
 		String msg = "TEST";
 		BeanReflector<TestBean> br = new BeanReflector<TestBean>(bean, "test");
 		br.setField(msg);
@@ -128,13 +128,13 @@ public class BeanReflectorTestCase extends junit.framework.TestCase {
 		assertTrue("BeanReflector->getField", br.getField().get(bean).equals(msg));
 	}
 
-	public void testCreateInstance() throws Throwable {
+	public void testCreateInstance() throws Exception {
 		Object tb = BeanReflector.createInstance(TestBean.class);
 		assertNotNull(tb);
 		assertTrue("BeanReflector.createInstance(TestBean)", tb instanceof TestBean);
 	}
 
-	public void testHasProperty() throws Throwable {
+	public void testHasProperty() throws Exception {
 		BeanReflector<TestBean> br = new BeanReflector<TestBean>(bean, "iVal");
 		assertTrue("BeanReflector", br.hasProperty() == BeanReflector.GETTER_AND_SETTER);
 
@@ -142,7 +142,7 @@ public class BeanReflectorTestCase extends junit.framework.TestCase {
 		assertTrue("BeanReflector", bl.hasProperty() == BeanReflector.GETTER);
 	}
 
-	public void testCloneValue() throws Throwable {
+	public void testCloneValue() throws Exception {
 		BeanReflector<TestBean> br = new BeanReflector<TestBean>(bean, "text");
 		Object clonedValue = br.cloneValue();
 		assertTrue("BeanReflector->String-Contents is equal", bean.getText().equals(clonedValue));
