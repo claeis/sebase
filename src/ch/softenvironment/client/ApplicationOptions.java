@@ -326,7 +326,7 @@ public class ApplicationOptions extends java.util.Properties implements UserSett
 		try {
 			FileOutputStream outputStream = new FileOutputStream(filename);
 			super.store(outputStream, "User Properties <" + filename + ">");
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			Tracer.getInstance().runtimeWarning("IGNORE: Failed for User Properties <" + filename + ">");
 		}
 	}
