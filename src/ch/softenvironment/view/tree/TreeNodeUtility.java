@@ -29,7 +29,7 @@ public interface TreeNodeUtility {
      * @param element owned Element to be added to owner
      * @return given element
      */
-    Object addOwnedElement(Object owner, Object element) throws Throwable;
+    Object addOwnedElement(Object owner, Object element) throws Exception;
     /**
      * Compare two classes for sorting.
      */
@@ -102,7 +102,7 @@ public interface TreeNodeUtility {
      * @param object ModelElement
      * @param targetNamespace Package
      */
-    void relocateElement(Object object, Object targetNamespace) throws Throwable;
+    void relocateElement(Object object, Object targetNamespace) throws Exception;
     /**
      * Remove ownedElement from owner.
      * @param element ch.softenvironment.tree.core.Element
