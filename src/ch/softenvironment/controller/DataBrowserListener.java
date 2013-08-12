@@ -14,28 +14,35 @@ package ch.softenvironment.controller;
 
 /**
  * Listener for DataBrowser.
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.1 $ $Date: 2006-12-19 09:58:03 $
+ * 
+ * @author Peter Hirzel, softEnvironment GmbH
  */
 public interface DataBrowserListener<T> {
-    /**
-     * Called when currentObject is to be removed.
-     * @param object Object to be removed
-     * @return veto
-     */
-    boolean removeObject(T object);
-    /**
-     * Called before currentObject will be changed
-     * to make sure any changes on still current Object
-     * can be done.
-     * @param param java.lang.Object Object to be invalidated
-     * @return the saved object
-     */
-    T saveChanges(T object);
-    /**
-     * Called when currentObject becomes another one.
-     * @param object New current Object
-     * @see #saveChanges(Object)
-     */
-    void setCurrentObject(T object);
+	/**
+	 * Called when currentObject is to be removed.
+	 * 
+	 * @param object
+	 *            Object to be removed
+	 * @return veto
+	 */
+	boolean removeObject(T object);
+
+	/**
+	 * Called before currentObject will be changed to make sure any changes on
+	 * still current Object can be done.
+	 * 
+	 * @param param
+	 *            java.lang.Object Object to be invalidated
+	 * @return the saved object
+	 */
+	T saveChanges(T object);
+
+	/**
+	 * Called when currentObject becomes another one.
+	 * 
+	 * @param object
+	 *            New current Object
+	 * @see #saveChanges(Object)
+	 */
+	void setCurrentObject(T object);
 }
