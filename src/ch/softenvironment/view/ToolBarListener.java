@@ -13,63 +13,95 @@ package ch.softenvironment.view;
  */
 
 /**
- * @author Peter Hirzel <i>soft</i>Environment
- * @version $Revision: 1.2 $ $Date: 2004-02-05 11:33:00 $
+ * Define a set of typical Toolbar actions, such as new, save, print, etc.
+ * 
+ * Usage for a GUI-Component: <code>
+ * myToolbar = new ToolBar();
+ * myToolbar.addToolBarListener(new ch.softenvironment.view.ToolBarListener() {
+ *   public void tbbPrintAction_actionPerformed(java.util.EventObject e) {
+ * 		printObject(); 
+ *   }
+ *   ..
+ * }
+ * </code>
+ * 
+ * @author Peter Hirzel softEnvironment GmbH
  */
 public interface ToolBarListener extends java.util.EventListener {
-/**
- * 
- * @param newEvent java.util.EventObject
- */
-void tbbCopyAction_actionPerformed(java.util.EventObject newEvent);
-/**
- * 
- * @param newEvent java.util.EventObject
- */
-void tbbCutAction_actionPerformed(java.util.EventObject newEvent);
-/**
- * 
- * @param newEvent java.util.EventObject
- */
-void tbbDeleteAction_actionPerformed(java.util.EventObject newEvent);
-/**
- * 
- * @param newEvent java.util.EventObject
- */
-void tbbFindAction_actionPerformed(java.util.EventObject newEvent);
-/**
- * 
- * @param newEvent java.util.EventObject
- */
-void tbbNewAction_actionPerformed(java.util.EventObject newEvent);
-/**
- * 
- * @param newEvent java.util.EventObject
- */
-void tbbOpenAction_actionPerformed(java.util.EventObject newEvent);
-/**
- * 
- * @param newEvent java.util.EventObject
- */
-void tbbPasteAction_actionPerformed(java.util.EventObject newEvent);
-/**
- * 
- * @param newEvent java.util.EventObject
- */
-void tbbPrintAction_actionPerformed(java.util.EventObject newEvent);
-/**
- * 
- * @param newEvent java.util.EventObject
- */
-void tbbRedoAction_actionPerformed(java.util.EventObject newEvent);
-/**
- * 
- * @param newEvent java.util.EventObject
- */
-void tbbSaveAction_actionPerformed(java.util.EventObject newEvent);
-/**
- * 
- * @param newEvent java.util.EventObject
- */
-void tbbUndoAction_actionPerformed(java.util.EventObject newEvent);
+	/**
+	 * 
+	 * @param newEvent
+	 *            java.util.EventObject
+	 */
+	void tbbCopyAction_actionPerformed(java.util.EventObject newEvent);
+
+	/**
+	 * 
+	 * @param newEvent
+	 *            java.util.EventObject
+	 */
+	void tbbCutAction_actionPerformed(java.util.EventObject newEvent);
+
+	/**
+	 * 
+	 * @param newEvent
+	 *            java.util.EventObject
+	 */
+	void tbbDeleteAction_actionPerformed(java.util.EventObject newEvent);
+
+	/**
+	 * 
+	 * @param newEvent
+	 *            java.util.EventObject
+	 */
+	void tbbFindAction_actionPerformed(java.util.EventObject newEvent);
+
+	/**
+	 * 
+	 * @param newEvent
+	 *            java.util.EventObject
+	 */
+	void tbbNewAction_actionPerformed(java.util.EventObject newEvent);
+
+	/**
+	 * 
+	 * @param newEvent
+	 *            java.util.EventObject
+	 */
+	void tbbOpenAction_actionPerformed(java.util.EventObject newEvent);
+
+	/**
+	 * 
+	 * @param newEvent
+	 *            java.util.EventObject
+	 */
+	void tbbPasteAction_actionPerformed(java.util.EventObject newEvent);
+
+	/**
+	 * 
+	 * @param newEvent
+	 *            java.util.EventObject
+	 */
+	void tbbPrintAction_actionPerformed(java.util.EventObject newEvent);
+
+	/**
+	 * 
+	 * @param newEvent
+	 *            java.util.EventObject
+	 */
+	void tbbRedoAction_actionPerformed(java.util.EventObject newEvent);
+
+	/**
+	 * 
+	 * @param newEvent
+	 *            java.util.EventObject
+	 */
+	void tbbSaveAction_actionPerformed(java.util.EventObject newEvent);
+
+	/**
+	 * 
+	 * @param newEvent
+	 *            java.util.EventObject
+	 */
+	void tbbUndoAction_actionPerformed(java.util.EventObject newEvent);
 }
