@@ -78,6 +78,11 @@ public class BasePanel extends javax.swing.JPanel {
 		return ResourceManager.getResource(this.getClass(), propertyName);
 	}
 
+	
+	protected static String getResourceString(java.lang.Class resource, String propertyName) {
+		return ch.softenvironment.client.ResourceManager.getResource(resource, propertyName);
+	}
+	
 	/**
 	 * Popup an error Dialog.
 	 * 
