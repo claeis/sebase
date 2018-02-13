@@ -131,8 +131,8 @@ public class StringUtilsTestCase extends junit.framework.TestCase {
 	 */
 	public void testEncoding() {
 		assertTrue("Character same in ANSI & UTF-8", "<".equals(new String("<".getBytes(), Charset.forName("ISO-8859-1"))));
-		String valISO = new String("ä".getBytes(), Charset.forName("ISO-8859-1"));
-		assertTrue("Character  same in ANSI & UTF-8", "ä".equals(valISO));
-		assertFalse("Character reversed to UTF-8", "ä".equals(new String("ä".getBytes(), Charset.forName("UTF-8"))));
+		String valISO = new String("Ã¤".getBytes(), Charset.forName("ISO-8859-1"));
+		assertTrue("Character  same in ANSI & UTF-8", "Ã¤".equals(valISO));
+		assertFalse("Character reversed to UTF-8", "Ã¤".equals(new String("Ã¤".getBytes(), Charset.forName("UTF-8"))));
 	}
 }
