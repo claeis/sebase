@@ -848,7 +848,7 @@ public class ToolBar extends javax.swing.JToolBar implements DataBrowserListener
 				ivjTbbFind.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
 				ivjTbbFind.setIcon(null);
 				ivjTbbFind.setMargin(new java.awt.Insets(0, 0, 0, 0));
-				ivjTbbFind.setEnabled(false);
+				ivjTbbFind.setEnabled(true);
 				// user code begin {1}
 				ivjTbbFind.setIcon(CommonUserAccess.getIconFind());
 				ivjTbbFind.setToolTipText(CommonUserAccess.getMniEditFindText());

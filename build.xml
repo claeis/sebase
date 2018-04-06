@@ -48,7 +48,7 @@
     <!-- Compile the java code from ${src} into ${build}/classes -->
     <mkdir dir="${build}/classes"/>
   	<!--ant inheritAll="true" antfile="../ehibasics/build.xml" target="jar"/-->
-    <javac destdir="${build}/classes" includes="**/*.java" excludes="**/test/*.java"  debug="on" source="6" target="1.6">
+    <javac destdir="${build}/classes" includes="**/*.java" excludes="**/test/*.java"  debug="on" includeantruntime="true" encoding="UTF-8" source="6" target="1.6">
       <classpath>
         <pathelement location="lib/ehibasics.jar"/>
       </classpath>

@@ -34,7 +34,7 @@ import junit.framework.TestCase;
  * @see ch.softenvironment.util.DOMUtils
  */
 public class DOMUtilsTestCase extends TestCase {
-    private static String text = "<äöü{}[]ÄÖÜ çé @ '$\" &  \n\r\t>"; 
+    private static String text = "<Ã¤Ã¶Ã¼{}[]Ã„Ã–Ãœ Ã§Ã© @ '$\" &  \n\r\t>"; 
     private static String path = System.getProperty("java.io.tmpdir");
 
     private DocumentBuilder docBuilder = null;
