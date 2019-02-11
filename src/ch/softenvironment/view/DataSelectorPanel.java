@@ -658,6 +658,7 @@ public void setCurrentObject(java.lang.Object currentObject) {
 public void setListener(DataSelectorPanelListener listener) {
 	this.listener = listener;
 	getTbbNew().setVisible(listener != null);
+	getTbbDelete().setVisible(listener != null);
 }
 /**
  * Set the list of Objects to treat by Selector.
